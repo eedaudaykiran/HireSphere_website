@@ -43,6 +43,7 @@ class Job(models.Model):
     skills = models.CharField(max_length=300)
     conditions = models.CharField(max_length=300, default="Hands-on projects • Paper writing • Coding explanation")
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+    role_category = models.CharField(max_length=100)
     
     # 👇 MODIFIED: use choices instead of plain CharField
     category = models.CharField(

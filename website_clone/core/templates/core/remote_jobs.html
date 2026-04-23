@@ -1,5 +1,7 @@
 {% load static %}
 {% load humanize %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -221,9 +223,10 @@
                     <div class="rj-sec-body" id="body-workmode">
 
                         <label class="rj-cb-row">
-                            <input type="checkbox" name="work_mode" value="On-site" 
-                            {% if "On-site" in selected_work_modes %}checked{% endif %} onchange="this.form.submit()">   
-                            <span>Work from office</span>
+                            <input type="checkbox" name="work_mode" value="On-site"
+                                {% if "On-site" in selected_work_modes %}checked{% endif %}
+                           onchange="this.form.submit()">
+                           <span>On-site</span>
                         </label>
 
                         <label class="rj-cb-row">
@@ -319,25 +322,419 @@
                                 <input type="checkbox" name="category" value="Finance"
                                     onchange="this.form.submit()">
                                     <span>Finance & Accounting</span>
+                                    <span class="rj-count">({{ category_counts.Finance|default:0 }})</span>
                             </label>
 
                             <label class="rj-cb-row">
                                 <input type="checkbox" name="category" value="HR"
                                     onchange="this.form.submit()">
                                     <span>Human Resources</span>
+                                    <span class="rj-count">({{ category_counts.HR|default:0 }})</span>
                             </label>
 
                             <label class="rj-cb-row">
                                 <input type="checkbox" name="category" value="Marketing"
                                     onchange="this.form.submit()">
                                     <span>Marketing</span>
+                                    <span class="rj-count">({{ category_counts.Marketing|default:0 }})</span>
                             </label>
 
                             </div>
+                            <span class="rj-view-more"
+                                id="toggle-dept"
+                                onclick="toggleMore('dept')">
+                                View more
+                            </span>
 
                         </div>
                     </div>
+                    <!-- locations -->
+                     <div class="rj-filter-section" id="sec-loc">
+                        <div class="rj-sec-header" onclick="toggleSection('loc')">
+                            <span>Location</span>
+                            <i class="fa fa-chevron-up" id="icon-loc"></i>
+                        </div>
+                    <div class="rj-sec-body" id="body-loc">
+
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="location" value="Bangalore"
+                                    {% if "Bangalore" in selected_locations %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                <span>Bengaluru</span>
+                                <span class="rj-count">({{ location_counts.Bangalore|default:0 }})</span>
+                            </label>
+
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="location" value="Delhi"
+                                    {% if "Delhi" in selected_locations %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                <span>Delhi / NCR</span>
+                                <span class="rj-count">({{ location_counts.Delhi|default:0 }})</span>
+                            </label>
+
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="location" value="Mumbai"
+                                    {% if "Mumbai" in selected_locations %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                <span>Mumbai</span>
+                                <span class="rj-count">({{ location_counts.Mumbai|default:0 }})</span>
+                            </label>
+
+                                <!-- Hidden -->
+                            <div class="rj-more-items" id="more-loc" style="display:none;">
+
+                            <label class="rj-cb-row">
+                                    <input type="checkbox" name="location" value="Hyderabad"
+                                    {% if "Hyderabad" in selected_locations %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                <span>Hyderabad</span>
+                                <span class="rj-count">({{ location_counts.Hyderabad|default:0 }})</span>
+                            </label>
+
+                            <label class="rj-cb-row">
+                                    <input type="checkbox" name="location" value="Pune"
+                                    {% if "Pune" in selected_locations %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                <span>Pune</span>
+                                <span class="rj-count">({{ location_counts.Pune|default:0 }})</span>
+                            </label>
+
+                            <label class="rj-cb-row">
+                                    <input type="checkbox" name="location" value="Chennai"
+                                    {% if "Chennai" in selected_locations %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                    <span>Chennai</span>
+                                    <span class="rj-count">({{ location_counts.Chennai|default:0 }})</span>
+                            </label>
+
                 </div>
+
+                            <!-- View more -->
+                    <span class="rj-view-more"
+                                id="toggle-loc"
+                                onclick="toggleMore('loc')">
+                                View more
+                            </span>
+
+                </div>
+                    <!-- Salary -->
+                    <div class="rj-filter-section" id="sec-sal">
+                        <div class="rj-sec-header" onclick="toggleSection('sal')">
+                            <span>Salary</span>
+                            <i class="fa fa-chevron-up" id="icon-sal"></i>
+                        </div>
+
+                    <div class="rj-sec-body" id="body-sal">
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="0-3"
+                            {% if "0-3" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>0-3 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"0-3"|default:0 }})</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="3-6"
+                            {% if "3-6" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>3-6 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"3-6"|default:0 }})</span>
+                        </label>
+
+                        <!-- HIDDEN ITEMS -->
+                    <div class="rj-more-items" id="more-sal" style="display:none;">
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="6-10"
+                                {% if "6-10" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                                <span>6-10 Lakhs</span>
+                                <span class="rj-count">({{ salary_counts|get_item:"6-10"|default:0 }})</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="10-15"
+                                {% if "10-15" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                                <span>10-15 Lakhs</span>
+                                <span class="rj-count">({{ salary_counts|get_item:"10-15"|default:0 }})</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="15-20"
+                                {% if "15-20" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                                <span>15-20 Lakhs</span>
+                                <span class="rj-count">({{ salary_counts|get_item:"15-20"|default:0 }})</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="20-25"
+                                {% if "20-25" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                                <span>20-25 Lakhs</span>
+                                <span class="rj-count">({{ salary_counts|get_item:"20-25"|default:0 }})</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="25-30"
+                                {% if "25-30" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                                <span>25-30 Lakhs</span>
+                                <span class="rj-count">({{ salary_counts|get_item:"25-30"|default:0 }})</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="30-35"
+                                {% if "30-35" in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                                <span>30-35 Lakhs</span>
+                                <span class="rj-count">({{ salary_counts|get_item:"30-35"|default:0 }})</span>
+                        </label>
+                        
+
+                 </div>
+
+                            <!-- VIEW MORE BUTTON -->
+                        <span class="rj-view-more"
+                                id="toggle-sal"
+                                onclick="toggleMore('sal')">
+                            View more
+                        </span>
+
+                    </div>
+                    <!-- company type  -->
+                     <div class="rj-filter-section" id="sec-ctype">
+                <div class="rj-sec-header" onclick="toggleSection('ctype')">
+                    <span>Company type</span>
+                    <i class="fa fa-chevron-up" id="icon-ctype"></i>
+                </div>
+                <div class="rj-sec-body" id="body-ctype">
+
+    <!-- Foreign MNC -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="company_type" value="Foreign MNC"
+        {% if "Foreign MNC" in selected_company_types %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>Foreign MNC</span>
+        <span class="rj-count">({{ company_type_counts|get_item:"Foreign MNC"|default:0 }})</span>
+    </label>
+
+    <!-- Corporate -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="company_type" value="Corporate"
+        {% if "Corporate" in selected_company_types %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>Corporate</span>
+        <span class="rj-count">({{ company_type_counts|get_item:"Corporate"|default:0 }})</span>
+    </label>
+
+    <!-- Indian MNC -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="company_type" value="Indian MNC"
+        {% if "Indian MNC" in selected_company_types %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>Indian MNC</span>
+        <span class="rj-count">({{ company_type_counts|get_item:"Indian MNC"|default:0 }})</span>
+    </label>
+
+    <!-- Startup -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="company_type" value="Startup"
+        {% if "Startup" in selected_company_types %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>Startup</span>
+        <span class="rj-count">({{ company_type_counts|get_item:"Startup"|default:0 }})</span>
+    </label>
+
+    <!-- Hidden -->
+    <div class="rj-more-items" id="more-ctype" style="display:none;">
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="company_type" value="SME"
+            {% if "SME" in selected_company_types %}checked{% endif %}
+            onchange="this.form.submit()">
+
+            <span>SME</span>
+            <span class="rj-count">({{ company_type_counts|get_item:"SME"|default:0 }})</span>
+        </label>
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="company_type" value="Public Sector"
+            {% if "Public Sector" in selected_company_types %}checked{% endif %}
+            onchange="this.form.submit()">
+
+            <span>Public Sector</span>
+            <span class="rj-count">({{ company_type_counts|get_item:"Public Sector"|default:0 }})</span>
+        </label>
+
+    </div>
+
+    <span class="rj-view-more" id="toggle-ctype" onclick="toggleMore('ctype')">
+        View more
+    </span>
+
+</div>
+<!-- role category -->
+
+<div class="rj-filter-section" id="sec-role">
+                <div class="rj-sec-header" onclick="toggleSection('role')">
+                    <span>Role category</span>
+                    <i class="fa fa-chevron-up" id="icon-role"></i>
+                </div>
+<div class="rj-sec-body" id="body-role">
+
+    <!-- Software Developer -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="role_category" value="Software Developer"
+        {% if "Software Developer" in selected_roles %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>Software Develop...</span>
+        <span class="rj-count">({{ role_counts|get_item:"Software Developer"|default:0 }})</span>
+    </label>
+
+    <!-- Retail Sales -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="role_category" value="Retail & B2C Sales"
+        {% if "Retail & B2C Sales" in selected_roles %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>Retail & B2C Sales</span>
+        <span class="rj-count">({{ role_counts|get_item:"Retail & B2C Sales"|default:0 }})</span>
+    </label>
+
+    <!-- BD / Pre Sales -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="role_category" value="BD / Pre Sales"
+        {% if "BD / Pre Sales" in selected_roles %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>BD / Pre Sales</span>
+        <span class="rj-count">({{ role_counts|get_item:"BD / Pre Sales"|default:0 }})</span>
+    </label>
+
+    <!-- QA -->
+    <label class="rj-cb-row">
+        <input type="checkbox" name="role_category" value="Quality Assurance"
+        {% if "Quality Assurance" in selected_roles %}checked{% endif %}
+        onchange="this.form.submit()">
+
+        <span>Quality Assurance ...</span>
+        <span class="rj-count">({{ role_counts|get_item:"Quality Assurance"|default:0 }})</span>
+    </label>
+
+    <!-- Hidden -->
+    <div class="rj-more-items" id="more-role" style="display:none;">
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="role_category" value="IT Networking"
+            {% if "IT Networking" in selected_roles %}checked{% endif %}
+            onchange="this.form.submit()">
+
+            <span>IT Networking</span>
+            <span class="rj-count">({{ role_counts|get_item:"IT Networking"|default:0 }})</span>
+        </label>
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="role_category" value="HR / Admin"
+            {% if "HR / Admin" in selected_roles %}checked{% endif %}
+            onchange="this.form.submit()">
+
+            <span>HR / Admin</span>
+            <span class="rj-count">({{ role_counts|get_item:"HR / Admin"|default:0 }})</span>
+        </label>
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="role_category" value="Finance"
+            {% if "Finance" in selected_roles %}checked{% endif %}
+            onchange="this.form.submit()">
+
+            <span>Finance</span>
+            <span class="rj-count">({{ role_counts|get_item:"Finance"|default:0 }})</span>
+        </label>
+
+    </div>
+
+    <span class="rj-view-more" id="toggle-role" onclick="toggleMore('role')">
+        View more
+    </span>
+
+</div>
+<div class="rj-filter-section" id="sec-stip">
+
+    <div class="rj-sec-header" onclick="toggleSection('stip')">
+        <span>Stipend</span>
+        <i class="fa fa-chevron-up" id="icon-stip"></i>
+    </div>
+
+    <div class="rj-sec-body" id="body-stip">
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="stipend" value="unpaid"
+            {% if "unpaid" in selected_stipends %}checked{% endif %}
+            onchange="this.form.submit()">
+            <span>Unpaid</span>
+            <span class="rj-count">({{ stipend_counts|get_item:"unpaid"|default:0 }})</span>
+        </label>
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="stipend" value="0-10"
+            {% if "0-10" in selected_stipends %}checked{% endif %}
+            onchange="this.form.submit()">
+            <span>0-10k</span>
+            <span class="rj-count">({{ stipend_counts|get_item:"0-10"|default:0 }})</span>
+        </label>
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="stipend" value="10-20"
+            {% if "10-20" in selected_stipends %}checked{% endif %}
+            onchange="this.form.submit()">
+            <span>10k-20k</span>
+            <span class="rj-count">({{ stipend_counts|get_item:"10-20"|default:0 }})</span>
+        </label>
+
+        <label class="rj-cb-row">
+            <input type="checkbox" name="stipend" value="20-30"
+            {% if "20-30" in selected_stipends %}checked{% endif %}
+            onchange="this.form.submit()">
+            <span>20k-30k</span>
+            <span class="rj-count">({{ stipend_counts|get_item:"20-30"|default:0 }})</span>
+        </label>
+
+        <div class="rj-more-items" id="more-stip" style="display:none;">
+
+            <label class="rj-cb-row">
+                <input type="checkbox" name="stipend" value="30-50"
+                {% if "30-50" in selected_stipends %}checked{% endif %}
+                onchange="this.form.submit()">
+                <span>30k-50k</span>
+                <span class="rj-count">({{ stipend_counts|get_item:"30-50"|default:0 }})</span>
+            </label>
+
+            <label class="rj-cb-row">
+                <input type="checkbox" name="stipend" value="50+"
+                {% if "50+" in selected_stipends %}checked{% endif %}
+                onchange="this.form.submit()">
+                <span>50k+</span>
+                <span class="rj-count">({{ stipend_counts|get_item:"50+"|default:0 }})</span>
+            </label>
+
+        </div>
+
+        <span class="rj-view-more" onclick="toggleMore('stip')">
+            View More
+        </span>
+
+    </div>
+</div>
+    </div>
+                
         </form> 
 
         
@@ -754,6 +1151,22 @@
 
             renderPage();
         });
+        function toggleMore(section) {
+    // 1) Find hidden container: "more-dept"
+    const moreDiv = document.getElementById('more-' + section);
+
+    // 2) Find text element: "toggle-dept"
+    const toggleText = document.getElementById('toggle-' + section);
+
+    // 3) Read current state and toggle
+    if (moreDiv.style.display === "none" || moreDiv.style.display === "") {
+        moreDiv.style.display = "block";      // show items
+        toggleText.innerText = "View less";  // change label
+    } else {
+        moreDiv.style.display = "none";       // hide items
+        toggleText.innerText = "View more";  // change back
+    }
+}
  
     </script>
 </body>
