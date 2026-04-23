@@ -221,20 +221,20 @@
                     <div class="rj-sec-body" id="body-workmode">
 
                         <label class="rj-cb-row">
-                            <input type="checkbox" name="work_mode" value="On-site" {% if "On-site" in
-                                selected_work_modes %}checked{% endif %} onchange="this.form.submit()">
+                            <input type="checkbox" name="work_mode" value="On-site" 
+                            {% if "On-site" in selected_work_modes %}checked{% endif %} onchange="this.form.submit()">   
                             <span>Work from office</span>
                         </label>
 
                         <label class="rj-cb-row">
-                            <input type="checkbox" name="work_mode" value="Hybrid" {% if "Hybrid" in selected_work_modes
-                                %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Hybrid</span>
+                            <input type="checkbox" name="work_mode" value="Hybrid" 
+                            {% if "Hybrid" in selected_work_modes %}checked{% endif %} onchange="this.form.submit()">
+                                <span>Hybrid</span>
                         </label>
 
                         <label class="rj-cb-row">
-                            <input type="checkbox" name="work_mode" value="Remote" {% if "Remote" in selected_work_modes
-                                %}checked{% endif %} onchange="this.form.submit()">
+                            <input type="checkbox" name="work_mode" value="Remote" 
+                            {% if "Remote" in selected_work_modes %}checked{% endif %} onchange="this.form.submit()">
                             <span>Remote</span>
                         </label>
 
@@ -273,10 +273,74 @@
                         </div>
 
                     </div>
-                </div>
-        </form>
+                    <!-- Department -->
+                    <div class="rj-filter-section" id="sec-dept">
+                        <div class="rj-sec-header" onclick="toggleSection('dept')">
+                            <span>Department</span>
+                            <i class="fa fa-chevron-up" id="icon-dept"></i>
+                        </div>
 
-        <!-- Department -->
+                        <div class="rj-sec-body" id="body-dept">
+
+                            <!-- IT -->
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="category" value="IT" 
+                                {% if "IT" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
+                                <span>Engineering - Software</span>
+                                <span class="rj-count">({{ category_counts.IT|default:0 }})</span>
+                            </label>
+
+                            <!-- Sales -->
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="category" value="Sales" 
+                                {% if "Sales" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
+                                <span>Sales & Business</span>
+                                <span class="rj-count">({{ category_counts.Sales|default:0 }})</span>
+                            </label>
+
+                            <!-- HR -->
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="category" value="HR" 
+                                {% if "HR" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
+                                <span>Human Resources</span>
+                                <span class="rj-count">({{ category_counts.HR|default:0 }})</span>
+                            </label>
+
+                            <!-- General -->
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="category" value="General" 
+                                {% if "General" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
+                                <span>General</span>
+                                <span class="rj-count">({{ category_counts.General|default:0 }})</span>
+                            </label>
+                            <div class="rj-more-items" id="more-dept" style="display:none;">
+
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="category" value="Finance"
+                                    onchange="this.form.submit()">
+                                    <span>Finance & Accounting</span>
+                            </label>
+
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="category" value="HR"
+                                    onchange="this.form.submit()">
+                                    <span>Human Resources</span>
+                            </label>
+
+                            <label class="rj-cb-row">
+                                <input type="checkbox" name="category" value="Marketing"
+                                    onchange="this.form.submit()">
+                                    <span>Marketing</span>
+                            </label>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+        </form> 
+
+        
 
 
         <!-- JOB CARDS (column 2) -->
@@ -651,36 +715,30 @@
             body.style.display = isOpen ? 'none' : 'block';
             icon.className = isOpen ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
         }
-        function toggleMore(id) {
-            const more = document.getElementById('more-' + id);
-            const btn = document.querySelector(`[data-more="${id}"]`);
-            const isHidden = more.style.display === 'none';
-            more.style.display = isHidden ? 'block' : 'none';
-            btn.textContent = isHidden ? 'View Less' : 'View More';
-        }
-/* ========== EXPERIENCE SLIDER ========== */
-document.addEventListener('DOMContentLoaded', function () {
+       
+        /* ========== EXPERIENCE SLIDER ========== */
+        document.addEventListener('DOMContentLoaded', function () {
 
-    const slider = document.getElementById('expSlider');
+            const slider = document.getElementById('expSlider');
 
-    function updateSlider(val) {
-        const bubble = document.getElementById('sliderBubble');
+            function updateSlider(val) {
+                const bubble = document.getElementById('sliderBubble');
 
-        bubble.textContent = val >= 30 ? 'Any' : val + ' Yr' + (val == 1 ? '' : 's');
+                bubble.textContent = val >= 30 ? 'Any' : val + ' Yr' + (val == 1 ? '' : 's');
 
-        const pct = (val / 30) * 100;
-        const off = 20 - (pct * 0.4);
-        bubble.style.left = `calc(${pct}% + ${off}px)`;
+                const pct = (val / 30) * 100;
+                const off = 20 - (pct * 0.4);
+                bubble.style.left = `calc(${pct}% + ${off}px)`;
 
-        slider.style.setProperty('--value', pct + '%');
-    }
+                slider.style.setProperty('--value', pct + '%');
+            }
 
-    slider.addEventListener('input', function (e) {
-        updateSlider(e.target.value);
-    });
+            slider.addEventListener('input', function (e) {
+                updateSlider(e.target.value);
+            });
 
-    updateSlider(slider.value);
-});        
+            updateSlider(slider.value);
+        });
 
         /* ========== INITIALIZE ========== */
         document.addEventListener('DOMContentLoaded', function () {
@@ -696,6 +754,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             renderPage();
         });
+ 
     </script>
 </body>
 

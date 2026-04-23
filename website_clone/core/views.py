@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.db.models import Q
 from .forms import RegisterForm, LoginForm
 from .models import UserProfile, Job
+from django.db.models import Count
 
  
  
@@ -159,36 +160,42 @@ def employer_login_page(request):
     return render(request, 'core/employer_login.html')
  
 def remote_jobs_page(request):
-    jobs = Job.objects.all()
+    jobs = Job.objects.all().order_by('-id')
 
-    # Work Mode
+    # 🔹 Work Mode (multiple checkbox)
     work_modes = request.GET.getlist('work_mode')
     if work_modes:
         jobs = jobs.filter(work_mode__in=work_modes)
 
-    # Category
+    # 🔹 Category (Department filter)
     categories = request.GET.getlist('category')
     if categories:
         jobs = jobs.filter(category__in=categories)
 
-    # Company Type
+     # 🔥 ADD HERE (AFTER filters or before render)
+    category_counts_qs = Job.objects.values('category').annotate(total=Count('id'))
+    category_counts = {item['category']: item['total'] for item in category_counts_qs}
+
+    # 🔹 Company Type
     company_types = request.GET.getlist('company_type')
     if company_types:
         jobs = jobs.filter(company_type__in=company_types)
 
-    # ✅ Experience Filter (NEW)
+    # 🔹 Experience (slider)
     experience = request.GET.get('experience')
     if experience and experience != "30":
         jobs = jobs.filter(experience__icontains=experience)
 
     return render(request, 'core/remote_jobs.html', {
         'jobs': jobs,
+
+        # 👇 send selected values to template (IMPORTANT)
         'selected_work_modes': work_modes,
         'selected_categories': categories,
         'selected_company_types': company_types,
         'selected_experience': experience,
-    }) 
-
+        'category_counts': category_counts,
+    })
 
 def mnc_jobs_page(request):
     jobs = Job.objects.filter(company_type__iexact="mnc").order_by('-id')
