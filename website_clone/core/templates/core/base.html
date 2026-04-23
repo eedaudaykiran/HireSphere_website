@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Website{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- 🔥 NAVBAR (COMMON FOR ALL PAGES) -->
+    <nav class="navbar">
+        <div class="logo">naukri</div>
+
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Jobs</a></li>
+            <li><a href="#">Companies</a></li>
+            <li><a href="#">Services</a></li>
+        </ul>
+
+        <div class="nav-right">
+            <input type="text" placeholder="Search jobs">
+
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="register-btn">Register</a>
+        </div>
+    </nav>
+
+    <!-- 🔥 PAGE CONTENT -->
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+
+</html>

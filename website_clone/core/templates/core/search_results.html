@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: #f7f7f7;
+        }
+
+        .top-search {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .top-search input,
+        .top-search select {
+            border: none;
+            outline: none;
+            font-size: 18px;
+            flex: 1;
+            background: transparent;
+        }
+
+        .divider {
+            width: 1px;
+            height: 30px;
+            background: #ddd;
+        }
+
+        .search-btn {
+            background: #275df5;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .results {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .job-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .job-card h2 {
+            margin: 0 0 10px;
+        }
+
+        .no-results {
+            background: white;
+            padding: 40px;
+            border-radius: 14px;
+            text-align: center;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form method="GET" action="{% url 'search_jobs' %}" class="top-search">
+        <input type="text" name="keyword" placeholder="Enter skills / designations / companies" value="{{ keyword }}">
+
+        <div class="divider"></div>
+
+        <select name="experience">
+            <option value="">Select experience</option>
+            <option value="0" {% if experience=='0' %}selected{% endif %}>Fresher</option>
+            <option value="1" {% if experience=='1' %}selected{% endif %}>1 year</option>
+            <option value="2" {% if experience=='2' %}selected{% endif %}>2 years</option>
+            <option value="3" {% if experience=='3' %}selected{% endif %}>3 years</option>
+            <option value="4" {% if experience=='4' %}selected{% endif %}>4 years</option>
+            <option value="5" {% if experience=='5' %}selected{% endif %}>5 years</option>
+        </select>
+
+        <div class="divider"></div>
+
+        <input type="text" name="location" placeholder="Enter location" value="{{ location }}">
+
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+
+    <div class="results">
+        <h2>Total Jobs Found: {{ jobs|length }}</h2>
+
+        {% for job in jobs %}
+        <div class="job-card">
+            <h2>{{ job.title }}</h2>
+            <p><strong>Company:</strong> {{ job.company }}</p>
+            <p><strong>Location:</strong> {{ job.location }}</p>
+            <p><strong>Skills:</strong> {{ job.skills }}</p>
+            <p><strong>Experience:</strong> {{ job.experience }} year(s)</p>
+        </div>
+        {% empty %}
+        <div class="no-results">
+            No jobs found
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

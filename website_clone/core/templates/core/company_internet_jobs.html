@@ -1,0 +1,716 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of internet companies hiring</title>
+    <link rel="stylesheet" href="{% static 'core/css/company_internet.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@400;600;700&family=Nunito+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════
+         NAVBAR (original)
+    ═══════════════════════════════════════ -->
+    <header class="rj-navbar">
+        <a href="{% url 'index' %}" class="rj-nav-logo">
+            <div class="rj-nav-logo-icon">
+                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                    <circle cx="18" cy="18" r="18" fill="#275df5" />
+                    <path d="M11 26V14l10 8V14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <circle cx="24" cy="12" r="2.5" fill="#fff" />
+                </svg>
+            </div>
+            <span class="rj-nav-logo-text">naukri</span>
+        </a>
+
+        <nav class="rj-nav-links">
+            <!-- Jobs dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Jobs <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Popular categories</p>
+                        <a href="{% url 'it_jobs' %}">IT jobs</a>
+                        <a href="#">Sales Jobs</a>
+                        <a href="#">Marketing Jobs</a>
+                        <a href="#">Data Science Jobs</a>
+                        <a href="#">HR Jobs</a>
+                        <a href="#">Engineering Jobs</a>
+                        <a href="#">Finance Jobs</a>
+                        <a href="#">Operations Jobs</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Jobs in demand</p>
+                        <a href="#">Fresher Jobs</a>
+                        <a href="#">MNC Jobs</a>
+                        <a href="{% url 'remote_jobs' %}">Remote Jobs</a>
+                        <a href="#">Work from Home Jobs</a>
+                        <a href="#">Walk-in Jobs</a>
+                        <a href="#">Part-time Jobs</a>
+                        <a href="#">Internship Jobs</a>
+                        <a href="#">Startup Jobs</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Jobs by location</p>
+                        <a href="#">Jobs in Delhi</a>
+                        <a href="#">Jobs in Mumbai</a>
+                        <a href="#">Jobs in Bangalore</a>
+                        <a href="#">Jobs in Hyderabad</a>
+                        <a href="#">Jobs in Chennai</a>
+                        <a href="#">Jobs in Pune</a>
+                        <a href="#">Jobs in Kolkata</a>
+                        <a href="#">Jobs in Ahmedabad</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Companies dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Companies <i
+                        class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Explore categories</p>
+                        <a href="#">Unicorn</a>
+                        <a href="#">MNC</a>
+                        <a href="#">Startup</a>
+                        <a href="#">Product based</a>
+                        <a href="#">Internet</a>
+                        <a href="#">Fortune 500</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Explore collections</p>
+                        <a href="#">Top companies</a>
+                        <a href="#">IT companies</a>
+                        <a href="#">Fintech companies</a>
+                        <a href="#">Sponsored companies</a>
+                        <a href="#">Featured companies</a>
+                        <a href="#">Actively hiring</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Research companies</p>
+                        <a href="#">Interview questions</a>
+                        <a href="#">Company salaries</a>
+                        <a href="#">Company reviews</a>
+                        <a href="#">Salary Calculator</a>
+                        <a href="#">Work culture ratings</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Services <i
+                        class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Resume writing</p>
+                        <a href="#">Text resume</a>
+                        <a href="#">Visual resume</a>
+                        <a href="#">Resume critique</a>
+                        <p class="rj-drop-heading rj-drop-heading--mt">Find Jobs</p>
+                        <a href="#">Jobs4u</a>
+                        <a href="#">Priority applicant</a>
+                        <a href="#">Contact us</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Get recruiter's attention</p>
+                        <a href="#">Resume display</a>
+                        <p class="rj-drop-heading rj-drop-heading--mt">Monthly subscriptions</p>
+                        <a href="#">Basic &amp; premium plans</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Free resume resources</p>
+                        <a href="#">Resume maker</a>
+                        <a href="#">Resume quality score</a>
+                        <a href="#">Resume samples</a>
+                        <a href="#">Job letter samples</a>
+                        <a href="#">Cover letter builder</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="rj-nav-search">
+            <input type="text" class="rj-nav-search-input" placeholder="Search jobs, skills, companies...">
+            <button class="rj-nav-search-btn"><i class="fa fa-search"></i></button>
+        </div>
+
+        <div class="rj-nav-right">
+            <a href="{% url 'login' %}" class="rj-nav-login">Login</a>
+            <a href="{% url 'register' %}" class="rj-nav-register">Register</a>
+            <div class="rj-nav-dropdown rj-employers-drop">
+                <div class="rj-nav-employers">For employers <i class="fa fa-chevron-down rj-drop-arrow"></i></div>
+                <div class="rj-drop-menu rj-drop-narrow">
+                    <a href="#">Buy Online</a>
+                    <a href="#">Naukri Talent Cloud</a>
+                    <a href="{% url 'employer_login' %}">Employer Login</a>
+                    <a href="#">Post a Job</a>
+                    <a href="#">View Plans</a>
+                    <a href="#">Recruitment Solutions</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════
+         CAROUSEL – Unicorns actively hiring
+    ═══════════════════════════════════════ -->
+    <main style="padding: 40px 32px 20px 32px;">
+        <p class="section-title">Unicorns actively hiring</p>
+        <div class="carousel-wrapper">
+            <button class="arrow-btn" id="prevBtn" onclick="slide(-1)" disabled>
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18l-6-6 6-6" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+            <div class="cards-track-outer" id="trackOuter">
+                <div class="cards-track" id="track">
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">MNCs</div><a class="card-sub" href="#">2.3K+ Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Edtech</div><a class="card-sub" href="#">167 Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Healthcare</div><a class="card-sub" href="#">713 Companies &nbsp;›</a>
+                    </div>
+                    <div class="card active" onclick="selectCard(this)">
+                        <div class="check-badge"><svg viewBox="0 0 24 24">
+                                <path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" />
+                            </svg></div>
+                        <div class="card-title">Unicorns</div><a class="card-sub" href="#">102 Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Internet</div><a class="card-sub" href="#">246 Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">B2C</div><a class="card-sub" href="#">2.5K+ Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Manufacturing</div><a class="card-sub" href="#">1.2K+ Companies
+                            &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Fortune 500</div><a class="card-sub" href="#">164 Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Product</div><a class="card-sub" href="#">1.3K+ Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Banking&finance</div><a class="card-sub" href="#">453 Companies
+                            &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">hospitality</div><a class="card-sub" href="#">108 Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Fintech</div><a class="card-sub" href="#">151 Companies &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">FMCG & Retail</div><a class="card-sub" href="#">183 Companies
+                            &nbsp;›</a>
+                    </div>
+                    <div class="card" onclick="selectCard(this)">
+                        <div class="card-title">Startups</div><a class="card-sub" href="#">823 Companies &nbsp;›</a>
+                    </div>
+                </div>
+            </div>
+            <button class="arrow-btn" id="nextBtn" onclick="slide(1)">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="#333" stroke-width="2" />
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <!-- ═══════════════════════════════════════
+         COMPANY LISTINGS (with filters & pagination)
+    ═══════════════════════════════════════ -->
+    <div class="listings-header">
+        <h1>Company Listings</h1>
+        <span class="count-badge" id="showing-count">Showing 15 companies</span>
+    </div>
+
+    <div class="layout">
+        <!-- FILTER PANEL -->
+        <aside class="filter-panel">
+            <div class="filter-header">
+                <h2>All Filters</h2>
+                <span class="applied-badge" id="applied-count">Applied (0)</span>
+            </div>
+
+            <!-- Company Type -->
+            <div class="filter-section">
+                <div class="filter-section-title" onclick="toggleSection(this)">Company type <span
+                        class="chevron">▼</span></div>
+                <div class="filter-section-body">
+                    <label class="filter-option"><input type="checkbox" data-filter="type" value="Startup"
+                            onchange="applyFilters()"><span class="label">Startup</span><span
+                            class="cnt">(46)</span></label>
+                    <label class="filter-option"><input type="checkbox" data-filter="type" value="Corporate"
+                            onchange="applyFilters()"><span class="label">Corporate</span><span
+                            class="cnt">(32)</span></label>
+                    <label class="filter-option"><input type="checkbox" data-filter="type" value="Foreign MNC"
+                            onchange="applyFilters()"><span class="label">Foreign MNC</span><span
+                            class="cnt">(14)</span></label>
+                    <label class="filter-option"><input type="checkbox" data-filter="type" value="Indian MNC"
+                            onchange="applyFilters()"><span class="label">Indian MNC</span><span
+                            class="cnt">(2)</span></label>
+                </div>
+            </div>
+            <hr class="divider" />
+
+            <!-- Location -->
+            <div class="filter-section">
+                <div class="filter-section-title" onclick="toggleSection(this)">Location <span class="chevron">▼</span>
+                </div>
+                <div class="filter-section-body">
+                    <div class="search-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg><input type="text" placeholder="Search Location" oninput="filterList(this,'loc-list')">
+                    </div>
+                    <div id="loc-list">
+                        <label class="filter-option"><input type="checkbox" data-filter="location" value="Bengaluru"
+                                onchange="applyFilters()"><span class="label">Bengaluru</span><span
+                                class="cnt">(74)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="location" value="Delhi / NCR"
+                                onchange="applyFilters()"><span class="label">Delhi / NCR</span><span
+                                class="cnt">(57)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="location"
+                                value="Mumbai (All Areas)" onchange="applyFilters()"><span class="label">Mumbai (All
+                                Areas)</span><span class="cnt">(50)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="location" value="Mumbai"
+                                onchange="applyFilters()"><span class="label">Mumbai</span><span
+                                class="cnt">(46)</span></label>
+                    </div>
+                    <a href="#" class="more-link">+90 more</a>
+                </div>
+            </div>
+            <hr class="divider" />
+
+            <!-- Industry -->
+            <div class="filter-section">
+                <div class="filter-section-title" onclick="toggleSection(this)">Industry <span class="chevron">▼</span>
+                </div>
+                <div class="filter-section-body">
+                    <div class="search-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg><input type="text" placeholder="Search Industry" oninput="filterList(this,'ind-list')">
+                    </div>
+                    <div id="ind-list">
+                        <label class="filter-option"><input type="checkbox" data-filter="industry" value="Internet"
+                                onchange="applyFilters()"><span class="label">Internet</span><span
+                                class="cnt">(32)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="industry"
+                                value="Software Product" onchange="applyFilters()"><span class="label">Software
+                                Product</span><span class="cnt">(18)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="industry"
+                                value="FinTech / Payments" onchange="applyFilters()"><span class="label">FinTech /
+                                Payments</span><span class="cnt">(8)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="industry"
+                                value="e-Learning / EdTech" onchange="applyFilters()"><span class="label">e-Learning /
+                                EdTech</span><span class="cnt">(7)</span></label>
+                    </div>
+                    <a href="#" class="more-link">+15 more</a>
+                </div>
+            </div>
+            <hr class="divider" />
+
+            <!-- Department -->
+            <div class="filter-section">
+                <div class="filter-section-title" onclick="toggleSection(this)">Department <span
+                        class="chevron">▼</span></div>
+                <div class="filter-section-body">
+                    <div class="search-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg><input type="text" placeholder="Search Department" oninput="filterList(this,'dept-list')">
+                    </div>
+                    <div id="dept-list">
+                        <label class="filter-option"><input type="checkbox" data-filter="department"
+                                value="Sales & Business Development" onchange="applyFilters()"><span class="label">Sales
+                                & Business Development</span><span class="cnt">(61)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="department"
+                                value="Engineering - Software & QA" onchange="applyFilters()"><span
+                                class="label">Engineering - Software & QA</span><span class="cnt">(58)</span></label>
+                        <label class="filter-option"><input type="checkbox" data-filter="department"
+                                value="Marketing & Communication" onchange="applyFilters()"><span
+                                class="label">Marketing & Communication</span><span class="cnt">(54)</span></label>
+                    </div>
+                    <a href="#" class="more-link">+25 more</a>
+                </div>
+            </div>
+            <hr class="divider" />
+
+            <!-- Experience (Pills) -->
+            <div class="filter-section">
+                <div class="filter-section-title" onclick="toggleSection(this)">Experience <span
+                        class="chevron">▼</span></div>
+                <div class="filter-section-body">
+                    <div class="pill-group">
+                        <span class="pill" data-filter="experience" data-value="Experienced"
+                            onclick="togglePill(this)">Experienced (101)</span>
+                        <span class="pill" data-filter="experience" data-value="Entry Level"
+                            onclick="togglePill(this)">Entry Level (45)</span>
+                    </div>
+                </div>
+            </div>
+            <hr class="divider" />
+
+            <!-- Nature of business (Pills) -->
+            <div class="filter-section">
+                <div class="filter-section-title" onclick="toggleSection(this)">Nature of business <span
+                        class="chevron">▼</span></div>
+                <div class="filter-section-body">
+                    <div class="pill-group">
+                        <span class="pill" data-filter="nature" data-value="B2B" onclick="togglePill(this)">B2B
+                            (61)</span>
+                        <span class="pill" data-filter="nature" data-value="B2C" onclick="togglePill(this)">B2C
+                            (58)</span>
+                        <span class="pill" data-filter="nature" data-value="SaaS" onclick="togglePill(this)">SaaS
+                            (23)</span>
+                        <span class="pill" data-filter="nature" data-value="D2C" onclick="togglePill(this)">D2C
+                            (3)</span>
+                        <span class="pill" data-filter="nature" data-value="PaaS" onclick="togglePill(this)">PaaS
+                            (1)</span>
+                    </div>
+                </div>
+            </div>
+            <hr class="divider" />
+
+            <!-- Job posting date (Pills) -->
+            <div class="filter-section">
+                <div class="filter-section-title" onclick="toggleSection(this)">Job posting date <span
+                        class="chevron">▼</span></div>
+                <div class="filter-section-body">
+                    <div class="pill-group">
+                        <span class="pill" data-filter="date" data-value="<7 Days" onclick="togglePill(this)">&lt;7
+                            Days</span>
+                        <span class="pill" data-filter="date" data-value="<15 Days" onclick="togglePill(this)">&lt;15
+                            Days</span>
+                    </div>
+                </div>
+            </div>
+            <hr class="divider" />
+            <button class="clear-btn" onclick="clearAllFilters()">Clear All Filters</button>
+        </aside>
+
+        <!-- COMPANY CARDS – COLUMN 2 -->
+        <div class="companies-col" id="col2">
+            <a href="#" class="company-card" data-type="Corporate" data-industry="Internet"
+                data-tags="Corporate,Internet,Unicorn">
+                <div class="company-logo">OLA</div>
+                <div class="company-info">
+                    <div class="company-name">Ola</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.3</span><span
+                            class="review-cnt">2.1K+ reviews</span></div>
+                    <div class="company-tags"><span class="tag">Corporate</span><span class="tag">Internet</span><span
+                            class="tag">Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Beauty & Personal Care"
+                data-tags="Startup,Beauty & Personal Care">
+                <div class="company-logo">M</div>
+                <div class="company-info">
+                    <div class="company-name">Mamaearth</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.8</span><span
+                            class="review-cnt">260 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">Beauty & Personal
+                            Care</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Indian MNC" data-industry="" data-tags="Indian MNC">
+                <div class="company-logo">S</div>
+                <div class="company-info">
+                    <div class="company-name">Symphony Limited</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">4.6</span><span
+                            class="review-cnt">468 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Indian MNC</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Automobile"
+                data-tags="Startup,Automobile,Unicorn">
+                <div class="company-logo">A</div>
+                <div class="company-info">
+                    <div class="company-name">Ather Energy</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">4.1</span><span
+                            class="review-cnt">856 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Automobile</span><span class="tag">Soonicorn</span><span
+                            class="tag">Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Internet"
+                data-tags="Startup,Internet,Unicorn">
+                <div class="company-logo">MG</div>
+                <div class="company-info">
+                    <div class="company-name">Moglix</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.3</span><span
+                            class="review-cnt">690 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">Internet</span><span
+                            class="tag">Unicorn</span><span class="tag">Founded: 2015</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Advertising & Marketing"
+                data-tags="Startup,Advertising & Marketing">
+                <div class="company-logo">BM</div>
+                <div class="company-info">
+                    <div class="company-name">Branch Metrics</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">2.8</span><span
+                            class="review-cnt">7 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">Advertising &
+                            Marketing</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Courier / Logistics"
+                data-tags="Startup,Courier / Logistics,Unicorn">
+                <div class="company-logo">E</div>
+                <div class="company-info">
+                    <div class="company-name">Elasticrun</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.6</span><span
+                            class="review-cnt">2.7K+ reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">Courier /
+                            Logistics</span><span class="tag">Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+        </div>
+
+        <!-- COMPANY CARDS – COLUMN 3 -->
+        <div class="companies-col" id="col3">
+            <a href="#" class="company-card" data-type="Corporate" data-industry="Real Estate"
+                data-tags="Corporate,Real Estate,Foreign Unicorn">
+                <div class="company-logo">AV</div>
+                <div class="company-info">
+                    <div class="company-name">Avant Heritage-Iii Realty</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">4</span><span
+                            class="review-cnt">98 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Corporate</span><span class="tag">Real
+                            Estate</span><span class="tag">Foreign Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Foreign MNC" data-industry="Software Product"
+                data-tags="Foreign MNC,Software Product">
+                <div class="company-logo">IV</div>
+                <div class="company-info">
+                    <div class="company-name">Ivalua</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.7</span><span
+                            class="review-cnt">45 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Foreign MNC</span><span class="tag">Software
+                            Product</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="IT Services & Consulting"
+                data-tags="Startup,IT Services & Consulting,Unicorn">
+                <div class="company-logo">GB</div>
+                <div class="company-info">
+                    <div class="company-name">Globalbees Brands</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.7</span><span
+                            class="review-cnt">103 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">IT Services &
+                            Consulting</span><span class="tag">Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Software Product"
+                data-tags="Startup,Software Product,Unicorn">
+                <div class="company-logo">HS</div>
+                <div class="company-info">
+                    <div class="company-name">Hasura</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.6</span><span
+                            class="review-cnt">5 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">Software
+                            Product</span><span class="tag">Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Internet"
+                data-tags="Startup,Internet,Unicorn">
+                <div class="company-logo">U</div>
+                <div class="company-info">
+                    <div class="company-name">Udaan</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.9</span><span
+                            class="review-cnt">5.7K+ reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">Internet</span><span
+                            class="tag">Unicorn</span><span class="tag">Founded: 2016</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="e-Learning / EdTech"
+                data-tags="Startup,e-Learning / EdTech,Unicorn">
+                <div class="company-logo">PW</div>
+                <div class="company-info">
+                    <div class="company-name">Physicswallah</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.6</span><span
+                            class="review-cnt">2.6K+ reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">e-Learning /
+                            EdTech</span><span class="tag">Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Startup" data-industry="Emerging Technologies"
+                data-tags="Startup,Emerging Technologies,Unicorn">
+                <div class="company-logo">ZT</div>
+                <div class="company-info">
+                    <div class="company-name">Zeta</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">3.2</span><span
+                            class="review-cnt">314 reviews</span></div>
+                    <div class="company-tags"><span class="tag">Startup</span><span class="tag">Emerging
+                            Technologies</span><span class="tag">Unicorn</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="#" class="company-card" data-type="Foreign MNC" data-industry="Analytics / KPO / Research"
+                data-tags="Foreign MNC,Analytics / KPO / Research">
+                <div class="company-logo">FA</div>
+                <div class="company-info">
+                    <div class="company-name">Fractal Analytics</div>
+                    <div class="company-rating"><span class="star-icon">★</span><span class="rating-val">4</span><span
+                            class="review-cnt">1K+ reviews</span></div>
+                    <div class="company-tags"><span class="tag">Foreign MNC</span><span class="tag">Analytics / KPO /
+                            Research</span></div>
+                </div>
+                <span class="arrow-icon">›</span>
+            </a>
+        </div>
+
+        <!-- PAGINATION ROW (spans both columns) -->
+        <div class="pagination-row">
+            <span class="page-label">Page <span id="page-label-current">1</span> of 3</span>
+            <button class="page-btn disabled" id="btn-prev" onclick="changePage(currentPage - 1)">
+                <span class="chevron-sm">‹</span> Previous
+            </button>
+            <button class="page-btn active" id="btn-p1" onclick="changePage(1)">1</button>
+            <button class="page-btn" id="btn-p2" onclick="changePage(2)">2</button>
+            <button class="page-btn" id="btn-p3" onclick="changePage(3)">3</button>
+            <button class="page-btn" id="btn-next" onclick="changePage(currentPage + 1)">
+                Next <span class="chevron-sm">›</span>
+            </button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="unicorn-box">
+            <h3>Popular companies in category Unicorns</h3>
+
+            <div class="tabs">
+                <a href="#">Company By Industry</a>
+                <a href="#">Company By Type</a>
+                <a href="#">Company By Functional Area</a>
+            </div>
+
+            <div class="content">
+                <ul>
+                    <li><a href="#">Internet companies in India</a></li>
+                    <li><a href="#">E-Learning / EdTech companies in India</a></li>
+                    <li><a href="#">Courier / Logistics companies in India</a></li>
+                </ul>
+
+                <ul>
+                    <li><a href="#">Software Product companies in India</a></li>
+                    <li><a href="#">IT Services & Consulting companies in India</a></li>
+                </ul>
+
+                <ul>
+                    <li><a href="#">FinTech / Payments companies in India</a></li>
+                    <li><a href="#">Retail companies in India</a></li>
+                </ul>
+            </div>
+
+            <div class="breadcrumb">
+                <a href="#">Home</a> >
+                <a href="#">Companies In India</a> >
+                <a href="#">Unicorns Companies In India</a>
+            </div>
+        </div>
+    </div>
+    <footer class="rj-footer">
+        <div class="rj-footer-container">
+
+            <!-- Logo + Social -->
+            <div class="rj-footer-left">
+                <div class="rj-footer-logo-text">
+                    <span class="rj-footer-logo-i">i</span>naukri
+                </div>
+                <p class="rj-footer-social-label">Connect with us</p>
+                <div class="rj-social-icons">
+                    <a href="#" class="rj-social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="rj-social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="rj-social-btn" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="rj-social-btn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" class="rj-social-btn" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Link columns -->
+            <div class="rj-footer-links">
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Company</p>
+                    <a href="#">About us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Employer home</a>
+                    <a href="#">Sitemap</a>
+                    <a href="#">Credits</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Support</p>
+                    <a href="#">Help center</a>
+                    <a href="#">Summons/Notices</a>
+                    <a href="#">Grievances</a>
+                    <a href="#">Report issue</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Legal</p>
+                    <a href="#">Privacy policy</a>
+                    <a href="#">Terms &amp; conditions</a>
+                    <a href="#">Fraud alert</a>
+                    <a href="#">Trust &amp; safety</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">For Job Seekers</p>
+                    <a href="#">Search jobs</a>
+                    <a href="#">Browse companies</a>
+                    <a href="#">Resume builder</a>
+                    <a href="#">Career advice</a>
+                    <a href="#">Salary calculator</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">For Employers</p>
+                    <a href="#">Post a job</a>
+                    <a href="#">Employer login</a>
+                    <a href="#">Hiring solutions</a>
+                    <a href="#">View plans</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="rj-footer-bottom">
+            <span>© 2025 Naukri Clone. All rights reserved.</span>
+            <span>Made with ❤️ in India</span>
+        </div>
+    </footer>
+
+    <script src="{% static 'core/js/company_unicorn.js' %}"></script>
+</body>
+
+</html>

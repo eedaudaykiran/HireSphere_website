@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Naukri Clone</title>
+    <link rel="stylesheet" href="{% static 'core/css/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .messages-box {
+            max-width: 700px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+        }
+
+        .alert {
+            padding: 13px 18px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .field-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        input.input-error {
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, .1) !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="login-navbar">
+        <a href="{% url 'index' %}" class="logo">
+            <span class="logo-icon">i</span>
+            <span class="logo-text">naukri</span>
+        </a>
+        <div class="nav-right">
+            <span>New to Naukri?</span>
+            <a href="{% url 'register' %}" class="register-link">Register for free</a>
+        </div>
+    </header>
+
+    <!-- Flash messages -->
+    {% if messages %}
+    <div class="messages-box">
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
+            <i class="fa {% if message.tags == 'success' %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Login Main -->
+    <section class="login-page">
+
+        <!-- Left -->
+        <div class="login-left">
+            <div class="left-card">
+                <h2>On registering, you can</h2>
+                <div class="feature-item"><i class="fa fa-check-circle"></i><span>Build your profile and let recruiters
+                        find you</span></div>
+                <div class="feature-item"><i class="fa fa-check-circle"></i><span>Get job postings delivered right to
+                        your email</span></div>
+                <div class="feature-item"><i class="fa fa-check-circle"></i><span>Find a job and grow your career</span>
+                </div>
+                <a href="{% url 'register' %}" class="register-free-btn">Register for free</a>
+            </div>
+        </div>
+
+        <!-- Right — Login form -->
+        <div class="login-form-box">
+            <h2>Login</h2>
+            <p>Access your Naukri profile</p>
+
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <label>Email ID</label>
+                <input type="email" name="email" placeholder="Enter your registered Email ID"
+                    value="{{ form.email.value|default:'' }}" class="{% if form.email.errors %}input-error{% endif %}"
+                    required>
+                {% for error in form.email.errors %}
+                <p class="field-error"><i class="fa fa-triangle-exclamation"></i>{{ error }}</p>
+                {% endfor %}
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password"
+                    class="{% if form.password.errors %}input-error{% endif %}" required>
+                {% for error in form.password.errors %}
+                <p class="field-error"><i class="fa fa-triangle-exclamation"></i>{{ error }}</p>
+                {% endfor %}
+
+                <div class="forgot-row">
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-submit-btn">Login</button>
+
+                <div class="or-divider"><span>or</span></div>
+
+                <button type="button" class="google-btn">
+                    <i class="fa-brands fa-google"></i> Sign in with Google
+                </button>
+            </form>
+        </div>
+
+    </section>
+
+</body>
+
+</html>

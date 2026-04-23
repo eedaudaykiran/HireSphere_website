@@ -1,0 +1,702 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Jobs</title>
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/remote.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════
+         NAVBAR
+    ═══════════════════════════════════════ -->
+    <header class="rj-navbar">
+        <a href="{% url 'index' %}" class="rj-nav-logo">
+            <div class="rj-nav-logo-icon">
+                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                    <circle cx="18" cy="18" r="18" fill="#275df5" />
+                    <path d="M11 26V14l10 8V14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <circle cx="24" cy="12" r="2.5" fill="#fff" />
+                </svg>
+            </div>
+            <span class="rj-nav-logo-text">naukri</span>
+        </a>
+
+        <nav class="rj-nav-links">
+            <!-- Jobs dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Jobs <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Popular categories</p>
+                        <a href="{% url 'it_jobs' %}">IT jobs</a>
+                        <a href="{% url 'sales_jobs' %}">Sales Jobs</a>
+                        <a href="#">Marketing Jobs</a>
+                        <a href="#">Data Science Jobs</a>
+                        <a href="#">HR Jobs</a>
+                        <a href="#">Engineering Jobs</a>
+                        <a href="#">Finance Jobs</a>
+                        <a href="#">Operations Jobs</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Jobs in demand</p>
+                        <a href="#">Fresher Jobs</a>
+                        <a href="#">MNC Jobs</a>
+                        <a href="{% url 'remote_jobs' %}">Remote Jobs</a>
+                        <a href="#">Work from Home Jobs</a>
+                        <a href="#">Walk-in Jobs</a>
+                        <a href="#">Part-time Jobs</a>
+                        <a href="#">Internship Jobs</a>
+                        <a href="#">Startup Jobs</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Jobs by location</p>
+                        <a href="#">Jobs in Delhi</a>
+                        <a href="#">Jobs in Mumbai</a>
+                        <a href="#">Jobs in Bangalore</a>
+                        <a href="#">Jobs in Hyderabad</a>
+                        <a href="#">Jobs in Chennai</a>
+                        <a href="#">Jobs in Pune</a>
+                        <a href="#">Jobs in Kolkata</a>
+                        <a href="#">Jobs in Ahmedabad</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Companies dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Companies <i
+                        class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Explore categories</p>
+                        <a href="#">Unicorn</a>
+                        <a href="#">MNC</a>
+                        <a href="#">Startup</a>
+                        <a href="#">Product based</a>
+                        <a href="#">Internet</a>
+                        <a href="#">Fortune 500</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Explore collections</p>
+                        <a href="#">Top companies</a>
+                        <a href="#">IT companies</a>
+                        <a href="#">Fintech companies</a>
+                        <a href="#">Sponsored companies</a>
+                        <a href="#">Featured companies</a>
+                        <a href="#">Actively hiring</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Research companies</p>
+                        <a href="#">Interview questions</a>
+                        <a href="#">Company salaries</a>
+                        <a href="#">Company reviews</a>
+                        <a href="#">Salary Calculator</a>
+                        <a href="#">Work culture ratings</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Services <i
+                        class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Resume writing</p>
+                        <a href="#">Text resume</a>
+                        <a href="#">Visual resume</a>
+                        <a href="#">Resume critique</a>
+                        <p class="rj-drop-heading rj-drop-heading--mt">Find Jobs</p>
+                        <a href="#">Jobs4u</a>
+                        <a href="#">Priority applicant</a>
+                        <a href="#">Contact us</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Get recruiter's attention</p>
+                        <a href="#">Resume display</a>
+                        <p class="rj-drop-heading rj-drop-heading--mt">Monthly subscriptions</p>
+                        <a href="#">Basic &amp; premium plans</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Free resume resources</p>
+                        <a href="#">Resume maker</a>
+                        <a href="#">Resume quality score</a>
+                        <a href="#">Resume samples</a>
+                        <a href="#">Job letter samples</a>
+                        <a href="#">Cover letter builder</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="rj-nav-search">
+            <input type="text" class="rj-nav-search-input" placeholder="Search jobs, skills, companies...">
+            <button class="rj-nav-search-btn">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <div class="rj-nav-right">
+            <a href="{% url 'login' %}" class="rj-nav-login">Login</a>
+            <a href="{% url 'register' %}" class="rj-nav-register">Register</a>
+            <div class="rj-nav-dropdown rj-employers-drop">
+                <div class="rj-nav-employers">
+                    For employers <i class="fa fa-chevron-down rj-drop-arrow"></i>
+                </div>
+                <div class="rj-drop-menu rj-drop-narrow">
+                    <a href="#">Buy Online</a>
+                    <a href="#">Naukri Talent Cloud</a>
+                    <a href="{% url 'employer_login' %}">Employer Login</a>
+                    <a href="#">Post a Job</a>
+                    <a href="#">View Plans</a>
+                    <a href="#">Recruitment Solutions</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Carousel -->
+    <div class="rj-cat-strip">
+        <div class="rj-cat-track-wrap">
+            <div class="rj-cat-track" id="catTrack">
+                <a href="#" class="rj-cat-pill">Supply Chain Jobs</a>
+                <a href="#" class="rj-cat-pill">Foreign MNC Jobs</a>
+                <a href="#" class="rj-cat-pill">Work from Home Jobs</a>
+                <a href="#" class="rj-cat-pill">Startup Jobs</a>
+                <a href="#" class="rj-cat-pill">Sales Jobs</a>
+                <a href="#" class="rj-cat-pill">Analytics &amp; BI Jobs</a>
+                <a href="#" class="rj-cat-pill">Marketing Jobs</a>
+                <a href="#" class="rj-cat-pill">Data Science Jobs</a>
+                <a href="#" class="rj-cat-pill">Banking &amp; Finance Jobs</a>
+                <a href="#" class="rj-cat-pill">Engineering Jobs</a>
+                <a href="#" class="rj-cat-pill">HR Jobs</a>
+                <a href="#" class="rj-cat-pill">IT Jobs</a>
+                <a href="#" class="rj-cat-pill">Fresher Jobs</a>
+            </div>
+        </div>
+        <button class="rj-cat-arrow rj-cat-next" id="catNext">
+            <i class="fa fa-chevron-right"></i>
+        </button>
+        <button class="rj-cat-arrow rj-cat-prev" id="catPrev" style="display:none;">
+            <i class="fa fa-chevron-left"></i>
+        </button>
+    </div>
+
+    <div class="rj-result-bar">
+        <span class="rj-result-count">1 – 20 of <strong>15,651 Remote Jobs</strong></span>
+        <button class="rj-sort-btn">Sort by: Relevance <i class="fa fa-chevron-down"></i></button>
+    </div>
+
+    <!-- Three‑column layout -->
+    <div class="rj-page-wrap">
+
+        <!-- FILTER PANEL (column 1) -->
+        <form method="GET" id="filterForm">
+            <aside class="rj-col rj-col--filter">
+                <div class="rj-filter-head">
+                    <span class="rj-filter-title">All Filters</span>
+                    <span class="rj-filter-applied">Applied (1)</span>
+                </div>
+
+                <!-- Work mode -->
+                <!-- <div class="rj-sec-body" id="body-workmode"> -->
+
+                <div class="rj-filter-section" id="sec-workmode">
+                    <div class="rj-sec-header" onclick="toggleSection('workmode')">
+                        <span>Work mode</span>
+                        <i class="fa fa-chevron-up" id="icon-workmode"></i>
+                    </div>
+
+                    <div class="rj-sec-body" id="body-workmode">
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="work_mode" value="On-site" {% if "On-site" in
+                                selected_work_modes %}checked{% endif %} onchange="this.form.submit()">
+                            <span>Work from office</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="work_mode" value="Hybrid" {% if "Hybrid" in selected_work_modes
+                                %}checked{% endif %} onchange="this.form.submit()">
+                            <span>Hybrid</span>
+                        </label>
+
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="work_mode" value="Remote" {% if "Remote" in selected_work_modes
+                                %}checked{% endif %} onchange="this.form.submit()">
+                            <span>Remote</span>
+                        </label>
+
+                    </div>
+                </div>
+                <!-- Experience slider -->
+                <div class="rj-filter-section" id="sec-exp">
+
+                    <!-- Header -->
+                    <div class="rj-sec-header" onclick="toggleSection('exp')">
+                        <span>Experience</span>
+                        <i class="fa fa-chevron-up" id="icon-exp"></i>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="rj-sec-body" id="body-exp">
+
+                        <div class="rj-slider-wrap">
+
+                            <!-- Bubble -->
+                            <div class="rj-slider-bubble" id="sliderBubble">
+                                {{ selected_experience|default:"Any" }}
+                            </div>
+
+                            <!-- Slider -->
+                            <input type="range" name="experience" min="0" max="30"
+                                value="{{ selected_experience|default:30 }}" class="rj-slider" id="expSlider"
+                                onchange="this.form.submit()">
+
+                            <!-- Labels -->
+                            <div class="rj-slider-labels">
+                                <span>0 Yrs</span>
+                                <span>Any</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+        </form>
+
+        <!-- Department -->
+
+
+        <!-- JOB CARDS (column 2) -->
+        <main class="rj-col rj-col--jobs">
+
+            {% for job in jobs %}
+            <div class="rj-job-card" data-workmode="{{ job.work_mode|default:'' }}"
+                data-category="{{ job.category|default:'' }}" data-salary="{{ job.salary|default:'' }}">
+
+                <!-- LOGO -->
+                <div class="rj-card-logo">
+                    {% if job.logo %}
+                    <img src="{{ job.logo.url }}" class="rj-logo-img" alt="{{ job.company }}">
+                    {% else %}
+                    <div class="rj-logo-placeholder">
+                        {{ job.company|default:"NA"|slice:":2"|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- BODY -->
+                <div class="rj-card-body">
+
+                    <!-- TITLE -->
+                    <a href="#" class="rj-job-title-link">
+                        <div class="rj-job-title">
+                            {{ job.title|default:"No Title" }}
+                        </div>
+                    </a>
+
+                    <!-- COMPANY -->
+                    <a href="#" class="rj-company-link">
+                        <div class="rj-company-name">
+                            {{ job.company|default:"Unknown Company" }}
+                            <span class="rj-star-rating">
+                                <i class="fa-solid fa-star rj-star-icon"></i>
+                                <span class="rj-star-value">3.5</span>
+                                <span class="rj-review-count">118 Reviews</span>
+                            </span>
+                        </div>
+                    </a>
+
+                    <!-- META -->
+                    <div class="rj-meta-row">
+                        <span>
+                            <i class="fa-solid fa-briefcase"></i>
+                            <a href="#" class="rj-meta-link">
+                                {{ job.experience|default:"Not specified" }}
+                            </a>
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            <a href="#" class="rj-meta-link">
+                                {{ job.salary|default:"Not disclosed" }}
+                            </a>
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-location-dot"></i>
+                            <a href="#" class="rj-meta-link">
+                                {{ job.work_mode|default:"Not specified" }}
+                            </a>
+                        </span>
+                    </div>
+
+                    <!-- CONDITIONS -->
+                    {% if job.conditions %}
+                    <div class="rj-condition-row">
+                        <a href="#" class="rj-condition-link">
+                            <span>
+                                <i class="fa-solid fa-hands"></i>
+                                {{ job.conditions }}
+                            </span>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <!-- SKILLS -->
+                    <div class="rj-skills-row">
+                        {% if job.skills %}
+                        {% for skill in job.skills_list %}
+                        <a href="#" class="rj-skill">{{ skill }}</a>
+                        {% endfor %}
+                        {% else %}
+                        <span class="rj-skill">No skills</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="rj-card-footer">
+                    <span class="rj-posted">
+                        posted {{ job.created_at|naturaltime }}
+                    </span>
+                    <button class="rj-save-btn" data-job-id="{{ job.id }}" onclick="toggleSave(this)">
+                        <i class="fa-regular fa-bookmark"></i>
+                        <span class="rj-save-text">Save</span>
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <p>No remote jobs available</p>
+            {% endfor %}
+
+            <!-- NO RESULTS -->
+            <div class="rj-no-results" id="rjNoResults">
+                <i class="fa-solid fa-magnifying-glass"
+                    style="font-size:28px; margin-bottom:10px; display:block; color:#d1d5db;"></i>
+                No jobs match your selected filters. Try removing some filters.
+            </div>
+
+            <!-- PAGINATION (dynamic) -->
+            <div class="rj-pagination" id="rjPagination"></div>
+
+        </main>
+
+        <!-- PROMO BOX (column 3) -->
+        <aside class="rj-col rj-col--promo">
+            <div class="rj-promo-box">
+                <div class="rj-promo-logo-wrap">
+                    <div class="rj-promo-logo">
+                        <span class="rj-logo-naukri">naukri</span>
+                        <span class="rj-logo-ff">FAST<span class="rj-ff-accent">FORWARD</span></span>
+                        <span class="rj-logo-tagline">Speed Up Your Career</span>
+                    </div>
+                </div>
+                <div class="rj-promo-body">
+                    <h3 class="rj-promo-heading">Get 3X more profile views from recruiters</h3>
+                    <p class="rj-promo-text">Increase your chances of callback with Naukri FastForward</p>
+                    <a href="#" class="rj-promo-link">Know More</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="rj-toast" id="rjToast">
+        <i class="fa-solid fa-check-circle" id="rjToastIcon"></i>
+        <span id="rjToastMsg">Saved successfully!</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="rj-footer">
+        <div class="rj-footer-container">
+            <div class="rj-footer-left">
+                <div class="rj-footer-logo-text">
+                    <span class="rj-footer-logo-i">i</span>naukri
+                </div>
+                <p class="rj-footer-social-label">Connect with us</p>
+                <div class="rj-social-icons">
+                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="rj-footer-links">
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Company</p>
+                    <a href="#">About us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Employer home</a>
+                    <a href="#">Sitemap</a>
+                    <a href="#">Credits</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Support</p>
+                    <a href="#">Help center</a>
+                    <a href="#">Summons/Notices</a>
+                    <a href="#">Grievances</a>
+                    <a href="#">Report issue</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Legal</p>
+                    <a href="#">Privacy policy</a>
+                    <a href="#">Terms &amp; conditions</a>
+                    <a href="#">Fraud alert</a>
+                    <a href="#">Trust &amp; safety</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">For Job Seekers</p>
+                    <a href="#">Search jobs</a>
+                    <a href="#">Browse companies</a>
+                    <a href="#">Resume builder</a>
+                    <a href="#">Career advice</a>
+                    <a href="#">Salary calculator</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">For Employers</p>
+                    <a href="#">Post a job</a>
+                    <a href="#">Employer login</a>
+                    <a href="#">Hiring solutions</a>
+                    <a href="#">View plans</a>
+                </div>
+            </div>
+        </div>
+        <div class="rj-footer-bottom">
+            <span>© 2025 Naukri Clone. All rights reserved.</span>
+            <span>Made with ❤️ in India</span>
+        </div>
+    </footer>
+
+    <script>
+        /* ========== TOAST HELPER ========== */
+        function showToast(message, type) {
+            const toast = document.getElementById('rjToast');
+            const msg = document.getElementById('rjToastMsg');
+            const icon = document.getElementById('rjToastIcon');
+            msg.textContent = message;
+            toast.classList.remove('rj-toast--saved', 'rj-toast--removed');
+            if (type === 'saved') {
+                toast.classList.add('rj-toast--saved');
+                icon.className = 'fa-solid fa-bookmark';
+            } else {
+                toast.classList.add('rj-toast--removed');
+                icon.className = 'fa-solid fa-bookmark-slash';
+            }
+            toast.classList.add('rj-toast--show');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => toast.classList.remove('rj-toast--show'), 2500);
+        }
+
+        /* ========== SAVE BUTTON + LOCALSTORAGE ========== */
+        let savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '{}');
+
+        function toggleSave(btn) {
+            const jobId = btn.dataset.jobId;
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('.rj-save-text');
+            const isSaved = btn.classList.contains('rj-saved');
+            if (isSaved) {
+                btn.classList.remove('rj-saved');
+                icon.className = 'fa-regular fa-bookmark';
+                text.textContent = 'Save';
+                delete savedJobs[jobId];
+                showToast('Removed from saved jobs', 'removed');
+            } else {
+                btn.classList.add('rj-saved');
+                icon.className = 'fa-solid fa-bookmark';
+                text.textContent = 'Saved';
+                savedJobs[jobId] = true;
+                showToast('Saved successfully!', 'saved');
+            }
+            localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+        }
+
+        /* ========== FILTER FUNCTION (UPDATED) ========== */
+        function getAllCards() {
+            return Array.from(document.querySelectorAll('.rj-job-card'));
+        }
+
+        function getVisibleCards() {
+            return getAllCards().filter(card => !card.classList.contains('rj-filter-hidden'));
+        }
+
+
+
+        /* ========== PAGINATION (7 per page) ========== */
+        const ITEMS_PER_PAGE = 7;
+        let currentPage = 1;
+
+        function renderPage() {
+            const cards = getVisibleCards();
+            const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+
+            // Show/hide based on page
+            cards.forEach((card, i) => {
+                card.style.display = (i >= start && i < end) ? '' : 'none';
+            });
+            // Ensure filtered cards stay hidden
+            getAllCards().filter(c => c.classList.contains('rj-filter-hidden')).forEach(c => c.style.display = 'none');
+
+            // Update result count
+            const countEl = document.querySelector('.rj-result-count');
+            if (countEl) {
+                const totalVisible = cards.length;
+                if (totalVisible === 0) {
+                    countEl.innerHTML = `0 of <strong>0 Remote Jobs</strong>`;
+                } else {
+                    countEl.innerHTML = `${start + 1} – ${Math.min(end, totalVisible)} of <strong>${totalVisible} Remote Jobs</strong>`;
+                }
+            }
+
+            // Show/hide no-results
+            const noResults = document.getElementById('rjNoResults');
+            if (noResults) noResults.style.display = cards.length === 0 ? 'block' : 'none';
+
+            // Build pagination buttons
+            buildPageButtons(totalPages);
+        }
+
+        function buildPageButtons(totalPages) {
+            const pagination = document.getElementById('rjPagination');
+            if (!pagination) return;
+            pagination.innerHTML = '';
+
+            // Prev button
+            const prev = document.createElement('button');
+            prev.className = 'rj-page-btn rj-page-prev';
+            prev.disabled = currentPage === 1;
+            prev.innerHTML = '<i class="fa fa-chevron-left"></i> Previous';
+            prev.onclick = () => goPage('prev');
+            pagination.appendChild(prev);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'rj-page-btn rj-page-num' + (i === currentPage ? ' active' : '');
+                btn.textContent = i;
+                btn.onclick = () => { currentPage = i; renderPage(); };
+                pagination.appendChild(btn);
+            }
+
+            // Next button
+            const next = document.createElement('button');
+            next.className = 'rj-page-btn rj-page-next';
+            next.disabled = currentPage === totalPages;
+            next.innerHTML = 'Next <i class="fa fa-chevron-right"></i>';
+            next.onclick = () => goPage('next');
+            pagination.appendChild(next);
+        }
+
+        function goPage(dir) {
+            const cards = getVisibleCards();
+            const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
+            if (dir === 'prev' && currentPage > 1) currentPage--;
+            else if (dir === 'next' && currentPage < totalPages) currentPage++;
+            renderPage();
+        }
+
+        /* ========== CAROUSEL ========== */
+        (function () {
+            const track = document.getElementById('catTrack');
+            const next = document.getElementById('catNext');
+            const prev = document.getElementById('catPrev');
+            const scrollAmt = 320;
+            next.addEventListener('click', () => track.scrollBy({ left: scrollAmt, behavior: 'smooth' }));
+            prev.addEventListener('click', () => track.scrollBy({ left: -scrollAmt, behavior: 'smooth' }));
+            track.addEventListener('scroll', () => {
+                const atStart = track.scrollLeft <= 4;
+                const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+                prev.style.display = atStart ? 'none' : 'flex';
+                next.style.display = atEnd ? 'none' : 'flex';
+            });
+        })();
+
+        /* ========== FRESHNESS DROPDOWN ========== */
+        function toggleFreshness() {
+            const dd = document.getElementById('fresh-dropdown');
+            const icon = document.getElementById('icon-fresh');
+            const open = dd.style.display !== 'none';
+            dd.style.display = open ? 'none' : 'block';
+            icon.className = open ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
+        }
+        function selectFresh(val) {
+            document.getElementById('freshLabel').textContent = val;
+            document.getElementById('freshLabel').style.color = '#275df5';
+            document.getElementById('fresh-dropdown').style.display = 'none';
+            document.getElementById('icon-fresh').className = 'fa fa-chevron-down';
+
+        }
+
+        /* ========== COLLAPSE SECTIONS ========== */
+        function toggleSection(id) {
+            const body = document.getElementById('body-' + id);
+            const icon = document.getElementById('icon-' + id);
+            const isOpen = body.style.display !== 'none';
+            body.style.display = isOpen ? 'none' : 'block';
+            icon.className = isOpen ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
+        }
+        function toggleMore(id) {
+            const more = document.getElementById('more-' + id);
+            const btn = document.querySelector(`[data-more="${id}"]`);
+            const isHidden = more.style.display === 'none';
+            more.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'View Less' : 'View More';
+        }
+/* ========== EXPERIENCE SLIDER ========== */
+document.addEventListener('DOMContentLoaded', function () {
+
+    const slider = document.getElementById('expSlider');
+
+    function updateSlider(val) {
+        const bubble = document.getElementById('sliderBubble');
+
+        bubble.textContent = val >= 30 ? 'Any' : val + ' Yr' + (val == 1 ? '' : 's');
+
+        const pct = (val / 30) * 100;
+        const off = 20 - (pct * 0.4);
+        bubble.style.left = `calc(${pct}% + ${off}px)`;
+
+        slider.style.setProperty('--value', pct + '%');
+    }
+
+    slider.addEventListener('input', function (e) {
+        updateSlider(e.target.value);
+    });
+
+    updateSlider(slider.value);
+});        
+
+        /* ========== INITIALIZE ========== */
+        document.addEventListener('DOMContentLoaded', function () {
+            // restore saved job states
+            document.querySelectorAll('.rj-save-btn').forEach(btn => {
+                const jobId = btn.dataset.jobId;
+                if (savedJobs[jobId]) {
+                    btn.classList.add('rj-saved');
+                    btn.querySelector('i').className = 'fa-solid fa-bookmark';
+                    btn.querySelector('.rj-save-text').textContent = 'Saved';
+                }
+            });
+
+            renderPage();
+        });
+    </script>
+</body>
+
+</html>

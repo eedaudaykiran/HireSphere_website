@@ -1,0 +1,1185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs in Delhi Jobs </title>
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/delhi.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════
+     NAVBAR  — matches image exactly
+═══════════════════════════════════════ -->
+    <header class="rj-navbar">
+
+        <!-- Left: Logo -->
+        <a href="{% url 'index' %}" class="rj-nav-logo">
+            <div class="rj-nav-logo-icon">
+                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                    <circle cx="18" cy="18" r="18" fill="#275df5" />
+                    <path d="M11 26V14l10 8V14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <circle cx="24" cy="12" r="2.5" fill="#fff" />
+                </svg>
+            </div>
+            <span class="rj-nav-logo-text">naukri</span>
+        </a>
+
+        <!-- Center-left: Nav links with dropdowns -->
+        <nav class="rj-nav-links">
+
+            <!-- Jobs dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Jobs <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Popular categories</p>
+                        <a href="{% url 'it_jobs' %}", target="_self">IT jobs</a>
+                        <a href="#">Sales Jobs</a>
+                        <a href="#">Marketing Jobs</a>
+                        <a href="#">Data Science Jobs</a>
+                        <a href="#">HR Jobs</a>
+                        <a href="#">Engineering Jobs</a>
+                        <a href="#">Finance Jobs</a>
+                        <a href="#">Operations Jobs</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Jobs in demand</p>
+                        <a href="#">Fresher Jobs</a>
+                        <a href="#">MNC Jobs</a>
+                        <a href="{% url 'remote_jobs' %}">Remote Jobs</a>
+                        <a href="#">Work from Home Jobs</a>
+                        <a href="#">Walk-in Jobs</a>
+                        <a href="#">Part-time Jobs</a>
+                        <a href="#">Internship Jobs</a>
+                        <a href="#">Startup Jobs</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Jobs by location</p>
+                        <a href="#">Jobs in Delhi</a>
+                        <a href="#">Jobs in Mumbai</a>
+                        <a href="#">Jobs in Bangalore</a>
+                        <a href="#">Jobs in Hyderabad</a>
+                        <a href="#">Jobs in Chennai</a>
+                        <a href="#">Jobs in Pune</a>
+                        <a href="#">Jobs in Kolkata</a>
+                        <a href="#">Jobs in Ahmedabad</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Companies dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Companies <i
+                        class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Explore categories</p>
+                        <a href="#">Unicorn</a>
+                        <a href="#">MNC</a>
+                        <a href="#">Startup</a>
+                        <a href="#">Product based</a>
+                        <a href="#">Internet</a>
+                        <a href="#">Fortune 500</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Explore collections</p>
+                        <a href="#">Top companies</a>
+                        <a href="#">IT companies</a>
+                        <a href="#">Fintech companies</a>
+                        <a href="#">Sponsored companies</a>
+                        <a href="#">Featured companies</a>
+                        <a href="#">Actively hiring</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Research companies</p>
+                        <a href="#">Interview questions</a>
+                        <a href="#">Company salaries</a>
+                        <a href="#">Company reviews</a>
+                        <a href="#">Salary Calculator</a>
+                        <a href="#">Work culture ratings</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services dropdown -->
+            <div class="rj-nav-dropdown">
+                <a href="#" class="rj-nav-link rj-has-drop">Services <i
+                        class="fa fa-chevron-down rj-drop-arrow"></i></a>
+                <div class="rj-drop-menu rj-drop-wide">
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Resume writing</p>
+                        <a href="#">Text resume</a>
+                        <a href="#">Visual resume</a>
+                        <a href="#">Resume critique</a>
+                        <p class="rj-drop-heading rj-drop-heading--mt">Find Jobs</p>
+                        <a href="#">Jobs4u</a>
+                        <a href="#">Priority applicant</a>
+                        <a href="#">Contact us</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Get recruiter's attention</p>
+                        <a href="#">Resume display</a>
+                        <p class="rj-drop-heading rj-drop-heading--mt">Monthly subscriptions</p>
+                        <a href="#">Basic &amp; premium plans</a>
+                    </div>
+                    <div class="rj-drop-col">
+                        <p class="rj-drop-heading">Free resume resources</p>
+                        <a href="#">Resume maker</a>
+                        <a href="#">Resume quality score</a>
+                        <a href="#">Resume samples</a>
+                        <a href="#">Job letter samples</a>
+                        <a href="#">Cover letter builder</a>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+
+        <!-- Center: Search box -->
+        <div class="rj-nav-search">
+            <input type="text" class="rj-nav-search-input" placeholder="Search jobs, skills, companies...">
+            <button class="rj-nav-search-btn">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <!-- Right: Login, Register, For Employers -->
+        <div class="rj-nav-right">
+            <a href="{% url 'login' %}" class="rj-nav-login">Login</a>
+            <a href="{% url 'register' %}" class="rj-nav-register">Register</a>
+            <div class="rj-nav-dropdown rj-employers-drop">
+                <div class="rj-nav-employers">
+                    For employers <i class="fa fa-chevron-down rj-drop-arrow"></i>
+                </div>
+                <div class="rj-drop-menu rj-drop-narrow">
+                    <a href="#">Buy Online</a>
+                    <a href="#">Naukri Talent Cloud</a>
+                    <a href="{% url 'employer_login' %}">Employer Login</a>
+                    <a href="#">Post a Job</a>
+                    <a href="#">View Plans</a>
+                    <a href="#">Recruitment Solutions</a>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+
+    <!-- ═══════════════════════════════════════
+     CATEGORY CAROUSEL — under navbar
+═══════════════════════════════════════ -->
+    <div class="rj-cat-strip">
+        <div class="rj-cat-track-wrap">
+            <div class="rj-cat-track" id="catTrack">
+                <a href="#" class="rj-cat-pill">Supply Chain Jobs</a>
+                <a href="#" class="rj-cat-pill">Foreign MNC Jobs</a>
+                <a href="#" class="rj-cat-pill">Work from Home Jobs</a>
+                <a href="#" class="rj-cat-pill">Startup Jobs</a>
+                <a href="#" class="rj-cat-pill">Sales Jobs</a>
+                <a href="#" class="rj-cat-pill">Analytics &amp; BI Jobs</a>
+                <a href="#" class="rj-cat-pill">Marketing Jobs</a>
+                <a href="#" class="rj-cat-pill">Data Science Jobs</a>
+                <a href="#" class="rj-cat-pill">Banking &amp; Finance Jobs</a>
+                <a href="#" class="rj-cat-pill">Engineering Jobs</a>
+                <a href="#" class="rj-cat-pill">HR Jobs</a>
+                <a href="#" class="rj-cat-pill">IT Jobs</a>
+                <a href="#" class="rj-cat-pill">Fresher Jobs</a>
+            </div>
+        </div>
+        <button class="rj-cat-arrow rj-cat-next" id="catNext">
+            <i class="fa fa-chevron-right"></i>
+        </button>
+        <button class="rj-cat-arrow rj-cat-prev" id="catPrev" style="display:none;">
+            <i class="fa fa-chevron-left"></i>
+        </button>
+    </div>
+
+
+    <div class="rj-result-bar">
+        <span class="rj-result-count">1 – 20 of <strong>15,651 delhi Jobs</strong></span>
+        <button class="rj-sort-btn">Sort by: Relevance <i class="fa fa-chevron-down"></i></button>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+     THREE-COLUMN WRAPPER
+═══════════════════════════════════════ -->
+    <div class="rj-page-wrap">
+
+        <!-- ╔══════════════════════════════╗
+         ║  COLUMN 1 — FILTER PANEL    ║
+         ╚══════════════════════════════╝ -->
+        <aside class="rj-col rj-col--filter">
+
+            <div class="rj-filter-head">
+                <span class="rj-filter-title">All Filters</span>
+                <span class="rj-filter-applied">Applied (1)</span>
+            </div>
+
+            <!-- ── Work mode ── -->
+            <div class="rj-filter-section" id="sec-workmode">
+                <div class="rj-sec-header" onclick="toggleSection('workmode')">
+                    <span>Work mode</span>
+                    <i class="fa fa-chevron-up" id="icon-workmode"></i>
+                </div>
+                <div class="rj-sec-body" id="body-workmode">
+                    <label class="rj-cb-row"><input type="checkbox" checked> <span>Work from office</span><span
+                            class="rj-count">(570329)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"> <span>Hybrid</span> <span
+                            class="rj-count">(17321)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"> <span>Remote</span> <span
+                            class="rj-count">(5095)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"> <span>Temp. WFH due to...</span><span
+                            class="rj-count">(1)</span></label>
+                </div>
+            </div>
+
+            <!-- ── Experience ── -->
+            <div class="rj-filter-section" id="sec-exp">
+                <div class="rj-sec-header" onclick="toggleSection('exp')">
+                    <span>Experience</span>
+                    <i class="fa fa-chevron-up" id="icon-exp"></i>
+                </div>
+                <div class="rj-sec-body" id="body-exp">
+                    <div class="rj-slider-wrap">
+                        <div class="rj-slider-bubble" id="sliderBubble">Any</div>
+                        <input type="range" min="0" max="30" value="30" class="rj-slider" id="expSlider"
+                            oninput="updateSlider(this.value)">
+                        <div class="rj-slider-labels"><span>0 Yrs</span><span>Any</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Department ── -->
+            <div class="rj-filter-section" id="sec-dept">
+                <div class="rj-sec-header" onclick="toggleSection('dept')">
+                    <span>Department</span>
+                    <i class="fa fa-chevron-up" id="icon-dept"></i>
+                </div>
+                <div class="rj-sec-body" id="body-dept">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Engineering - Soft...</span><span
+                            class="rj-count">(134789)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Sales &amp; Business D...</span><span
+                            class="rj-count">(78162)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Customer Success,...</span><span
+                            class="rj-count">(41268)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Production, Manuf...</span><span
+                            class="rj-count">(31289)</span></label>
+                    <div class="rj-more-items" id="more-dept" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>Finance &amp; Accounting</span><span
+                                class="rj-count">(22100)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Human Resources</span><span
+                                class="rj-count">(19845)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Marketing</span><span
+                                class="rj-count">(15630)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="dept" onclick="toggleMore('dept')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Location ── -->
+            <div class="rj-filter-section" id="sec-loc">
+                <div class="rj-sec-header" onclick="toggleSection('loc')">
+                    <span>Location</span>
+                    <i class="fa fa-chevron-up" id="icon-loc"></i>
+                </div>
+                <div class="rj-sec-body" id="body-loc">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Bengaluru</span> <span
+                            class="rj-count">(129908)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Delhi / NCR</span> <span
+                            class="rj-count">(78968)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Mumbai (All Areas)</span><span
+                            class="rj-count">(78032)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Mumbai</span> <span
+                            class="rj-count">(66578)</span></label>
+                    <div class="rj-more-items" id="more-loc" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>Hyderabad</span><span
+                                class="rj-count">(55321)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Pune</span> <span
+                                class="rj-count">(44780)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Chennai</span> <span
+                                class="rj-count">(38900)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="loc" onclick="toggleMore('loc')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Salary ── -->
+            <div class="rj-filter-section" id="sec-sal">
+                <div class="rj-sec-header" onclick="toggleSection('sal')">
+                    <span>Salary</span>
+                    <i class="fa fa-chevron-up" id="icon-sal"></i>
+                </div>
+                <div class="rj-sec-body" id="body-sal">
+                    <label class="rj-cb-row"><input type="checkbox"><span>0-3 Lakhs</span> <span
+                            class="rj-count">(135705)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>3-6 Lakhs</span> <span
+                            class="rj-count">(318977)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>6-10 Lakhs</span> <span
+                            class="rj-count">(297240)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>10-15 Lakhs</span> <span
+                            class="rj-count">(152502)</span></label>
+                    <div class="rj-more-items" id="more-sal" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>15-25 Lakhs</span><span
+                                class="rj-count">(88200)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>25-50 Lakhs</span><span
+                                class="rj-count">(42100)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>50+ Lakhs</span> <span
+                                class="rj-count">(11500)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="sal" onclick="toggleMore('sal')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Company type ── -->
+            <div class="rj-filter-section" id="sec-ctype">
+                <div class="rj-sec-header" onclick="toggleSection('ctype')">
+                    <span>Company type</span>
+                    <i class="fa fa-chevron-up" id="icon-ctype"></i>
+                </div>
+                <div class="rj-sec-body" id="body-ctype">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Foreign MNC</span> <span
+                            class="rj-count">(109347)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Corporate</span> <span
+                            class="rj-count">(105959)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Indian MNC</span> <span
+                            class="rj-count">(29027)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Startup</span> <span
+                            class="rj-count">(19564)</span></label>
+                    <div class="rj-more-items" id="more-ctype" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>SME</span> <span
+                                class="rj-count">(8900)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Public Sector</span> <span
+                                class="rj-count">(5600)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="ctype" onclick="toggleMore('ctype')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Role category ── -->
+            <div class="rj-filter-section" id="sec-role">
+                <div class="rj-sec-header" onclick="toggleSection('role')">
+                    <span>Role category</span>
+                    <i class="fa fa-chevron-up" id="icon-role"></i>
+                </div>
+                <div class="rj-sec-body" id="body-role">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Software Develop...</span><span
+                            class="rj-count">(99960)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Retail &amp; B2C Sales</span><span
+                            class="rj-count">(31791)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>BD / Pre Sales</span> <span
+                            class="rj-count">(24702)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Quality Assurance ...</span><span
+                            class="rj-count">(18953)</span></label>
+                    <div class="rj-more-items" id="more-role" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>IT Networking</span> <span
+                                class="rj-count">(14500)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>HR / Admin</span> <span
+                                class="rj-count">(11200)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Finance</span> <span
+                                class="rj-count">(9800)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="role" onclick="toggleMore('role')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Stipend ── -->
+            <div class="rj-filter-section" id="sec-stip">
+                <div class="rj-sec-header" onclick="toggleSection('stip')">
+                    <span>Stipend</span>
+                    <i class="fa fa-chevron-up" id="icon-stip"></i>
+                </div>
+                <div class="rj-sec-body" id="body-stip">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Unpaid</span> <span
+                            class="rj-count">(4912)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>0-10k</span> <span
+                            class="rj-count">(246)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>10k-20k</span> <span
+                            class="rj-count">(544)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>20k-30k</span> <span
+                            class="rj-count">(125)</span></label>
+                    <div class="rj-more-items" id="more-stip" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>30k-50k</span><span
+                                class="rj-count">(88)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>50k+</span> <span
+                                class="rj-count">(42)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="stip" onclick="toggleMore('stip')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Duration ── -->
+            <div class="rj-filter-section" id="sec-dur">
+                <div class="rj-sec-header" onclick="toggleSection('dur')">
+                    <span>Duration</span>
+                    <i class="fa fa-chevron-up" id="icon-dur"></i>
+                </div>
+                <div class="rj-sec-body" id="body-dur">
+                    <label class="rj-cb-row"><input type="checkbox"><span>1 Month</span> <span
+                            class="rj-count">(51)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>2 Months</span> <span
+                            class="rj-count">(104)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>3 Months</span> <span
+                            class="rj-count">(1154)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>4 Months</span> <span
+                            class="rj-count">(68)</span></label>
+                    <div class="rj-more-items" id="more-dur" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>5 Months</span><span
+                                class="rj-count">(34)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>6 Months</span><span
+                                class="rj-count">(210)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="dur" onclick="toggleMore('dur')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Education ── -->
+            <div class="rj-filter-section" id="sec-edu">
+                <div class="rj-sec-header" onclick="toggleSection('edu')">
+                    <span>Education</span>
+                    <i class="fa fa-chevron-up" id="icon-edu"></i>
+                </div>
+                <div class="rj-sec-body" id="body-edu">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Any Postgraduate</span> <span
+                            class="rj-count">(384999)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>MBA/PGDM</span> <span
+                            class="rj-count">(24748)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Any Graduate</span> <span
+                            class="rj-count">(428909)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>B.Tech/B.E. - Bach...</span><span
+                            class="rj-count">(88430)</span></label>
+                    <div class="rj-more-items" id="more-edu" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>Diploma</span> <span
+                                class="rj-count">(21000)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>12th Pass</span> <span
+                                class="rj-count">(15000)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="edu" onclick="toggleMore('edu')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Posted by ── -->
+            <div class="rj-filter-section" id="sec-posted">
+                <div class="rj-sec-header" onclick="toggleSection('posted')">
+                    <span>Posted by</span>
+                    <i class="fa fa-chevron-up" id="icon-posted"></i>
+                </div>
+                <div class="rj-sec-body" id="body-posted">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Company Jobs</span> <span
+                            class="rj-count">(492978)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Consultant Jobs</span><span
+                            class="rj-count">(77351)</span></label>
+                </div>
+            </div>
+            <!-- ── Industry ── -->
+            <div class="rj-filter-section" id="sec-ind">
+                <div class="rj-sec-header" onclick="toggleSection('ind')">
+                    <span>Industry</span>
+                    <i class="fa fa-chevron-up" id="icon-ind"></i>
+                </div>
+                <div class="rj-sec-body" id="body-ind">
+                    <label class="rj-cb-row"><input type="checkbox"><span>IT Services &amp; Cons...</span><span
+                            class="rj-count">(179603)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Recruitment / Staffi...</span><span
+                            class="rj-count">(32783)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Education / Training</span> <span
+                            class="rj-count">(24466)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>BPM / BPO</span> <span
+                            class="rj-count">(20549)</span></label>
+                    <div class="rj-more-items" id="more-ind" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>Healthcare</span> <span
+                                class="rj-count">(18900)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>BFSI</span> <span
+                                class="rj-count">(16700)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Retail</span> <span
+                                class="rj-count">(12300)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="ind" onclick="toggleMore('ind')">View More</span>
+                </div>
+            </div>
+
+            <!-- ── Top companies ── -->
+            <div class="rj-filter-section" id="sec-topc">
+                <div class="rj-sec-header" onclick="toggleSection('topc')">
+                    <span>Top companies</span>
+                    <i class="fa fa-chevron-up" id="icon-topc"></i>
+                </div>
+                <div class="rj-sec-body" id="body-topc">
+                    <label class="rj-cb-row"><input type="checkbox"><span>Accenture</span> <span
+                            class="rj-count">(38479)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Bajaj Finance</span> <span
+                            class="rj-count">(5073)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>EY</span> <span
+                            class="rj-count">(4592)</span></label>
+                    <label class="rj-cb-row"><input type="checkbox"><span>Tata Consultancy S...</span><span
+                            class="rj-count">(3296)</span></label>
+                    <div class="rj-more-items" id="more-topc" style="display:none;">
+                        <label class="rj-cb-row"><input type="checkbox"><span>Infosys</span> <span
+                                class="rj-count">(3100)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>Wipro</span> <span
+                                class="rj-count">(2890)</span></label>
+                        <label class="rj-cb-row"><input type="checkbox"><span>HCL</span> <span
+                                class="rj-count">(2500)</span></label>
+                    </div>
+                    <span class="rj-view-more" data-more="topc" onclick="toggleMore('topc')">View More</span>
+                </div>
+            </div>
+            <!-- ── Freshness ── -->
+            <div class="rj-filter-section" id="sec-fresh">
+                <div class="rj-sec-header rj-freshness-header" onclick="toggleFreshness()">
+                    <span>Freshness</span>
+                    <div class="rj-fresh-right">
+                        <span class="rj-fresh-selected" id="freshLabel">Select</span>
+                        <i class="fa fa-chevron-down" id="icon-fresh"></i>
+                    </div>
+                </div>
+                <div class="rj-fresh-dropdown" id="fresh-dropdown" style="display:none;">
+                    <div class="rj-fresh-option" onclick="selectFresh('Last 30 days')">Last 30 days</div>
+                    <div class="rj-fresh-option" onclick="selectFresh('Last 15 days')">Last 15 days</div>
+                    <div class="rj-fresh-option" onclick="selectFresh('Last 7 days')">Last 7 days</div>
+                    <div class="rj-fresh-option" onclick="selectFresh('Last 3 days')">Last 3 days</div>
+                    <div class="rj-fresh-option" onclick="selectFresh('Last 1 day')">Last 1 day</div>
+                </div>
+            </div>
+
+        </aside>
+        <!-- END column 1 -->
+
+
+        <!-- ╔══════════════════════════════╗
+         ║  COLUMN 2 — JOB CARDS       ║
+         ╚══════════════════════════════╝ -->
+        <main class="rj-col rj-col--jobs">
+
+            <!-- Job Card 1 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#1a3c6e;">
+                        <span>HDM</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">AI Full Stack Engineer Intern</div>
+                    <div class="rj-company-name">Health Data Max</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 0-2 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 3-4 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Remote</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on AI / ML projects</span>
+                        <span><i class="fa fa-file-alt"></i> Written coding round</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Azure Cloud</span>
+                        <span class="rj-skill">MongoDB</span>
+                        <span class="rj-skill">Python Development</span>
+                        <span class="rj-skill">React.Js</span>
+                        <span class="rj-skill">Machine Learning</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">Few hours ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 2 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#ff9900;">
+                        <span>AMZ</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">Senior Python Developer</div>
+                    <div class="rj-company-name">Amazon</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 3-6 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 12-18 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Remote</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on backend projects</span>
+                        <span><i class="fa fa-file-alt"></i> System design round</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Python</span>
+                        <span class="rj-skill">Django</span>
+                        <span class="rj-skill">REST API</span>
+                        <span class="rj-skill">AWS</span>
+                        <span class="rj-skill">PostgreSQL</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">2 days ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 3 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#4285f4;">
+                        <span>GGL</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">Frontend React Developer</div>
+                    <div class="rj-company-name">Google</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 2-5 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 15-25 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Hybrid</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on UI projects</span>
+                        <span><i class="fa fa-file-alt"></i> Live coding test</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">React</span>
+                        <span class="rj-skill">TypeScript</span>
+                        <span class="rj-skill">Next.js</span>
+                        <span class="rj-skill">Tailwind CSS</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">1 day ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 4 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#0057b8;">
+                        <span>WIP</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">AI / ML Data Scientist (GIG / Freelance)</div>
+                    <div class="rj-company-name">Wipro</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 5-10 Yrs</span>
+                        <span><i class="fa fa-dollar-sign"></i> $5,000-10,000 PA</span>
+                        <span><i class="fa fa-location-dot"></i> Remote</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on ML model building</span>
+                        <span><i class="fa fa-file-alt"></i> Paper-based coding test</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">TensorFlow</span>
+                        <span class="rj-skill">NLP</span>
+                        <span class="rj-skill">Python</span>
+                        <span class="rj-skill">PyTorch</span>
+                        <span class="rj-skill">Generative AI</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">1 week ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 5 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#e31837;">
+                        <span>TCS</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">Java Backend Engineer</div>
+                    <div class="rj-company-name">Tata Consultancy Services</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 2-4 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 8-14 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Remote</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on microservices</span>
+                        <span><i class="fa fa-file-alt"></i> Written aptitude test</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Java</span>
+                        <span class="rj-skill">Spring Boot</span>
+                        <span class="rj-skill">Microservices</span>
+                        <span class="rj-skill">MySQL</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">5 days ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 6 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#a100ff;">
+                        <span>ACC</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">Data Analyst – Business Intelligence</div>
+                    <div class="rj-company-name">Accenture</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 1-3 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 6-10 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Hybrid</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on dashboard projects</span>
+                        <span><i class="fa fa-file-alt"></i> SQL written round</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">SQL</span>
+                        <span class="rj-skill">Excel</span>
+                        <span class="rj-skill">Power BI</span>
+                        <span class="rj-skill">Python</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">3 days ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 7 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#f7941d;">
+                        <span>FLK</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">UI/UX Product Designer</div>
+                    <div class="rj-company-name">Flipkart</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 2-5 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 10-18 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Bangalore</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on Figma design project</span>
+                        <span><i class="fa fa-file-alt"></i> Portfolio review round</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Figma</span>
+                        <span class="rj-skill">Prototyping</span>
+                        <span class="rj-skill">User Research</span>
+                        <span class="rj-skill">Wireframing</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">4 days ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 8 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#0057a8;">
+                        <span>INF</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">DevOps / Cloud Engineer</div>
+                    <div class="rj-company-name">Infosys</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 3-7 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 14-22 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Remote</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on CI/CD pipeline setup</span>
+                        <span><i class="fa fa-file-alt"></i> Live infra deployment test</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Docker</span>
+                        <span class="rj-skill">Kubernetes</span>
+                        <span class="rj-skill">AWS</span>
+                        <span class="rj-skill">Terraform</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">2 days ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 9 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#16a34a;">
+                        <span>ZHO</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">Product Manager – SaaS</div>
+                    <div class="rj-company-name">Zoho Corporation</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 4-8 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 18-30 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Chennai</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on product roadmapping</span>
+                        <span><i class="fa fa-file-alt"></i> Case study presentation</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Roadmapping</span>
+                        <span class="rj-skill">Agile</span>
+                        <span class="rj-skill">JIRA</span>
+                        <span class="rj-skill">Analytics</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">6 days ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 10 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#dc2626;">
+                        <span>HCL</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">Cloud Solutions Architect</div>
+                    <div class="rj-company-name">HCL Technologies</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 6-10 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 25-40 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Noida</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on cloud migration</span>
+                        <span><i class="fa fa-file-alt"></i> Architecture design test</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Azure</span>
+                        <span class="rj-skill">GCP</span>
+                        <span class="rj-skill">Terraform</span>
+                        <span class="rj-skill">Architecture</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">1 week ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 11 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#7c3aed;">
+                        <span>BYJ</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">Content & Curriculum Developer</div>
+                    <div class="rj-company-name">Byjus</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 1-3 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 4-7 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Remote</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on curriculum writing</span>
+                        <span><i class="fa fa-file-alt"></i> Sample lesson submission</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">Content Writing</span>
+                        <span class="rj-skill">Instructional Design</span>
+                        <span class="rj-skill">LMS</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">3 days ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- Job Card 12 -->
+            <div class="rj-job-card">
+                <div class="rj-card-logo">
+                    <div class="rj-logo-box" style="background:#0891b2;">
+                        <span>COG</span>
+                    </div>
+                </div>
+                <div class="rj-card-body">
+                    <div class="rj-job-title">HR Executive – Talent Acquisition</div>
+                    <div class="rj-company-name">Cognizant</div>
+                    <div class="rj-meta-row">
+                        <span><i class="fa fa-briefcase"></i> 0-1 Yrs</span>
+                        <span><i class="fa fa-indian-rupee-sign"></i> 3.5-6 Lacs PA</span>
+                        <span><i class="fa fa-location-dot"></i> Remote</span>
+                    </div>
+                    <div class="rj-condition-row">
+                        <span><i class="fa fa-hands"></i> Hands-on sourcing & screening</span>
+                        <span><i class="fa fa-file-alt"></i> HR scenario written test</span>
+                    </div>
+                    <div class="rj-skills-row">
+                        <span class="rj-skill">HR</span>
+                        <span class="rj-skill">ATS</span>
+                        <span class="rj-skill">Job Portals</span>
+                        <span class="rj-skill">Hiring</span>
+                    </div>
+                </div>
+                <div class="rj-card-footer">
+                    <span class="rj-posted">1 day ago</span>
+                    <button class="rj-save-btn"><i class="fa-regular fa-bookmark"></i> Save</button>
+                </div>
+            </div>
+
+            <!-- ── PAGINATION — inside column 2 only ── -->
+            <div class="rj-pagination">
+                <button class="rj-page-btn rj-page-prev" id="prevBtn" onclick="goPage('prev')">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </button>
+
+                <button class="rj-page-btn rj-page-num active" onclick="setPage(this, 1)">1</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 2)">2</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 3)">3</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 4)">4</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 5)">5</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 6)">6</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 7)">7</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 8)">8</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 9)">9</button>
+                <button class="rj-page-btn rj-page-num" onclick="setPage(this, 10)">10</button>
+
+                <button class="rj-page-btn rj-page-next" id="nextBtn" onclick="goPage('next')">
+                    Next <i class="fa fa-chevron-right"></i>
+                </button>
+            </div>
+
+        </main>
+        <!-- END column 2 -->
+
+
+        <!-- ╔══════════════════════════════╗
+         ║  COLUMN 3 — STICKY PROMO    ║
+         ╚══════════════════════════════╝ -->
+        <aside class="rj-col rj-col--promo">
+            <div class="rj-promo-box">
+                <!-- Logo block matching image 8 exactly -->
+                <div class="rj-promo-logo-wrap">
+                    <div class="rj-promo-logo">
+                        <span class="rj-logo-naukri">naukri</span>
+                        <span class="rj-logo-ff">FAST<span class="rj-ff-accent">FORWARD</span></span>
+                        <span class="rj-logo-tagline">Speed Up Your Career</span>
+                    </div>
+                </div>
+                <div class="rj-promo-body">
+                    <h3 class="rj-promo-heading">Get 3X more profile views from recruiters</h3>
+                    <p class="rj-promo-text">
+                        Increase your chances of callback with Naukri FastForward
+                    </p>
+                    <a href="#" class="rj-promo-link">Know More</a>
+                </div>
+            </div>
+        </aside>
+        <!-- END column 3 -->
+
+    </div>
+    <!-- END rj-page-wrap -->
+
+    <script>
+        /* ── Category carousel ── */
+        (function () {
+            const track = document.getElementById('catTrack');
+            const nextBtn = document.getElementById('catNext');
+            const prevBtn = document.getElementById('catPrev');
+            const scrollAmt = 320;
+
+            nextBtn.addEventListener('click', function () {
+                track.scrollBy({ left: scrollAmt, behavior: 'smooth' });
+            });
+
+            prevBtn.addEventListener('click', function () {
+                track.scrollBy({ left: -scrollAmt, behavior: 'smooth' });
+            });
+
+            track.addEventListener('scroll', function () {
+                const atStart = track.scrollLeft <= 4;
+                const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+                prevBtn.style.display = atStart ? 'none' : 'flex';
+                nextBtn.style.display = atEnd ? 'none' : 'flex';
+            });
+        })();
+
+        /* ── Freshness dropdown ── */
+        function toggleFreshness() {
+            const dd = document.getElementById('fresh-dropdown');
+            const icon = document.getElementById('icon-fresh');
+            const open = dd.style.display !== 'none';
+            dd.style.display = open ? 'none' : 'block';
+            icon.className = open ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
+        }
+
+        function selectFresh(val) {
+            document.getElementById('freshLabel').textContent = val;
+            document.getElementById('freshLabel').style.color = '#275df5';
+            document.getElementById('fresh-dropdown').style.display = 'none';
+            document.getElementById('icon-fresh').className = 'fa fa-chevron-down';
+        }
+
+        /* ── Toggle filter sections (collapse / expand) ── */
+        function toggleSection(id) {
+            const body = document.getElementById('body-' + id);
+            const icon = document.getElementById('icon-' + id);
+            const isOpen = body.style.display !== 'none';
+            body.style.display = isOpen ? 'none' : 'block';
+            icon.className = isOpen ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
+        }
+
+        /* ── View More / View Less — fixed ── */
+        function toggleMore(id) {
+            const more = document.getElementById('more-' + id);
+            const btn = document.querySelector('[data-more="' + id + '"]');
+            const isHidden = more.style.display === 'none';
+            more.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'View Less' : 'View More';
+        }
+
+        /* ── Experience slider bubble ── */
+        function updateSlider(val) {
+            const bubble = document.getElementById('sliderBubble');
+            const slider = document.getElementById('expSlider');
+            bubble.textContent = val >= 30 ? 'Any' : val + ' Yr' + (val == 1 ? '' : 's');
+            const pct = (val / 30) * 100;
+            const off = 20 - (pct * 0.4);          // keep bubble inside track
+            bubble.style.left = 'calc(' + pct + '% + ' + off + 'px)';
+        }
+
+        /* ── Pagination ── */
+        let currentPage = 1;
+        const totalPages = 10;
+
+        function setPage(el, num) {
+            // remove active from all number buttons
+            document.querySelectorAll('.rj-page-num').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentPage = num;
+
+            // disable prev on page 1, disable next on page 10
+            document.getElementById('prevBtn').disabled = (currentPage === 1);
+            document.getElementById('nextBtn').disabled = (currentPage === totalPages);
+        }
+
+        function goPage(dir) {
+            if (dir === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (dir === 'next' && currentPage < totalPages) {
+                currentPage++;
+            }
+            // update active number button
+            document.querySelectorAll('.rj-page-num').forEach(b => b.classList.remove('active'));
+            const allNums = document.querySelectorAll('.rj-page-num');
+            allNums[currentPage - 1].classList.add('active');
+
+            document.getElementById('prevBtn').disabled = (currentPage === 1);
+            document.getElementById('nextBtn').disabled = (currentPage === totalPages);
+        }
+
+        // initialise: disable prev on load
+        document.getElementById('prevBtn').disabled = true;
+
+        /* ── Save button bookmark toggle ── */
+        document.querySelectorAll('.rj-save-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const icon = this.querySelector('i');
+                const saved = icon.classList.contains('fa-solid');
+                icon.classList.toggle('fa-regular', saved);
+                icon.classList.toggle('fa-solid', !saved);
+                this.classList.toggle('rj-saved', !saved);
+            });
+        });
+    </script>
+
+    <!-- ═══════════════════════════════════════
+     FOOTER — outside page-wrap, does not move
+═══════════════════════════════════════ -->
+    <footer class="rj-footer">
+        <div class="rj-footer-container">
+
+            <!-- Logo + Social -->
+            <div class="rj-footer-left">
+                <div class="rj-footer-logo-text">
+                    <span class="rj-footer-logo-i">i</span>naukri
+                </div>
+                <p class="rj-footer-social-label">Connect with us</p>
+                <div class="rj-social-icons">
+                    <a href="#" class="rj-social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="rj-social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="rj-social-btn" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="rj-social-btn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" class="rj-social-btn" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Link columns -->
+            <div class="rj-footer-links">
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Company</p>
+                    <a href="#">About us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Employer home</a>
+                    <a href="#">Sitemap</a>
+                    <a href="#">Credits</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Support</p>
+                    <a href="#">Help center</a>
+                    <a href="#">Summons/Notices</a>
+                    <a href="#">Grievances</a>
+                    <a href="#">Report issue</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">Legal</p>
+                    <a href="#">Privacy policy</a>
+                    <a href="#">Terms &amp; conditions</a>
+                    <a href="#">Fraud alert</a>
+                    <a href="#">Trust &amp; safety</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">For Job Seekers</p>
+                    <a href="#">Search jobs</a>
+                    <a href="#">Browse companies</a>
+                    <a href="#">Resume builder</a>
+                    <a href="#">Career advice</a>
+                    <a href="#">Salary calculator</a>
+                </div>
+                <div class="rj-footer-col">
+                    <p class="rj-footer-col-head">For Employers</p>
+                    <a href="#">Post a job</a>
+                    <a href="#">Employer login</a>
+                    <a href="#">Hiring solutions</a>
+                    <a href="#">View plans</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="rj-footer-bottom">
+            <span>© 2025 Naukri Clone. All rights reserved.</span>
+            <span>Made with ❤️ in India</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>

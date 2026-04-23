@@ -1,0 +1,286 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Naukri Clone</title>
+    <link rel="stylesheet" href="{% static 'core/css/register.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ── Alert messages ── */
+        .messages-box {
+            max-width: 680px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+        }
+
+        .alert {
+            padding: 13px 18px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* ── Field-level inline errors ── */
+        .field-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            line-height: 1.5;
+        }
+
+        .field-error i {
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ── Red border on invalid input ── */
+        input.input-error {
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, .1) !important;
+        }
+
+        /* ── Live password strength box ── */
+        .password-hint {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #92400e;
+            display: none;
+        }
+
+        .password-hint strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .password-hint ul {
+            margin-left: 16px;
+            line-height: 2;
+        }
+
+        .password-hint ul li.ok {
+            color: #065f46;
+            text-decoration: line-through;
+        }
+
+        .password-hint ul li.fail {
+            color: #dc2626;
+        }
+
+        /* ── Work status card selected state ── */
+        .status-card {
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .status-card.selected {
+            border-color: #275df5 !important;
+            background: #eef3ff;
+            box-shadow: 0 0 0 3px rgba(39, 93, 245, .12);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="register-navbar">
+        <a href="{% url 'index' %}" class="logo">
+            <span class="logo-icon">i</span>
+            <span class="logo-text">naukri</span>
+        </a>
+        <div class="nav-right">
+            <span>Already Registered?</span>
+            <a href="{% url 'login' %}" class="login-link">Login</a>
+        </div>
+    </header>
+
+    <!-- Flash messages (success / error) -->
+    {% if messages %}
+    <div class="messages-box">
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
+            <i class="fa {% if message.tags == 'success' %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Register Section -->
+    <section class="register-page">
+
+        <!-- Left -->
+        <div class="register-left">
+            <h1>Find a job &amp; grow your career</h1>
+            <div class="feature-item"><i class="fa fa-check-circle"></i><span>Build your profile and get
+                    discovered</span></div>
+            <div class="feature-item"><i class="fa fa-check-circle"></i><span>Get matched with top companies</span>
+            </div>
+            <div class="feature-item"><i class="fa fa-check-circle"></i><span>Apply to jobs quickly and easily</span>
+            </div>
+            <div class="feature-item"><i class="fa fa-check-circle"></i><span>Receive recruiter calls and updates</span>
+            </div>
+        </div>
+
+        <!-- Right Form -->
+        <div class="register-form-box">
+            <h2>Create your Naukri profile</h2>
+            <p>Search &amp; apply to jobs from India's No.1 Job Site</p>
+
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <label>Full name *</label>
+                <input type="text" name="full_name" placeholder="What is your name?"
+                    value="{{ form.full_name.value|default:'' }}"
+                    class="{% if form.full_name.errors %}input-error{% endif %}" required>
+                {% for error in form.full_name.errors %}
+                <p class="field-error"><i class="fa fa-triangle-exclamation"></i>{{ error }}</p>
+                {% endfor %}
+
+                <!-- Email -->
+                <label>Email ID *</label>
+                <input type="email" name="email" placeholder="Enter your Email ID (must be unique)"
+                    value="{{ form.email.value|default:'' }}" class="{% if form.email.errors %}input-error{% endif %}"
+                    required>
+                {% for error in form.email.errors %}
+                <p class="field-error"><i class="fa fa-triangle-exclamation"></i>{{ error }}</p>
+                {% endfor %}
+
+                <!-- Password -->
+                <label>Password *</label>
+                <input type="password" name="password" id="passwordInput"
+                    placeholder="Min 8 chars, uppercase, number, special char" oninput="checkStrength(this.value)"
+                    class="{% if form.password.errors %}input-error{% endif %}">
+                {% for error in form.password.errors %}
+                <p class="field-error"><i class="fa fa-triangle-exclamation"></i>{{ error }}</p>
+                {% endfor %}
+
+                <!-- Live password strength hint -->
+                <div class="password-hint" id="pwHint">
+                    <strong>🔐 Strong password must have:</strong>
+                    <ul>
+                        <li id="h-len" class="fail">At least 8 characters</li>
+                        <li id="h-upper" class="fail">At least one uppercase letter (A–Z)</li>
+                        <li id="h-lower" class="fail">At least one lowercase letter (a–z)</li>
+                        <li id="h-digit" class="fail">At least one number (0–9)</li>
+                        <li id="h-special" class="fail">At least one special character (!@#$%^&amp;*)</li>
+                    </ul>
+                </div>
+
+                <!-- Mobile Number -->
+                <label>
+                    Mobile Number *
+                    <small class="mobile-help-text">Only 10 digits (91+ added automatically, must be unique)</small>
+                </label>
+
+                <div class="mobile-wrapper {% if form.mobile_number.errors %}input-error-box{% endif %}">
+                    <span class="country-prefix">91+</span>
+
+                    <input type="text" name="mobile_number" placeholder="Enter 10-digit mobile number"
+                        value="{% if form.mobile_number.value %}{{ form.mobile_number.value|cut:'91+' }}{% endif %}"
+                        maxlength="10" inputmode="numeric" pattern="\d{10}" required>
+                </div>
+
+                {% for error in form.mobile_number.errors %}
+                <p class="field-error">
+                    <i class="fa fa-triangle-exclamation"></i> {{ error }}
+                </p>
+                {% endfor %}
+
+                <!-- Work Status -->
+                <label>Work status *</label>
+                <!-- Hidden input holds the actual value -->
+                <input type="hidden" name="work_status" id="workStatusInput"
+                    value="{{ form.work_status.value|default:'' }}">
+                <div class="work-status-box">
+                    <div class="status-card {% if form.work_status.value == 'experienced' %}selected{% endif %}"
+                        onclick="selectStatus('experienced', this)">
+                        <h4>I'm experienced</h4>
+                        <p>I have work experience (excluding internships)</p>
+                    </div>
+                    <div class="status-card {% if form.work_status.value == 'fresher' %}selected{% endif %}"
+                        onclick="selectStatus('fresher', this)">
+                        <h4>I'm a fresher</h4>
+                        <p>I am a student / Haven't worked after graduation</p>
+                    </div>
+                </div>
+                {% for error in form.work_status.errors %}
+                <p class="field-error"><i class="fa fa-triangle-exclamation"></i>{{ error }}</p>
+                {% endfor %}
+
+                <button type="submit" class="create-btn">Register now</button>
+
+                <p class="terms-text">
+                    By clicking Register, you agree to the Terms and Conditions &amp; Privacy Policy
+                </p>
+            </form>
+        </div>
+
+    </section>
+
+    <script>
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     const mobileInput = document.querySelector('input[name="mobile_number"]');
+
+        //     if (mobileInput) {
+        //         mobileInput.addEventListener("input", function () {
+        //             this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        //         });
+        //     }
+        // });
+
+        // ── Work status selection ──
+        function selectStatus(value, el) {
+            document.querySelectorAll('.status-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('workStatusInput').value = value;
+        }
+
+        // ── Live password strength checker ──
+        function checkStrength(val) {
+            const hint = document.getElementById('pwHint');
+            hint.style.display = val.length > 0 ? 'block' : 'none';
+            mark('h-len', val.length >= 8);
+            mark('h-upper', /[A-Z]/.test(val));
+            mark('h-lower', /[a-z]/.test(val));
+            mark('h-digit', /[0-9]/.test(val));
+            mark('h-special', /[!@#$%^&*(),.?":{}|<>]/.test(val));
+        }
+
+        function mark(id, pass) {
+            const el = document.getElementById(id);
+            el.className = pass ? 'ok' : 'fail';
+        }
+    </script>
+
+</body>
+
+</html>

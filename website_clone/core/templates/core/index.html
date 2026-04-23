@@ -1,0 +1,949 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Naukri Clone</title>
+
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+    <header class="navbar">
+        <a href="{% url 'index' %}" class="logo">
+            <span class="logo-icon">i</span>
+            <span class="logo-text">naukri</span>
+        </a>
+
+        <nav class="nav-links">
+            <!-- Jobs -->
+            <div class="dropdown">
+                <a href="#" class="drop-btn active-link">Jobs</a>
+                <div class="dropdown-menu jobs-dropdown">
+                    <div class="dropdown-column">
+                        <h4>Popular categories</h4>
+                        <a href="{% url 'it_jobs' %}">IT jobs</a>
+                        <a href="{% url 'sales_jobs' %}">Sales jobs</a>
+                        <a href="{% url 'marketing_jobs' %}">Marketing jobs</a>
+                        <a href="{% url 'data_science_jobs' %}">Data Science jobs</a>
+                        <a href="{% url 'human_resources_jobs' %}">HR jobs</a>
+                        <a href="{% url 'engineering_jobs' %}">Engineering jobs</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Jobs in demand</h4>
+                        <a href="{% url 'fresher_jobs' %}">Fresher jobs</a>
+                        <a href="{% url 'mnc_jobs' %}">MNC jobs</a>
+                        <a href="{% url 'remote_jobs' %}">Remote jobs</a>
+                        <a href="{% url 'remote_jobs' %}">Work from home jobs</a>
+                        <a href="{% url 'walk_in_jobs' %}">Walk-in jobs</a>
+                        <a href="{% url 'part_time_jobs' %}">Part-time jobs</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Jobs by location</h4>
+                        <a href="{% url 'delhi_jobs' %}">Jobs in Delhi</a>
+                        <a href="{% url 'mumbai_jobs' %}">Jobs in Mumbai</a>
+                        <a href="{% url 'bangalore_jobs' %}">Jobs in Bangalore</a>
+                        <a href="{% url 'hyderabad_jobs' %}">Jobs in Hyderabad</a>
+                        <a href="{% url 'chennai_jobs' %}">Jobs in Chennai</a>
+                        <a href="{% url 'pune_jobs' %}">Jobs in Pune</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Companies -->
+            <div class="dropdown">
+                <a href="#" class="drop-btn">Companies</a>
+                <div class="dropdown-menu companies-dropdown">
+                    <div class="dropdown-column">
+                        <h4>Explore categories</h4>
+                        <a href="{% url 'company_unicorn' %}">Unicorn</a>
+                        <a href="{% url 'company_mnc' %}">MNC</a>
+                        <a href="{% url 'company_startups' %}">Startup</a>
+                        <a href="{% url 'company_product_based' %}">Product based</a>
+                        <a href="{% url 'company_internet' %}">Internet</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Explore collections</h4>
+                        <a href="{% url 'top_companies_jobs' %}">Top companies</a>
+                        <a href="{% url 'company_it_companies_jobs' %}">IT companies</a>
+                        <a href="{% url 'company_fintech_companies_jobs' %}">Fintech companies</a>
+                        <a href="{% url 'company_sponsored_companies_jobs' %}">Sponsored companies</a>
+                        <a href="{% url 'company_featured_companies_jobs' %}">Featured companies</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Research companies</h4>
+                        <a href="#">Interview questions</a>
+                        <a href="#">Company salaries</a>
+                        <a href="#">Company reviews</a>
+                        <a href="#">Salary Calculator</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="dropdown">
+                <a href="#" class="drop-btn">Services</a>
+                <div class="dropdown-menu services-dropdown">
+                    <div class="dropdown-column">
+                        <h4>Resume writing</h4>
+                        <a href="#">Text resume</a>
+                        <a href="#">Visual resume</a>
+                        <a href="#">Resume critique</a>
+                        <h4 class="mt-space">Find Jobs</h4>
+                        <a href="#">Jobs4u</a>
+                        <a href="#">Priority applicant</a>
+                        <a href="#">Contact us</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Get recruiter's attention</h4>
+                        <a href="#">Resume display</a>
+                        <h4 class="mt-space">Monthly subscriptions</h4>
+                        <a href="#">Basic & premium plans</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4>Free resume resources</h4>
+                        <a href="#">Resume maker</a>
+                        <a href="#">Resume quality score</a>
+                        <a href="#">Resume samples</a>
+                        <a href="#">Job letter samples</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employers -->
+            <div class="dropdown">
+                <div class="drop-btn employers-btn">For Employers <span class="arrow-small">▼</span></div>
+                <div class="dropdown-menu employers-dropdown">
+                    <a href="#">Buy Online</a>
+                    <a href="#">Naukri Talent Cloud</a>
+                    <a href="{% url 'employer_login' %}">Employer Login</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="nav-buttons">
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="register-btn">Register</a>
+        </div>
+    </header>
+
+    <!-- =========================
+         HERO
+    ========================== -->
+    <section class="hero">
+        <h1>Find your dream job now</h1>
+        <p>5 lakh+ jobs for you to explore</p>
+
+        <div class="search-bar">
+            <div class="search-item">
+                <i class="fa fa-search"></i>
+                <input type="text" placeholder="Enter skills / designations / companies">
+            </div>
+            <div class="search-item">
+                <i class="fa fa-location-dot"></i>
+                <input type="text" placeholder="Location">
+            </div>
+            <div class="search-item">
+                <i class="fa fa-briefcase"></i>
+                <input type="text" placeholder="Experience">
+            </div>
+            <button class="search-btn">Search</button>
+        </div>
+
+        <div class="popular-searches">
+            <span>Popular Searches:</span>
+            <a href="#">Python</a>
+            <a href="#">Django</a>
+            <a href="#">Frontend</a>
+            <a href="#">Java</a>
+            <a href="#">React</a>
+        </div>
+    </section>
+
+    <!-- =========================
+         CATEGORY SECTION
+    ========================== -->
+    <section class="category-section">
+        <div class="category-container">
+            <a href="{% url 'remote_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">🏠</div>
+                <span>Remote</span>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="{% url 'mnc_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">🏢</div>
+                <span>MNC</span>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="{% url 'banking_finance_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">₹</div>
+                <span>Banking&finance</span>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="{% url 'startup_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">🚀</div>
+                <span>Startup</span>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="{% url 'software_it_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">💻</div>
+                <span>Software & IT</span>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="{% url 'internship_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">📊</div>
+                <span>Internship</span>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="{% url 'engineering_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">💼</div>
+                <span>Engineering</span>
+                <span class="arrow-icon">›</span>
+            </a>
+            <a href="{% url 'marketing_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">📦</div>
+                <span>Marketing</span>
+                <span class="arrow-icon">›</span>
+            </a>
+
+            <a href="{% url 'fortune_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">🏅</div>
+                <span>Fortune 500</span>
+                <span class="arrow-icon">›</span>
+            </a>
+
+            <a href="{% url 'human_resources_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">👥</div>
+                <span>Human Resources</span>
+                <span class="arrow-icon">›</span>
+            </a>
+
+            <a href="{% url 'project_management_jobs' %}" , target="_blank" class="category-card">
+                <div class="category-icon">✔</div>
+                <span>Project Management</span>
+                <span class="arrow-icon">›</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- =========================
+         TOP COMPANIES HIRING
+    ========================== -->
+    <section class="top-companies-section">
+        <div class="top-companies-wrapper">
+            <h2 class="top-companies-title">Top companies hiring now</h2>
+
+            <div class="top-companies-carousel-container">
+                <button class="top-carousel-arrow left-arrow" id="topPrevBtn">‹</button>
+
+                <div class="top-companies-row" id="topCompaniesRow">
+                    <a href="#" class="company-hiring-card">
+                        <div class="company-card-header">
+                            <h3>MNCs</h3><span class="card-arrow">›</span>
+                        </div>
+                        <p>2.3K+ are actively hiring</p>
+                        <div class="company-logo-row">
+                            <img src="{% static 'core/images/company-logos/cocoblu_logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/anewa_engineering_pvt_ltd__logo.png' %}"
+                                alt="">
+                            <img src="{% static 'core/images/company-logos/comviva_logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/alten_india_logo.png' %}" alt="">
+                        </div>
+                    </a>
+
+                    <a href="#" class="company-hiring-card">
+                        <div class="company-card-header">
+                            <h3>Internet</h3><span class="card-arrow">›</span>
+                        </div>
+                        <p>249 are actively hiring</p>
+                        <div class="company-logo-row">
+                            <img src="{% static 'core/images/company-logos/naukriLogoIco.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/the_luxury.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/Airtel-logo.jpg' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/hcl1_tech.png' %}" alt="">
+                        </div>
+                    </a>
+
+                    <a href="#" class="company-hiring-card">
+                        <div class="company-card-header">
+                            <h3>Manufacturing</h3><span class="card-arrow">›</span>
+                        </div>
+                        <p>1.1K+ are actively hiring</p>
+                        <div class="company-logo-row">
+                            <img src="{% static 'core/images/company-logos/nj.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/trimont.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/axa.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                        </div>
+                    </a>
+
+                    <a href="#" class="company-hiring-card">
+                        <div class="company-card-header">
+                            <h3>Fortune 500</h3><span class="card-arrow">›</span>
+                        </div>
+                        <p>111 are actively hiring</p>
+                        <div class="company-logo-row">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                        </div>
+                    </a>
+
+                    <a href="#" class="company-hiring-card">
+                        <div class="company-card-header">
+                            <h3>Product</h3><span class="card-arrow">›</span>
+                        </div>
+                        <p>1.3K+ are actively hiring</p>
+                        <div class="company-logo-row">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                        </div>
+                    </a>
+
+                    <a href="#" class="company-hiring-card">
+                        <div class="company-card-header">
+                            <h3>Startups</h3><span class="card-arrow">›</span>
+                        </div>
+                        <p>980+ are actively hiring</p>
+                        <div class="company-logo-row">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                            <img src="{% static 'core/images/company-logos/google-logo.png' %}" alt="">
+                        </div>
+                    </a>
+                </div>
+
+                <button class="top-carousel-arrow right-arrow" id="topNextBtn">›</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================
+         FEATURED COMPANIES
+    ========================== -->
+    <section class="featured-companies-section">
+        <h2 class="featured-title">Featured companies actively hiring</h2>
+
+        <div class="featured-carousel-container">
+            <button class="featured-arrow left-arrow" id="featuredPrevBtn">‹</button>
+
+            <div class="featured-row" id="featuredRow">
+                <div class="featured-card">
+                    <img src="{% static 'core/images/featured/nagarro-logo.png' %}" class="company-logo" alt="">
+                    <div class="company-info">
+                        <h3>Nagarro</h3>
+                        <div class="rating">⭐ 3.9 <span>4.7K+ reviews</span></div>
+                        <p>Leader in digital product engineering.</p>
+                        <a href="#" class="view-btn">View jobs</a>
+                    </div>
+                </div>
+
+                <div class="featured-card">
+                    <img src="{% static 'core/images/featured/realice.png' %}" class="company-logo" alt="">
+                    <div class="company-info">
+                        <h3>Reliance Industries</h3>
+                        <div class="rating">⭐ 4.0 <span>20.1K+ reviews</span></div>
+                        <p>Indian multinational conglomerate company.</p>
+                        <a href="#" class="view-btn">View jobs</a>
+                    </div>
+                </div>
+
+                <div class="featured-card">
+                    <img src="{% static 'core/images/featured/datamatics.png' %}" class="company-logo" alt="">
+                    <div class="company-info">
+                        <h3>Datamatics</h3>
+                        <div class="rating">⭐ 3.4 <span>2.4K+ reviews</span></div>
+                        <p>Global digital solutions & technology company.</p>
+                        <a href="#" class="view-btn">View jobs</a>
+                    </div>
+                </div>
+
+                <div class="featured-card">
+                    <img src="{% static 'core/images/featured/fis.png' %}" class="company-logo" alt="">
+                    <div class="company-info">
+                        <h3>FIS</h3>
+                        <div class="rating">⭐ 3.8 <span>6.5K+ reviews</span></div>
+                        <p>Global leader in financial services technology.</p>
+                        <a href="#" class="view-btn">View jobs</a>
+                    </div>
+                </div>
+                <div class="featured-card">
+                    <img src="{% static 'core/images/featured/fis.png' %}" class="company-logo" alt="">
+                    <div class="company-info">
+                        <h3>FIS</h3>
+                        <div class="rating">⭐ 3.8 <span>6.5K+ reviews</span></div>
+                        <p>Global leader in financial services technology.</p>
+                        <a href="#" class="view-btn">View jobs</a>
+                    </div>
+                </div>
+                <div class="featured-card">
+                    <img src="{% static 'core/images/featured/fis.png' %}" class="company-logo" alt="">
+                    <div class="company-info">
+                        <h3>FIS</h3>
+                        <div class="rating">⭐ 3.8 <span>6.5K+ reviews</span></div>
+                        <p>Global leader in financial services technology.</p>
+                        <a href="#" class="view-btn">View jobs</a>
+                    </div>
+                </div>
+
+                <div class="featured-card">
+                    <img src="{% static 'core/images/featured/avalara.png' %}" class="company-logo" alt="">
+                    <div class="company-info">
+                        <h3>Avalara</h3>
+                        <div class="rating">⭐ 2.9 <span>1.2K+ reviews</span></div>
+                        <p>We’re transforming tax compliance.</p>
+                        <a href="#" class="view-btn">View jobs</a>
+                    </div>
+                </div>
+            </div>
+
+            <button class="featured-arrow right-arrow" id="featuredNextBtn">›</button>
+        </div>
+
+        <div class="view-all-wrapper">
+            <a href="#" class="view-all-btn">View all companies</a>
+        </div>
+    </section>
+
+    <!-- =========================
+         CAMPUS
+    ========================== -->
+    <section class="campus-section">
+        <div class="campus-card">
+            <div class="campus-badge">Just launched</div>
+
+            <div class="campus-left">
+                <div class="campus-logo">
+                    <img src="{% static 'core/images/campus/naukri.png' %}" alt="">
+                </div>
+            </div>
+
+            <div class="campus-content">
+                <h2>Introducing a career platform for college students & fresh grads</h2>
+                <p>Explore contests, webinars, take aptitude test, prepare for your dream career & find jobs &
+                    internships</p>
+
+                <div class="campus-tags">
+                    <span>Expert speak ›</span>
+                    <span>Contests ›</span>
+                    <span>NCAT ›</span>
+                    <span>Pathfinder ›</span>
+                    <span>Jobs & Internships ›</span>
+                </div>
+            </div>
+
+            <div class="campus-right">
+                <a href="#" class="explore-btn">Explore now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================
+         ROLES
+    ========================== -->
+    <section class="roles-section">
+        <div class="roles-container">
+            <div class="roles-left">
+                <img src="{% static 'core/images/roles/illustration.png' %}" alt="">
+                <h2>Discover jobs across<br>popular roles</h2>
+                <p>Select a role and we'll show you relevant jobs for it!</p>
+            </div>
+
+            <div class="roles-right">
+                <div class="roles-slider" id="rolesSlider">
+                    <div class="roles-grid">
+                        <div class="role-card">Full Stack Developer <span>21.3K+ Jobs ›</span></div>
+                        <div class="role-card">Mobile / App Developer <span>2.7K+ Jobs ›</span></div>
+                        <div class="role-card">Front End Developer <span>5.2K+ Jobs ›</span></div>
+                        <div class="role-card">DevOps Engineer <span>2.8K+ Jobs ›</span></div>
+                        <div class="role-card">Engineering Manager <span>1.6K+ Jobs ›</span></div>
+                        <div class="role-card">Technical Lead <span>9.7K+ Jobs ›</span></div>
+                    </div>
+
+                    <div class="roles-grid">
+                        <div class="role-card">Data Scientist <span>12K+ Jobs ›</span></div>
+                        <div class="role-card">AI Engineer <span>4.2K+ Jobs ›</span></div>
+                        <div class="role-card">Backend Developer <span>7K+ Jobs ›</span></div>
+                        <div class="role-card">UI/UX Designer <span>3.5K+ Jobs ›</span></div>
+                        <div class="role-card">Cloud Engineer <span>6K+ Jobs ›</span></div>
+                        <div class="role-card">QA Engineer <span>4K+ Jobs ›</span></div>
+                    </div>
+                </div>
+
+                <button class="slider-arrow" id="nextBtn">›</button>
+
+                <div class="slider-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================
+         SPONSORED TAGS
+    ========================== -->
+    <section class="sponsored-companies-section">
+        <h2 class="sponsored-title">Sponsored companies</h2>
+        <div class="sponsored-tags">
+            <a href="#" class="sponsored-tag active">All</a>
+            <a href="#" class="sponsored-tag">IT Services</a>
+            <a href="#" class="sponsored-tag">Technology</a>
+            <a href="#" class="sponsored-tag">Healthcare & Life Sciences</a>
+            <a href="#" class="sponsored-tag">Infrastructure, Transport & Real Estate</a>
+            <a href="#" class="sponsored-tag">Manufacturing & Production</a>
+            <a href="#" class="sponsored-tag">BFSI</a>
+            <a href="#" class="sponsored-tag">BPM</a>
+            <a href="#" class="sponsored-tag">Consumer, Retail & Hospitality</a>
+            <a href="#" class="sponsored-tag">Media, Entertainment & Telecom</a>
+            <a href="#" class="sponsored-tag">Education</a>
+        </div>
+    </section>
+
+    <!-- =========================
+         TOP COMPANIES GRID JS
+    ========================== -->
+    <section class="company-carousel-section">
+        <div class="carousel-header">
+            <h2>Top Companies</h2>
+            <p>Explore companies hiring near you</p>
+        </div>
+
+        <div class="carousel-wrapper">
+            <button class="carousel-arrow prev" id="companyPrevBtn">‹</button>
+
+            <div class="carousel-track-outer">
+                <div class="companies-grid" id="companiesGrid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+
+            <button class="carousel-arrow next" id="companyNextBtn">›</button>
+        </div>
+
+        <div class="view-all-wrap">
+            <a href="#" class="btn-view-all">View all companies</a>
+        </div>
+    </section>
+
+    <!-- =========================
+         EVENTS
+    ========================== -->
+    <section class="events-section">
+        <div class="events-left">
+            <h2>Upcoming events and challenges</h2>
+
+            <div class="illustration">
+                <svg viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="65" cy="115" rx="28" ry="7" fill="#e5e7eb" />
+                    <rect x="52" y="88" width="9" height="26" rx="4.5" fill="#d1d5db" />
+                    <rect x="67" y="88" width="9" height="26" rx="4.5" fill="#d1d5db" />
+                    <ellipse cx="56" cy="114" rx="8" ry="4" fill="#9ca3af" />
+                    <ellipse cx="71" cy="114" rx="8" ry="4" fill="#9ca3af" />
+                    <rect x="44" y="55" width="40" height="36" rx="10" fill="#f3f4f6" stroke="#d1d5db"
+                        stroke-width="1.5" />
+                    <line x1="64" y1="55" x2="64" y2="91" stroke="#e5e7eb" stroke-width="1.2" />
+                    <path d="M84 65 Q100 62 112 60" stroke="#d1d5db" stroke-width="7" stroke-linecap="round" />
+                    <circle cx="113" cy="60" r="5" fill="#d1d5db" />
+                    <path d="M110 57 Q115 54 118 57" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M44 68 Q34 72 30 78" stroke="#d1d5db" stroke-width="7" stroke-linecap="round" />
+                    <rect x="59" y="44" width="10" height="14" rx="5" fill="#f3f4f6" stroke="#d1d5db"
+                        stroke-width="1.2" />
+                    <ellipse cx="64" cy="34" rx="18" ry="20" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="events-track-outer">
+            <button class="events-arrow-btn" id="eventsNextBtn">›</button>
+
+            <div class="events-track" id="eventsTrack">
+                <div class="event-card">
+                    <div class="card-banner" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+                        <div class="banner-meta">
+                            <span class="banner-date">Entry closes by 26 Apr</span>
+                            <span class="badge hiring">Hiring challenge</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="company-row">
+                            <div class="company-logo">
+                                <div class="company-logo-text" style="background:#2563eb;">S</div>
+                            </div>
+                            <div class="company-info">
+                                <div class="event-title">Sagility Contest</div>
+                                <div class="company-name">Sagility India</div>
+                            </div>
+                        </div>
+                        <div class="tags-row">
+                            <span class="etag">Communication Skills</span>
+                            <span class="etag">Problem Solving</span>
+                            <span class="etag">Time Management</span>
+                        </div>
+                        <div class="meta-row">
+                            <span><i class="fa-regular fa-calendar"></i> 27 Mar, 7:00 PM</span>
+                            <span><i class="fa-regular fa-user"></i> 649 Enrolled</span>
+                        </div>
+                        <hr class="card-divider" />
+                    </div>
+                    <div class="card-footer">
+                        <span class="footer-label"><i class="fa-solid fa-briefcase"></i> Job offer</span>
+                        <a href="#" class="view-details-btn">View details</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="card-banner" style="background: linear-gradient(135deg, #1e3a5f 0%, #0f2744 100%);">
+                        <div class="banner-meta">
+                            <span class="banner-date">Entry closes in 1d</span>
+                            <span class="badge webinar">Webinar</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="company-row">
+                            <div class="company-logo">
+                                <div class="company-logo-text" style="background:#e84040;">CN</div>
+                            </div>
+                            <div class="company-info">
+                                <div class="event-title">Zero to Data Analyst: Amazon Analyst Roadmap</div>
+                                <div class="company-name">Coding Ninjas</div>
+                            </div>
+                        </div>
+                        <div class="tags-row">
+                            <span class="etag">Interview Preparation</span>
+                            <span class="etag">Career Guidance</span>
+                            <span class="etag">Data Analyst</span>
+                        </div>
+                        <div class="meta-row">
+                            <span><i class="fa-regular fa-calendar"></i> 1 Apr, 7:00 PM</span>
+                            <span><i class="fa-regular fa-user"></i> 47 Enrolled</span>
+                        </div>
+                        <hr class="card-divider" />
+                    </div>
+                    <div class="card-footer">
+                        <span class="footer-label"><i class="fa-solid fa-lightbulb light"></i> Learn from experts</span>
+                        <a href="#" class="view-details-btn">View details</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="card-banner" style="background: linear-gradient(135deg, #1e293b 0%, #111827 100%);">
+                        <div class="banner-meta">
+                            <span class="banner-date">Entry closes in 3d</span>
+                            <span class="badge contest">Contest</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="company-row">
+                            <div class="company-logo">
+                                <div class="company-logo-text" style="background:#e84040;">CN</div>
+                            </div>
+                            <div class="company-info">
+                                <div class="event-title">Full Stack Developer Bootcamp 2024</div>
+                                <div class="company-name">Coding Ninjas</div>
+                            </div>
+                        </div>
+                        <div class="tags-row">
+                            <span class="etag">Interview Preparation</span>
+                            <span class="etag">Web Dev</span>
+                            <span class="etag">React</span>
+                        </div>
+                        <div class="meta-row">
+                            <span><i class="fa-regular fa-calendar"></i> 31 Mar, 7:00 PM</span>
+                            <span><i class="fa-regular fa-user"></i> 312 Enrolled</span>
+                        </div>
+                        <hr class="card-divider" />
+                    </div>
+                    <div class="card-footer">
+                        <span class="footer-label"><i class="fa-solid fa-lightbulb light"></i> Learn from experts</span>
+                        <a href="#" class="view-details-btn">View details</a>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="card-banner" style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%);">
+                        <div class="banner-meta">
+                            <span class="banner-date">Entry closes in 5d</span>
+                            <span class="badge contest">Contest</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="company-row">
+                            <div class="company-logo">
+                                <div class="company-logo-text" style="background:#16a34a;">A</div>
+                            </div>
+                            <div class="company-info">
+                                <div class="event-title">AI Engineer Hiring Challenge</div>
+                                <div class="company-name">AI Labs</div>
+                            </div>
+                        </div>
+                        <div class="tags-row">
+                            <span class="etag">Python</span>
+                            <span class="etag">ML</span>
+                            <span class="etag">API</span>
+                        </div>
+                        <div class="meta-row">
+                            <span><i class="fa-regular fa-calendar"></i> 5 Apr, 8:00 PM</span>
+                            <span><i class="fa-regular fa-user"></i> 801 Enrolled</span>
+                        </div>
+                        <hr class="card-divider" />
+                    </div>
+                    <div class="card-footer">
+                        <span class="footer-label"><i class="fa-solid fa-briefcase"></i> Hiring</span>
+                        <a href="#" class="view-details-btn">View details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- NEW: Interview Prep Section (by AmbitionBox) -->
+    <div class="interview-section">
+        <!-- LEFT: Prepare for your next interview -->
+        <div class="left-panel panel">
+            <span class="ambitionbox-badge">by AmbitionBox</span>
+            <div class="left-illustration">
+                <svg viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg" width="220" height="185">
+                    <circle cx="130" cy="120" r="72" fill="#f0ebe5" />
+                    <rect x="82" y="148" width="11" height="38" rx="5.5" fill="#d1d5db" />
+                    <rect x="97" y="148" width="11" height="38" rx="5.5" fill="#d1d5db" />
+                    <ellipse cx="87" cy="186" rx="9" ry="4.5" fill="#9ca3af" />
+                    <ellipse cx="102" cy="186" rx="9" ry="4.5" fill="#9ca3af" />
+                    <rect x="74" y="108" width="44" height="44" rx="10" fill="#fff" stroke="#e5e7eb"
+                        stroke-width="1.5" />
+                    <path d="M91 108 L96 120 L101 108" stroke="#e5e7eb" stroke-width="1.5" fill="none" />
+                    <path d="M118 120 Q134 116 146 114" stroke="#d1d5db" stroke-width="8" stroke-linecap="round" />
+                    <circle cx="147" cy="114" r="5.5" fill="#d1d5db" />
+                    <path d="M74 122 Q64 130 60 140" stroke="#d1d5db" stroke-width="8" stroke-linecap="round" />
+                    <rect x="90" y="96" width="12" height="14" rx="6" fill="#f9fafb" stroke="#e5e7eb"
+                        stroke-width="1.2" />
+                    <ellipse cx="96" cy="84" rx="18" ry="19" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.5" />
+                    <path d="M78 80 Q77 65 90 62 Q96 60 102 62 Q113 65 113 79" fill="#374151" />
+                    <circle cx="90" cy="85" r="2" fill="#374151" />
+                    <circle cx="102" cy="85" r="2" fill="#374151" />
+                    <path d="M91 91 Q96 95 101 91" stroke="#374151" stroke-width="1.5" stroke-linecap="round"
+                        fill="none" />
+                    <rect x="106" y="52" width="38" height="24" rx="8" fill="#fff" stroke="#e5e7eb"
+                        stroke-width="1.2" />
+                    <path d="M112 76 L108 84 L118 76" fill="#fff" stroke="#e5e7eb" stroke-width="1.2" />
+                    <circle cx="116" cy="64" r="2.5" fill="#d1d5db" />
+                    <circle cx="125" cy="64" r="2.5" fill="#d1d5db" />
+                    <circle cx="134" cy="64" r="2.5" fill="#d1d5db" />
+                    <rect x="158" y="148" width="11" height="38" rx="5.5" fill="#d1d5db" />
+                    <rect x="173" y="148" width="11" height="38" rx="5.5" fill="#d1d5db" />
+                    <ellipse cx="163" cy="186" rx="9" ry="4.5" fill="#9ca3af" />
+                    <ellipse cx="178" cy="186" rx="9" ry="4.5" fill="#9ca3af" />
+                    <path d="M150 148 Q158 160 171 160 Q184 160 192 148 Z" fill="#e5e7eb" />
+                    <rect x="150" y="108" width="44" height="44" rx="10" fill="#f3f4f6" stroke="#e5e7eb"
+                        stroke-width="1.5" />
+                    <path d="M150 120 Q136 117 126 115" stroke="#d1d5db" stroke-width="8" stroke-linecap="round" />
+                    <circle cx="125" cy="115" r="5.5" fill="#d1d5db" />
+                    <path d="M194 122 Q202 130 205 140" stroke="#d1d5db" stroke-width="8" stroke-linecap="round" />
+                    <rect x="166" y="96" width="12" height="14" rx="6" fill="#f9fafb" stroke="#e5e7eb"
+                        stroke-width="1.2" />
+                    <ellipse cx="172" cy="84" rx="18" ry="19" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.5" />
+                    <path
+                        d="M154 82 Q153 64 166 61 Q172 59 178 61 Q190 64 190 80 L190 95 Q185 106 172 106 Q159 106 154 95 Z"
+                        fill="#374151" />
+                    <ellipse cx="172" cy="86" rx="14" ry="15" fill="#f9fafb" />
+                    <circle cx="167" cy="86" r="2" fill="#374151" />
+                    <circle cx="177" cy="86" r="2" fill="#374151" />
+                    <path d="M167 93 Q172 97 177 93" stroke="#374151" stroke-width="1.5" stroke-linecap="round"
+                        fill="none" />
+                    <path d="M154 80 Q154 62 172 62 Q190 62 190 80" stroke="#6d28d9" stroke-width="3" fill="none"
+                        stroke-linecap="round" />
+                    <rect x="150" y="78" width="7" height="10" rx="3.5" fill="#6d28d9" />
+                    <rect x="187" y="78" width="7" height="10" rx="3.5" fill="#6d28d9" />
+                    <rect x="120" y="40" width="38" height="24" rx="8" fill="#fff" stroke="#e5e7eb"
+                        stroke-width="1.2" />
+                    <path d="M150 64 L156 72 L146 64" fill="#fff" stroke="#e5e7eb" stroke-width="1.2" />
+                    <circle cx="130" cy="52" r="2.5" fill="#d1d5db" />
+                    <circle cx="139" cy="52" r="2.5" fill="#d1d5db" />
+                    <circle cx="148" cy="52" r="2.5" fill="#d1d5db" />
+                </svg>
+            </div>
+            <h2>Prepare for your next interview</h2>
+        </div>
+
+        <!-- MIDDLE: Interview questions by company -->
+        <div class="mid-panel panel">
+            <div class="panel-title">Interview questions by company</div>
+            <div class="company-grid">
+                <a class="company-item" href="#">
+                    <div class="company-logo-box"><svg viewBox="0 0 40 40"><text x="3" y="28" font-family="Arial"
+                                font-size="16" font-weight="900" fill="#e31837">tcs</text></svg></div>
+                    <div class="company-text"><span class="cname">TCS</span><span class="ccount">2.5K+ Interviews</span>
+                    </div><span class="chevron">›</span>
+                </a>
+                <a class="company-item" href="#">
+                    <div class="company-logo-box"><svg viewBox="0 0 40 40">
+                            <polygon points="20,8 32,28 8,28" fill="none" stroke="#a100ff" stroke-width="3.5" /><text
+                                x="10" y="27" font-family="Arial" font-size="20" font-weight="900"
+                                fill="#a100ff">›</text>
+                        </svg></div>
+                    <div class="company-text"><span class="cname">Accenture</span><span class="ccount">2K+
+                            Interviews</span></div><span class="chevron">›</span>
+                </a>
+                <a class="company-item" href="#">
+                    <div class="company-logo-box"><svg viewBox="0 0 40 40"><text x="6" y="26" font-family="Arial"
+                                font-size="22" font-weight="900" fill="#222">a</text>
+                            <path d="M6 30 Q18 36 32 30" stroke="#f90" stroke-width="2.5" fill="none" />
+                        </svg></div>
+                    <div class="company-text"><span class="cname">Amazon</span><span class="ccount">1.7K+
+                            Interviews</span></div><span class="chevron">›</span>
+                </a>
+                <a class="company-item" href="#">
+                    <div class="company-logo-box"><svg viewBox="0 0 40 40">
+                            <rect width="40" height="40" rx="8" fill="#F7941D" /><text x="8" y="28" font-family="Arial"
+                                font-size="18" font-weight="900" fill="#fff">F</text>
+                        </svg></div>
+                    <div class="company-text"><span class="cname">Flipkart</span><span class="ccount">488
+                            Interviews</span></div><span class="chevron">›</span>
+                </a>
+                <a class="company-item" href="#">
+                    <div class="company-logo-box"><svg viewBox="0 0 40 40">
+                            <circle cx="20" cy="20" r="14" fill="none" stroke="#1561ac" stroke-width="3" />
+                            <circle cx="20" cy="20" r="7" fill="#1561ac" opacity="0.3" /><text x="9" y="25"
+                                font-family="Arial" font-size="11" font-weight="700" fill="#1561ac">cog</text>
+                        </svg></div>
+                    <div class="company-text"><span class="cname">Cognizant</span><span class="ccount">1.6K+
+                            Interviews</span></div><span class="chevron">›</span>
+                </a>
+                <a class="company-item" href="#">
+                    <div class="company-logo-box"><svg viewBox="0 0 40 40">
+                            <rect width="40" height="40" rx="8" fill="#6c2fa3" /><text x="4" y="27" font-family="Arial"
+                                font-size="10" font-weight="900" fill="#fff">BYJU'S</text>
+                        </svg></div>
+                    <div class="company-text"><span class="cname">Byjus</span><span class="ccount">816 Interviews</span>
+                    </div><span class="chevron">›</span>
+                </a>
+            </div>
+            <a href="#" class="view-all-link">View all companies &nbsp;›</a>
+        </div>
+
+        <!-- RIGHT: Interview questions by role -->
+        <div class="right-panel panel">
+            <div class="panel-title">Interview questions by role</div>
+            <ul class="role-list">
+                <li><a class="role-item" href="#"><span class="role-name">Software Engineer</span><span
+                            class="role-count">(7.2K+ questions)</span></a></li>
+                <li><a class="role-item" href="#"><span class="role-name">Business Analyst</span><span
+                            class="role-count">(2.8K+ questions)</span></a></li>
+                <li><a class="role-item" href="#"><span class="role-name">Consultant</span><span
+                            class="role-count">(2.4K+ questions)</span></a></li>
+                <li><a class="role-item" href="#"><span class="role-name">Financial Analyst</span><span
+                            class="role-count">(894 questions)</span></a></li>
+                <li><a class="role-item" href="#"><span class="role-name">Sales &amp; Marketing</span><span
+                            class="role-count">(991 questions)</span></a></li>
+                <li><a class="role-item" href="#"><span class="role-name">Quality Engineer</span><span
+                            class="role-count">(1.3K+ questions)</span></a></li>
+            </ul>
+            <a href="#" class="view-all-link">View all roles &nbsp;›</a>
+        </div>
+    </div>
+    <section class="premium-banner">
+        <div class="premium-left">
+            <div class="premium-image-box">
+                <img src="{% static 'core/images/text_image.png' %}" alt="Resume Card">
+            </div>
+            <div class="premium-content">
+                <h2>Accelerate your job search with premium services</h2>
+                <p>
+                    Services to help you get hired, faster: from preparing your CV,
+                    getting recruiter attention, finding the right jobs, and more!
+                </p>
+
+                <div class="premium-tags">
+                    <a href="#" class="tag-btn">
+                        <span class="icon">⚡</span> Resume writing
+                        <span class="arrow">›</span>
+                    </a>
+
+                    <a href="#" class="tag-btn">
+                        <span class="icon">📄</span> Priority applicant
+                        <span class="arrow">›</span>
+                    </a>
+
+                    <a href="#" class="tag-btn">
+                        <span class="icon">✏</span> Resume display
+                        <span class="arrow">›</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-right">
+            <div class="premium-badge">by Naukri FastForward</div>
+
+            <a href="#" class="learn-btn">Learn more</a>
+            <p class="paid-text">Includes paid services</p>
+        </div>
+    </section>
+    <footer class="naukri-footer">
+        <div class="footer-container">
+
+            <!-- LEFT LOGO + SOCIAL -->
+            <div class="footer-left">
+                <div class="footer-logo">
+                    <img src="{% static 'core/images/naukri1.png' %}" alt="Naukri Logo">
+                </div>
+
+                <h4>Connect with us</h4>
+
+                <div class="social-icons">
+
+                    <a href="#"><img src="{% static 'core/images/facebook.png' %}" alt="Facebook"></a>
+                    <a href="#"><img src="{% static 'core/images/instagram.png' %}" alt="Instagram"></a>
+                    <a href="#"><img src="{% static 'core/images/twitter.png' %}" alt="Twitter"></a>
+                    <a href="#"><img src="{% static 'core/images/linkdin1.png' %}" alt="LinkedIn"></a>
+                </div>
+            </div>
+
+            <!-- FOOTER LINKS -->
+            <div class="footer-links">
+                <div class="footer-column">
+                    <a href="#">About us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Employer home</a>
+                    <a href="#">Sitemap</a>
+                    <a href="#">Credits</a>
+                </div>
+
+                <div class="footer-column">
+                    <a href="#">Help center</a>
+                    <a href="#">Summons/Notices</a>
+                    <a href="#">Grievances</a>
+                    <a href="#">Report issue</a>
+                </div>
+
+                <div class="footer-column">
+                    <a href="#">Privacy policy</a>
+                    <a href="#">Terms & conditions</a>
+                    <a href="#">Fraud alert</a>
+                    <a href="#">Trust & safety</a>
+                </div>
+            </div>
+        </div>
+
+        <hr class="footer-line">
+    </footer>
+
+    <script src="{% static 'core/js/script.js' %}"></script>
+    <script src="{% static 'core/js/main.js' %}"></script>
+</body>
+
+</html>
+{% endblock %}
