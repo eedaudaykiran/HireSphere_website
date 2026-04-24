@@ -156,6 +156,11 @@ def employer_login_page(request):
 # ============================================================
 # UPDATED remote_jobs_page with stipend_counts and selected_stipends
 # ============================================================
+
+from django.db.models import Q, Count
+from django.utils import timezone
+import datetime
+
 def remote_jobs_page(request):
     jobs = Job.objects.all().order_by('-id')
 
@@ -190,7 +195,7 @@ def remote_jobs_page(request):
             salary_query |= Q(salary__icontains=sal)
         jobs = jobs.filter(salary_query)
 
-    # 🔹 Stipend (filtering logic)
+    # 🔹 Stipend
     stipends = request.GET.getlist('stipend')
     if stipends:
         stipend_query = Q()
@@ -210,20 +215,52 @@ def remote_jobs_page(request):
     if experience and experience != "30":
         jobs = jobs.filter(experience__icontains=experience)
 
+    # 🔹 Freshness (Date posted) – NEW
+    freshness = request.GET.get('freshness')
+    if freshness:
+        try:
+            days = int(freshness)
+            cutoff_date = timezone.now() - datetime.timedelta(days=days)
+            jobs = jobs.filter(created_at__gte=cutoff_date)
+        except ValueError:
+            pass
+
+    # 🔹 Duration
+    durations = request.GET.getlist('duration')
+    if durations:
+        jobs = jobs.filter(duration__in=durations)
+
+    # 🔹 Education
+    educations = request.GET.getlist('education')
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    # 🔹 Posted By
+    posted_by = request.GET.getlist('posted_by')
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    # 🔹 Industry
+    industries = request.GET.getlist('industry')
+    if industries:
+        jobs = jobs.filter(industry__in=industries)
+
+    # 🔹 Top Companies
+    companies = request.GET.getlist('company')
+    if companies:
+        jobs = jobs.filter(company__in=companies)
+
     # 🔹 Role
     roles = request.GET.getlist('role_category')
     if roles:
         jobs = jobs.filter(role_category__in=roles)
 
-    # ✅ COUNTS — all based on unfiltered Job queryset (for sidebar filters)
+    # ✅ COUNTS — all based on unfiltered Job queryset
     all_jobs = Job.objects.all()
 
-    # Salary counts (all 8 ranges matching template)
+    # Salary counts
     salary_ranges = ['0-3', '3-6', '6-10', '10-15', '15-20', '20-25', '25-30', '30-35']
-    salary_counts = {
-        r: all_jobs.filter(salary__icontains=r).count()
-        for r in salary_ranges
-    }
+    salary_counts = {r: all_jobs.filter(salary__icontains=r).count() for r in salary_ranges}
 
     # Category counts
     category_counts = {
@@ -250,7 +287,7 @@ def remote_jobs_page(request):
         for item in all_jobs.values('role_category').annotate(total=Count('id'))
     }
 
-    # ✅ Stipend counts (NEW - added as requested)
+    # Stipend counts
     stipend_ranges = ['unpaid', '0-10', '10-20', '20-30', '30-50', '50+']
     stipend_counts = {}
     for s in stipend_ranges:
@@ -260,11 +297,31 @@ def remote_jobs_page(request):
             stipend_counts[s] = all_jobs.filter(salary__icontains='50').count()
         elif '-' in s:
             min_s, max_s = s.split('-')
-            stipend_counts[s] = all_jobs.filter(
-                Q(salary__icontains=min_s) | Q(salary__icontains=max_s)
-            ).count()
+            stipend_counts[s] = all_jobs.filter(Q(salary__icontains=min_s) | Q(salary__icontains=max_s)).count()
         else:
-            stipend_counts[s] = 0  # fallback
+            stipend_counts[s] = 0
+
+    # Duration counts
+    all_durations = all_jobs.exclude(duration__isnull=True).exclude(duration='').values_list('duration', flat=True).distinct()
+    duration_counts = {d: all_jobs.filter(duration=d).count() for d in all_durations}
+
+    # Education counts
+    all_educations = all_jobs.exclude(education__isnull=True).exclude(education='').values_list('education', flat=True).distinct()
+    education_counts = {e: all_jobs.filter(education=e).count() for e in all_educations}
+
+    # Posted By counts
+    all_posted_by = all_jobs.exclude(posted_by__isnull=True).exclude(posted_by='').values_list('posted_by', flat=True).distinct()
+    posted_by_counts = {p: all_jobs.filter(posted_by=p).count() for p in all_posted_by}
+
+    # Industry counts
+    all_industries = all_jobs.exclude(industry__isnull=True).exclude(industry='').values_list('industry', flat=True).distinct()
+    industry_counts = {i: all_jobs.filter(industry=i).count() for i in all_industries}
+
+    # Company counts
+    company_counts = {
+        item['company']: item['total']
+        for item in all_jobs.values('company').annotate(total=Count('id'))
+    }
 
     return render(request, 'core/remote_jobs.html', {
         'jobs': jobs,
@@ -274,16 +331,26 @@ def remote_jobs_page(request):
         'selected_locations': locations,
         'selected_salaries': salaries,
         'selected_experience': experience,
+        'selected_freshness': freshness,          # ✅ ADDED
         'selected_roles': roles,
-        'selected_stipends': stipends,       # ✅ ADDED
+        'selected_stipends': stipends,
+        'selected_durations': durations,
+        'selected_educations': educations,
+        'selected_posted': posted_by,
+        'selected_industries': industries,
+        'selected_companies': companies,
         'salary_counts': salary_counts,
         'category_counts': category_counts,
         'location_counts': location_counts,
         'company_type_counts': company_type_counts,
         'role_counts': role_counts,
-        'stipend_counts': stipend_counts,    # ✅ ADDED
+        'stipend_counts': stipend_counts,
+        'duration_counts': duration_counts,
+        'education_counts': education_counts,
+        'posted_by_counts': posted_by_counts,
+        'industry_counts': industry_counts,
+        'company_counts': company_counts,
     })
-
 
 def mnc_jobs_page(request):
     jobs = Job.objects.filter(company_type__iexact="mnc").order_by('-id')

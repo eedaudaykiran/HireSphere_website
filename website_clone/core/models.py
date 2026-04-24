@@ -33,6 +33,31 @@ class Job(models.Model):
         ('HR', 'HR'),
         ('General', 'General'),
     )
+    # education choices for filtering
+    EDUCATION_CHOICES = [
+        ("PG", "Any Postgraduate"),
+        ("MBA", "MBA/PGDM"),
+        ("GRAD", "Any Graduate"),
+        ("BTECH", "B.Tech/B.E."),
+        ("DIP", "Diploma"),
+        ("12TH", "12th Pass"),
+    ]
+    # posted jobs
+    POSTED_BY_CHOICES = [
+        ("COMPANY", "Company Jobs"),
+        ("CONSULTANT", "Consultant Jobs"),
+    ]
+    # industry choices for filtering
+    INDUSTRY_CHOICES = [
+        ("IT", "IT Services & Consulting"),
+        ("RECRUIT", "Recruitment / Staffing"),
+        ("EDU", "Education / Training"),
+        ("BPO", "BPM / BPO"),
+        ("HEALTH", "Healthcare"),
+        ("BFSI", "BFSI"),
+        ("RETAIL", "Retail"),
+    ]
+
 
     title = models.CharField(max_length=200)
     company = models.CharField(max_length=200)
@@ -44,6 +69,16 @@ class Job(models.Model):
     conditions = models.CharField(max_length=300, default="Hands-on projects • Paper writing • Coding explanation")
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     role_category = models.CharField(max_length=100)
+    duration = models.CharField(max_length=50, blank=True, null=True)
+    education = models.CharField(max_length=50, choices=EDUCATION_CHOICES)
+    posted_by = models.CharField(
+    max_length=20,
+    choices=POSTED_BY_CHOICES,
+    default="COMPANY"
+    )
+    industry = models.CharField(max_length=100, blank=True)
+    # models.py
+    created_at = models.DateTimeField(auto_now_add=True)
     
     # 👇 MODIFIED: use choices instead of plain CharField
     category = models.CharField(
