@@ -168,22 +168,7 @@
     </header>
  
     <!-- Mobile Nav Drawer -->
-    <div class="rj-mobile-nav" id="rjMobileNav">
-        <div class="rj-mobile-nav-inner">
-            <button class="rj-mobile-close" id="rjMobileClose"><i class="fa fa-times"></i></button>
-            <a href="{% url 'index' %}" class="rj-mobile-logo">naukri</a>
-            <div class="rj-mobile-links">
-                <a href="#">Jobs</a>
-                <a href="#">Companies</a>
-                <a href="#">Services</a>
-                <hr>
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'register' %}">Register</a>
-                <a href="{% url 'employer_login' %}">Employer Login</a>
-            </div>
-        </div>
-    </div>
-    <div class="rj-mobile-overlay" id="rjMobileOverlay"></div>
+    
  
     <!-- ═══════════════════════════════════════
          CATEGORY CAROUSEL STRIP
@@ -228,12 +213,7 @@
         ══════════════════════ -->
         <aside class="rj-col rj-col--filter">
  
-            <!-- Mobile filter toggle button -->
-            <button class="rj-filter-toggle-btn" id="rjFilterToggle">
-                <i class="fa fa-sliders-h"></i> Filters
-                <i class="fa fa-chevron-down" id="rjFilterToggleIcon"></i>
-            </button>
- 
+           
             <form method="GET" id="filterForm" class="rj-filter-form">
  
                 <div class="rj-filter-head">
@@ -1177,6 +1157,7 @@
  
         renderPage();
     });
+    
     </script>
 </body>
 </html>

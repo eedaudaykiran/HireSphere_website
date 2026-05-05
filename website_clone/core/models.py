@@ -62,7 +62,8 @@ class Job(models.Model):
     title = models.CharField(max_length=200)
     company = models.CharField(max_length=200)
     experience = models.CharField(max_length=50)
-    salary = models.CharField(max_length=50)
+    min_salary = models.IntegerField(null=True, blank=True)
+    max_salary = models.IntegerField(null=True, blank=True)
     location = models.CharField(max_length=100)
     work_mode = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES)
     skills = models.CharField(max_length=300)
@@ -77,8 +78,7 @@ class Job(models.Model):
     default="COMPANY"
     )
     industry = models.CharField(max_length=100, blank=True)
-    # models.py
-    created_at = models.DateTimeField(auto_now_add=True)
+    
     
     # 👇 MODIFIED: use choices instead of plain CharField
     category = models.CharField(
