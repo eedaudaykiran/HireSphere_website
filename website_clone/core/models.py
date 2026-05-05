@@ -105,6 +105,17 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+    
+class SavedJob(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'job')  # prevent duplicate saves
+
+    def __str__(self):
+        return f"{self.user.username} saved {self.job.title}"
 
     def skills_list(self):
         """Returns a list of individual skills, splitting by comma and stripping whitespace."""

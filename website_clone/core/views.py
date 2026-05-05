@@ -1,16 +1,45 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.utils import timezone
 import datetime
 
 from .forms import RegisterForm, LoginForm
-from .models import UserProfile, Job
+from .models import UserProfile, Job, SavedJob
 
 
-# ===================== FILTER FUNCTIONS (ADDED) =====================
+# ===================== SAVE JOB VIEW (with login_required) =====================
+
+@login_required
+def save_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    
+    saved, created = SavedJob.objects.get_or_create(
+        user=request.user,
+        job=job
+    )
+    
+    if created:
+        messages.success(request, "✅ Job saved successfully!")
+    else:
+        saved.delete()
+        messages.warning(request, "❌ Job removed from saved!")
+    
+    next_url = request.META.get('HTTP_REFERER', 'remote_jobs')
+    return redirect(next_url)
+
+
+def saved_jobs_page(request):
+    saved_jobs = SavedJob.objects.filter(user=request.user)
+    return render(request, 'core/saved_jobs.html', {
+        'saved_jobs': saved_jobs
+    })
+
+
+# ===================== FILTER FUNCTIONS =====================
 
 def filter_by_work_mode(qs, request):
     work_modes = request.GET.getlist('work_mode')
@@ -49,7 +78,6 @@ def filter_by_salary(qs, request):
                 min_s, max_s = s.split('-')
                 query |= Q(min_salary__gte=int(min_s), max_salary__lte=int(max_s))
             except (ValueError, AttributeError):
-                # if format is wrong, skip this value
                 continue
         qs = qs.filter(query)
     return qs, salaries
@@ -57,7 +85,7 @@ def filter_by_salary(qs, request):
 
 def filter_by_experience(qs, request):
     exp = request.GET.get('experience')
-    if exp and exp != "30":          # "30" means "All" in your UI
+    if exp and exp != "30":
         qs = qs.filter(experience__icontains=exp)
     return qs, exp
 
@@ -119,7 +147,6 @@ def register_view(request):
             mobile_number = form.cleaned_data["mobile_number"]
             work_status   = form.cleaned_data["work_status"]
 
-            # generate unique username from email prefix
             base_username = email.split("@")[0]
             username = base_username
             counter = 1
@@ -194,7 +221,6 @@ def employer_login_page(request):
 def remote_jobs_page(request):
     jobs = Job.objects.all().order_by('-id')
 
-    # ---- Use the new filter functions ----
     jobs, selected_work_modes  = filter_by_work_mode(jobs, request)
     jobs, selected_categories   = filter_by_category(jobs, request)
     jobs, selected_locations    = filter_by_location(jobs, request)
@@ -202,26 +228,9 @@ def remote_jobs_page(request):
     jobs, selected_experience   = filter_by_experience(jobs, request)
     jobs, selected_freshness    = filter_by_freshness(jobs, request)
 
-    # ---- Keep other filters as they were (company_type, stipend, duration, etc.) ----
     company_types = request.GET.getlist('company_type')
     if company_types:
         jobs = jobs.filter(company_type__in=company_types)
-
-    # Stipend – WARNING: No 'stipend' field in Job model. 
-    # Uncomment only after adding a stipend field or map to min_salary.
-    # stipends = request.GET.getlist('stipend')
-    # if stipends:
-    #     stipend_query = Q()
-    #     for s in stipends:
-    #         if s == "unpaid":
-    #             stipend_query |= Q(salary__icontains="unpaid")   # adjust if you have a stipend field
-    #         elif '-' in s:
-    #             min_s, max_s = s.split('-')
-    #             stipend_query |= Q(min_salary__gte=min_s, max_salary__lte=max_s)
-    #         else:
-    #             stipend_query |= Q(min_salary__gte=s.replace('+', ''))
-    #     jobs = jobs.filter(stipend_query)
-    # selected_stipends = request.GET.getlist('stipend', [])   # just for passing to template
 
     durations = request.GET.getlist('duration')
     if durations:
@@ -247,10 +256,8 @@ def remote_jobs_page(request):
     if roles:
         jobs = jobs.filter(role_category__in=roles)
 
-    # ========== COUNTS (based on unfiltered Job queryset) ==========
     all_jobs = Job.objects.all()
 
-    # Salary counts using min_salary / max_salary ranges
     salary_ranges = ['0-3', '3-6', '6-10', '10-15', '15-20', '20-25', '25-30', '30-35']
     salary_counts = {}
     for r in salary_ranges:
@@ -261,54 +268,44 @@ def remote_jobs_page(request):
             cnt = 0
         salary_counts[r] = cnt
 
-    # Category counts
     category_counts = {
         item['category']: item['total']
         for item in all_jobs.values('category').annotate(total=Count('id'))
     }
 
-    # Location counts (predefined cities)
     location_list = ['Bangalore', 'Delhi', 'Mumbai', 'Hyderabad', 'Pune', 'Chennai']
     location_counts = {
         loc: all_jobs.filter(location__icontains=loc).count()
         for loc in location_list
     }
 
-    # Company type counts
     company_type_counts = {
         item['company_type']: item['total']
         for item in all_jobs.values('company_type').annotate(total=Count('id'))
     }
 
-    # Role counts
     role_counts = {
         item['role_category']: item['total']
         for item in all_jobs.values('role_category').annotate(total=Count('id'))
     }
 
-    # Duration counts
     all_durations = all_jobs.exclude(duration__isnull=True).exclude(duration='').values_list('duration', flat=True).distinct()
     duration_counts = {d: all_jobs.filter(duration=d).count() for d in all_durations}
 
-    # Education counts
     all_educations = all_jobs.exclude(education__isnull=True).exclude(education='').values_list('education', flat=True).distinct()
     education_counts = {e: all_jobs.filter(education=e).count() for e in all_educations}
 
-    # Posted by counts
     all_posted_by = all_jobs.exclude(posted_by__isnull=True).exclude(posted_by='').values_list('posted_by', flat=True).distinct()
     posted_by_counts = {p: all_jobs.filter(posted_by=p).count() for p in all_posted_by}
 
-    # Industry counts
     all_industries = all_jobs.exclude(industry__isnull=True).exclude(industry='').values_list('industry', flat=True).distinct()
     industry_counts = {i: all_jobs.filter(industry=i).count() for i in all_industries}
 
-    # Company counts
     company_counts = {
         item['company']: item['total']
         for item in all_jobs.values('company').annotate(total=Count('id'))
     }
 
-    # Stipend counts – again, only if you have a stipend field. For now, set empty dict.
     stipend_counts = {}
 
     return render(request, 'core/remote_jobs.html', {
@@ -321,7 +318,7 @@ def remote_jobs_page(request):
         'selected_experience': selected_experience,
         'selected_freshness': selected_freshness,
         'selected_roles': roles,
-        'selected_stipends': [],          # disabled until stipend field exists
+        'selected_stipends': [],
         'selected_durations': durations,
         'selected_educations': educations,
         'selected_posted': posted_by,
@@ -341,7 +338,7 @@ def remote_jobs_page(request):
     })
 
 
-# ===================== OTHER PAGES (unchanged) =====================
+# ===================== OTHER PAGES =====================
 
 def mnc_jobs_page(request):
     jobs = Job.objects.filter(company_type__iexact="mnc").order_by('-id')

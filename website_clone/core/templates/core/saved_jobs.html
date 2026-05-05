@@ -1,0 +1,10 @@
+<h2>Saved Jobs</h2>
+
+{% for item in saved_jobs %}
+    <div>
+        <h3>{{ item.job.title }}</h3>
+        <p>{{ item.job.company }}</p>
+    </div>
+{% empty %}
+    <p>No saved jobs yet</p>
+{% endfor %}
