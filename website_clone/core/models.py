@@ -103,6 +103,8 @@ class Job(models.Model):
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=3.5)
+    review_count = models.IntegerField(default=0)
     def __str__(self):
         return self.title
     

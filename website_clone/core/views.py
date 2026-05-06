@@ -284,7 +284,35 @@ def remote_jobs_page(request):
         for item in all_jobs.values('company').annotate(total=Count('id'))
     }
 
-    stipend_counts = {}
+    # Get selected stipends from request
+    stipends = request.GET.getlist('stipend')
+    if stipends:
+        stipend_query = Q()
+        for s in stipends:
+            if s == 'unpaid':
+                stipend_query |= Q(min_salary=0, max_salary=0)
+            elif s == '0-10':
+                stipend_query |= Q(min_salary__gte=0, max_salary__lte=10)
+            elif s == '10-20':
+                stipend_query |= Q(min_salary__gte=10, max_salary__lte=20)
+            elif s == '20-30':
+                stipend_query |= Q(min_salary__gte=20, max_salary__lte=30)
+            elif s == '30-50':
+                stipend_query |= Q(min_salary__gte=30, max_salary__lte=50)
+            elif s == '50+':
+                stipend_query |= Q(min_salary__gte=50)
+        jobs = jobs.filter(stipend_query)
+
+     # Stipend counts for display
+    stipend_ranges = {
+        'unpaid': jobs.filter(min_salary=0, max_salary=0).count(),
+        '0-10':   Job.objects.filter(min_salary__gte=0,  max_salary__lte=10).count(),
+        '10-20':  Job.objects.filter(min_salary__gte=10, max_salary__lte=20).count(),
+        '20-30':  Job.objects.filter(min_salary__gte=20, max_salary__lte=30).count(),
+        '30-50':  Job.objects.filter(min_salary__gte=30, max_salary__lte=50).count(),
+        '50+':    Job.objects.filter(min_salary__gte=50).count(),
+    }
+    stipend_counts = stipend_ranges
 
     return render(request, 'core/remote_jobs.html', {
         'jobs': jobs,
@@ -296,7 +324,7 @@ def remote_jobs_page(request):
         'selected_experience': selected_experience,
         'selected_freshness': selected_freshness,
         'selected_roles': roles,
-        'selected_stipends': [],
+        'selected_stipends': stipends,
         'selected_durations': durations,
         'selected_educations': educations,
         'selected_posted': posted_by,
