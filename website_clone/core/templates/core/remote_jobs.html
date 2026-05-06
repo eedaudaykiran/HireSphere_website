@@ -168,7 +168,7 @@
         </button>
     </header>
 
-    <!-- Mobile Nav Drawer -->
+    <!-- Mobile Nav Drawer (optional, not used) -->
     
 
     <!-- ═══════════════════════════════════════
@@ -213,10 +213,7 @@
              COLUMN 1 — FILTER PANEL
         ══════════════════════ -->
         <aside class="rj-col rj-col--filter">
-
-           
             <form method="GET" id="filterForm" class="rj-filter-form">
-
                 <div class="rj-filter-head">
                     <span class="rj-filter-title">All Filters</span>
                     <span class="rj-filter-applied" id="rjAppliedCount">Applied (0)</span>
@@ -768,7 +765,6 @@
                         </label>
                     </div>
                 </div>
-
             </form>
         </aside>
 
@@ -776,7 +772,6 @@
              COLUMN 2 — JOB CARDS + PAGINATION
         ══════════════════════ -->
         <main class="rj-col rj-col--jobs">
-
             {% for job in jobs %}
             <div class="rj-job-card"
                 data-workmode="{{ job.work_mode|default:'' }}"
@@ -802,8 +797,8 @@
                             {{ job.company|default:"Unknown Company" }}
                             <span class="rj-star-rating">
                                 <i class="fa-solid fa-star rj-star-icon"></i>
-                                <span class="rj-star-value">{{ job.rating }}</span>
-                                <span class="rj-review-count">{{ job.review_count }} Reviews</span>
+                                <span class="rj-star-value">3.5</span>
+                                <span class="rj-review-count">118 Reviews</span>
                             </span>
                         </div>
                     </a>
@@ -815,7 +810,7 @@
                             <a href="#" class="rj-meta-link">{{ job.salary|default:"Not disclosed" }}</a>
                         </span>
                         <span><i class="fa-solid fa-location-dot"></i>
-                            <a href="#" class="rj-meta-link">{{ job.work_mode }} - {{ job.location }}</a>
+                            <a href="#" class="rj-meta-link">{{ job.work_mode|default:"Not specified" }} - {{ job.location|default:"" }}</a>
                         </span>
                     </div>
                     {% if job.conditions %}
@@ -839,13 +834,12 @@
                 <!-- Footer -->
                 <div class="rj-card-footer">
                     <span class="rj-posted">posted {{ job.created_at|naturaltime }}</span>
-                    <!-- REPLACED BUTTON WITH ANCHOR -->
                     <button class="rj-save-btn" 
                         data-job-id="{{ job.id }}"
                         data-saved="false"
                         onclick="toggleSave(this)">
                         <i class="fa-regular fa-bookmark"></i>
-                    <span class="rj-save-text">Save</span>
+                        <span class="rj-save-text">Save</span>
                     </button>
                 </div>
             </div>
@@ -859,9 +853,8 @@
                 No jobs match your selected filters. Try removing some filters.
             </div>
 
-            <!-- PAGINATION — lives inside column 2 only -->
+            <!-- PAGINATION -->
             <div class="rj-pagination" id="rjPagination"></div>
-
         </main>
 
         <!-- ══════════════════════
@@ -883,8 +876,181 @@
                 </div>
             </div>
         </aside>
-
     </div><!-- end rj-page-wrap -->
+
+    <!-- ═══════════════════════════════════════
+         NEW LOCATION BOX (added above footer)
+    ═══════════════════════════════════════ -->
+    <div class="rj-location-box">
+        <div class="rj-loc-title">Apply to 16215 Remote Jobs on Naukri.com</div>
+
+        <div class="rj-loc-tabs-row">
+            <button class="rj-loc-tab active" onclick="switchTab(this, 'bangalore')">Bangalore</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'delhi')">Delhi NCR</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'hyderabad')">Hyderabad Secunderabad</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'mumbai')">Mumbai</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'chennai')">Chennai</button>
+        </div>
+
+        <div class="rj-loc-tabs-row">
+            <button class="rj-loc-tab" onclick="switchTab(this, 'pune')">Pune</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'kolkata')">Kolkata</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'ahmedabad')">Ahmedabad</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'gurgaon')">Gurgaon</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'noida')">Noida</button>
+            <button class="rj-loc-tab" onclick="switchTab(this, 'alljobs')">All Jobs</button>
+        </div>
+
+        <div class="rj-loc-row4">
+            <button class="rj-top-companies-tab" onclick="switchTab(this, 'topcompanies')">Top Companies</button>
+        </div>
+
+        <!-- Panels -->
+        <ul class="rj-loc-items active" id="panel-bangalore">
+            <li><a href="#">Support Jobs In Bangalore</a></li>
+            <li><a href="#">Infrastructure Jobs In Bangalore</a></li>
+            <li><a href="#">Desktop Jobs In Bangalore</a></li>
+            <li><a href="#">Remote Support Jobs In Bangalore</a></li>
+            <li><a href="#">Troubleshooting Jobs In Bangalore</a></li>
+            <li><a href="#">Technical Support Jobs In Bangalore</a></li>
+            <li><a href="#">Server Jobs In Bangalore</a></li>
+            <li><a href="#">Network Jobs In Bangalore</a></li>
+            <li><a href="#">Itil Jobs In Bangalore</a></li>
+            <li><a href="#">Windows Jobs In Bangalore</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-delhi">
+            <li><a href="#">Support Jobs In Delhi NCR</a></li>
+            <li><a href="#">Infrastructure Jobs In Delhi NCR</a></li>
+            <li><a href="#">Desktop Jobs In Delhi NCR</a></li>
+            <li><a href="#">Remote Support Jobs In Delhi NCR</a></li>
+            <li><a href="#">Troubleshooting Jobs In Delhi NCR</a></li>
+            <li><a href="#">Technical Support Jobs In Delhi NCR</a></li>
+            <li><a href="#">Server Jobs In Delhi NCR</a></li>
+            <li><a href="#">Network Jobs In Delhi NCR</a></li>
+            <li><a href="#">Itil Jobs In Delhi NCR</a></li>
+            <li><a href="#">Windows Jobs In Delhi NCR</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-hyderabad">
+            <li><a href="#">Support Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Infrastructure Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Desktop Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Remote Support Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Troubleshooting Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Technical Support Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Server Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Network Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Itil Jobs In Hyderabad Secunderabad</a></li>
+            <li><a href="#">Windows Jobs In Hyderabad Secunderabad</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-mumbai">
+            <li><a href="#">Support Jobs In Mumbai</a></li>
+            <li><a href="#">Infrastructure Jobs In Mumbai</a></li>
+            <li><a href="#">Desktop Jobs In Mumbai</a></li>
+            <li><a href="#">Remote Support Jobs In Mumbai</a></li>
+            <li><a href="#">Troubleshooting Jobs In Mumbai</a></li>
+            <li><a href="#">Technical Support Jobs In Mumbai</a></li>
+            <li><a href="#">Server Jobs In Mumbai</a></li>
+            <li><a href="#">Network Jobs In Mumbai</a></li>
+            <li><a href="#">Itil Jobs In Mumbai</a></li>
+            <li><a href="#">Windows Jobs In Mumbai</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-chennai">
+            <li><a href="#">Support Jobs In Chennai</a></li>
+            <li><a href="#">Infrastructure Jobs In Chennai</a></li>
+            <li><a href="#">Desktop Jobs In Chennai</a></li>
+            <li><a href="#">Remote Support Jobs In Chennai</a></li>
+            <li><a href="#">Troubleshooting Jobs In Chennai</a></li>
+            <li><a href="#">Technical Support Jobs In Chennai</a></li>
+            <li><a href="#">Server Jobs In Chennai</a></li>
+            <li><a href="#">Network Jobs In Chennai</a></li>
+            <li><a href="#">Itil Jobs In Chennai</a></li>
+            <li><a href="#">Windows Jobs In Chennai</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-pune">
+            <li><a href="#">Support Jobs In Pune</a></li>
+            <li><a href="#">Infrastructure Jobs In Pune</a></li>
+            <li><a href="#">Desktop Jobs In Pune</a></li>
+            <li><a href="#">Remote Support Jobs In Pune</a></li>
+            <li><a href="#">Troubleshooting Jobs In Pune</a></li>
+            <li><a href="#">Technical Support Jobs In Pune</a></li>
+            <li><a href="#">Server Jobs In Pune</a></li>
+            <li><a href="#">Network Jobs In Pune</a></li>
+            <li><a href="#">Itil Jobs In Pune</a></li>
+            <li><a href="#">Windows Jobs In Pune</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-kolkata">
+            <li><a href="#">Support Jobs In Kolkata</a></li>
+            <li><a href="#">Infrastructure Jobs In Kolkata</a></li>
+            <li><a href="#">Desktop Jobs In Kolkata</a></li>
+            <li><a href="#">Remote Support Jobs In Kolkata</a></li>
+            <li><a href="#">Troubleshooting Jobs In Kolkata</a></li>
+            <li><a href="#">Technical Support Jobs In Kolkata</a></li>
+            <li><a href="#">Server Jobs In Kolkata</a></li>
+            <li><a href="#">Network Jobs In Kolkata</a></li>
+            <li><a href="#">Itil Jobs In Kolkata</a></li>
+            <li><a href="#">Windows Jobs In Kolkata</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-ahmedabad">
+            <li><a href="#">Support Jobs In Ahmedabad</a></li>
+            <li><a href="#">Infrastructure Jobs In Ahmedabad</a></li>
+            <li><a href="#">Desktop Jobs In Ahmedabad</a></li>
+            <li><a href="#">Remote Support Jobs In Ahmedabad</a></li>
+            <li><a href="#">Troubleshooting Jobs In Ahmedabad</a></li>
+            <li><a href="#">Technical Support Jobs In Ahmedabad</a></li>
+            <li><a href="#">Server Jobs In Ahmedabad</a></li>
+            <li><a href="#">Network Jobs In Ahmedabad</a></li>
+            <li><a href="#">Itil Jobs In Ahmedabad</a></li>
+            <li><a href="#">Windows Jobs In Ahmedabad</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-gurgaon">
+            <li><a href="#">Support Jobs In Gurgaon</a></li>
+            <li><a href="#">Infrastructure Jobs In Gurgaon</a></li>
+            <li><a href="#">Desktop Jobs In Gurgaon</a></li>
+            <li><a href="#">Remote Support Jobs In Gurgaon</a></li>
+            <li><a href="#">Troubleshooting Jobs In Gurgaon</a></li>
+            <li><a href="#">Technical Support Jobs In Gurgaon</a></li>
+            <li><a href="#">Server Jobs In Gurgaon</a></li>
+            <li><a href="#">Network Jobs In Gurgaon</a></li>
+            <li><a href="#">Itil Jobs In Gurgaon</a></li>
+            <li><a href="#">Windows Jobs In Gurgaon</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-noida">
+            <li><a href="#">Support Jobs In Noida</a></li>
+            <li><a href="#">Infrastructure Jobs In Noida</a></li>
+            <li><a href="#">Desktop Jobs In Noida</a></li>
+            <li><a href="#">Remote Support Jobs In Noida</a></li>
+            <li><a href="#">Troubleshooting Jobs In Noida</a></li>
+            <li><a href="#">Technical Support Jobs In Noida</a></li>
+            <li><a href="#">Server Jobs In Noida</a></li>
+            <li><a href="#">Network Jobs In Noida</a></li>
+            <li><a href="#">Itil Jobs In Noida</a></li>
+            <li><a href="#">Windows Jobs In Noida</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-alljobs">
+            <li><a href="#">Support Jobs</a></li>
+            <li><a href="#">Infrastructure Jobs</a></li>
+            <li><a href="#">Desktop Jobs</a></li>
+            <li><a href="#">Remote Support Jobs</a></li>
+            <li><a href="#">Troubleshooting Jobs</a></li>
+            <li><a href="#">Technical Support Jobs</a></li>
+            <li><a href="#">Server Jobs</a></li>
+            <li><a href="#">Network Jobs</a></li>
+            <li><a href="#">Itil Jobs</a></li>
+            <li><a href="#">Windows Jobs</a></li>
+        </ul>
+        <ul class="rj-loc-items" id="panel-topcompanies">
+            <li><a href="#">Rackspace Technology</a></li>
+            <li><a href="#">Wockhardt</a></li>
+            <li><a href="#">CSG</a></li>
+            <li><a href="#">FCS Software Solutions</a></li>
+            <li><a href="#">Nagarro</a></li>
+            <li><a href="#">Alembic Pharmaceuticals</a></li>
+            <li><a href="#">Tech Mahindra</a></li>
+            <li><a href="#">Innodata India</a></li>
+            <li><a href="#">Sutherland</a></li>
+            <li><a href="#">TP</a></li>
+        </ul>
+    </div>
 
     <!-- TOAST -->
     <div class="rj-toast" id="rjToast">
@@ -957,7 +1123,7 @@
     </footer>
 
     <script>
-    /* Get CSRF token from the hidden input generated by {% csrf_token %} */
+    /* Get CSRF token from the hidden input */
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     /* ── TOAST ── */
@@ -991,7 +1157,6 @@
             },
         })
         .then(response => {
-            // If user is not logged in, Django redirects to login page
             if (response.redirected) {
                 window.location.href = response.url;
                 return;
@@ -1134,21 +1299,36 @@
         bubble.style.left = `calc(${pct}% + ${off}px)`;
     }
 
-    /* ── MOBILE FILTER TOGGLE ── */
-    document.addEventListener('DOMContentLoaded', function () {
-        const filterToggle = document.getElementById('rjFilterToggle');
-        const filterForm   = document.querySelector('.rj-filter-form');
-        const filterIcon   = document.getElementById('rjFilterToggleIcon');
-
-        if (filterToggle && filterForm) {
-            filterToggle.addEventListener('click', function () {
-                const isOpen = filterForm.classList.toggle('rj-filter-open');
-                filterIcon.className = isOpen ? 'fa fa-chevron-up' : 'fa fa-chevron-down';
-                
-                
-            });
+    /* ── FILTER APPLIED COUNT ── */
+    function updateAppliedCount() {
+        const form = document.getElementById('filterForm');
+        if (!form) return;
+        const checkedBoxes = form.querySelectorAll('input[type="checkbox"]:checked').length;
+        const checkedRadios = form.querySelectorAll('input[type="radio"]:checked').length;
+        const slider = document.getElementById('expSlider');
+        const sliderActive = slider && parseInt(slider.value) < 30 ? 1 : 0;
+        const total = checkedBoxes + checkedRadios + sliderActive;
+        const countEl = document.getElementById('rjAppliedCount');
+        if (!countEl) return;
+        if (total === 0) {
+            countEl.style.display = 'none';
+        } else {
+            countEl.style.display = 'inline';
+            countEl.textContent = `Applied (${total})`;
         }
+    }
 
+    /* ── NEW: TAB SWITCHING FOR LOCATION BOX ── */
+    function switchTab(clickedBtn, panelId) {
+        document.querySelectorAll('.rj-loc-tab, .rj-top-companies-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.rj-loc-items').forEach(p => p.classList.remove('active'));
+        clickedBtn.classList.add('active');
+        const panel = document.getElementById('panel-' + panelId);
+        if (panel) panel.classList.add('active');
+    }
+
+    /* ── DOMContentLoaded ── */
+    document.addEventListener('DOMContentLoaded', function () {
         /* Mobile hamburger nav */
         const hamburger = document.getElementById('rjHamburger');
         const mobileNav = document.getElementById('rjMobileNav');
@@ -1156,13 +1336,13 @@
         const closeBtn  = document.getElementById('rjMobileClose');
 
         function openMobileNav() {
-            mobileNav.classList.add('rj-mobile-nav--open');
-            overlay.classList.add('rj-mobile-overlay--show');
+            if (mobileNav) mobileNav.classList.add('rj-mobile-nav--open');
+            if (overlay) overlay.classList.add('rj-mobile-overlay--show');
             document.body.style.overflow = 'hidden';
         }
         function closeMobileNav() {
-            mobileNav.classList.remove('rj-mobile-nav--open');
-            overlay.classList.remove('rj-mobile-overlay--show');
+            if (mobileNav) mobileNav.classList.remove('rj-mobile-nav--open');
+            if (overlay) overlay.classList.remove('rj-mobile-overlay--show');
             document.body.style.overflow = '';
         }
         if (hamburger) hamburger.addEventListener('click', openMobileNav);
@@ -1179,34 +1359,6 @@
         renderPage();
         updateAppliedCount();
     });
-    /* ── FILTER APPLIED COUNT ── */
-function updateAppliedCount() {
-    // Count all checked checkboxes in the filter form
-    const form = document.getElementById('filterForm');
-    if (!form) return;
-
-    // Count checked checkboxes
-    const checkedBoxes = form.querySelectorAll('input[type="checkbox"]:checked').length;
-    
-    // Count selected radio buttons (freshness)
-    const checkedRadios = form.querySelectorAll('input[type="radio"]:checked').length;
-
-    // Check if experience slider is not at default (30 = Any)
-    const slider = document.getElementById('expSlider');
-    const sliderActive = slider && parseInt(slider.value) < 30 ? 1 : 0;
-
-    const total = checkedBoxes + checkedRadios + sliderActive;
-
-    const countEl = document.getElementById('rjAppliedCount');
-    if (!countEl) return;
-
-    if (total === 0) {
-        countEl.style.display = 'none';  // hide when nothing selected
-    } else {
-        countEl.style.display = 'inline'; // show when something selected
-        countEl.textContent = `Applied (${total})`;
-    }
-}
     </script>
 </body>
 </html>
