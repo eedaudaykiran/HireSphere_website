@@ -44,5 +44,5 @@ urlpatterns = [
     path('company-sponsored-jobs/', views.company_sponsored_companies_jobs_page, name='company_sponsored_companies_jobs'),
     path('company-featured-jobs/', views.company_featured_companies_jobs_page, name='company_featured_companies_jobs'),
     path('saved-jobs/', views.saved_jobs_page, name='saved_jobs'),
-    path('save-job/<int:job_id>/', views.save_job, name='save_job')
+    path('save-job/<int:job_id>/', views.save_job, name='save_job'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

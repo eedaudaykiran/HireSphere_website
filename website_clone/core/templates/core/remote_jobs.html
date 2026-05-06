@@ -16,6 +16,7 @@
 </head>
  
 <body>
+{% csrf_token %}
  
     <!-- ═══════════════════════════════════════
          NAVBAR
@@ -839,10 +840,13 @@
                 <div class="rj-card-footer">
                     <span class="rj-posted">posted {{ job.created_at|naturaltime }}</span>
                     <!-- REPLACED BUTTON WITH ANCHOR -->
-                    <a href="{% url 'save_job' job.id %}" class="rj-save-btn">
+                    <button class="rj-save-btn" 
+                        data-job-id="{{ job.id }}"
+                        data-saved="false"
+                        onclick="toggleSave(this)">
                         <i class="fa-regular fa-bookmark"></i>
-                        <span class="rj-save-text">Save</span>
-                    </a>
+                    <span class="rj-save-text">Save</span>
+                    </button>
                 </div>
             </div>
             {% empty %}

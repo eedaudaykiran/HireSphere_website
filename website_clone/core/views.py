@@ -6,37 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.utils import timezone
 import datetime
-
+ 
 from .forms import RegisterForm, LoginForm
-from .models import UserProfile, Job, SavedJob
+from .models import UserProfile, Job, SavedJob  # adjust import paths as per your actual models
+from django.http import JsonResponse  # add this import at the top
 
 
 # ===================== SAVE JOB VIEW (with login_required) =====================
 
-@login_required
-def save_job(request, job_id):
-    job = get_object_or_404(Job, id=job_id)
-    
-    saved, created = SavedJob.objects.get_or_create(
-        user=request.user,
-        job=job
-    )
-    
-    if created:
-        messages.success(request, "✅ Job saved successfully!")
-    else:
-        saved.delete()
-        messages.warning(request, "❌ Job removed from saved!")
-    
-    next_url = request.META.get('HTTP_REFERER', 'remote_jobs')
-    return redirect(next_url)
-
-
-def saved_jobs_page(request):
-    saved_jobs = SavedJob.objects.filter(user=request.user)
-    return render(request, 'core/saved_jobs.html', {
-        'saved_jobs': saved_jobs
-    })
+from django.http import JsonResponse  # add this import at the top
 
 
 # ===================== FILTER FUNCTIONS =====================
@@ -482,3 +460,34 @@ def company_sponsored_companies_jobs_page(request):
 def company_featured_companies_jobs_page(request):
     jobs = Job.objects.filter(is_featured=True).order_by('-id')
     return render(request, 'core/company_featured_companies_jobs.html', {'jobs': jobs})
+# core/views.py (add these imports at the top of the file)
+
+
+@login_required
+def saved_jobs_page(request):
+    saved = SavedJob.objects.filter(user=request.user).select_related('job').order_by('-saved_at')
+    return render(request, 'core/saved_jobs.html', {
+        'saved_jobs': saved
+    })
+
+
+@login_required
+def save_job(request, job_id):
+    # Only allow POST requests from AJAX
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+    job = get_object_or_404(Job, id=job_id)
+    
+    saved, created = SavedJob.objects.get_or_create(
+        user=request.user,
+        job=job
+    )
+    
+    if created:
+        # Job was newly saved
+        return JsonResponse({'status': 'saved', 'message': 'Saved successfully!'})
+    else:
+        # Job already existed → remove it
+        saved.delete()
+        return JsonResponse({'status': 'removed', 'message': 'Removed from saved jobs!'})
