@@ -50,4 +50,19 @@ urlpatterns = [
         views.apply_job,
         name='apply_job'
     ),
+    path(
+    'applied-jobs/',
+    views.applied_jobs_page,
+    name='applied_jobs'
+    ),
+    path(
+    'recruiter-applications/',
+    views.recruiter_applications,
+    name='recruiter_applications'
+    ),
+    path(
+    'update-status/<int:app_id>/<str:status>/',
+    views.update_status,
+    name='update_status'
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

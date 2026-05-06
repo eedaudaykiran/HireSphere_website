@@ -1,0 +1,35 @@
+<h2>My Applied Jobs</h2>
+
+{% for item in applied_jobs %}
+
+<div class="applied-job-card">
+
+    <h3>{{ item.job.title }}</h3>
+
+    <p>
+        Company:
+        {{ item.job.company }}
+    </p>
+
+    <p>
+        Location:
+        {{ item.job.location }}
+    </p>
+
+    <p>
+        Applied Date:
+        {{ item.applied_at }}
+    </p>
+
+    <p>
+        Status:
+        {{ item.status }}
+    </p>
+
+</div>
+
+{% empty %}
+
+<p>You have not applied for any jobs yet.</p>
+
+{% endfor %}

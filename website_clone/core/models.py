@@ -9,7 +9,7 @@ class UserProfile(models.Model):
         ('fresher', 'Fresher'),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # ✅ link to Django User
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # link to Django User
     full_name = models.CharField(max_length=150)
     mobile_number = models.CharField(max_length=15, unique=True)
     work_status = models.CharField(max_length=20, choices=WORK_STATUS_CHOICES)
@@ -26,14 +26,13 @@ class Job(models.Model):
         ('Hybrid', 'Hybrid'),
     )
 
-    # 👇 NEW CATEGORY CHOICES
     CATEGORY_CHOICES = (
         ('IT', 'IT'),
         ('Sales', 'Sales'),
         ('HR', 'HR'),
         ('General', 'General'),
     )
-    # education choices for filtering
+
     EDUCATION_CHOICES = [
         ("PG", "Any Postgraduate"),
         ("MBA", "MBA/PGDM"),
@@ -42,12 +41,12 @@ class Job(models.Model):
         ("DIP", "Diploma"),
         ("12TH", "12th Pass"),
     ]
-    # posted jobs
+
     POSTED_BY_CHOICES = [
         ("COMPANY", "Company Jobs"),
         ("CONSULTANT", "Consultant Jobs"),
     ]
-    # industry choices for filtering
+
     INDUSTRY_CHOICES = [
         ("IT", "IT Services & Consulting"),
         ("RECRUIT", "Recruitment / Staffing"),
@@ -58,6 +57,12 @@ class Job(models.Model):
         ("RETAIL", "Retail"),
     ]
 
+    COMPANY_TYPE_CHOICES = (
+        ('MNC', 'MNC'),
+        ('Startup', 'Startup'),
+        ('Product', 'Product'),
+        ('Unicorn', 'Unicorn'),
+    )
 
     title = models.CharField(max_length=200)
     company = models.CharField(max_length=200)
@@ -72,65 +77,41 @@ class Job(models.Model):
     role_category = models.CharField(max_length=100)
     duration = models.CharField(max_length=50, blank=True, null=True)
     education = models.CharField(max_length=50, choices=EDUCATION_CHOICES)
-    posted_by = models.CharField(
-    max_length=20,
-    choices=POSTED_BY_CHOICES,
-    default="COMPANY"
-    )
+    posted_by = models.CharField(max_length=20, choices=POSTED_BY_CHOICES, default="COMPANY")
     industry = models.CharField(max_length=100, blank=True)
-    
-    
-    # 👇 MODIFIED: use choices instead of plain CharField
-    category = models.CharField(
-        max_length=100,
-        choices=CATEGORY_CHOICES,
-        default='General'
-    )
-    
-    COMPANY_TYPE_CHOICES = (
-        ('MNC', 'MNC'),
-        ('Startup', 'Startup'),
-        ('Product', 'Product'),
-        ('Unicorn', 'Unicorn'),
-    )
-
-    company_type = models.CharField(
-        max_length=50,
-        choices=COMPANY_TYPE_CHOICES,
-        default='MNC'
-    )
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default='General')
+    company_type = models.CharField(max_length=50, choices=COMPANY_TYPE_CHOICES, default='MNC')
     is_sponsored = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=3.5)
     review_count = models.IntegerField(default=0)
+
     def __str__(self):
         return self.title
-    
+
+    def skills_list(self):
+        """Returns a list of individual skills, splitting by comma and stripping whitespace."""
+        return [skill.strip() for skill in self.skills.split(',')] if self.skills else []
+
+
 class ApplyJob(models.Model):
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE
+    STATUS_CHOICES = (
+        ('Applied', 'Applied'),
+        ('Pending', 'Pending'),
+        ('Shortlisted', 'Shortlisted'),
+        ('Rejected', 'Rejected'),
+        ('Selected', 'Selected'),
     )
 
-    job = models.ForeignKey(
-        Job,
-        on_delete=models.CASCADE
-    )
-
-    applied_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    status = models.CharField(
-        max_length=50,
-        default='Applied'
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)   # candidate
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Applied')
 
     def __str__(self):
         return f"{self.user.username} applied for {self.job.title}"
+
 
 class SavedJob(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -138,13 +119,7 @@ class SavedJob(models.Model):
     saved_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'job')  # prevent duplicate saves
+        unique_together = ('user', 'job')   # prevent duplicate saves
 
     def __str__(self):
         return f"{self.user.username} saved {self.job.title}"
-
-    def skills_list(self):
-        """Returns a list of individual skills, splitting by comma and stripping whitespace."""
-        return [skill.strip() for skill in self.skills.split(',')]
-
-

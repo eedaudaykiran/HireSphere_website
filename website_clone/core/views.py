@@ -548,3 +548,40 @@ def saved_jobs_page(request):
     return render(request, 'core/saved_jobs.html', {
         'saved_jobs': saved
     })
+
+@login_required
+def applied_jobs_page(request):
+
+    applied_jobs = ApplyJob.objects.filter(
+        user=request.user
+    ).select_related('job')
+
+    return render(
+        request,
+        'core/applied_jobs.html',
+        {'applied_jobs': applied_jobs}
+    )
+@login_required
+def recruiter_applications(request):
+
+    applications = ApplyJob.objects.select_related(
+        'user',
+        'job'
+    ).all().order_by('-applied_at')
+
+    return render(
+        request,
+        'core/recruiter_applications.html',
+        {'applications': applications}
+    )
+
+@login_required
+def update_status(request, app_id, status):
+
+    application = ApplyJob.objects.get(id=app_id)
+
+    application.status = status
+
+    application.save()
+
+    return redirect('recruiter_applications')

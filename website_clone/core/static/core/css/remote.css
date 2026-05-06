@@ -875,3 +875,12 @@ body {
     color:#92400e;
     border:1px solid #fcd34d;
 }
+
+.applied-job-card{
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+    background:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}

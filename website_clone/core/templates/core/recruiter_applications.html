@@ -1,0 +1,46 @@
+<h2>Applied Candidates</h2>
+
+<table border="1" cellpadding="10">
+
+    <tr>
+        <th>Candidate</th>
+        <th>Job</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for app in applications %}
+
+    <tr>
+
+        <td>{{ app.user.username }}</td>
+
+        <td>{{ app.job.title }}</td>
+
+        <td>{{ app.status }}</td>
+
+        <td>
+
+            <a href="{% url 'update_status' app.id 'Shortlisted' %}">
+                Shortlist
+            </a>
+
+            |
+
+            <a href="{% url 'update_status' app.id 'Rejected' %}">
+                Reject
+            </a>
+
+            |
+
+            <a href="{% url 'update_status' app.id 'Selected' %}">
+                Select
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
