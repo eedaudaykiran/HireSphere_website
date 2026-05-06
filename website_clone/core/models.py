@@ -108,6 +108,30 @@ class Job(models.Model):
     def __str__(self):
         return self.title
     
+class ApplyJob(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    job = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE
+    )
+
+    applied_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    status = models.CharField(
+        max_length=50,
+        default='Applied'
+    )
+
+    def __str__(self):
+        return f"{self.user.username} applied for {self.job.title}"
+
 class SavedJob(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)

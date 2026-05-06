@@ -6,15 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.utils import timezone
 import datetime
- 
+from django.http import JsonResponse
+
 from .forms import RegisterForm, LoginForm
-from .models import UserProfile, Job, SavedJob  # adjust import paths as per your actual models
-from django.http import JsonResponse  # add this import at the top
-
-
-# ===================== SAVE JOB VIEW (with login_required) =====================
-
-from django.http import JsonResponse  # add this import at the top
+from .models import UserProfile, Job, SavedJob, ApplyJob
 
 
 # ===================== FILTER FUNCTIONS =====================
@@ -303,7 +298,7 @@ def remote_jobs_page(request):
                 stipend_query |= Q(min_salary__gte=50)
         jobs = jobs.filter(stipend_query)
 
-     # Stipend counts for display
+    # Stipend counts for display
     stipend_ranges = {
         'unpaid': jobs.filter(min_salary=0, max_salary=0).count(),
         '0-10':   Job.objects.filter(min_salary__gte=0,  max_salary__lte=10).count(),
@@ -488,16 +483,9 @@ def company_sponsored_companies_jobs_page(request):
 def company_featured_companies_jobs_page(request):
     jobs = Job.objects.filter(is_featured=True).order_by('-id')
     return render(request, 'core/company_featured_companies_jobs.html', {'jobs': jobs})
-# core/views.py (add these imports at the top of the file)
 
 
-@login_required
-def saved_jobs_page(request):
-    saved = SavedJob.objects.filter(user=request.user).select_related('job').order_by('-saved_at')
-    return render(request, 'core/saved_jobs.html', {
-        'saved_jobs': saved
-    })
-
+# ===================== SAVE / APPLY / SAVED JOBS =====================
 
 @login_required
 def save_job(request, job_id):
@@ -519,3 +507,44 @@ def save_job(request, job_id):
         # Job already existed → remove it
         saved.delete()
         return JsonResponse({'status': 'removed', 'message': 'Removed from saved jobs!'})
+
+
+from django.contrib import messages
+
+@login_required
+def apply_job(request, job_id):
+
+    job = Job.objects.get(id=job_id)
+
+    already_applied = ApplyJob.objects.filter(
+        user=request.user,
+        job=job
+    ).exists()
+
+    if already_applied:
+
+        messages.warning(
+            request,
+            'You already applied for this job'
+        )
+
+    else:
+
+        ApplyJob.objects.create(
+            user=request.user,
+            job=job
+        )
+
+        messages.success(
+            request,
+            'Job applied successfully'
+        )
+
+    return redirect('remote_jobs')
+
+@login_required
+def saved_jobs_page(request):
+    saved = SavedJob.objects.filter(user=request.user).select_related('job').order_by('-saved_at')
+    return render(request, 'core/saved_jobs.html', {
+        'saved_jobs': saved
+    })
