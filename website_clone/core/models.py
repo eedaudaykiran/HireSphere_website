@@ -183,3 +183,20 @@ class Application(models.Model):
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
     applied_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, default='New Applied')
+
+
+class JobApplication(models.Model):
+
+    applicant = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+
+    applied_at = models.DateTimeField(auto_now_add=True)
+
+    status = models.CharField(
+        max_length=50,
+        default='Pending'
+    )
+
+    def __str__(self):
+        return f"{self.applicant.username} applied for {self.job.title}"
