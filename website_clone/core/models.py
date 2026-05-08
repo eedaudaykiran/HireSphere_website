@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -275,3 +277,136 @@ class Message(models.Model):
     def __str__(self):
 
         return f"{self.sender} → {self.receiver}"
+    
+    
+# This model is used to store detailed company profiles for employers, including information such as company description, industry, location, and other relevant details that can be displayed on the employer's profile page and job listings.
+
+class CompanyProfile(models.Model):
+
+    employer = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    company_name = models.CharField(
+        max_length=200
+    )
+
+    logo = models.ImageField(
+        upload_to='company_logos/',
+        blank=True,
+        null=True
+    )
+
+    description = models.TextField()
+
+    website = models.URLField(
+        blank=True,
+        null=True
+    )
+
+    location = models.CharField(
+        max_length=200
+    )
+
+    industry = models.CharField(
+        max_length=100
+    )
+
+    employee_count = models.CharField(
+        max_length=50
+    )
+
+    founded_year = models.IntegerField(
+    null=True,
+    blank=True
+    )
+    
+    def __str__(self):
+
+        return self.company_name
+    
+# This model is used to manage subscription plans for employers, allowing them to subscribe to different plans that offer various features and benefits on the platform. It tracks the subscription details, payment status, and validity period.
+
+class Subscription(models.Model):
+
+    employer = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    plan_name = models.CharField(
+        max_length=100
+    )
+
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    start_date = models.DateField()
+
+    expiry_date = models.DateField()
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    payment_status = models.CharField(
+        max_length=50,
+        default='Paid'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return f"{self.employer.username} - {self.plan_name}"
+    
+# This model is used to store individual settings and preferences for employers, such as notification preferences, display settings, and other customizable options that enhance the user experience on the platform.
+
+class EmployerSettings(models.Model):
+
+    employer = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    profile_image = models.ImageField(
+        upload_to='profile_images/',
+        blank=True,
+        null=True
+    )
+
+    phone_number = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+
+    email_notifications = models.BooleanField(
+        default=True
+    )
+
+    dark_mode = models.BooleanField(
+        default=False
+    )
+
+    language = models.CharField(
+        max_length=50,
+        default='English'
+    )
+
+    two_factor_auth = models.BooleanField(
+        default=False
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return self.employer.username

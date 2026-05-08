@@ -305,7 +305,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         // 1) Bar Chart: Applications per job
         const jobLabels = [{% for job in top_jobs %}"{{ job.title|escapejs }}", {% endfor %}];
-    const appCounts = [{% for job in top_jobs %}{ { job.applications_count } }, {% endfor %}];
+    const appCounts = [{% for job in top_jobs %}{{ job.applications_count }}, {% endfor %}];
     const ctxBar = document.getElementById('appsPerJobChart')?.getContext('2d');
     if (ctxBar && jobLabels.length) {
         new Chart(ctxBar, {
@@ -317,8 +317,8 @@
 
     // 2) Line Chart: Monthly trend (example data – replace with real from context)
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    const monthlyApps = {{ monthly_applications|default:'[45,62,78,89,112,98]' }};
-    const monthlyHires = [{{ monthly_hires|default: "[8, 12, 15, 18, 24, 20]" }}];
+    const monthlyApps = {{ monthly_applications|default:'[45,62,78]' }};
+    const monthlyHires = {{ monthly_hires|default:'[8,12,15]' }};
     const ctxLine = document.getElementById('monthlyTrendChart')?.getContext('2d');
     if (ctxLine) {
         new Chart(ctxLine, {
@@ -330,7 +330,7 @@
 
     // 3) Pie Chart: Status distribution (pending, shortlisted, rejected, interviewed)
     const statusLabels = ['Pending', 'Shortlisted', 'Rejected', 'Interview'];
-    const statusData = [{{ pending_count|default: 0 }}, { { shortlisted_count |default: 0 } }, { { rejected_count |default: 0 } }, { { interview_count |default: 0 } }];
+    const statusData = [{{ pending_count|default:0 }}, {{ shortlisted_count|default:0 }}, {{ rejected_count|default:0 }}, {{ interview_count|default:0 }}];
     const pieColors = ['#eab308', '#10b981', '#ef4444', '#8b5cf6'];
     const ctxPie = document.getElementById('statusPieChart')?.getContext('2d');
     if (ctxPie) {

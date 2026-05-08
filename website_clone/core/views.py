@@ -10,8 +10,8 @@ import datetime
 from django.http import HttpResponse, JsonResponse
 
 
-from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm
-from .models import JobApplication, UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message
+from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm
+from .models import JobApplication, UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, Subscription, EmployerSettings
 
 
 # ===================== FILTER FUNCTIONS =====================
@@ -892,3 +892,113 @@ def reports(request):
         'core/reports.html',
         context
     )
+
+# View to display and edit company profile for the employer
+def company_profile(request):
+
+    profile, created = CompanyProfile.objects.get_or_create(
+        employer=request.user
+    )
+
+    if request.method == 'POST':
+
+        form = CompanyProfileForm(
+            request.POST,
+            request.FILES,
+            instance=profile
+        )
+
+        if form.is_valid():
+
+            company = form.save(commit=False)
+
+            company.employer = request.user
+
+            company.save()
+
+            return redirect('company_profile')
+
+    else:
+
+        form = CompanyProfileForm(
+            instance=profile
+        )
+
+    context = {
+        'form': form,
+        'profile': profile
+    }
+
+    return render(
+        request,
+        'core/company_profile.html',
+        context
+    )
+
+# View to display subscription details for the employer
+def subscription(request):
+
+    subscription = Subscription.objects.filter(
+        employer=request.user
+    ).first()
+
+    context = {
+        'subscription': subscription
+    }
+
+    return render(
+        request,
+        'core/subscription.html',
+        context
+    )
+
+
+
+# View to display and edit settings for the employer
+def settings(request):
+
+    employer_settings, created = EmployerSettings.objects.get_or_create(
+        employer=request.user
+    )
+
+    if request.method == 'POST':
+
+        form = EmployerSettingsForm(
+            request.POST,
+            request.FILES,
+            instance=employer_settings
+        )
+
+        if form.is_valid():
+
+            settings_data = form.save(commit=False)
+
+            settings_data.employer = request.user
+
+            settings_data.save()
+
+            return redirect('settings')
+
+    else:
+
+        form = EmployerSettingsForm(
+            instance=employer_settings
+        )
+
+    context = {
+        'form': form
+    }
+
+    return render(
+        request,
+        'core/settings.html',
+        context
+    )
+
+# View to handle employer logout
+
+def logout_view(request):
+
+    logout(request)
+
+    return redirect('employer_login_page')

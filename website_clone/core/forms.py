@@ -2,7 +2,7 @@ from ast import pattern
 from django import forms
 from django.contrib.auth.models import User
 import re
-from .models import UserProfile, Job
+from .models import UserProfile, Job, CompanyProfile, EmployerSettings
  
  
 class RegisterForm(forms.Form):
@@ -146,3 +146,27 @@ class JobForm(forms.ModelForm):
             'company_type',
             'logo',
         ]
+
+# Employer Company Profile Form
+class CompanyProfileForm(forms.ModelForm):
+
+    class Meta:
+
+        model = CompanyProfile
+
+        fields = '__all__'
+
+        exclude = ['employer']
+
+
+
+# Employer Settings Form
+class EmployerSettingsForm(forms.ModelForm):
+
+    class Meta:
+
+        model = EmployerSettings
+
+        fields = '__all__'
+
+        exclude = ['employer']

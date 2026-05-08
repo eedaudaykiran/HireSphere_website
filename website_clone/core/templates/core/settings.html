@@ -1,0 +1,336 @@
+{% block title %}Settings | HireHub{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    body { background: #0b1120; }
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .settings-section {
+        transition: all 0.2s;
+    }
+    .danger-zone {
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        background: rgba(239, 68, 68, 0.05);
+    }
+    input, select, textarea {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        padding: 10px 16px;
+        color: white;
+        width: 100%;
+        outline: none;
+        transition: border 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+        border-color: #6366f1;
+    }
+    label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #cbd5e1;
+        margin-bottom: 4px;
+        display: block;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        padding: 10px 20px;
+        border-radius: 40px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    .btn-primary:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    }
+    .btn-outline {
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 8px 18px;
+        border-radius: 40px;
+        font-weight: 500;
+    }
+    .btn-outline:hover {
+        background: rgba(255,255,255,0.1);
+    }
+    .checkbox-slider {
+        width: 44px;
+        height: 24px;
+        background: #334155;
+        border-radius: 999px;
+        position: relative;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .checkbox-slider.active {
+        background: #4f46e5;
+    }
+    .checkbox-slider:after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        transition: 0.2s;
+    }
+    .checkbox-slider.active:after {
+        left: 22px;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
+    @media (max-width: 768px) {
+        .settings-grid { grid-template-columns: 1fr !important; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#0b1120] text-white overflow-hidden">
+    <!-- Background blur orbs -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full"></div>
+
+    <div class="relative z-10 flex">
+        <!-- Sidebar (same as previous) -->
+        <aside class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
+            <h1 class="text-3xl font-extrabold mb-10">Hire<span class="text-indigo-400">Hub</span></h1>
+            <nav class="space-y-3">
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥 Applicants</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage Jobs</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⭐ Shortlisted</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📅 Interviews</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💬 Messages</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📊 Reports</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💰 Subscription</a>
+                <a href="#" class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">⚙️ Settings</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 p-4 sm:p-8">
+            <!-- Header -->
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+                <div>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold">⚙️ Settings</h2>
+                    <p class="text-gray-400 mt-2 text-lg">Manage your account, security, and preferences.</p>
+                </div>
+                <button type="submit" form="mainSettingsForm" class="btn-primary px-6 py-3 flex items-center gap-2"><i class="fas fa-save"></i> Save All Changes</button>
+            </div>
+
+            <!-- Display messages (success/error) -->
+            {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                <div class="glass-card rounded-xl p-3 text-sm {% if message.tags == 'success' %}text-green-400 border-green-400/30{% else %}text-red-400 border-red-400/30{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- MAIN FORM (Profile + Notifications + Preferences) -->
+            <form method="POST" enctype="multipart/form-data" id="mainSettingsForm">
+                {% csrf_token %}
+
+                <!-- PROFILE SETTINGS -->
+                <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
+                    <h3 class="text-xl font-bold mb-5"><i class="fas fa-user-circle mr-2 text-indigo-400"></i> Profile Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label>Full Name</label>
+                            <input type="text" name="full_name" value="{{ user.get_full_name|default:user.username }}" class="w-full">
+                        </div>
+                        <div>
+                            <label>Email Address</label>
+                            <input type="email" name="email" value="{{ user.email }}" class="w-full">
+                        </div>
+                        <div>
+                            <label>Phone Number</label>
+                            <input type="text" name="phone" value="{{ user.profile.phone|default:'' }}" placeholder="+91 98765 43210">
+                        </div>
+                        <div>
+                            <label>Company Name</label>
+                            <input type="text" name="company" value="{{ user.profile.company|default:'' }}" placeholder="Your startup / organization">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label>Profile Image</label>
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xl font-bold">
+                                    {{ user.username|slice:":1"|upper }}
+                                </div>
+                                <input type="file" name="profile_image" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOTIFICATION SETTINGS -->
+                <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
+                    <h3 class="text-xl font-bold mb-5"><i class="fas fa-bell mr-2 text-indigo-400"></i> Notifications</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div><span class="font-medium">Email notifications</span><p class="text-xs text-gray-400">Receive job alerts and application updates</p></div>
+                            <div class="checkbox-slider" data-target="email_notif"></div>
+                            <input type="hidden" name="email_notifications" value="{% if user.profile.email_notifications %}on{% endif %}" id="email_notif">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><span class="font-medium">SMS alerts</span><p class="text-xs text-gray-400">Get interview reminders via SMS</p></div>
+                            <div class="checkbox-slider" data-target="sms_notif"></div>
+                            <input type="hidden" name="sms_alerts" value="{% if user.profile.sms_alerts %}on{% endif %}" id="sms_notif">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div><span class="font-medium">New applicant alerts</span><p class="text-xs text-gray-400">Notify when a candidate applies</p></div>
+                            <div class="checkbox-slider" data-target="applicant_notif"></div>
+                            <input type="hidden" name="applicant_alerts" value="{% if user.profile.applicant_alerts %}on{% endif %}" id="applicant_notif">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PREFERENCES (Theme + Language) -->
+                <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
+                    <h3 class="text-xl font-bold mb-5"><i class="fas fa-palette mr-2 text-indigo-400"></i> Preferences</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label>Theme</label>
+                            <select name="theme">
+                                <option value="dark" selected>Dark Mode</option>
+                                <option value="light">Light Mode</option>
+                                <option value="system">System Default</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Language</label>
+                            <select name="language">
+                                <option value="en">English</option>
+                                <option value="hi">हिन्दी</option>
+                                <option value="te">తెలుగు</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden two-factor field (will be set by JS) -->
+                <input type="hidden" name="two_factor_enabled" id="two_factor_hidden" value="{% if user.profile.two_factor %}on{% endif %}">
+            </form>
+
+            <!-- SECURITY SECTION (Password change + 2FA) -->
+            <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
+                <h3 class="text-xl font-bold mb-5"><i class="fas fa-shield-alt mr-2 text-indigo-400"></i> Security</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label>Current Password</label>
+                        <input type="password" id="current_password" class="w-full">
+                        <label class="mt-3">New Password</label>
+                        <input type="password" id="new_password" class="w-full">
+                        <label class="mt-3">Confirm New Password</label>
+                        <input type="password" id="confirm_password" class="w-full">
+                        <button onclick="changePassword()" class="mt-4 btn-primary w-full">Change Password</button>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-medium">Two‑Factor Authentication (2FA)</span>
+                            <div class="checkbox-slider" id="twofaSlider"></div>
+                        </div>
+                        <p class="text-xs text-gray-400">Add an extra layer of security with OTP verification.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DANGER ZONE (Account Deactivation) -->
+            <div class="glass-card rounded-3xl p-6 danger-zone settings-section">
+                <h3 class="text-xl font-bold mb-3 text-red-400"><i class="fas fa-exclamation-triangle mr-2"></i> Danger Zone</h3>
+                <p class="text-gray-300 text-sm mb-4">Once you deactivate your account, all your jobs and data will be hidden. You can reactivate later.</p>
+                <button onclick="openDeactivateModal()" class="bg-red-600/30 hover:bg-red-600/50 text-red-300 px-5 py-2 rounded-xl transition">Deactivate Account</button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Deactivation Modal -->
+<div id="deactivateModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden transition-all">
+    <div class="glass-card rounded-3xl p-8 max-w-md w-full mx-4">
+        <h3 class="text-2xl font-bold mb-3">Deactivate Account?</h3>
+        <p class="text-gray-300 mb-5">Your jobs will no longer be visible, and you won’t receive applications. You can reactivate by contacting support.</p>
+        <div class="flex gap-3">
+            <button onclick="closeDeactivateModal()" class="flex-1 btn-outline">Cancel</button>
+            <button onclick="confirmDeactivate()" class="flex-1 bg-red-600 hover:bg-red-700 py-2 rounded-xl font-semibold">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle sliders for notification settings & 2FA
+    document.querySelectorAll('.checkbox-slider').forEach(slider => {
+        const targetId = slider.getAttribute('data-target');
+        const hiddenInput = targetId ? document.getElementById(targetId) : null;
+        if (hiddenInput && hiddenInput.value === 'on') slider.classList.add('active');
+        slider.addEventListener('click', function() {
+            this.classList.toggle('active');
+            if (hiddenInput) hiddenInput.value = this.classList.contains('active') ? 'on' : 'off';
+            if (this.id === 'twofaSlider') {
+                document.getElementById('two_factor_hidden').value = this.classList.contains('active') ? 'on' : 'off';
+            }
+        });
+    });
+
+    // Two-factor slider (separate)
+    const twofaSlider = document.createElement('div');
+    twofaSlider.className = 'checkbox-slider';
+    twofaSlider.id = 'twofaSlider';
+    if (document.getElementById('two_factor_hidden').value === 'on') twofaSlider.classList.add('active');
+    twofaSlider.addEventListener('click', function() {
+        this.classList.toggle('active');
+        document.getElementById('two_factor_hidden').value = this.classList.contains('active') ? 'on' : 'off';
+    });
+    document.querySelector('#twofaSlider').parentNode.replaceChild(twofaSlider, document.querySelector('#twofaSlider'));
+
+    // Password change (AJAX simulation)
+    function changePassword() {
+        const cur = document.getElementById('current_password').value;
+        const newPwd = document.getElementById('new_password').value;
+        const confirm = document.getElementById('confirm_password').value;
+        if (!cur || !newPwd || !confirm) {
+            alert("Please fill all password fields.");
+            return;
+        }
+        if (newPwd !== confirm) {
+            alert("New passwords do not match.");
+            return;
+        }
+        // Send AJAX POST to /employer/change-password/
+        fetch('/employer/change-password/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': '{{ csrf_token }}', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ current_password: cur, new_password: newPwd })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) alert("Password changed successfully.");
+            else alert("Error: " + (data.error || "Please try again."));
+        })
+        .catch(() => alert("Server error. Try again."));
+    }
+
+    // Deactivation modal
+    const deactModal = document.getElementById('deactivateModal');
+    function openDeactivateModal() { deactModal.classList.remove('hidden'); }
+    function closeDeactivateModal() { deactModal.classList.add('hidden'); }
+    function confirmDeactivate() {
+        fetch('/employer/deactivate-account/', { method: 'POST', headers: { 'X-CSRFToken': '{{ csrf_token }}' } })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) window.location.href = '/logout/';
+            else alert("Deactivation failed. Contact support.");
+        });
+    }
+    window.onclick = (e) => { if (e.target === deactModal) closeDeactivateModal(); };
+</script>
+{% endblock %}

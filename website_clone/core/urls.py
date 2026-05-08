@@ -111,4 +111,24 @@ urlpatterns = [
     views.reports,
     name='reports'
     ),
+    path(
+    'company-profile/',
+    views.company_profile,
+    name='company_profile'
+    ),
+    path(
+    'subscription/',
+    views.subscription,
+    name='subscription'
+    ),
+    path(
+    'settings/',
+    views.settings,
+    name='settings'
+    ),
+    path(
+    'logout/',
+    views.logout_view,
+    name='logout'
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
