@@ -184,6 +184,7 @@ class Application(models.Model):
     applied_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, default='New Applied')
 
+# This model is used to track applications for each job, allowing us to easily count applications and update statuses without complex queries.
 
 class JobApplication(models.Model):
 
@@ -200,3 +201,77 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.applicant.username} applied for {self.job.title}"
+    
+    
+# This model is used to schedule and manage interviews for candidates who have applied for jobs. It tracks the interview details, status, and feedback.
+
+
+class Interview(models.Model):
+
+    candidate = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    job = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE
+    )
+
+    round_type = models.CharField(
+        max_length=100
+    )
+
+    interview_date = models.DateField()
+
+    interview_time = models.TimeField()
+
+    meeting_link = models.URLField()
+
+    status = models.CharField(
+        max_length=50,
+        default='Scheduled'
+    )
+
+    feedback = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return f"{self.candidate.username} - {self.round_type}"
+    
+# This model is used to facilitate messaging between candidates and employers, allowing them to communicate directly within the platform regarding job applications, interview schedules, and other related discussions.
+
+class Message(models.Model):
+
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='sent_messages'
+    )
+
+    receiver = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='received_messages'
+    )
+
+    message = models.TextField()
+
+    is_read = models.BooleanField(
+        default=False
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return f"{self.sender} → {self.receiver}"

@@ -1,0 +1,357 @@
+{% block title %}Messages | HireHub{% endblock %}
+
+{% block extra_css %}
+<!-- Tailwind CSS + Font Awesome -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    body {
+        background: #0b1120;
+    }
+
+    /* custom scrollbar */
+    .chat-sidebar::-webkit-scrollbar,
+    .chat-messages::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .chat-sidebar::-webkit-scrollbar-track,
+    .chat-messages::-webkit-scrollbar-track {
+        background: #1e293b;
+    }
+
+    .chat-sidebar::-webkit-scrollbar-thumb,
+    .chat-messages::-webkit-scrollbar-thumb {
+        background: #4f46e5;
+        border-radius: 10px;
+    }
+
+    .message-bubble {
+        max-width: 75%;
+        word-wrap: break-word;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hover-bg:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .active-chat {
+        background: rgba(99, 102, 241, 0.2);
+        border-left: 3px solid #6366f1;
+    }
+
+    @media (max-width: 768px) {
+        .chat-panel {
+            flex-direction: column;
+        }
+
+        .chat-sidebar {
+            width: 100% !important;
+            border-right: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-window {
+            width: 100% !important;
+        }
+
+        .mobile-hide {
+            display: none;
+        }
+
+        .message-bubble {
+            max-width: 85%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#0b1120] text-white overflow-hidden">
+    <!-- Background orbs -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full"></div>
+
+    <div class="relative z-10 flex">
+        <!-- Sidebar (same as previous) -->
+        <aside
+            class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
+            <h1 class="text-3xl font-extrabold mb-10">Hire<span class="text-indigo-400">Hub</span></h1>
+            <nav class="space-y-3">
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥
+                    Applicants</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage
+                    Jobs</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⭐
+                    Shortlisted</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📅
+                    Interviews</a>
+                <a href="#"
+                    class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">💬
+                    Messages</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📊
+                    Analytics</a>
+                <a href="#" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⚙️
+                    Settings</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN: MESSAGING PANEL -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden p-4 sm:p-6">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-3xl font-extrabold">💬 Messages</h2>
+                    <p class="text-gray-400 text-sm mt-1">Communicate with candidates, send updates & documents</p>
+                </div>
+                <div class="flex gap-3">
+                    <button
+                        class="bg-indigo-600/30 hover:bg-indigo-600/50 px-4 py-2 rounded-xl text-sm font-semibold transition">
+                        <i class="fas fa-plus mr-1"></i> New Conversation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat container: two columns (sidebar + chat window) -->
+            <div class="chat-panel flex flex-1 overflow-hidden gap-4">
+                <!-- LEFT SIDEBAR: conversation list -->
+                <div
+                    class="chat-sidebar w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-3 flex flex-col overflow-hidden">
+                    <!-- Search conversations -->
+                    <div class="relative mb-4">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" id="searchConv" placeholder="Search conversations..."
+                            class="w-full bg-white/10 border border-white/10 rounded-2xl py-3 pl-10 pr-4 text-sm outline-none focus:border-indigo-500 text-white placeholder-gray-400">
+                    </div>
+                    <!-- Conversation list -->
+                    <div class="flex-1 overflow-y-auto space-y-2" id="conversationList">
+                        {% for conv in conversations %}
+                        <div class="conversation-item p-3 rounded-2xl cursor-pointer transition hover-bg {% if forloop.first %}active-chat{% endif %}"
+                            data-conv-id="{{ conv.id }}" data-candidate="{{ conv.candidate.id }}">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                                    {{ conv.candidate.name|slice:":1"|upper }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-semibold truncate">{{ conv.candidate.name }}</h4>
+                                        <span class="text-xs text-gray-400">{{ conv.last_message_time|date:"H:i"
+                                            }}</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400 truncate">{{ conv.last_message|truncatechars:30 }}
+                                    </p>
+                                </div>
+                                {% if conv.unread_count > 0 %}
+                                <span
+                                    class="bg-indigo-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{{
+                                    conv.unread_count }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center text-gray-400 p-8">No conversations yet.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE: active chat window -->
+                <div
+                    class="chat-window flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl flex flex-col overflow-hidden">
+                    <!-- Chat header (selected candidate) -->
+                    <div class="border-b border-white/10 p-4 flex items-center justify-between" id="chatHeader">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                                JD</div>
+                            <div>
+                                <h3 class="font-bold" id="chatCandidateName">John Doe</h3>
+                                <p class="text-xs text-green-400"><i
+                                        class="fas fa-circle text-[6px] mr-1 align-middle"></i> Online</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition"><i
+                                    class="fas fa-phone-alt"></i></button>
+                            <button class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition"><i
+                                    class="fas fa-video"></i></button>
+                            <button class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition"><i
+                                    class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Messages container -->
+                    <div class="flex-1 overflow-y-auto p-4 space-y-3" id="chatMessages">
+                        <!-- Dynamic messages will be inserted here via JS -->
+                        <!-- Example static message structure -->
+                        <div class="flex justify-start">
+                            <div class="message-bubble bg-white/10 rounded-2xl p-3 max-w-[70%]">
+                                <p class="text-sm">Hi, I saw your application for Python Developer. Can we schedule an
+                                    interview?</p>
+                                <span class="text-[10px] text-gray-400 block mt-1">10:30 AM</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <div class="message-bubble bg-indigo-600 rounded-2xl p-3 max-w-[70%]">
+                                <p class="text-sm">Yes sir, I'm available tomorrow at 2 PM.</p>
+                                <span class="text-[10px] text-indigo-200 block mt-1">10:32 AM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message input area -->
+                    <div class="border-t border-white/10 p-4">
+                        <div class="flex gap-3">
+                            <button class="bg-white/10 hover:bg-white/20 p-3 rounded-full transition"><i
+                                    class="fas fa-paperclip"></i></button>
+                            <input type="text" id="messageInput" placeholder="Type your message..."
+                                class="flex-1 bg-white/10 border border-white/10 rounded-2xl px-5 py-3 outline-none focus:border-indigo-500 text-white">
+                            <button id="sendMessageBtn"
+                                class="bg-indigo-600 hover:bg-indigo-700 p-3 rounded-full transition"><i
+                                    class="fas fa-paper-plane"></i></button>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-2 text-center">Press Enter to send</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Simulate conversation switching & message loading
+    // In real implementation, you'd fetch messages via AJAX and handle WebSocket for real-time.
+    const conversations = [
+        {% for conv in conversations %}
+    {
+        id: { { conv.id } },
+        candidateId: { { conv.candidate.id } },
+        candidateName: "{{ conv.candidate.name|escapejs }}",
+            messages: [
+                {% for msg in conv.messages %}
+    { text: "{{ msg.text|escapejs }}", sender: "{{ msg.sender_type }}", time: "{{ msg.created_at|date:'H:i' }}" },
+    {% endfor %}
+            ]
+        },
+    {% endfor %}
+    ];
+
+    let activeConversation = conversations.length ? conversations[0] : null;
+
+    function renderMessages(conv) {
+        const container = document.getElementById('chatMessages');
+        if (!container) return;
+        container.innerHTML = '';
+        if (!conv || !conv.messages) return;
+        conv.messages.forEach(msg => {
+            const isEmployer = (msg.sender === 'employer');
+            const div = document.createElement('div');
+            div.className = isEmployer ? 'flex justify-end' : 'flex justify-start';
+            div.innerHTML = `
+                <div class="message-bubble ${isEmployer ? 'bg-indigo-600' : 'bg-white/10'} rounded-2xl p-3 max-w-[70%]">
+                    <p class="text-sm">${escapeHtml(msg.text)}</p>
+                    <span class="text-[10px] ${isEmployer ? 'text-indigo-200' : 'text-gray-400'} block mt-1">${msg.time}</span>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function updateHeader(conv) {
+        if (!conv) return;
+        document.getElementById('chatCandidateName').innerText = conv.candidateName;
+        // Update avatar initials (optional)
+        const avatarDiv = document.querySelector('#chatHeader .w-10.h-10');
+        if (avatarDiv) {
+            avatarDiv.innerText = conv.candidateName.charAt(0).toUpperCase();
+        }
+    }
+
+    function markConversationActive(convId) {
+        document.querySelectorAll('.conversation-item').forEach(item => {
+            item.classList.remove('active-chat');
+            if (item.getAttribute('data-conv-id') == convId) {
+                item.classList.add('active-chat');
+            }
+        });
+    }
+
+    // Event listeners for conversation items
+    document.querySelectorAll('.conversation-item').forEach(item => {
+        item.addEventListener('click', function () {
+            const convId = parseInt(this.getAttribute('data-conv-id'));
+            const conv = conversations.find(c => c.id === convId);
+            if (conv) {
+                activeConversation = conv;
+                renderMessages(conv);
+                updateHeader(conv);
+                markConversationActive(convId);
+            }
+        });
+    });
+
+    // Send message (simulate frontend only; backend via AJAX)
+    const sendBtn = document.getElementById('sendMessageBtn');
+    const messageInput = document.getElementById('messageInput');
+    function sendMessage() {
+        const text = messageInput.value.trim();
+        if (!text || !activeConversation) return;
+        // Simulate sending message to backend (POST)
+        // For demo, just add to UI
+        const newMsg = { text: text, sender: 'employer', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+        activeConversation.messages.push(newMsg);
+        renderMessages(activeConversation);
+        messageInput.value = '';
+        // Also update last message in sidebar (simulate)
+        const convItem = document.querySelector(`.conversation-item[data-conv-id="${activeConversation.id}"]`);
+        if (convItem) {
+            const lastMsgPara = convItem.querySelector('p');
+            if (lastMsgPara) lastMsgPara.innerText = text.substring(0, 30);
+            const timeSpan = convItem.querySelector('.text-xs.text-gray-400');
+            if (timeSpan) timeSpan.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        // TODO: actual AJAX POST to /api/conversations/<id>/send/
+    }
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    // Search conversations
+    const searchInput = document.getElementById('searchConv');
+    searchInput.addEventListener('input', function () {
+        const term = this.value.toLowerCase();
+        document.querySelectorAll('.conversation-item').forEach(item => {
+            const name = item.querySelector('h4')?.innerText.toLowerCase() || '';
+            if (name.includes(term)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // Helper to escape HTML
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function (m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Initialize with first conversation if exists
+    if (activeConversation) {
+        renderMessages(activeConversation);
+        updateHeader(activeConversation);
+    }
+</script>
+{% endblock %}

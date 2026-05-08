@@ -1,3 +1,4 @@
+from mailbox import Message
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -8,9 +9,10 @@ from django.utils import timezone
 import datetime
 from django.http import HttpResponse, JsonResponse
 
-from .forms import RegisterForm, LoginForm
-from .models import UserProfile, Job, SavedJob, ApplyJob, Application
-from .forms import EmployerRegisterForm, JobForm
+
+from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm
+from .models import JobApplication, UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message
+
 
 # ===================== FILTER FUNCTIONS =====================
 
@@ -760,5 +762,133 @@ def manage_jobs(request):
     return render(
         request,
         'core/manage_jobs.html',
+        context
+    )
+
+# View to list applicants for employer's jobs
+
+def applicants(request):
+
+    applications = JobApplication.objects.filter(
+        job__employer=request.user
+    )
+
+    context = {
+        'applications': applications
+    }
+
+    return render(
+        request,
+        'core/applicants.html',
+        context
+    )
+
+# View to list shortlisted candidates for employer's jobs
+
+def shortlisted_candidates(request):
+
+    shortlisted = JobApplication.objects.filter(
+        job__employer=request.user,
+        status='Shortlisted'
+    )
+
+    context = {
+        'shortlisted': shortlisted
+    }
+
+    return render(
+        request,
+        'core/shortlisted.html',
+        context
+    )
+
+
+def interviews(request):
+
+    interviews = Interview.objects.filter(
+        job__employer=request.user
+    )
+
+    context = {
+        'interviews': interviews
+    }
+
+    return render(
+        request,
+        'core/interviews.html',
+        context
+    )
+
+# View to display messages for the employer
+
+def messages(request):
+
+    messages = Message.objects.filter(
+        receiver=request.user
+    ).order_by('-created_at')
+
+    unread_count = Message.objects.filter(
+        receiver=request.user,
+        is_read=False
+    ).count()
+
+    context = {
+        'messages': messages,
+        'unread_count': unread_count
+    }
+
+    return render(
+        request,
+        'core/messages.html',
+        context
+    )
+
+
+
+# View to display reports and analytics for the employer's jobs
+
+def reports(request):
+
+    jobs = Job.objects.filter(
+        employer=request.user
+    )
+
+    total_jobs = jobs.count()
+
+    total_applications = JobApplication.objects.filter(
+        job__employer=request.user
+    ).count()
+
+    shortlisted_count = JobApplication.objects.filter(
+        job__employer=request.user,
+        status='Shortlisted'
+    ).count()
+
+    rejected_count = JobApplication.objects.filter(
+        job__employer=request.user,
+        status='Rejected'
+    ).count()
+
+    interview_count = Interview.objects.filter(
+        job__employer=request.user
+    ).count()
+
+    total_views = 0
+
+    for job in jobs:
+        total_views += job.views
+
+    context = {
+        'total_jobs': total_jobs,
+        'total_applications': total_applications,
+        'shortlisted_count': shortlisted_count,
+        'rejected_count': rejected_count,
+        'interview_count': interview_count,
+        'total_views': total_views,
+    }
+
+    return render(
+        request,
+        'core/reports.html',
         context
     )

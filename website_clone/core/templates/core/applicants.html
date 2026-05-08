@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applicants — Employer Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #f5f4f0;
+            --white: #ffffff;
+            --ink: #111118;
+            --muted: #6e6e85;
+            --border: #e4e2da;
+            --card: #ffffff;
+            --accent: #1a56ff;
+            --accent-bg: #eef1ff;
+            --green: #0ca678;
+            --green-bg: #e6faf4;
+            --red: #e03131;
+            --red-bg: #fff0f0;
+            --amber: #e67700;
+            --amber-bg: #fff8e6;
+            --sky: #0277b5;
+            --sky-bg: #e8f4fd;
+            --purple: #7048e8;
+            --purple-bg: #f0ebff;
+            --radius: 16px;
+            --shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 62px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Fraunces', serif;
+            font-size: 22px;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo em {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tb-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .tb-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--red);
+            border: 1.5px solid var(--white);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* ── LAYOUT ── */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 62px);
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 230px;
+            min-width: 230px;
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            padding: 24px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-group-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            padding: 14px 12px 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--bg);
+            color: var(--ink);
+        }
+
+        .nav-item.active {
+            background: var(--accent-bg);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .nav-icon {
+            width: 18px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .nav-chip {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 20px;
+        }
+
+        .nav-chip.red {
+            background: var(--red);
+        }
+
+        .sep {
+            height: 1px;
+            background: var(--border);
+            margin: 10px 4px;
+        }
+
+        /* ── MAIN ── */
+        .main {
+            flex: 1;
+            padding: 32px 36px;
+            min-width: 0;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-hdr {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .page-title {
+            font-family: 'Fraunces', serif;
+            font-size: 30px;
+            color: var(--ink);
+            line-height: 1.15;
+        }
+
+        .page-sub {
+            color: var(--muted);
+            font-size: 13.5px;
+            margin-top: 5px;
+        }
+
+        .hdr-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            color: var(--ink);
+            border-radius: 10px;
+            padding: 9px 18px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-primary {
+            background: var(--ink);
+            border: none;
+            color: #fff;
+            border-radius: 10px;
+            padding: 9px 18px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+        }
+
+        /* ── STATS ── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .stat {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            animation: up 0.4s ease both;
+        }
+
+        .stat:nth-child(1) {
+            animation-delay: .04s
+        }
+
+        .stat:nth-child(2) {
+            animation-delay: .08s
+        }
+
+        .stat:nth-child(3) {
+            animation-delay: .12s
+        }
+
+        .stat:nth-child(4) {
+            animation-delay: .16s
+        }
+
+        .stat:nth-child(5) {
+            animation-delay: .20s
+        }
+
+        @keyframes up {
+            from {
+                opacity: 0;
+                transform: translateY(14px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .stat-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .stat-num {
+            font-family: 'Fraunces', serif;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* ── TOOLBAR ── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 220px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px 10px 38px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13.5px;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted);
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent);
+        }
+
+        .si {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .filter-pill {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+
+        .filter-pill:hover,
+        .filter-pill.on {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-bg);
+        }
+
+        .select-box {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            color: var(--ink);
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%236e6e85' stroke-width='2' stroke-linecap='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 32px;
+        }
+
+        .select-box:focus {
+            border-color: var(--accent);
+        }
+
+        /* ── APPLICANT COUNT BAR ── */
+        .count-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .count-text {
+            font-size: 13.5px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .count-text strong {
+            color: var(--ink);
+        }
+
+        .sort-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* ── APPLICANT CARDS ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+
+        .acard {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            animation: up 0.4s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .acard:hover {
+            box-shadow: var(--shadow);
+            border-color: var(--accent);
+        }
+
+        .acard-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .cphoto {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .online-ring {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+        .cinfo {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cname {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .crole {
+            font-size: 12.5px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .cdate {
+            font-size: 11.5px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .cbadge {
+            flex-shrink: 0;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 700;
+        }
+
+        .s-pending {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .s-shortlisted {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .s-rejected {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .s-reviewed {
+            background: var(--sky-bg);
+            color: var(--sky);
+        }
+
+        .s-interview {
+            background: var(--purple-bg);
+            color: var(--purple);
+        }
+
+        /* Skills */
+        .skills-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .skill-tag {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--ink);
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* Meta row */
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        /* Divider */
+        .card-sep {
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 14px;
+        }
+
+        /* Actions */
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .act-btn {
+            flex: 1;
+            border-radius: 9px;
+            padding: 8px 0;
+            font-size: 12.5px;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-align: center;
+            border: none;
+        }
+
+        .act-view {
+            background: var(--ink);
+            color: #fff;
+        }
+
+        .act-view:hover {
+            background: var(--accent);
+        }
+
+        .act-shortlist {
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1.5px solid transparent;
+        }
+
+        .act-shortlist:hover {
+            border-color: var(--green);
+        }
+
+        .act-reject {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1.5px solid transparent;
+        }
+
+        .act-reject:hover {
+            border-color: var(--red);
+        }
+
+        .act-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            flex-shrink: 0;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .act-icon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Featured stripe */
+        .acard.featured::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent), var(--purple));
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* Empty state */
+        .empty {
+            display: none;
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 52px;
+            margin-bottom: 14px;
+        }
+
+        .empty p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        /* ── PROFILE MODAL ── */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 22px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: up 0.25s ease;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+        }
+
+        .modal-head {
+            padding: 28px 28px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .modal-photo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .modal-name {
+            font-family: 'Fraunces', serif;
+            font-size: 22px;
+        }
+
+        .modal-role {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 3px;
+        }
+
+        .modal-close {
+            margin-left: auto;
+            background: var(--bg);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-body {
+            padding: 24px 28px;
+        }
+
+        .modal-section {
+            margin-bottom: 22px;
+        }
+
+        .modal-section h4 {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .info-cell {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        .info-cell span {
+            font-size: 11.5px;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .info-cell strong {
+            font-size: 13.5px;
+            font-weight: 700;
+        }
+
+        .modal-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .modal-skill {
+            background: var(--accent-bg);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .modal-actions {
+            padding: 20px 28px 28px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .modal-actions .act-btn {
+            flex: 1;
+            padding: 11px 0;
+            font-size: 13.5px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:1100px) {
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media(max-width:860px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 22px 18px;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hide-sm {
+                display: none;
+            }
+        }
+
+        @media(max-width:520px) {
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hdr-actions .btn-outline {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="logo">Hire<em>Hub</em></div>
+        <div class="topbar-right">
+            <div class="tb-btn">🔔<div class="dot"></div>
+            </div>
+            <div class="tb-btn hide-sm">📧</div>
+            <div class="avatar">RC</div>
+        </div>
+    </div>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="nav-group-label">Main</div>
+            <a class="nav-item" href="#"><span class="nav-icon">🏠</span>Overview</a>
+            <a class="nav-item" href="#"><span class="nav-icon">💼</span>Manage Jobs<span class="nav-chip">10</span></a>
+            <a class="nav-item active" href="#"><span class="nav-icon">👥</span>Applicants<span
+                    class="nav-chip red">43</span></a>
+            <a class="nav-item" href="#"><span class="nav-icon">⭐</span>Shortlisted</a>
+            <a class="nav-item" href="#"><span class="nav-icon">📅</span>Interviews</a>
+            <div class="sep"></div>
+            <div class="nav-group-label">Reports</div>
+            <a class="nav-item" href="#"><span class="nav-icon">📊</span>Analytics</a>
+            <a class="nav-item" href="#"><span class="nav-icon">📄</span>Reports</a>
+            <div class="sep"></div>
+            <a class="nav-item" href="#"><span class="nav-icon">⚙️</span>Settings</a>
+            <a class="nav-item" href="#"><span class="nav-icon">🚪</span>Logout</a>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <!-- Page Header -->
+            <div class="page-hdr">
+                <div>
+                    <div class="page-title">Applicants</div>
+                    <div class="page-sub">Review, shortlist, and manage all candidates who applied to your jobs.</div>
+                </div>
+                <div class="hdr-actions">
+                    <button class="btn-outline">⬇️ Export CSV</button>
+                    <button class="btn-primary">+ Invite Candidate</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon" style="background:#eef1ff">📩</div>
+                        <span style="font-size:11px;color:var(--green);font-weight:700;">+12 today</span>
+                    </div>
+                    <div class="stat-num" style="color:var(--accent)">43</div>
+                    <div class="stat-label">Total Applicants</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon" style="background:var(--amber-bg)">🕐</div>
+                    </div>
+                    <div class="stat-num" style="color:var(--amber)">18</div>
+                    <div class="stat-label">Pending Review</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon" style="background:var(--green-bg)">✅</div>
+                    </div>
+                    <div class="stat-num" style="color:var(--green)">14</div>
+                    <div class="stat-label">Shortlisted</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon" style="background:var(--purple-bg)">📅</div>
+                    </div>
+                    <div class="stat-num" style="color:var(--purple)">6</div>
+                    <div class="stat-label">Interviews Set</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon" style="background:var(--red-bg)">❌</div>
+                    </div>
+                    <div class="stat-num" style="color:var(--red)">5</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-box">
+                    <span class="si">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search by name, skills, location..."
+                        oninput="applyFilters()" />
+                </div>
+                <select class="select-box" id="jobFilter" onchange="applyFilters()">
+                    <option value="">All Jobs</option>
+                    <option>Python Developer</option>
+                    <option>React Developer</option>
+                    <option>Django Backend</option>
+                    <option>Data Analyst</option>
+                    <option>ML Engineer</option>
+                </select>
+                <select class="select-box hide-sm" id="expFilter" onchange="applyFilters()">
+                    <option value="">Experience</option>
+                    <option>Fresher</option>
+                    <option>1-3 Years</option>
+                    <option>3-5 Years</option>
+                    <option>5+ Years</option>
+                </select>
+            </div>
+
+            <!-- Status Filter Pills -->
+            <div class="toolbar" style="margin-bottom:16px;">
+                <button class="filter-pill on" onclick="filterStatus('all',this)">All (43)</button>
+                <button class="filter-pill" onclick="filterStatus('pending',this)">🕐 Pending (18)</button>
+                <button class="filter-pill" onclick="filterStatus('reviewed',this)">👁️ Reviewed (7)</button>
+                <button class="filter-pill" onclick="filterStatus('shortlisted',this)">⭐ Shortlisted (14)</button>
+                <button class="filter-pill" onclick="filterStatus('interview',this)">📅 Interview (6)</button>
+                <button class="filter-pill" onclick="filterStatus('rejected',this)">❌ Rejected (5)</button>
+            </div>
+
+            <!-- Count Bar -->
+            <div class="count-bar">
+                <div class="count-text">Showing <strong id="countText">8</strong> applicants</div>
+                <div class="sort-row">
+                    Sort:
+                    <select class="select-box" style="padding:6px 28px 6px 10px;font-size:12.5px;">
+                        <option>Newest First</option>
+                        <option>Oldest First</option>
+                        <option>Name A–Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="cards-grid" id="cardsGrid">
+                <div class="empty" id="emptyState">
+                    <div class="empty-icon">🔍</div>
+                    <p>No applicants match your current filter.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div class="overlay" id="profileModal">
+        <div class="modal">
+            <div class="modal-head">
+                <div class="modal-photo" id="mPhoto"></div>
+                <div>
+                    <div class="modal-name" id="mName"></div>
+                    <div class="modal-role" id="mRole"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>Contact Information</h4>
+                    <div class="info-grid">
+                        <div class="info-cell"><span>Email</span><strong id="mEmail"></strong></div>
+                        <div class="info-cell"><span>Phone</span><strong id="mPhone"></strong></div>
+                        <div class="info-cell"><span>Location</span><strong id="mLocation"></strong></div>
+                        <div class="info-cell"><span>Experience</span><strong id="mExp"></strong></div>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h4>Education</h4>
+                    <div class="info-grid">
+                        <div class="info-cell"><span>Degree</span><strong id="mDegree"></strong></div>
+                        <div class="info-cell"><span>Applied For</span><strong id="mJob"></strong></div>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h4>Skills</h4>
+                    <div class="modal-skills" id="mSkills"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="act-btn act-view" onclick="alert('Downloading resume PDF...')">⬇️ Download
+                    Resume</button>
+                <button class="act-btn act-shortlist" id="mShortlistBtn"></button>
+                <button class="act-btn act-reject" onclick="closeModal()">✕ Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const COLORS = ['#1a56ff', '#7048e8', '#0ca678', '#e67700', '#0277b5', '#e03131', '#6741d9', '#2f9e44'];
+
+        const APPLICANTS = [
+            { id: 1, name: 'Arjun Sharma', role: 'Python Developer', exp: '3 Years', loc: 'Hyderabad', email: 'arjun@email.com', phone: '+91 98765 43210', degree: 'B.Tech CSE', skills: ['Python', 'Django', 'REST API', 'PostgreSQL'], date: '2 days ago', status: 'pending', color: COLORS[0], featured: true },
+            { id: 2, name: 'Priya Nair', role: 'React Developer', exp: '2 Years', loc: 'Bangalore', email: 'priya@email.com', phone: '+91 91234 56789', degree: 'B.E. IT', skills: ['React', 'TypeScript', 'Redux', 'Tailwind'], date: '1 day ago', status: 'shortlisted', color: COLORS[1], featured: false },
+            { id: 3, name: 'Rahul Mehta', role: 'Django Backend', exp: '4 Years', loc: 'Mumbai', email: 'rahul@email.com', phone: '+91 99887 76655', degree: 'MCA', skills: ['Django', 'Python', 'MySQL', 'Docker'], date: '3 days ago', status: 'interview', color: COLORS[2], featured: true },
+            { id: 4, name: 'Divya Reddy', role: 'Data Analyst', exp: 'Fresher', loc: 'Chennai', email: 'divya@email.com', phone: '+91 80001 23456', degree: 'B.Sc Stats', skills: ['SQL', 'Excel', 'Power BI', 'Python'], date: '5 days ago', status: 'reviewed', color: COLORS[3], featured: false },
+            { id: 5, name: 'Kiran Patel', role: 'ML Engineer', exp: '2 Years', loc: 'Pune', email: 'kiran@email.com', phone: '+91 77665 44332', degree: 'M.Tech AI', skills: ['Python', 'TensorFlow', 'Scikit-learn', 'NLP'], date: '4 days ago', status: 'rejected', color: COLORS[4], featured: false },
+            { id: 6, name: 'Sneha Iyer', role: 'Python Developer', exp: '1-3 Years', loc: 'Hyderabad', email: 'sneha@email.com', phone: '+91 88990 11223', degree: 'B.Tech IT', skills: ['Python', 'Flask', 'MongoDB', 'Redis'], date: 'Today', status: 'pending', color: COLORS[5], featured: false },
+            { id: 7, name: 'Vikram Joshi', role: 'React Developer', exp: '5+ Years', loc: 'Delhi', email: 'vikram@email.com', phone: '+91 98001 55667', degree: 'B.E. CSE', skills: ['React', 'Node.js', 'GraphQL', 'AWS'], date: '6 days ago', status: 'shortlisted', color: COLORS[6], featured: true },
+            { id: 8, name: 'Ananya Singh', role: 'Django Backend', exp: '3-5 Years', loc: 'Kolkata', email: 'ananya@email.com', phone: '+91 70099 88776', degree: 'B.Tech CSE', skills: ['Django', 'DRF', 'Celery', 'Redis'], date: '2 days ago', status: 'interview', color: COLORS[7], featured: false },
+        ];
+
+        let currentStatusFilter = 'all';
+        let openApplicant = null;
+
+        const STATUS_META = {
+            pending: { label: 'Pending', cls: 's-pending' },
+            reviewed: { label: 'Reviewed', cls: 's-reviewed' },
+            shortlisted: { label: 'Shortlisted', cls: 's-shortlisted' },
+            interview: { label: 'Interview', cls: 's-interview' },
+            rejected: { label: 'Rejected', cls: 's-rejected' },
+        };
+
+        function initials(n) { return n.split(' ').map(w => w[0]).join('').toUpperCase(); }
+
+        function renderCards(list) {
+            const grid = document.getElementById('cardsGrid');
+            const empty = document.getElementById('emptyState');
+            // Remove old cards
+            grid.querySelectorAll('.acard').forEach(c => c.remove());
+            document.getElementById('countText').textContent = list.length;
+            if (!list.length) { empty.style.display = 'block'; return; }
+            empty.style.display = 'none';
+            list.forEach((a, i) => {
+                const sm = STATUS_META[a.status];
+                const div = document.createElement('div');
+                div.className = 'acard' + (a.featured ? ' featured' : '');
+                div.style.animationDelay = (i * 0.06) + 's';
+                div.innerHTML = `
+      <div class="acard-top">
+        <div class="cphoto" style="background:${a.color}">
+          ${initials(a.name)}
+          <div class="online-ring" style="background:${a.status === 'interview' ? 'var(--purple)' : a.status === 'shortlisted' ? 'var(--green)' : 'var(--muted)'}"></div>
+        </div>
+        <div class="cinfo">
+          <div class="cname">${a.name}</div>
+          <div class="crole">Applied for: <strong>${a.role}</strong></div>
+          <div class="cdate">🕐 ${a.date}</div>
+        </div>
+        <div class="cbadge">
+          <span class="status-badge ${sm.cls}">${sm.label}</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        ${a.skills.slice(0, 3).map(s => `<span class="skill-tag">${s}</span>`).join('')}
+        ${a.skills.length > 3 ? `<span class="skill-tag">+${a.skills.length - 3}</span>` : ''}
+      </div>
+      <div class="meta-row">
+        <div class="meta-item">💼 ${a.exp}</div>
+        <div class="meta-item">📍 ${a.loc}</div>
+        <div class="meta-item">🎓 ${a.degree}</div>
+      </div>
+      <div class="card-sep"></div>
+      <div class="card-actions">
+        <button class="act-btn act-view" onclick="openProfile(${a.id})">👁️ View Profile</button>
+        <button class="act-btn act-shortlist" onclick="changeStatus(${a.id},'shortlisted',this)">
+          ${a.status === 'shortlisted' ? '⭐ Shortlisted' : '☆ Shortlist'}
+        </button>
+        <button class="act-btn act-reject" onclick="changeStatus(${a.id},'rejected',this)">✕</button>
+        <div class="act-icon" title="Download Resume" onclick="alert('Downloading resume for ${a.name}...')">⬇️</div>
+      </div>
+    `;
+                grid.appendChild(div);
+            });
+        }
+
+        function applyFilters() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const job = document.getElementById('jobFilter').value;
+            const exp = document.getElementById('expFilter')?.value || '';
+            let list = APPLICANTS.filter(a => {
+                const matchStatus = currentStatusFilter === 'all' || a.status === currentStatusFilter;
+                const matchQ = !q || a.name.toLowerCase().includes(q) || a.skills.join(' ').toLowerCase().includes(q) || a.loc.toLowerCase().includes(q);
+                const matchJob = !job || a.role === job;
+                const matchExp = !exp || a.exp === exp;
+                return matchStatus && matchQ && matchJob && matchExp;
+            });
+            renderCards(list);
+        }
+
+        function filterStatus(status, btn) {
+            currentStatusFilter = status;
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('on'));
+            btn.classList.add('on');
+            applyFilters();
+        }
+
+        function changeStatus(id, newStatus, btn) {
+            const a = APPLICANTS.find(x => x.id === id);
+            if (!a) return;
+            a.status = newStatus;
+            applyFilters();
+        }
+
+        function openProfile(id) {
+            const a = APPLICANTS.find(x => x.id === id);
+            if (!a) return;
+            openApplicant = a;
+            document.getElementById('mPhoto').style.background = a.color;
+            document.getElementById('mPhoto').textContent = initials(a.name);
+            document.getElementById('mName').textContent = a.name;
+            document.getElementById('mRole').textContent = 'Applied for ' + a.role;
+            document.getElementById('mEmail').textContent = a.email;
+            document.getElementById('mPhone').textContent = a.phone;
+            document.getElementById('mLocation').textContent = a.loc;
+            document.getElementById('mExp').textContent = a.exp;
+            document.getElementById('mDegree').textContent = a.degree;
+            document.getElementById('mJob').textContent = a.role;
+            document.getElementById('mSkills').innerHTML = a.skills.map(s => `<span class="modal-skill">${s}</span>`).join('');
+            document.getElementById('mShortlistBtn').textContent = a.status === 'shortlisted' ? '⭐ Shortlisted' : '☆ Shortlist';
+            document.getElementById('profileModal').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('profileModal').classList.remove('open'); }
+        document.getElementById('profileModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+        // Init
+        renderCards(APPLICANTS);
+    </script>
+</body>
+
+</html>
