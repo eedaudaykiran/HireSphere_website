@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Jobs — Employer Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@600;700&family=Epilogue:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #0b0d14;
+            --surface: #12151f;
+            --card: #181c28;
+            --border: #242840;
+            --border-light: #2e3350;
+            --text: #e8eaf6;
+            --muted: #7b82a6;
+            --accent: #4f8aff;
+            --accent-glow: rgba(79, 138, 255, 0.18);
+            --green: #22c55e;
+            --green-bg: rgba(34, 197, 94, 0.10);
+            --red: #f43f5e;
+            --red-bg: rgba(244, 63, 94, 0.10);
+            --amber: #f59e0b;
+            --amber-bg: rgba(245, 158, 11, 0.10);
+            --purple: #a78bfa;
+            --purple-bg: rgba(167, 139, 250, 0.10);
+            --radius: 14px;
+        }
+
+        body {
+            font-family: 'Epilogue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ─── TOPBAR ─── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 32px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-logo {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 20px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topbar-logo span {
+            color: var(--accent);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .notif-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 10px;
+            padding: 8px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--red);
+        }
+
+        .post-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 9px 18px;
+            font-family: 'Epilogue', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .post-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        /* ─── LAYOUT ─── */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+
+        /* ─── SIDEBAR ─── */
+        .sidebar {
+            width: 220px;
+            min-width: 220px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 28px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: var(--accent-glow);
+            color: var(--accent);
+            border: 1px solid rgba(79, 138, 255, 0.22);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 20px;
+        }
+
+        .sidebar-sep {
+            height: 1px;
+            background: var(--border);
+            margin: 14px 4px;
+        }
+
+        /* ─── MAIN ─── */
+        .main {
+            flex: 1;
+            padding: 32px 36px;
+            overflow-x: hidden;
+        }
+
+        /* ─── PAGE HEADER ─── */
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 28px;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .page-sub {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* ─── STATS ROW ─── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.05s
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.10s
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.15s
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.20s
+        }
+
+        .stat-card::after {
+            content: attr(data-icon);
+            position: absolute;
+            bottom: -8px;
+            right: 10px;
+            font-size: 52px;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .stat-val {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 32px;
+            margin: 8px 0 6px;
+        }
+
+        .stat-delta {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .delta-up {
+            color: var(--green);
+        }
+
+        .delta-down {
+            color: var(--red);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─── TOOLBAR ─── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-wrap {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px 10px 38px;
+            color: var(--text);
+            font-family: 'Epilogue', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-wrap input::placeholder {
+            color: var(--muted);
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--accent);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .filter-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-family: 'Epilogue', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .filter-btn.active-filter {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrap {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        thead th {
+            padding: 13px 18px;
+            text-align: left;
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        thead th:first-child {
+            padding-left: 22px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        td {
+            padding: 16px 18px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        td:first-child {
+            padding-left: 22px;
+        }
+
+        /* Job title cell */
+        .job-title-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .job-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .job-name {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .job-meta {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* Status badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .badge-active {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .badge-active .badge-dot {
+            background: var(--green);
+        }
+
+        .badge-closed {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .badge-closed .badge-dot {
+            background: var(--red);
+        }
+
+        .badge-draft {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .badge-draft .badge-dot {
+            background: var(--amber);
+        }
+
+        /* Metric */
+        .metric {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .metric-val {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* Progress bar */
+        .progress-wrap {
+            width: 80px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            border-radius: 4px;
+            background: var(--border);
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--purple));
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-icon {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.18s;
+            text-decoration: none;
+        }
+
+        .btn-icon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-icon.danger:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .btn-icon.success:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        /* Toggle switch */
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 38px;
+            height: 22px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 22px;
+            background: var(--border-light);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .slider::before {
+            content: '';
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            border-radius: 50%;
+            background: #fff;
+            transition: 0.2s;
+        }
+
+        input:checked+.slider {
+            background: var(--green);
+        }
+
+        input:checked+.slider::before {
+            transform: translateX(16px);
+        }
+
+        /* ─── ANALYTICS SECTION ─── */
+        .section-title {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 18px;
+            margin: 36px 0 16px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .analytics-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+        }
+
+        .analytics-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        /* Bar chart */
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .bar-row-label {
+            font-size: 13px;
+            color: var(--text);
+            width: 130px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--purple));
+            transition: width 0.6s ease;
+        }
+
+        .bar-count {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            width: 36px;
+            text-align: right;
+        }
+
+        /* Top apps list */
+        .app-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .app-row:last-child {
+            border-bottom: none;
+        }
+
+        .app-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .app-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .app-role {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .status-pill {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .pill-short {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .pill-review {
+            background: var(--amber-bg);
+            color: var(--amber);
+        }
+
+        .pill-reject {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        /* ─── EMPTY STATE ─── */
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+            display: none;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 14px;
+        }
+
+        .empty p {
+            font-size: 15px;
+        }
+
+        /* ─── MODAL ─── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            width: 90%;
+            max-width: 420px;
+            animation: fadeUp 0.25s ease;
+        }
+
+        .modal h3 {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .modal p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-cancel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            border-radius: 10px;
+            padding: 9px 20px;
+            font-family: 'Epilogue', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            background: var(--red);
+            border: none;
+            color: #fff;
+            border-radius: 10px;
+            padding: 9px 20px;
+            font-family: 'Epilogue', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* ─── MOBILE ─── */
+        @media(max-width:1100px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width:850px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 22px 18px;
+            }
+
+            .topbar {
+                padding: 14px 18px;
+            }
+
+            .hide-mobile {
+                display: none;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width:520px) {
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-val {
+                font-size: 24px;
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── TOPBAR ── -->
+    <div class="topbar">
+        <div class="topbar-logo">🧠 <span>Hire</span>Hub</div>
+        <div class="topbar-right">
+            <div class="notif-btn">🔔<div class="notif-dot"></div>
+            </div>
+            <button class="post-btn" onclick="window.location='{% url 'post_job' %}'">+ Post New Job</button>
+            <div class="avatar">RC</div>
+        </div>
+    </div>
+
+    <div class="layout">
+
+        <!-- ── SIDEBAR ── -->
+        <aside class="sidebar">
+            <a class="nav-item" href="#"><span class="nav-icon">🏠</span> Overview</a>
+            <a class="nav-item active" href="#"><span class="nav-icon">💼</span> Manage Jobs <span
+                    class="nav-badge">10</span></a>
+            <a class="nav-item" href="#"><span class="nav-icon">👥</span> Applications <span
+                    class="nav-badge">43</span></a>
+            <a class="nav-item" href="#"><span class="nav-icon">⭐</span> Shortlisted</a>
+            <a class="nav-item" href="#"><span class="nav-icon">📊</span> Analytics</a>
+            <div class="sidebar-sep"></div>
+            <a class="nav-item" href="#"><span class="nav-icon">⚙️</span> Settings</a>
+            <a class="nav-item" href="#"><span class="nav-icon">🚪</span> Logout</a>
+        </aside>
+
+        <!-- ── MAIN ── -->
+        <main class="main">
+
+            <!-- Header -->
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Manage Jobs</div>
+                    <div class="page-sub">Monitor, edit, and control all your active job postings.</div>
+                </div>
+                <button class="post-btn" style="padding:11px 22px;font-size:14px;" onclick="window.location='{% url "
+                    post_job" %}'">+ Post New Job</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card" data-icon="💼">
+                    <div class="stat-label">Total Jobs</div>
+                    <div class="stat-val" style="color:var(--accent)">10</div>
+                    <div class="stat-delta delta-up">↑ 2 this month</div>
+                </div>
+                <div class="stat-card" data-icon="✅">
+                    <div class="stat-label">Active</div>
+                    <div class="stat-val" style="color:var(--green)">7</div>
+                    <div class="stat-delta delta-up">↑ 1 this week</div>
+                </div>
+                <div class="stat-card" data-icon="📩">
+                    <div class="stat-label">Applications</div>
+                    <div class="stat-val" style="color:var(--purple)">215</div>
+                    <div class="stat-delta delta-up">↑ 34 this week</div>
+                </div>
+                <div class="stat-card" data-icon="👁️">
+                    <div class="stat-label">Total Views</div>
+                    <div class="stat-val" style="color:var(--amber)">4,820</div>
+                    <div class="stat-delta delta-up">↑ 8% vs last week</div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search jobs by title, skills..."
+                        oninput="filterJobs()" />
+                </div>
+                <button class="filter-btn active-filter" onclick="filterByStatus('all',this)">All (10)</button>
+                <button class="filter-btn" onclick="filterByStatus('active',this)">Active</button>
+                <button class="filter-btn" onclick="filterByStatus('closed',this)">Closed</button>
+                <button class="filter-btn" onclick="filterByStatus('draft',this)">Draft</button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrap">
+                <table id="jobsTable">
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Status</th>
+                            <th class="hide-mobile">Applications</th>
+                            <th class="hide-mobile">Views</th>
+                            <th class="hide-mobile">Conversion</th>
+                            <th>Hiring Open</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jobsTbody">
+                        <!-- rows injected by JS -->
+                    </tbody>
+                </table>
+                <div class="empty" id="emptyState">
+                    <div class="empty-icon">🗂️</div>
+                    <p>No jobs found matching your filter.</p>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div class="section-title">📊 Performance Analytics</div>
+            <div class="analytics-grid">
+
+                <!-- Bar Chart: Applications per job -->
+                <div class="analytics-card">
+                    <h4>Applications per Job</h4>
+                    <div id="barChart"></div>
+                </div>
+
+                <!-- Recent Applicants -->
+                <div class="analytics-card">
+                    <h4>Recent Applicants</h4>
+                    <div id="applicantList"></div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ── DELETE MODAL ── -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <h3>🗑️ Delete Job?</h3>
+            <p>This will permanently remove the job posting and all its applications. This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ── DATA ── */
+        const JOBS = [
+            { id: 1, emoji: '🐍', title: 'Python Developer', meta: 'Backend · Full-Time', status: 'active', apps: 45, views: 1000, posted: '12 May 2025' },
+            { id: 2, emoji: '⚛️', title: 'React Developer', meta: 'Frontend · Full-Time', status: 'active', apps: 20, views: 800, posted: '10 May 2025' },
+            { id: 3, emoji: '🎨', title: 'UI/UX Designer', meta: 'Design · Remote', status: 'closed', apps: 30, views: 600, posted: '02 Apr 2025' },
+            { id: 4, emoji: '🗄️', title: 'Django Backend', meta: 'Backend · On-site', status: 'active', apps: 38, views: 920, posted: '18 May 2025' },
+            { id: 5, emoji: '☁️', title: 'DevOps Engineer', meta: 'Infra · Hybrid', status: 'draft', apps: 0, views: 120, posted: '20 May 2025' },
+            { id: 6, emoji: '📊', title: 'Data Analyst', meta: 'Analytics · Remote', status: 'active', apps: 55, views: 1200, posted: '05 May 2025' },
+            { id: 7, emoji: '🔒', title: 'Cybersecurity Lead', meta: 'Security · Full-Time', status: 'closed', apps: 15, views: 430, posted: '01 Apr 2025' },
+            { id: 8, emoji: '📱', title: 'Android Developer', meta: 'Mobile · Full-Time', status: 'active', apps: 22, views: 560, posted: '14 May 2025' },
+            { id: 9, emoji: '🧪', title: 'QA Engineer', meta: 'Testing · On-site', status: 'active', apps: 18, views: 380, posted: '16 May 2025' },
+            { id: 10, emoji: '🤖', title: 'ML Engineer', meta: 'AI/ML · Remote', status: 'draft', apps: 0, views: 95, posted: '21 May 2025' },
+        ];
+
+        const APPLICANTS = [
+            { name: 'Arjun Sharma', role: 'Python Developer', color: '#4f8aff', initials: 'AS', status: 'short' },
+            { name: 'Priya Nair', role: 'React Developer', color: '#a78bfa', initials: 'PN', status: 'review' },
+            { name: 'Rahul Mehta', role: 'UI/UX Designer', color: '#22c55e', initials: 'RM', status: 'short' },
+            { name: 'Divya Reddy', role: 'Data Analyst', color: '#f59e0b', initials: 'DR', status: 'reject' },
+            { name: 'Kiran Patel', role: 'Django Backend', color: '#f43f5e', initials: 'KP', status: 'review' },
+        ];
+
+        let currentStatus = 'all';
+        let deleteTarget = null;
+
+        /* ── RENDER TABLE ── */
+        function renderTable(jobs) {
+            const tbody = document.getElementById('jobsTbody');
+            const empty = document.getElementById('emptyState');
+            tbody.innerHTML = '';
+            if (!jobs.length) { empty.style.display = 'block'; return; }
+            empty.style.display = 'none';
+            jobs.forEach((j, i) => {
+                const conv = j.views ? Math.round((j.apps / j.views) * 100) : 0;
+                const statusClass = { active: 'badge-active', closed: 'badge-closed', draft: 'badge-draft' }[j.status];
+                const statusLabel = j.status.charAt(0).toUpperCase() + j.status.slice(1);
+                const isActive = j.status === 'active';
+                const tr = document.createElement('tr');
+                tr.dataset.status = j.status;
+                tr.dataset.title = j.title.toLowerCase();
+                tr.style.animationDelay = (i * 0.05) + 's';
+                tr.innerHTML = `
+      <td>
+        <div class="job-title-cell">
+          <div class="job-logo">${j.emoji}</div>
+          <div>
+            <div class="job-name">${j.title}</div>
+            <div class="job-meta">${j.meta} · ${j.posted}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="badge ${statusClass}"><span class="badge-dot"></span>${statusLabel}</span></td>
+      <td class="hide-mobile">
+        <div class="metric">
+          <span class="metric-val">${j.apps}</span>
+          <span class="metric-label">applicants</span>
+        </div>
+      </td>
+      <td class="hide-mobile">
+        <div class="metric">
+          <span class="metric-val">${j.views.toLocaleString()}</span>
+          <span class="metric-label">views</span>
+        </div>
+      </td>
+      <td class="hide-mobile">
+        <div class="progress-wrap">
+          <div style="font-size:13px;font-weight:700;">${conv}%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(conv * 2, 100)}%"></div></div>
+        </div>
+      </td>
+      <td>
+        <label class="toggle">
+          <input type="checkbox" ${isActive ? 'checked' : ''} onchange="toggleStatus(${j.id},this)"/>
+          <span class="slider"></span>
+        </label>
+      </td>
+      <td>
+        <div class="actions">
+          <a class="btn-icon success" title="View Applications" href="#" onclick="viewApps(${j.id});return false">👥</a>
+          <a class="btn-icon" title="Edit Job" href="#" onclick="editJob(${j.id});return false">✏️</a>
+          <a class="btn-icon danger" title="Delete Job" href="#" onclick="openDeleteModal(${j.id});return false">🗑️</a>
+        </div>
+      </td>
+    `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        /* ── FILTER ── */
+        function filterJobs() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = JOBS.filter(j => {
+                const matchStatus = currentStatus === 'all' || j.status === currentStatus;
+                const matchText = j.title.toLowerCase().includes(q);
+                return matchStatus && matchText;
+            });
+            renderTable(filtered);
+        }
+
+        function filterByStatus(status, btn) {
+            currentStatus = status;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+            btn.classList.add('active-filter');
+            filterJobs();
+        }
+
+        /* ── TOGGLE STATUS ── */
+        function toggleStatus(id, el) {
+            const job = JOBS.find(j => j.id === id);
+            if (!job) return;
+            if (el.checked) { job.status = 'active'; }
+            else { job.status = 'closed'; }
+            filterJobs();
+        }
+
+        /* ── ACTIONS ── */
+        function editJob(id) {
+            const j = JOBS.find(j => j.id === id);
+            alert(`Edit Job:\n"${j.title}"\n\n(In Django, this links to: /jobs/${id}/edit/)`);
+        }
+        function viewApps(id) {
+            const j = JOBS.find(j => j.id === id);
+            alert(`View Applications for:\n"${j.title}"\nTotal: ${j.apps} applicants\n\n(Links to: /jobs/${id}/applications/)`);
+        }
+
+        /* ── DELETE MODAL ── */
+        function openDeleteModal(id) { deleteTarget = id; document.getElementById('deleteModal').classList.add('open'); }
+        function closeModal() { document.getElementById('deleteModal').classList.remove('open'); deleteTarget = null; }
+        function confirmDelete() {
+            if (deleteTarget) {
+                const idx = JOBS.findIndex(j => j.id === deleteTarget);
+                if (idx > -1) { JOBS.splice(idx, 1); }
+            }
+            closeModal();
+            filterJobs();
+            renderBarChart();
+        }
+
+        /* ── BAR CHART ── */
+        function renderBarChart() {
+            const container = document.getElementById('barChart');
+            container.innerHTML = '';
+            const max = Math.max(...JOBS.map(j => j.apps), 1);
+            JOBS.slice().sort((a, b) => b.apps - a.apps).slice(0, 7).forEach(j => {
+                const pct = Math.round((j.apps / max) * 100);
+                container.innerHTML += `
+      <div class="bar-row">
+        <div class="bar-row-label">${j.emoji} ${j.title}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+        <div class="bar-count">${j.apps}</div>
+      </div>`;
+            });
+        }
+
+        /* ── APPLICANTS ── */
+        function renderApplicants() {
+            const container = document.getElementById('applicantList');
+            const pillMap = { short: 'pill-short Shortlisted', review: 'pill-review Under Review', reject: 'pill-reject Rejected' };
+            container.innerHTML = APPLICANTS.map(a => {
+                const [pillClass, pillText] = pillMap[a.status].split(' ').reduce((acc, v, i, arr) => i === 0 ? [v, arr.slice(1).join(' ')] : acc, []);
+                return `
+    <div class="app-row">
+      <div class="app-left">
+        <div class="app-avatar" style="background:${a.color}">${a.initials}</div>
+        <div>
+          <div class="app-name">${a.name}</div>
+          <div class="app-role">${a.role}</div>
+        </div>
+      </div>
+      <span class="status-pill ${pillClass}">${pillText}</span>
+    </div>`}).join('');
+        }
+
+        /* ── INIT ── */
+        renderTable(JOBS);
+        renderBarChart();
+        renderApplicants();
+    </script>
+</body>
+
+</html>

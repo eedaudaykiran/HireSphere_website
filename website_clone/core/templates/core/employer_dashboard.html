@@ -40,11 +40,11 @@
         </div>
         <nav class="flex-1 overflow-y-auto py-4">
             <ul class="space-y-1">
-                <li><a href="#" class="flex items-center px-5 py-2 text-gray-700 bg-indigo-50 text-indigo-600"><i
+                <li><a href="{% url 'employer_dashboard' %}" class="flex items-center px-5 py-2 text-gray-700 bg-indigo-50 text-indigo-600"><i
                             class="fas fa-tachometer-alt w-5"></i><span class="ml-3">Dashboard</span></a></li>
-                <li><a href="#" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
+                <li><a href="{% url 'post_job' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
                             class="fas fa-plus-circle w-5"></i><span class="ml-3">Post Job</span></a></li>
-                <li><a href="#" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
+                <li><a href="{% url 'manage_jobs' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
                             class="fas fa-briefcase w-5"></i><span class="ml-3">Manage Jobs</span></a></li>
                 <li><a href="#" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
                             class="fas fa-users w-5"></i><span class="ml-3">Applicants</span></a></li>

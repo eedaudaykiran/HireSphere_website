@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 
 from .forms import RegisterForm, LoginForm
 from .models import UserProfile, Job, SavedJob, ApplyJob, Application
-from .forms import EmployerRegisterForm
+from .forms import EmployerRegisterForm, JobForm
 
 # ===================== FILTER FUNCTIONS =====================
 
@@ -722,3 +722,43 @@ def dashboard_realtime_data(request):
         ]
     }
     return JsonResponse(data)
+
+# View for posting a new job by employer
+
+def post_job(request):
+
+    if request.method == 'POST':
+
+        form = JobForm(request.POST)
+
+        if form.is_valid():
+
+            job = form.save(commit=False)
+
+            job.employer = request.user
+
+            job.save()
+
+            return redirect('employer_dashboard')
+
+    else:
+
+        form = JobForm()
+
+    return render(request, 'core/post_job.html', {'form': form})
+
+# View for managing jobs (listing, editing, deleting) by employer
+
+def manage_jobs(request):
+
+    jobs = Job.objects.filter(employer=request.user)
+
+    context = {
+        'jobs': jobs
+    }
+
+    return render(
+        request,
+        'core/manage_jobs.html',
+        context
+    )

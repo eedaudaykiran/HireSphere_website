@@ -84,4 +84,6 @@ urlpatterns = [
     
     path('employer/dashboard/', views.employer_dashboard, name='employer_dashboard'),
     path('employer/dashboard/data/', views.dashboard_realtime_data, name='dashboard_data'),
+    path('post-job/', views.post_job, name='post_job'),
+    path('manage-jobs/', views.manage_jobs, name='manage_jobs'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

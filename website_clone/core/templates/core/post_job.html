@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post New Job</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --ink: #0f0f1a;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #f8f8fc;
+            --accent: #5c4aff;
+            --accent-light: #ede9ff;
+            --accent-2: #ff4a8d;
+            --white: #ffffff;
+            --radius: 18px;
+            --shadow: 0 8px 40px rgba(92, 74, 255, 0.10);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f0eff8;
+            min-height: 100vh;
+            padding: 40px 16px 60px;
+            color: var(--ink);
+        }
+
+        /* Background decoration */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -120px;
+            right: -120px;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(92, 74, 255, 0.14), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px;
+            left: -80px;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 74, 141, 0.10), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--white);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: slideUp 0.5s cubic-bezier(.22, .68, 0, 1.2) both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(32px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── BANNER ── */
+        .banner {
+            position: relative;
+            background: var(--ink);
+            padding: 48px 52px 44px;
+            overflow: hidden;
+        }
+
+        .banner-stripe {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(-55deg,
+                    transparent,
+                    transparent 28px,
+                    rgba(255, 255, 255, 0.025) 28px,
+                    rgba(255, 255, 255, 0.025) 56px);
+        }
+
+        .banner-blob {
+            position: absolute;
+            top: -60px;
+            right: -40px;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(92, 74, 255, 0.55), transparent 70%);
+            pointer-events: none;
+        }
+
+        .banner-blob-2 {
+            position: absolute;
+            bottom: -80px;
+            left: 30%;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 74, 141, 0.30), transparent 70%);
+            pointer-events: none;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .banner-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #c4bcff;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 50px;
+            margin-bottom: 18px;
+        }
+
+        .banner h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.1;
+        }
+
+        .banner h1 span {
+            background: linear-gradient(90deg, #a594ff, #ff7eb3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .banner p {
+            color: #a0a0bf;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+
+        /* ── FORM AREA ── */
+        .form-area {
+            padding: 44px 52px 52px;
+        }
+
+        .section-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: 0.01em;
+        }
+
+        label .req {
+            color: var(--accent-2);
+            margin-left: 2px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14.5px;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            appearance: none;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #b0b3c0;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(92, 74, 255, 0.12);
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .error {
+            font-size: 12px;
+            color: #ef4444;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* ── CHECKBOX ROW ── */
+        .checkbox-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            grid-column: 1 / -1;
+            padding: 16px 18px;
+            background: var(--accent-light);
+            border-radius: var(--radius);
+            border: 1.5px solid rgba(92, 74, 255, 0.12);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            padding: 0;
+            border-radius: 6px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .checkbox-item span {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #3d3580;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            border: none;
+            border-top: 1.5px solid var(--border);
+            margin: 36px 0 28px;
+        }
+
+        /* ── SUBMIT ── */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            background: var(--ink);
+            color: var(--white);
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.18s, box-shadow 0.18s;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .btn-submit:hover::before {
+            opacity: 1;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 36px rgba(92, 74, 255, 0.30);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 680px) {
+            .banner {
+                padding: 36px 24px 32px;
+            }
+
+            .form-area {
+                padding: 32px 20px 40px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: 1;
+            }
+
+            .checkbox-row {
+                flex-direction: column;
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-wrap">
+        <div class="card">
+
+            <!-- ── Banner ── -->
+            <div class="banner">
+                <div class="banner-stripe"></div>
+                <div class="banner-blob"></div>
+                <div class="banner-blob-2"></div>
+                <div class="banner-content">
+                    <div class="banner-tag">🏢 Employer Dashboard</div>
+                    <h1>Post <span>New Job</span></h1>
+                    <p>Hire top talent faster with a professional job posting.</p>
+                </div>
+            </div>
+
+            <!-- ── Form ── -->
+            <div class="form-area">
+
+                <div class="section-label">Basic Information</div>
+
+                <div class="grid">
+
+                    <!-- Job Title -->
+                    <div class="field">
+                        <label>Job Title <span class="req">*</span></label>
+                        <input type="text" name="title" placeholder="e.g. Senior Django Developer" />
+                    </div>
+
+                    <!-- Company -->
+                    <div class="field">
+                        <label>Company Name <span class="req">*</span></label>
+                        <input type="text" name="company" placeholder="e.g. TechCorp Pvt. Ltd." />
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="field">
+                        <label>Experience Required</label>
+                        <input type="text" name="experience" placeholder="e.g. 2–5 Years" />
+                    </div>
+
+                    <!-- Salary -->
+                    <div class="field">
+                        <label>Salary Range</label>
+                        <input type="text" name="salary" placeholder="e.g. ₹8–12 LPA" />
+                    </div>
+
+                    <!-- Location -->
+                    <div class="field">
+                        <label>Location</label>
+                        <input type="text" name="location" placeholder="e.g. Hyderabad, Telangana" />
+                    </div>
+
+                    <!-- Work Mode -->
+                    <div class="field">
+                        <label>Work Mode</label>
+                        <select name="work_mode">
+                            <option value="" disabled selected>Select work mode</option>
+                            <option>Remote</option>
+                            <option>On-site</option>
+                            <option>Hybrid</option>
+                        </select>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="field">
+                        <label>Job Category</label>
+                        <select name="category">
+                            <option value="" disabled selected>Select category</option>
+                            <option>Software / IT</option>
+                            <option>Marketing</option>
+                            <option>Finance</option>
+                            <option>Design</option>
+                            <option>HR</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Company Type -->
+                    <div class="field">
+                        <label>Company Type</label>
+                        <select name="company_type">
+                            <option value="" disabled selected>Select type</option>
+                            <option>Startup</option>
+                            <option>MNC</option>
+                            <option>Product Based</option>
+                            <option>Service Based</option>
+                        </select>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="field full">
+                        <label>Required Skills</label>
+                        <input type="text" name="skills" placeholder="e.g. Python, Django, REST API, PostgreSQL" />
+                    </div>
+
+                    <!-- Description -->
+                    <div class="field full">
+                        <label>Job Description <span class="req">*</span></label>
+                        <textarea name="description"
+                            placeholder="Describe the role, responsibilities, and what makes it exciting…"></textarea>
+                    </div>
+
+                    <!-- Checkboxes -->
+                    <div class="checkbox-row">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="is_sponsored" />
+                            <span>⭐ Mark as Sponsored</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="is_featured" />
+                            <span>🔥 Mark as Featured</span>
+                        </label>
+                    </div>
+
+                </div><!-- /grid -->
+
+                <hr class="divider" />
+
+                <button type="submit" class="btn-submit">
+                    <span>🚀 Publish Job Vacancy</span>
+                </button>
+
+            </div><!-- /form-area -->
+        </div><!-- /card -->
+    </div><!-- /page-wrap -->
+
+</body>
+
+</html>

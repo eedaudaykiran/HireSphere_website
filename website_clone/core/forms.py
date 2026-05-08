@@ -1,9 +1,8 @@
 from ast import pattern
-
 from django import forms
 from django.contrib.auth.models import User
 import re
-from .models import UserProfile
+from .models import UserProfile, Job
  
  
 class RegisterForm(forms.Form):
@@ -125,4 +124,25 @@ class EmployerRegisterForm(forms.ModelForm):
             'full_name',
             'mobile_number',
             'company_name',
+        ]
+
+class JobForm(forms.ModelForm):
+
+    class Meta:
+        model = Job
+
+        fields = [
+            'title',
+            'company',
+            'experience',
+            'min_salary',
+            'max_salary',
+            'location',
+            'work_mode',
+            'skills',
+            'role_category',
+            'education',
+            'category',
+            'company_type',
+            'logo',
         ]
