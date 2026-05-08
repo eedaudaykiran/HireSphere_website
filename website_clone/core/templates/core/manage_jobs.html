@@ -916,16 +916,16 @@
 
         <!-- ── SIDEBAR ── -->
         <aside class="sidebar">
-            <a class="nav-item" href="#"><span class="nav-icon">🏠</span> Overview</a>
-            <a class="nav-item active" href="#"><span class="nav-icon">💼</span> Manage Jobs <span
+            <a class="nav-item" href="{% url 'employer_dashboard' %}"><span class="nav-icon">🏠</span> Overview</a>
+            <a class="nav-item active" href="{% url 'manage_jobs' %}"><span class="nav-icon">💼</span> Manage Jobs <span
                     class="nav-badge">10</span></a>
-            <a class="nav-item" href="#"><span class="nav-icon">👥</span> Applications <span
+            <a class="nav-item" href="{% url 'recruiter_applications' %}"><span class="nav-icon">👥</span> Applications <span
                     class="nav-badge">43</span></a>
-            <a class="nav-item" href="#"><span class="nav-icon">⭐</span> Shortlisted</a>
-            <a class="nav-item" href="#"><span class="nav-icon">📊</span> Analytics</a>
+            <a class="nav-item" href="{% url 'shortlisted_candidates' %}"><span class="nav-icon">⭐</span> Shortlisted</a>
+            <a class="nav-item" href="{% url 'reports' %}"><span class="nav-icon">📊</span> Analytics</a>
             <div class="sidebar-sep"></div>
-            <a class="nav-item" href="#"><span class="nav-icon">⚙️</span> Settings</a>
-            <a class="nav-item" href="#"><span class="nav-icon">🚪</span> Logout</a>
+            <a class="nav-item" href="{% url 'settings' %}"><span class="nav-icon">⚙️</span> Settings</a>
+            <a class="nav-item" href="{% url 'logout' %}"><span class="nav-icon">🚪</span> Logout</a>
         </aside>
 
         <!-- ── MAIN ── -->
