@@ -3,6 +3,7 @@ from ast import pattern
 from django import forms
 from django.contrib.auth.models import User
 import re
+from .models import UserProfile
  
  
 class RegisterForm(forms.Form):
@@ -103,3 +104,25 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(),
         error_messages={'required': 'Password is required.'}
     )
+
+# Employer Registration Form
+
+class EmployerRegisterForm(forms.ModelForm):
+
+    username = forms.CharField(max_length=100)
+
+    email = forms.EmailField()
+
+    password = forms.CharField(
+        widget=forms.PasswordInput
+    )
+
+    class Meta:
+
+        model = UserProfile
+
+        fields = [
+            'full_name',
+            'mobile_number',
+            'company_name',
+        ]

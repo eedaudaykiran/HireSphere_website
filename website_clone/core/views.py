@@ -6,11 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.utils import timezone
 import datetime
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 
 from .forms import RegisterForm, LoginForm
-from .models import UserProfile, Job, SavedJob, ApplyJob
-
+from .models import UserProfile, Job, SavedJob, ApplyJob, Application
+from .forms import EmployerRegisterForm
 
 # ===================== FILTER FUNCTIONS =====================
 
@@ -585,3 +585,140 @@ def update_status(request, app_id, status):
     application.save()
 
     return redirect('recruiter_applications')
+
+# Employer registration view
+
+def employer_register(request):
+
+    if request.method == "POST":
+
+        form = EmployerRegisterForm(request.POST)
+
+        if form.is_valid():
+
+            username = form.cleaned_data['username']
+
+            email = form.cleaned_data['email']
+
+            password = form.cleaned_data['password']
+
+            # Create Django User
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+
+            # Create UserProfile
+            profile = form.save(commit=False)
+
+            profile.user = user
+
+            profile.role = "employer"
+
+            profile.save()
+
+            return redirect('employer_login_page')
+
+    else:
+
+        form = EmployerRegisterForm()
+
+    return render(
+        request,
+        'core/employer_register.html',
+        {'form': form}
+    )
+
+# ===================== EMPLOYER LOGIN VIEW =====================
+
+def employer_login(request):
+
+    if request.method == "POST":
+
+        username = request.POST.get('username')
+
+        password = request.POST.get('password')
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+
+            if user.userprofile.role == "employer":
+
+                login(request, user)
+
+                return redirect('employer_dashboard')
+
+            else:
+
+                return HttpResponse(
+                    "Only employers can login here"
+                )
+
+    return render(
+        request,
+        'core/employer_login_page.html'
+    )
+# ===================== EMPLOYER DASHBOARD VIEW =====================
+
+@login_required
+def employer_dashboard(request):
+
+    # FIX 6: safely check userprofile exists
+    try:
+        if request.user.userprofile.role != "employer":
+            return redirect('index')
+    except:
+        return redirect('index')
+
+    # ✅ annotate adds application_count directly on each job object
+    jobs = Job.objects.filter(employer=request.user).annotate(
+        application_count=Count('applications')
+    )
+    total_jobs = jobs.count()
+
+    total_applications = sum(job.application_count for job in jobs)
+
+    total_views = sum(job.views for job in jobs)
+
+    recent_applicants = Application.objects.filter(
+        job__in=jobs
+    ).select_related('applicant', 'job').order_by('-applied_at')[:10]
+
+    context = {
+        'total_jobs': total_jobs,
+        'total_applications': total_applications,
+        'total_views': total_views,
+        'recent_applicants': recent_applicants,
+        'jobs': jobs,
+    }
+
+    return render(request, 'core/employer_dashboard.html', context)
+
+# AJAX endpoint for real-time dashboard data (e.g. for charts)
+
+@login_required
+def dashboard_realtime_data(request):
+    jobs = Job.objects.filter(employer=request.user)
+    recent = Application.objects.filter(
+        job__in=jobs
+    ).select_related('applicant', 'job').order_by('-applied_at')[:10]
+
+    data = {
+        'total_applications': Application.objects.filter(job__in=jobs).count(),
+        'applicants': [
+            {
+                'name': app.applicant.get_full_name(),
+                'job': app.job.title,
+                'date': app.applied_at.strftime('%d %b %Y'),
+                'status': app.status,
+            }
+            for app in recent
+        ]
+    }
+    return JsonResponse(data)

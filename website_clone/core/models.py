@@ -1,18 +1,51 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+import uuid
 
 class UserProfile(models.Model):
+
+    ROLE_CHOICES = (
+        ('candidate', 'Candidate'),
+        ('employer', 'Employer'),
+    )
+
     WORK_STATUS_CHOICES = (
         ('experienced', 'Experienced'),
         ('fresher', 'Fresher'),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # link to Django User
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # Common fields
     full_name = models.CharField(max_length=150)
     mobile_number = models.CharField(max_length=15, unique=True)
-    work_status = models.CharField(max_length=20, choices=WORK_STATUS_CHOICES)
+
+    # Role
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES,
+        default='candidate'
+    )
+
+    # Candidate fields
+    work_status = models.CharField(
+        max_length=20,
+        choices=WORK_STATUS_CHOICES,
+        blank=True,
+        null=True
+    )
+
+    # Employer fields
+    company_name = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True
+    )
+    email_verified = models.BooleanField(
+        default=False
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -86,6 +119,14 @@ class Job(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=3.5)
     review_count = models.IntegerField(default=0)
+    employer = models.ForeignKey(
+    User,
+    on_delete=models.CASCADE,
+    null=True,
+    blank=True
+    )
+    views = models.IntegerField(default=0)  # track job views
+    
 
     def __str__(self):
         return self.title
@@ -123,3 +164,22 @@ class SavedJob(models.Model):
 
     def __str__(self):
         return f"{self.user.username} saved {self.job.title}"
+    
+class EmailVerification(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    token = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False
+    )
+    email_verified = models.BooleanField(default=False)
+
+class Application(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    applicant = models.ForeignKey(User, on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, default='New Applied')

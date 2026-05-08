@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import employer_login, employer_register, employer_dashboard
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -65,4 +66,22 @@ urlpatterns = [
     views.update_status,
     name='update_status'
     ),
+    path(
+        'employer/register/',
+        employer_register,
+        name='employer_register'
+    ),
+    path(
+        'employer/login/',
+        employer_login,
+        name='employer_login'
+    ),
+    path(
+    'employer-login-page/',
+    views.employer_login,
+    name='employer_login_page'
+    ),
+    
+    path('employer/dashboard/', views.employer_dashboard, name='employer_dashboard'),
+    path('employer/dashboard/data/', views.dashboard_realtime_data, name='dashboard_data'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
