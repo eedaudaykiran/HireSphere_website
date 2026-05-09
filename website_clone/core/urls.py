@@ -131,4 +131,6 @@ urlpatterns = [
     views.logout_view,
     name='logout'
     ),
+    path('jobs/', views.all_jobs, name='all_jobs'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

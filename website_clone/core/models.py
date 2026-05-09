@@ -182,9 +182,29 @@ class EmailVerification(models.Model):
 
 class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    resume = models.FileField(
+    upload_to='resumes/',
+    null=True,
+    blank=True
+    )
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
     applied_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=50, default='New Applied')
+    STATUS_CHOICES = (
+    ('Applied', 'Applied'),
+    ('Screening', 'Screening'),
+    ('Shortlisted', 'Shortlisted'),
+    ('Interview', 'Interview'),
+    ('Technical', 'Technical'),
+    ('HR', 'HR'),
+    ('Offer', 'Offer'),
+    ('Rejected', 'Rejected'),
+)
+
+    status = models.CharField(
+    max_length=50,
+    choices=STATUS_CHOICES,
+    default='Applied'
+)
 
 # This model is used to track applications for each job, allowing us to easily count applications and update statuses without complex queries.
 

@@ -668,40 +668,72 @@ def employer_login(request):
     )
 # ===================== EMPLOYER DASHBOARD VIEW =====================
 
-@login_required
+
+
 def employer_dashboard(request):
 
-    # FIX 6: safely check userprofile exists
-    try:
-        if request.user.userprofile.role != "employer":
-            return redirect('index')
-    except:
-        return redirect('index')
+    jobs = Job.objects.filter(employer=request.user)
 
-    # ✅ annotate adds application_count directly on each job object
-    jobs = Job.objects.filter(employer=request.user).annotate(
-        application_count=Count('applications')
-    )
     total_jobs = jobs.count()
 
-    total_applications = sum(job.application_count for job in jobs)
+    applications = Application.objects.filter(job__in=jobs)
+
+    total_applications = applications.count()
+
+    shortlisted_count = applications.filter(status='Shortlisted').count()
+
+    recent_applicants = applications.order_by('-applied_at')[:5]
+
+    interviews_scheduled = 2
+
+    pending_reviews = applications.filter(status='Pending').count()
 
     total_views = sum(job.views for job in jobs)
 
-    recent_applicants = Application.objects.filter(
-        job__in=jobs
-    ).select_related('applicant', 'job').order_by('-applied_at')[:10]
+    pipeline = {
+    'applied': applications.filter(status='Applied').count(),
+
+    'screening': applications.filter(
+        status='Screening'
+    ).count(),
+
+    'shortlisted': applications.filter(
+        status='Shortlisted'
+    ).count(),
+
+    'interview': applications.filter(
+        status='Interview'
+    ).count(),
+
+    'technical': applications.filter(
+        status='Technical'
+    ).count(),
+
+    'hr': applications.filter(
+        status='HR'
+    ).count(),
+
+    'offer': applications.filter(
+        status='Offer'
+    ).count(),
+}
+
+    for job in jobs:
+        job.application_count = Application.objects.filter(job=job).count()
 
     context = {
+        'jobs': jobs,
         'total_jobs': total_jobs,
         'total_applications': total_applications,
-        'total_views': total_views,
+        'shortlisted_count': shortlisted_count,
         'recent_applicants': recent_applicants,
-        'jobs': jobs,
+        'interviews_scheduled': interviews_scheduled,
+        'pending_reviews': pending_reviews,
+        'total_views': total_views,
+        'pipeline': pipeline,
     }
 
     return render(request, 'core/employer_dashboard.html', context)
-
 # AJAX endpoint for real-time dashboard data (e.g. for charts)
 
 @login_required
@@ -1002,3 +1034,13 @@ def logout_view(request):
     logout(request)
 
     return redirect('employer_login_page')
+
+# View to display all jobs (for testing purposes)
+
+def all_jobs(request):
+
+    jobs = Job.objects.all()
+
+    return render(request, 'core/all_jobs.html', {
+        'jobs': jobs
+    })
