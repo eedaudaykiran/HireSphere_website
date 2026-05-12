@@ -101,10 +101,11 @@ urlpatterns = [
     views.interviews,
     name='interviews'
     ),
+    # ✅ CORRECT
     path(
     'messages/',
-    views.messages,
-    name='messages'
+    views.inbox_messages,   # ← updated to new function name
+    name='messages'         # ← URL name stays same, no HTML changes needed
     ),
     path(
     'reports/',

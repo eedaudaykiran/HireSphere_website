@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 import re
 from .models import UserProfile, Job, CompanyProfile, EmployerSettings
+
  
  
 class RegisterForm(forms.Form):
@@ -145,8 +146,27 @@ class JobForm(forms.ModelForm):
             'category',
             'company_type',
             'logo',
+            'description',
+            'is_featured',
+            'is_sponsored',
         ]
 
+        widgets = {
+
+            'min_salary': forms.NumberInput(attrs={
+                'placeholder': 'Min Salary'
+            }),
+
+            'max_salary': forms.NumberInput(attrs={
+                'placeholder': 'Max Salary'
+            }),
+
+            'description': forms.Textarea(attrs={
+                'placeholder': 'Enter job description'
+            }),
+
+        }
+        
 # Employer Company Profile Form
 class CompanyProfileForm(forms.ModelForm):
 
@@ -170,3 +190,4 @@ class EmployerSettingsForm(forms.ModelForm):
         fields = '__all__'
 
         exclude = ['employer']
+
