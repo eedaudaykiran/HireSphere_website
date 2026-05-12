@@ -1,12 +1,12 @@
-from ast import pattern
+import re  # FIX: removed "from ast import pattern" — that was a wrong import
+ 
 from django import forms
 from django.contrib.auth.models import User
-import re
 from .models import UserProfile, Job, CompanyProfile, EmployerSettings
-
  
  
 class RegisterForm(forms.Form):
+ 
     full_name = forms.CharField(
         max_length=150,
         error_messages={'required': 'Full name is required.'}
@@ -27,14 +27,14 @@ class RegisterForm(forms.Form):
         error_messages={'required': 'Work status is required.'}
     )
  
-    # ✅ CONDITION 1: Full name min 3 characters
+    # CONDITION 1: Full name min 3 characters
     def clean_full_name(self):
         full_name = self.cleaned_data.get('full_name', '').strip()
         if len(full_name) < 3:
             raise forms.ValidationError("Full name must be at least 3 characters.")
         return full_name
  
-    # ✅ CONDITION 2: Email must be unique — same email cannot register twice
+    # CONDITION 2: Email must be unique
     def clean_email(self):
         email = self.cleaned_data.get('email', '').strip().lower()
         if User.objects.filter(email__iexact=email).exists():
@@ -44,7 +44,7 @@ class RegisterForm(forms.Form):
             )
         return email
  
-    # ✅ CONDITION 3: Strong password — must meet all 5 rules
+    # CONDITION 3: Strong password
     def clean_password(self):
         password = self.cleaned_data.get('password', '')
         errors = []
@@ -68,19 +68,15 @@ class RegisterForm(forms.Form):
             )
         return password
  
-    # ✅ CONDITION 4: Mobile number must be unique + correct format
+    # CONDITION 4: Mobile number format + unique
     def clean_mobile_number(self):
         mobile_number = self.cleaned_data.get('mobile_number', '').strip()
-
-        pattern = r'^\d{10}$'
-        if not re.match(pattern, mobile_number):
-            raise forms.ValidationError(
-                "❌ Enter exactly 10 digits mobile number"
-            )
-
-            return f"91+{mobile_number}"
  
-        from .models import UserProfile
+        # FIX: removed unreachable "return f'91+{mobile_number}'" that was
+        # placed after a raise — it could never execute and was confusing
+        if not re.match(r'^\d{10}$', mobile_number):
+            raise forms.ValidationError("❌ Enter exactly 10 digits mobile number")
+ 
         if UserProfile.objects.filter(mobile_number=mobile_number).exists():
             raise forms.ValidationError(
                 "❌ This mobile number is already registered. "
@@ -88,7 +84,7 @@ class RegisterForm(forms.Form):
             )
         return mobile_number
  
-    # ✅ CONDITION 5: Work status must be selected
+    # CONDITION 5: Work status must be selected
     def clean_work_status(self):
         work_status = self.cleaned_data.get('work_status', '')
         if work_status not in ['experienced', 'fresher']:
@@ -97,6 +93,7 @@ class RegisterForm(forms.Form):
  
  
 class LoginForm(forms.Form):
+ 
     email = forms.EmailField(
         error_messages={'required': 'Email is required.'}
     )
@@ -104,34 +101,23 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(),
         error_messages={'required': 'Password is required.'}
     )
-
-# Employer Registration Form
-
+ 
+ 
 class EmployerRegisterForm(forms.ModelForm):
-
+ 
     username = forms.CharField(max_length=100)
-
-    email = forms.EmailField()
-
-    password = forms.CharField(
-        widget=forms.PasswordInput
-    )
-
+    email    = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+ 
     class Meta:
-
-        model = UserProfile
-
-        fields = [
-            'full_name',
-            'mobile_number',
-            'company_name',
-        ]
-
+        model  = UserProfile
+        fields = ['full_name', 'mobile_number', 'company_name']
+ 
+ 
 class JobForm(forms.ModelForm):
-
+ 
     class Meta:
-        model = Job
-
+        model  = Job
         fields = [
             'title',
             'company',
@@ -150,44 +136,25 @@ class JobForm(forms.ModelForm):
             'is_featured',
             'is_sponsored',
         ]
-
         widgets = {
-
-            'min_salary': forms.NumberInput(attrs={
-                'placeholder': 'Min Salary'
-            }),
-
-            'max_salary': forms.NumberInput(attrs={
-                'placeholder': 'Max Salary'
-            }),
-
-            'description': forms.Textarea(attrs={
-                'placeholder': 'Enter job description'
-            }),
-
+            'min_salary':  forms.NumberInput(attrs={'placeholder': 'Min Salary'}),
+            'max_salary':  forms.NumberInput(attrs={'placeholder': 'Max Salary'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Enter job description'}),
         }
-        
-# Employer Company Profile Form
+ 
+ 
 class CompanyProfileForm(forms.ModelForm):
-
+ 
     class Meta:
-
-        model = CompanyProfile
-
-        fields = '__all__'
-
+        model   = CompanyProfile
+        fields  = '__all__'
         exclude = ['employer']
-
-
-
-# Employer Settings Form
+ 
+ 
 class EmployerSettingsForm(forms.ModelForm):
-
+ 
     class Meta:
-
-        model = EmployerSettings
-
-        fields = '__all__'
-
+        model   = EmployerSettings
+        fields  = '__all__'
         exclude = ['employer']
-
+ 

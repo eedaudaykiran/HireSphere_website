@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages                          # Django messages framework
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from django.utils import timezone
@@ -94,10 +94,10 @@ def search_jobs(request):
     if location:
         jobs = jobs.filter(location__icontains=location)
     context = {
-        'jobs': jobs,
-        'keyword': keyword,
+        'jobs':       jobs,
+        'keyword':    keyword,
         'experience': experience,
-        'location': location,
+        'location':   location,
     }
     return render(request, 'core/search_results.html', context)
  
@@ -293,32 +293,32 @@ def remote_jobs_page(request):
     }
  
     return render(request, 'core/remote_jobs.html', {
-        'jobs': jobs,
-        'selected_work_modes': selected_work_modes,
-        'selected_categories': selected_categories,
+        'jobs':                  jobs,
+        'selected_work_modes':   selected_work_modes,
+        'selected_categories':   selected_categories,
         'selected_company_types': company_types,
-        'selected_locations': selected_locations,
-        'selected_salaries': selected_salaries,
-        'selected_experience': selected_experience,
-        'selected_freshness': selected_freshness,
-        'selected_roles': roles,
-        'selected_stipends': stipends,
-        'selected_durations': durations,
-        'selected_educations': educations,
-        'selected_posted': posted_by,
-        'selected_industries': industries,
-        'selected_companies': companies,
-        'salary_counts': salary_counts,
-        'category_counts': category_counts,
-        'location_counts': location_counts,
-        'company_type_counts': company_type_counts,
-        'role_counts': role_counts,
-        'stipend_counts': stipend_counts,
-        'duration_counts': duration_counts,
-        'education_counts': education_counts,
-        'posted_by_counts': posted_by_counts,
-        'industry_counts': industry_counts,
-        'company_counts': company_counts,
+        'selected_locations':    selected_locations,
+        'selected_salaries':     selected_salaries,
+        'selected_experience':   selected_experience,
+        'selected_freshness':    selected_freshness,
+        'selected_roles':        roles,
+        'selected_stipends':     stipends,
+        'selected_durations':    durations,
+        'selected_educations':   educations,
+        'selected_posted':       posted_by,
+        'selected_industries':   industries,
+        'selected_companies':    companies,
+        'salary_counts':         salary_counts,
+        'category_counts':       category_counts,
+        'location_counts':       location_counts,
+        'company_type_counts':   company_type_counts,
+        'role_counts':           role_counts,
+        'stipend_counts':        stipend_counts,
+        'duration_counts':       duration_counts,
+        'education_counts':      education_counts,
+        'posted_by_counts':      posted_by_counts,
+        'industry_counts':       industry_counts,
+        'company_counts':        company_counts,
     })
  
  
@@ -505,10 +505,8 @@ def save_job(request, job_id):
 @login_required
 def apply_job(request, job_id):
  
-    # Get job or 404
     job = get_object_or_404(Job, id=job_id)
  
-    # Check if already applied — use Application model (correct table)
     already_applied = Application.objects.filter(
         applicant=request.user,
         job=job
@@ -518,7 +516,6 @@ def apply_job(request, job_id):
         messages.warning(request, "You already applied for this job.")
         return redirect('remote_jobs')
  
-    # Save application only on POST
     if request.method == "POST":
         resume = request.FILES.get('resume')
  
@@ -533,11 +530,7 @@ def apply_job(request, job_id):
         messages.success(request, "✅ Job applied successfully!")
         return redirect('remote_jobs')
  
-    # GET request — show the apply page
-    # FIX: was 'apply_job.html.' (wrong path + extra dot) — now correct
-    return render(request, 'core/apply_job.html', {
-        'job': job
-    })
+    return render(request, 'core/apply_job.html', {'job': job})
  
  
 # ===================== SAVED JOBS =====================
@@ -552,7 +545,6 @@ def saved_jobs_page(request):
  
 @login_required
 def applied_jobs_page(request):
-    # FIX: was reading ApplyJob (wrong table) — now reads Application (correct table)
     applied_jobs = Application.objects.filter(
         applicant=request.user
     ).select_related('job').order_by('-applied_at')
@@ -616,13 +608,13 @@ def employer_login(request):
 @login_required
 def employer_dashboard(request):
  
-    # Step 1: Get all jobs posted by this employer
+    # Step 1: All jobs by this employer
     jobs = Job.objects.filter(employer=request.user)
  
     # Step 2: Count total jobs
     total_jobs = jobs.count()
  
-    # Step 3: Get all applications for this employer's jobs
+    # Step 3: All applications for this employer's jobs
     applications = Application.objects.filter(job__employer=request.user)
  
     # Step 4: Count total applications
@@ -631,19 +623,20 @@ def employer_dashboard(request):
     # Step 5: Count shortlisted
     shortlisted_count = applications.filter(status='Shortlisted').count()
  
-    # Step 6: Get 5 most recent applicants
+    # Step 6: 5 most recent applicants
+    # FIX: works now because applied_at field is added to Application model
     recent_applicants = applications.select_related('applicant', 'job').order_by('-applied_at')[:5]
  
-    # Step 7: Count interviews scheduled
+    # Step 7: Interviews scheduled
     interviews_scheduled = applications.filter(status='Interview').count()
  
-    # Step 8: Count pending reviews
+    # Step 8: Pending reviews
     pending_reviews = applications.filter(status='Applied').count()
  
-    # Step 9: Sum all job views
+    # Step 9: Total views
     total_views = sum(job.views for job in jobs)
  
-    # Step 10: Build pipeline counts
+    # Step 10: Pipeline counts
     pipeline = {
         'applied':     applications.filter(status='Applied').count(),
         'screening':   applications.filter(status='Screening').count(),
@@ -654,11 +647,11 @@ def employer_dashboard(request):
         'offer':       applications.filter(status='Offer').count(),
     }
  
-    # Step 11: Add application_count to each job (used by chart)
+    # Step 11: Application count per job (for chart)
     for job in jobs:
         job.application_count = Application.objects.filter(job=job).count()
  
-    # Step 12: Count unread messages for badge
+    # Step 12: Unread messages badge
     unread_messages = Message.objects.filter(
         receiver=request.user,
         is_read=False
@@ -675,9 +668,12 @@ def employer_dashboard(request):
         'total_views':          total_views,
         'pipeline':             pipeline,
         'unread_messages':      unread_messages,
+        'applications':         applications,
     }
  
-    return render(request, 'core/employer_dashboard.html', context, {applications: applications})
+    # FIX: removed broken 4th argument {applications: applications}
+    # render() only accepts 3 arguments: (request, template, context_dict)
+    return render(request, 'core/employer_dashboard.html', context)
  
  
 # ===================== AJAX REAL-TIME DATA =====================
@@ -719,7 +715,6 @@ def post_job(request):
     else:
         form = JobForm()
  
-    # Fetch existing jobs by this employer
     jobs = Job.objects.filter(employer=request.user).order_by('-created_at')
  
     context = {
@@ -746,59 +741,34 @@ def applicants(request):
     return render(request, 'core/applicants.html', {'applications': applications})
  
  
-# ===================== SHORTLISTED =====================
-
-# SHORTLIST CANDIDATE
+# ===================== SHORTLIST CANDIDATE =====================
+ 
 @login_required
 def shortlist_candidate(request, app_id):
-
-    application = get_object_or_404(
-        Application,
-        id=app_id
-    )
-
-    # security check
+    application = get_object_or_404(Application, id=app_id)
+ 
     if application.job.employer != request.user:
-
-        messages.error(
-            request,
-            "Access denied"
-        )
-
+        messages.error(request, "Access denied.")
         return redirect('employer_dashboard')
-
-    # update status
+ 
     application.status = "Shortlisted"
-
     application.save()
-
-    messages.success(
-        request,
-        "Candidate shortlisted successfully"
-    )
-
+ 
+    messages.success(request, "✅ Candidate shortlisted successfully.")
     return redirect('employer_dashboard')
-
-
-# SHORTLISTED CANDIDATES PAGE
+ 
+ 
+# ===================== SHORTLISTED CANDIDATES =====================
+ 
 @login_required
 def shortlisted_candidates(request):
-
     shortlisted = Application.objects.filter(
-
         job__employer=request.user,
-
         status='Shortlisted'
-
-    ).order_by('-applied_at')
-
-    return render(
-        request,
-        'core/shortlisted.html',
-        {
-            'shortlisted': shortlisted
-        }
-    ) 
+    ).order_by('-applied_at')   # FIX: works now that applied_at exists in Application model
+ 
+    return render(request, 'core/shortlisted.html', {'shortlisted': shortlisted})
+ 
  
 # ===================== INTERVIEWS =====================
  
@@ -834,12 +804,12 @@ def inbox_messages(request):
 @login_required
 def reports(request):
     jobs = Job.objects.filter(employer=request.user)
-    total_jobs          = jobs.count()
-    total_applications  = JobApplication.objects.filter(job__employer=request.user).count()
-    shortlisted_count   = JobApplication.objects.filter(job__employer=request.user, status='Shortlisted').count()
-    rejected_count      = JobApplication.objects.filter(job__employer=request.user, status='Rejected').count()
-    interview_count     = Interview.objects.filter(job__employer=request.user).count()
-    total_views         = sum(job.views for job in jobs)
+    total_jobs         = jobs.count()
+    total_applications = JobApplication.objects.filter(job__employer=request.user).count()
+    shortlisted_count  = JobApplication.objects.filter(job__employer=request.user, status='Shortlisted').count()
+    rejected_count     = JobApplication.objects.filter(job__employer=request.user, status='Rejected').count()
+    interview_count    = Interview.objects.filter(job__employer=request.user).count()
+    total_views        = sum(job.views for job in jobs)
  
     context = {
         'total_jobs':         total_jobs,

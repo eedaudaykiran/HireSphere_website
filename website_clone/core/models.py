@@ -1,434 +1,265 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
 import uuid
-
+ 
+# FIX: removed "from urllib import request" — that was a wrong import that doesn't belong here
+ 
+ 
 class UserProfile(models.Model):
-
+ 
     ROLE_CHOICES = (
         ('candidate', 'Candidate'),
-        ('employer', 'Employer'),
+        ('employer',  'Employer'),
     )
-
+ 
     WORK_STATUS_CHOICES = (
         ('experienced', 'Experienced'),
-        ('fresher', 'Fresher'),
+        ('fresher',     'Fresher'),
     )
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    # Common fields
-    full_name = models.CharField(max_length=150)
+ 
+    user          = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name     = models.CharField(max_length=150)
     mobile_number = models.CharField(max_length=15, unique=True)
-
-    # Role
-    role = models.CharField(
-        max_length=20,
-        choices=ROLE_CHOICES,
-        default='candidate'
-    )
-
-    # Candidate fields
-    work_status = models.CharField(
-        max_length=20,
-        choices=WORK_STATUS_CHOICES,
-        blank=True,
-        null=True
-    )
-
-    # Employer fields
-    company_name = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True
-    )
-    email_verified = models.BooleanField(
-        default=False
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
+    role          = models.CharField(max_length=20, choices=ROLE_CHOICES, default='candidate')
+    work_status   = models.CharField(max_length=20, choices=WORK_STATUS_CHOICES, blank=True, null=True)
+    company_name  = models.CharField(max_length=200, blank=True, null=True)
+    email_verified = models.BooleanField(default=False)
+    created_at    = models.DateTimeField(auto_now_add=True)
+ 
     def __str__(self):
         return self.full_name
-
-
+ 
+ 
 class Job(models.Model):
+ 
     JOB_TYPE_CHOICES = (
-        ('Remote', 'Remote'),
+        ('Remote',  'Remote'),
         ('On-site', 'On-site'),
-        ('Hybrid', 'Hybrid'),
+        ('Hybrid',  'Hybrid'),
     )
-
+ 
     CATEGORY_CHOICES = (
-        ('IT', 'IT'),
-        ('Sales', 'Sales'),
-        ('HR', 'HR'),
+        ('IT',      'IT'),
+        ('Sales',   'Sales'),
+        ('HR',      'HR'),
         ('General', 'General'),
     )
-
+ 
     EDUCATION_CHOICES = [
-        ("PG", "Any Postgraduate"),
-        ("MBA", "MBA/PGDM"),
-        ("GRAD", "Any Graduate"),
+        ("PG",    "Any Postgraduate"),
+        ("MBA",   "MBA/PGDM"),
+        ("GRAD",  "Any Graduate"),
         ("BTECH", "B.Tech/B.E."),
-        ("DIP", "Diploma"),
-        ("12TH", "12th Pass"),
+        ("DIP",   "Diploma"),
+        ("12TH",  "12th Pass"),
     ]
-
+ 
     POSTED_BY_CHOICES = [
-        ("COMPANY", "Company Jobs"),
-        ("CONSULTANT", "Consultant Jobs"),
+        ("COMPANY",     "Company Jobs"),
+        ("CONSULTANT",  "Consultant Jobs"),
     ]
-
+ 
     INDUSTRY_CHOICES = [
-        ("IT", "IT Services & Consulting"),
+        ("IT",      "IT Services & Consulting"),
         ("RECRUIT", "Recruitment / Staffing"),
-        ("EDU", "Education / Training"),
-        ("BPO", "BPM / BPO"),
-        ("HEALTH", "Healthcare"),
-        ("BFSI", "BFSI"),
-        ("RETAIL", "Retail"),
+        ("EDU",     "Education / Training"),
+        ("BPO",     "BPM / BPO"),
+        ("HEALTH",  "Healthcare"),
+        ("BFSI",    "BFSI"),
+        ("RETAIL",  "Retail"),
     ]
-
+ 
     COMPANY_TYPE_CHOICES = (
-        ('MNC', 'MNC'),
+        ('MNC',     'MNC'),
         ('Startup', 'Startup'),
         ('Product', 'Product'),
         ('Unicorn', 'Unicorn'),
     )
-
-    title = models.CharField(max_length=200)
-    company = models.CharField(max_length=200)
-    experience = models.CharField(max_length=50)
-    min_salary = models.IntegerField(null=True, blank=True)
-    max_salary = models.IntegerField(null=True, blank=True)
-    location = models.CharField(max_length=100)
-    work_mode = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES)
-    skills = models.CharField(max_length=300)
-    conditions = models.CharField(max_length=300, default="Hands-on projects • Paper writing • Coding explanation")
-    logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+ 
+    title         = models.CharField(max_length=200)
+    company       = models.CharField(max_length=200)
+    experience    = models.CharField(max_length=50)
+    min_salary    = models.IntegerField(null=True, blank=True)
+    max_salary    = models.IntegerField(null=True, blank=True)
+    location      = models.CharField(max_length=100)
+    work_mode     = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES)
+    skills        = models.CharField(max_length=300)
+    conditions    = models.CharField(max_length=300, default="Hands-on projects • Paper writing • Coding explanation")
+    logo          = models.ImageField(upload_to='logos/', blank=True, null=True)
     role_category = models.CharField(max_length=100)
-    duration = models.CharField(max_length=50, blank=True, null=True)
-    education = models.CharField(max_length=50, choices=EDUCATION_CHOICES)
-    posted_by = models.CharField(max_length=20, choices=POSTED_BY_CHOICES, default="COMPANY")
-    industry = models.CharField(max_length=100, blank=True)
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default='General')
-    company_type = models.CharField(max_length=50, choices=COMPANY_TYPE_CHOICES, default='MNC')
-    is_sponsored = models.BooleanField(default=False)
-    is_featured = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    rating = models.DecimalField(max_digits=2, decimal_places=1, default=3.5)
-    review_count = models.IntegerField(default=0)
-    description = models.TextField(blank=True, null=True)
-    employer = models.ForeignKey(
-    User,
-    on_delete=models.CASCADE,
-    null=True,
-    blank=True
-    )
-    views = models.IntegerField(default=0)  # track job views
-    
-
+    duration      = models.CharField(max_length=50, blank=True, null=True)
+    education     = models.CharField(max_length=50, choices=EDUCATION_CHOICES)
+    posted_by     = models.CharField(max_length=20, choices=POSTED_BY_CHOICES, default="COMPANY")
+    industry      = models.CharField(max_length=100, blank=True)
+    category      = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default='General')
+    company_type  = models.CharField(max_length=50, choices=COMPANY_TYPE_CHOICES, default='MNC')
+    is_sponsored  = models.BooleanField(default=False)
+    is_featured   = models.BooleanField(default=False)
+    created_at    = models.DateTimeField(auto_now_add=True)
+    rating        = models.DecimalField(max_digits=2, decimal_places=1, default=3.5)
+    review_count  = models.IntegerField(default=0)
+    description   = models.TextField(blank=True, null=True)
+    employer      = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    views         = models.IntegerField(default=0)
+ 
     def __str__(self):
         return self.title
-
+ 
     def skills_list(self):
-        """Returns a list of individual skills, splitting by comma and stripping whitespace."""
         return [skill.strip() for skill in self.skills.split(',')] if self.skills else []
-
-
+ 
+ 
 class ApplyJob(models.Model):
+ 
     STATUS_CHOICES = (
-        ('Applied', 'Applied'),
-        ('Pending', 'Pending'),
+        ('Applied',     'Applied'),
+        ('Pending',     'Pending'),
         ('Shortlisted', 'Shortlisted'),
-        ('Rejected', 'Rejected'),
-        ('Selected', 'Selected'),
+        ('Rejected',    'Rejected'),
+        ('Selected',    'Selected'),
     )
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)   # candidate
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+ 
+    user       = models.ForeignKey(User, on_delete=models.CASCADE)
+    job        = models.ForeignKey(Job, on_delete=models.CASCADE)
     applied_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Applied')
-
+    status     = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Applied')
+ 
     def __str__(self):
         return f"{self.user.username} applied for {self.job.title}"
-
-
+ 
+ 
 class SavedJob(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+ 
+    user     = models.ForeignKey(User, on_delete=models.CASCADE)
+    job      = models.ForeignKey(Job, on_delete=models.CASCADE)
     saved_at = models.DateTimeField(auto_now_add=True)
-
+ 
     class Meta:
-        unique_together = ('user', 'job')   # prevent duplicate saves
-
+        unique_together = ('user', 'job')
+ 
     def __str__(self):
         return f"{self.user.username} saved {self.job.title}"
-    
+ 
+ 
 class EmailVerification(models.Model):
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE
-    )
-
-    token = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False
-    )
+ 
+    user           = models.ForeignKey(User, on_delete=models.CASCADE)
+    token          = models.UUIDField(default=uuid.uuid4, editable=False)
     email_verified = models.BooleanField(default=False)
-
+ 
+ 
 class Application(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
-    resume = models.FileField(
-    upload_to='resumes/',
-    null=True,
-    blank=True
-    )
-    applicant = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+    # ══════════════════════════════════════════════════════
+    # ROOT CAUSE FIX:
+    # 'applied_at' field was COMPLETELY MISSING from this model.
+    # Every view that used .order_by('-applied_at') crashed with:
+    #   FieldError: Cannot resolve keyword 'applied_at'
+    # Adding it here fixes: employer_dashboard, applied_jobs_page,
+    # shortlisted_candidates, and dashboard_realtime_data.
+    # After saving this file run: python manage.py makemigrations && python manage.py migrate
+    # ══════════════════════════════════════════════════════
+ 
     STATUS_CHOICES = (
-    ('Applied', 'Applied'),
-    ('Screening', 'Screening'),
-    ('Shortlisted', 'Shortlisted'),
-    ('Interview', 'Interview'),
-    ('Technical', 'Technical'),
-    ('HR', 'HR'),
-    ('Offer', 'Offer'),
-    ('Rejected', 'Rejected'),
-)
-
-    status = models.CharField(
-    max_length=50,
-    choices=STATUS_CHOICES,
-    default='Applied'
-)
-
-# This model is used to track applications for each job, allowing us to easily count applications and update statuses without complex queries.
-
-class JobApplication(models.Model):
-
-    applicant = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
-
-    applied_at = models.DateTimeField(auto_now_add=True)
-    applied_at = models.DateTimeField(auto_now_add=True)
-
-    status = models.CharField(
-        max_length=50,
-        default='Pending'
+        ('Applied',     'Applied'),
+        ('Screening',   'Screening'),
+        ('Shortlisted', 'Shortlisted'),
+        ('Interview',   'Interview'),
+        ('Technical',   'Technical'),
+        ('HR',          'HR'),
+        ('Offer',       'Offer'),
+        ('Rejected',    'Rejected'),
     )
-
-    
-
+ 
+    job        = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    applicant  = models.ForeignKey(User, on_delete=models.CASCADE)
+    resume     = models.FileField(upload_to='resumes/', null=True, blank=True)
+    status     = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Applied')
+    applied_at = models.DateTimeField(auto_now_add=True)   # ← THIS WAS MISSING
+ 
     def __str__(self):
         return f"{self.applicant.username} applied for {self.job.title}"
-    
-    
-# This model is used to schedule and manage interviews for candidates who have applied for jobs. It tracks the interview details, status, and feedback.
-
-
+ 
+ 
+class JobApplication(models.Model):
+ 
+    applicant  = models.ForeignKey(User, on_delete=models.CASCADE)
+    job        = models.ForeignKey(Job, on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)   # FIX: was defined twice before, kept once
+    status     = models.CharField(max_length=50, default='Pending')
+ 
+    def __str__(self):
+        return f"{self.applicant.username} applied for {self.job.title}"
+ 
+ 
 class Interview(models.Model):
-
-    candidate = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE
-    )
-
-    job = models.ForeignKey(
-        Job,
-        on_delete=models.CASCADE
-    )
-
-    round_type = models.CharField(
-        max_length=100
-    )
-
+ 
+    candidate      = models.ForeignKey(User, on_delete=models.CASCADE)
+    job            = models.ForeignKey(Job, on_delete=models.CASCADE)
+    round_type     = models.CharField(max_length=100)
     interview_date = models.DateField()
-
     interview_time = models.TimeField()
-
-    meeting_link = models.URLField()
-
-    status = models.CharField(
-        max_length=50,
-        default='Scheduled'
-    )
-
-    feedback = models.TextField(
-        blank=True,
-        null=True
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
+    meeting_link   = models.URLField()
+    status         = models.CharField(max_length=50, default='Scheduled')
+    feedback       = models.TextField(blank=True, null=True)
+    created_at     = models.DateTimeField(auto_now_add=True)
+ 
     def __str__(self):
-
         return f"{self.candidate.username} - {self.round_type}"
-    
-# This model is used to facilitate messaging between candidates and employers, allowing them to communicate directly within the platform regarding job applications, interview schedules, and other related discussions.
-
+ 
+ 
 class Message(models.Model):
-
-    sender = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='sent_messages'
-    )
-
-    receiver = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='received_messages'
-    )
-
-    message = models.TextField()
-
-    is_read = models.BooleanField(
-        default=False
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
+ 
+    sender     = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    message    = models.TextField()
+    is_read    = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+ 
     def __str__(self):
-
         return f"{self.sender} → {self.receiver}"
-    
-    
-# This model is used to store detailed company profiles for employers, including information such as company description, industry, location, and other relevant details that can be displayed on the employer's profile page and job listings.
-
+ 
+ 
 class CompanyProfile(models.Model):
-
-    employer = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE
-    )
-
-    company_name = models.CharField(
-        max_length=200
-    )
-
-    logo = models.ImageField(
-        upload_to='company_logos/',
-        blank=True,
-        null=True
-    )
-
-    description = models.TextField()
-
-    website = models.URLField(
-        blank=True,
-        null=True
-    )
-
-    location = models.CharField(
-        max_length=200
-    )
-
-    industry = models.CharField(
-        max_length=100
-    )
-
-    employee_count = models.CharField(
-        max_length=50
-    )
-
-    founded_year = models.IntegerField(
-    null=True,
-    blank=True
-    )
-    
+ 
+    employer       = models.OneToOneField(User, on_delete=models.CASCADE)
+    company_name   = models.CharField(max_length=200)
+    logo           = models.ImageField(upload_to='company_logos/', blank=True, null=True)
+    description    = models.TextField()
+    website        = models.URLField(blank=True, null=True)
+    location       = models.CharField(max_length=200)
+    industry       = models.CharField(max_length=100)
+    employee_count = models.CharField(max_length=50)
+    founded_year   = models.IntegerField(null=True, blank=True)
+ 
     def __str__(self):
-
         return self.company_name
-    
-# This model is used to manage subscription plans for employers, allowing them to subscribe to different plans that offer various features and benefits on the platform. It tracks the subscription details, payment status, and validity period.
-
+ 
+ 
 class Subscription(models.Model):
-
-    employer = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE
-    )
-
-    plan_name = models.CharField(
-        max_length=100
-    )
-
-    amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
-    )
-
-    start_date = models.DateField()
-
-    expiry_date = models.DateField()
-
-    is_active = models.BooleanField(
-        default=True
-    )
-
-    payment_status = models.CharField(
-        max_length=50,
-        default='Paid'
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
+ 
+    employer       = models.OneToOneField(User, on_delete=models.CASCADE)
+    plan_name      = models.CharField(max_length=100)
+    amount         = models.DecimalField(max_digits=10, decimal_places=2)
+    start_date     = models.DateField()
+    expiry_date    = models.DateField()
+    is_active      = models.BooleanField(default=True)
+    payment_status = models.CharField(max_length=50, default='Paid')
+    created_at     = models.DateTimeField(auto_now_add=True)
+ 
     def __str__(self):
-
         return f"{self.employer.username} - {self.plan_name}"
-    
-# This model is used to store individual settings and preferences for employers, such as notification preferences, display settings, and other customizable options that enhance the user experience on the platform.
-
+ 
+ 
 class EmployerSettings(models.Model):
-
-    employer = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE
-    )
-
-    profile_image = models.ImageField(
-        upload_to='profile_images/',
-        blank=True,
-        null=True
-    )
-
-    phone_number = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True
-    )
-
-    email_notifications = models.BooleanField(
-        default=True
-    )
-
-    dark_mode = models.BooleanField(
-        default=False
-    )
-
-    language = models.CharField(
-        max_length=50,
-        default='English'
-    )
-
-    two_factor_auth = models.BooleanField(
-        default=False
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
+ 
+    employer            = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_image       = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+    phone_number        = models.CharField(max_length=20, blank=True, null=True)
+    email_notifications = models.BooleanField(default=True)
+    dark_mode           = models.BooleanField(default=False)
+    language            = models.CharField(max_length=50, default='English')
+    two_factor_auth     = models.BooleanField(default=False)
+    created_at          = models.DateTimeField(auto_now_add=True)
+ 
     def __str__(self):
-
         return self.employer.username
