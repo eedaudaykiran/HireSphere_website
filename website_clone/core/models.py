@@ -1,5 +1,3 @@
-from urllib import request
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -189,7 +187,7 @@ class Application(models.Model):
     blank=True
     )
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
-    applied_at = models.DateTimeField(auto_now_add=True)
+    
     STATUS_CHOICES = (
     ('Applied', 'Applied'),
     ('Screening', 'Screening'),
@@ -216,11 +214,14 @@ class JobApplication(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
 
     applied_at = models.DateTimeField(auto_now_add=True)
+    applied_at = models.DateTimeField(auto_now_add=True)
 
     status = models.CharField(
         max_length=50,
         default='Pending'
     )
+
+    
 
     def __str__(self):
         return f"{self.applicant.username} applied for {self.job.title}"

@@ -8,7 +8,7 @@ from django.utils import timezone
 import datetime
 from django.http import HttpResponse, JsonResponse
  
-from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm, JobForm
+from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm
 from .models import JobApplication, UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, Subscription, EmployerSettings
  
  
@@ -485,7 +485,7 @@ def company_featured_companies_jobs_page(request):
     return render(request, 'core/company_featured_companies_jobs.html', {'jobs': jobs})
  
  
-# ===================== SAVE / APPLY / SAVED JOBS =====================
+# ===================== SAVE JOB =====================
  
 @login_required
 def save_job(request, job_id):
@@ -499,61 +499,48 @@ def save_job(request, job_id):
         saved.delete()
         return JsonResponse({'status': 'removed', 'message': 'Removed from saved jobs!'})
  
-#  ===================== APPLY JOB =====================
+ 
+# ===================== APPLY JOB =====================
+ 
 @login_required
 def apply_job(request, job_id):
-
-    # Get job
+ 
+    # Get job or 404
     job = get_object_or_404(Job, id=job_id)
-
-    # Check already applied
+ 
+    # Check if already applied — use Application model (correct table)
     already_applied = Application.objects.filter(
         applicant=request.user,
         job=job
     ).exists()
-
+ 
     if already_applied:
-
-        messages.warning(
-            request,
-            "You already applied for this job"
-        )
-
+        messages.warning(request, "You already applied for this job.")
         return redirect('remote_jobs')
-    
-
-    # Apply only on POST request
+ 
+    # Save application only on POST
     if request.method == "POST":
-
         resume = request.FILES.get('resume')
-
+ 
         application = Application(
-
             job=job,
-
             applicant=request.user,
-
             resume=resume,
-
             status='Applied'
-
         )
-
         application.save()
-
-        messages.success(
-            request,
-            "Job applied successfully"
-        )
-
-        print("Application Saved")
-
+ 
+        messages.success(request, "✅ Job applied successfully!")
         return redirect('remote_jobs')
-
-    return render(request, 'apply_job.html.', {
+ 
+    # GET request — show the apply page
+    # FIX: was 'apply_job.html.' (wrong path + extra dot) — now correct
+    return render(request, 'core/apply_job.html', {
         'job': job
     })
  
+ 
+# ===================== SAVED JOBS =====================
  
 @login_required
 def saved_jobs_page(request):
@@ -561,12 +548,18 @@ def saved_jobs_page(request):
     return render(request, 'core/saved_jobs.html', {'saved_jobs': saved})
  
  
-# AFTER (reads Application — correct table)
+# ===================== APPLIED JOBS =====================
+ 
 @login_required
 def applied_jobs_page(request):
-    applied_jobs = Application.objects.filter(applicant=request.user).select_related('job').order_by('-applied_at')
+    # FIX: was reading ApplyJob (wrong table) — now reads Application (correct table)
+    applied_jobs = Application.objects.filter(
+        applicant=request.user
+    ).select_related('job').order_by('-applied_at')
     return render(request, 'core/applied_jobs.html', {'applied_jobs': applied_jobs})
  
+ 
+# ===================== RECRUITER APPLICATIONS =====================
  
 @login_required
 def recruiter_applications(request):
@@ -618,39 +611,39 @@ def employer_login(request):
     return render(request, 'core/employer_login_page.html')
  
  
-# ===================== EMPLOYER DASHBOARD — FULLY DYNAMIC =====================
+# ===================== EMPLOYER DASHBOARD =====================
  
 @login_required
 def employer_dashboard(request):
  
-    # --- Step 1: Get all jobs posted by this employer ---
+    # Step 1: Get all jobs posted by this employer
     jobs = Job.objects.filter(employer=request.user)
  
-    # --- Step 2: Count total jobs ---
+    # Step 2: Count total jobs
     total_jobs = jobs.count()
  
-    # --- Step 3: Get all applications for this employer's jobs ---
-    applications = Application.objects.filter(job__in=jobs)
+    # Step 3: Get all applications for this employer's jobs
+    applications = Application.objects.filter(job__employer=request.user)
  
-    # --- Step 4: Count total applications ---
+    # Step 4: Count total applications
     total_applications = applications.count()
  
-    # --- Step 5: Count shortlisted ---
+    # Step 5: Count shortlisted
     shortlisted_count = applications.filter(status='Shortlisted').count()
  
-    # --- Step 6: Get 5 most recent applicants ---
+    # Step 6: Get 5 most recent applicants
     recent_applicants = applications.select_related('applicant', 'job').order_by('-applied_at')[:5]
  
-    # --- Step 7: Count interviews scheduled ---
+    # Step 7: Count interviews scheduled
     interviews_scheduled = applications.filter(status='Interview').count()
  
-    # --- Step 8: Count pending reviews ---
+    # Step 8: Count pending reviews
     pending_reviews = applications.filter(status='Applied').count()
  
-    # --- Step 9: Sum all job views ---
+    # Step 9: Sum all job views
     total_views = sum(job.views for job in jobs)
  
-    # --- Step 10: Build pipeline counts ---
+    # Step 10: Build pipeline counts
     pipeline = {
         'applied':     applications.filter(status='Applied').count(),
         'screening':   applications.filter(status='Screening').count(),
@@ -661,17 +654,16 @@ def employer_dashboard(request):
         'offer':       applications.filter(status='Offer').count(),
     }
  
-    # --- Step 11: Add application_count to each job (used by chart) ---
+    # Step 11: Add application_count to each job (used by chart)
     for job in jobs:
         job.application_count = Application.objects.filter(job=job).count()
  
-    # --- Step 12: Count unread messages for badge ---
+    # Step 12: Count unread messages for badge
     unread_messages = Message.objects.filter(
         receiver=request.user,
         is_read=False
     ).count()
  
-    # --- Step 13: Pack everything into context and send to template ---
     context = {
         'jobs':                 jobs,
         'total_jobs':           total_jobs,
@@ -685,7 +677,7 @@ def employer_dashboard(request):
         'unread_messages':      unread_messages,
     }
  
-    return render(request, 'core/employer_dashboard.html', context)
+    return render(request, 'core/employer_dashboard.html', context, {applications: applications})
  
  
 # ===================== AJAX REAL-TIME DATA =====================
@@ -723,20 +715,20 @@ def post_job(request):
             job.employer = request.user
             job.save()
             messages.success(request, '✅ Job posted successfully!')
-            print(form.errors)
-            return redirect('post_job')   # stay on the same page after posting
+            return redirect('post_job')
     else:
         form = JobForm()
-
-    # Fetch existing jobs by this employer (for the "Recent Jobs" section)
+ 
+    # Fetch existing jobs by this employer
     jobs = Job.objects.filter(employer=request.user).order_by('-created_at')
-
+ 
     context = {
         'form': form,
         'jobs': jobs,
     }
-    
+ 
     return render(request, 'core/post_job.html', context)
+ 
  
 # ===================== MANAGE JOBS =====================
  
@@ -755,15 +747,58 @@ def applicants(request):
  
  
 # ===================== SHORTLISTED =====================
- 
+
+# SHORTLIST CANDIDATE
+@login_required
+def shortlist_candidate(request, app_id):
+
+    application = get_object_or_404(
+        Application,
+        id=app_id
+    )
+
+    # security check
+    if application.job.employer != request.user:
+
+        messages.error(
+            request,
+            "Access denied"
+        )
+
+        return redirect('employer_dashboard')
+
+    # update status
+    application.status = "Shortlisted"
+
+    application.save()
+
+    messages.success(
+        request,
+        "Candidate shortlisted successfully"
+    )
+
+    return redirect('employer_dashboard')
+
+
+# SHORTLISTED CANDIDATES PAGE
 @login_required
 def shortlisted_candidates(request):
-    shortlisted = JobApplication.objects.filter(
+
+    shortlisted = Application.objects.filter(
+
         job__employer=request.user,
+
         status='Shortlisted'
-    )
-    return render(request, 'core/shortlisted.html', {'shortlisted': shortlisted})
- 
+
+    ).order_by('-applied_at')
+
+    return render(
+        request,
+        'core/shortlisted.html',
+        {
+            'shortlisted': shortlisted
+        }
+    ) 
  
 # ===================== INTERVIEWS =====================
  
@@ -773,12 +808,11 @@ def interviews(request):
     return render(request, 'core/interviews.html', {'interviews': interview_list})
  
  
-# ===================== INBOX MESSAGES (renamed to avoid conflict) =====================
+# ===================== INBOX MESSAGES =====================
  
 @login_required
 def inbox_messages(request):
-    # NOTE: renamed from "messages" to "inbox_messages"
-    # because "messages" is already used by Django's messages framework
+    # Renamed from "messages" to avoid conflict with Django's messages framework
     inbox = Message.objects.filter(
         receiver=request.user
     ).order_by('-created_at')
@@ -865,21 +899,3 @@ def settings(request):
 def all_jobs(request):
     jobs = Job.objects.all()
     return render(request, 'core/all_jobs.html', {'jobs': jobs})
- 
-
-def clean_mobile_number(self):
-    mobile_number = self.cleaned_data.get('mobile_number', '').strip()
-
-    pattern = r'^\d{10}$'
-
-    if not re.match(pattern, mobile_number):
-        raise forms.ValidationError(
-            "❌ Enter exactly 10 digits mobile number"
-        )
-
-    if UserProfile.objects.filter(mobile_number=mobile_number).exists():
-        raise forms.ValidationError(
-            "❌ This mobile number is already registered."
-        )
-
-    return mobile_number 

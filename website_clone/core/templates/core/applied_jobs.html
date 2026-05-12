@@ -1,35 +1,87 @@
-<h2>My Applied Jobs</h2>
+{% extends 'core/base.html' %}
 
-{% for item in applied_jobs %}
+{% block content %}
 
-<div class="applied-job-card">
+<div style="max-width: 900px; margin: 40px auto;">
 
-    <h3>{{ item.job.title }}</h3>
+    <h2>My Applied Jobs</h2>
+
+    {% if messages %}
+
+    {% for message in messages %}
+
+    <div style="
+                padding: 10px;
+                margin-bottom: 15px;
+                background: #f1f1f1;
+                border-radius: 5px;
+            ">
+
+        {{ message }}
+
+    </div>
+
+    {% endfor %}
+
+    {% endif %}
+
+    {% for item in applied_jobs %}
+
+    <div style="
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        ">
+
+        <h3>
+            {{ item.job.title }}
+        </h3>
+
+        <p>
+            <strong>Company:</strong>
+            {{ item.job.company }}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            {{ item.job.location }}
+        </p>
+
+        <p>
+            <strong>Applied Date:</strong>
+            {{ item.applied_at }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {{ item.status }}
+        </p>
+
+        {% if item.resume %}
+
+        <p>
+
+            <a href="{{ item.resume.url }}" target="_blank">
+
+                View Resume
+
+            </a>
+
+        </p>
+
+        {% endif %}
+
+    </div>
+
+    {% empty %}
 
     <p>
-        Company:
-        {{ item.job.company }}
+        You have not applied for any jobs yet.
     </p>
 
-    <p>
-        Location:
-        {{ item.job.location }}
-    </p>
-
-    <p>
-        Applied Date:
-        {{ item.applied_at }}
-    </p>
-
-    <p>
-        Status:
-        {{ item.status }}
-    </p>
+    {% endfor %}
 
 </div>
 
-{% empty %}
-
-<p>You have not applied for any jobs yet.</p>
-
-{% endfor %}
+{% endblock %}

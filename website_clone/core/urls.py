@@ -92,10 +92,17 @@ urlpatterns = [
     name='applicants'
     ),
     path(
-    'shortlisted/',
+    'shortlist-candidate/<int:app_id>/',
+    views.shortlist_candidate,
+    name='shortlist_candidate'
+    ),
+
+    path(
+    'shortlisted-candidates/',
     views.shortlisted_candidates,
     name='shortlisted_candidates'
     ),
+    
     path(
     'interviews/',
     views.interviews,
@@ -133,5 +140,6 @@ urlpatterns = [
     name='logout'
     ),
     path('jobs/', views.all_jobs, name='all_jobs'),
+    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

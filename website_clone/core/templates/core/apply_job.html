@@ -1,0 +1,133 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<style>
+    /* glass morphism & animations */
+    .apply-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border-radius: 32px;
+        box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+    }
+
+    .apply-container:hover {
+        transform: translateY(-3px);
+    }
+
+    .job-header h2 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #1e1e2f, #3b3b5c);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .job-details {
+        background: #f8fafc;
+        padding: 1rem 1.2rem;
+        border-radius: 20px;
+        margin: 1.5rem 0;
+        border-left: 5px solid #6366f1;
+    }
+
+    .job-details p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+        color: #334155;
+    }
+
+    .job-details strong {
+        color: #0f172a;
+        font-weight: 600;
+    }
+
+    /* form styling */
+    .apply-form {
+        margin-top: 1.8rem;
+    }
+
+    .file-label {
+        display: block;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .file-input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px dashed #cbd5e1;
+        border-radius: 20px;
+        background: #ffffff;
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+    .file-input:hover {
+        border-color: #6366f1;
+        background: #fef9e3;
+    }
+
+    .btn-submit {
+        background: linear-gradient(100deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 40px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 1.8rem;
+        transition: all 0.25s ease;
+        box-shadow: 0 6px 14px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 20px rgba(99, 102, 241, 0.4);
+        background: linear-gradient(100deg, #4f52e0, #7c3aed);
+    }
+
+    /* responsive */
+    @media (max-width: 640px) {
+        .apply-container {
+            margin: 20px;
+            padding: 1.5rem;
+        }
+
+        .job-header h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="apply-container">
+    <div class="job-header">
+        <h2>✨ Apply for {{ job.title }}</h2>
+    </div>
+
+    <div class="job-details">
+        <p><strong>🏢 Company:</strong> {{ job.company }}</p>
+        <p><strong>📍 Location:</strong> {{ job.location }}</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="apply-form">
+        {% csrf_token %}
+
+        <label class="file-label">📎 Upload Resume (optional)</label><br>
+        <input type="file" name="resume" accept=".pdf,.doc,.docx" class="file-input"><br><br>
+
+        <button type="submit" class="btn-submit">🚀 Submit Application</button>
+    </form>
+</div>
+
+{% endblock %}
