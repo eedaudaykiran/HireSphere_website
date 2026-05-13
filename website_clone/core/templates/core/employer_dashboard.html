@@ -1,32 +1,14 @@
 {% load static %}
 
-
-<!-- {% block title %}Employer Dashboard | Job Portal{% endblock %} -->
-
 {% block extra_css %}
-<!-- Tailwind CSS for quick styling (you can replace with your own CSS) -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* Custom scrollbar & minor tweaks */
-    .sidebar {
-        transition: all 0.3s;
-    }
-
-    .stat-card {
-        transition: transform 0.2s;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-4px);
-    }
-
-    .pipeline-stage {
-        border-left: 3px solid;
-    }
+    .sidebar { transition: all 0.3s; }
+    .stat-card { transition: transform 0.2s; }
+    .stat-card:hover { transform: translateY(-4px); }
+    .pipeline-stage { border-left: 3px solid; }
 </style>
 {% endblock %}
 
@@ -41,33 +23,31 @@
         </div>
         <nav class="flex-1 overflow-y-auto py-4">
             <ul class="space-y-1">
-                <li><a href="{% url 'employer_dashboard' %}" class="flex items-center px-5 py-2 text-gray-700 bg-indigo-50 text-indigo-600"><i
-                            class="fas fa-tachometer-alt w-5"></i><span class="ml-3">Dashboard</span></a></li>
-                <li><a href="{% url 'post_job' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-plus-circle w-5"></i><span class="ml-3">Post Job</span></a></li>
-                <li><a href="{% url 'manage_jobs' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-briefcase w-5"></i><span class="ml-3">Manage Jobs</span></a></li>
-                <li><a href="{% url 'applicants' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-users w-5"></i><span class="ml-3">Applicants</span></a></li>
-                <li><a href="{% url 'shortlisted_candidates' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-star w-5"></i><span class="ml-3">Shortlisted</span></a></li>
-                <li><a href="{% url 'interviews' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-calendar-alt w-5"></i><span class="ml-3">Interviews</span></a></li>
-                <li><a href="{% url 'messages' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-comments w-5"></i><span class="ml-3">Messages</span><span
-                            class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ unread_messages }}</span></a></li>
-                <li><a href="{% url 'reports' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-chart-line w-5"></i><span class="ml-3">Reports</span></a></li>
-                <li><a href="{% url 'company_profile' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-building w-5"></i><span class="ml-3">Company Profile</span></a></li>
-                <li><a href="{% url 'subscription' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-credit-card w-5"></i><span class="ml-3">Subscription</span></a></li>
-                <li><a href="{% url 'settings' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100"><i
-                            class="fas fa-cog w-5"></i><span class="ml-3">Settings</span></a></li>
-                <li>
-    <a href="{% url 'logout' %}"
-        class="flex items-center px-5 py-2 text-red-500 hover:bg-red-50 hover:text-red-600 transition duration-200 rounded-lg">
-        <i class="fas fa-sign-out-alt w-5"></i><span class="ml-3">Logout</span></a></li>
+                <li><a href="{% url 'employer_dashboard' %}" class="flex items-center px-5 py-2 text-gray-700 bg-indigo-50 text-indigo-600">
+                    <i class="fas fa-tachometer-alt w-5"></i><span class="ml-3">Dashboard</span></a></li>
+                <li><a href="{% url 'post_job' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-plus-circle w-5"></i><span class="ml-3">Post Job</span></a></li>
+                <li><a href="{% url 'manage_jobs' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-briefcase w-5"></i><span class="ml-3">Manage Jobs</span></a></li>
+                <li><a href="{% url 'applicants' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-users w-5"></i><span class="ml-3">Applicants</span></a></li>
+                <li><a href="{% url 'shortlisted_candidates' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-star w-5"></i><span class="ml-3">Shortlisted</span></a></li>
+                <li><a href="{% url 'interviews' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-calendar-alt w-5"></i><span class="ml-3">Interviews</span></a></li>
+                <li><a href="{% url 'messages' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-comments w-5"></i><span class="ml-3">Messages</span>
+                    <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ unread_messages }}</span></a></li>
+                <li><a href="{% url 'reports' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-chart-line w-5"></i><span class="ml-3">Reports</span></a></li>
+                <li><a href="{% url 'company_profile' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-building w-5"></i><span class="ml-3">Company Profile</span></a></li>
+                <li><a href="{% url 'subscription' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-credit-card w-5"></i><span class="ml-3">Subscription</span></a></li>
+                <li><a href="{% url 'settings' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                    <i class="fas fa-cog w-5"></i><span class="ml-3">Settings</span></a></li>
+                <li><a href="{% url 'logout' %}" class="flex items-center px-5 py-2 text-red-500 hover:bg-red-50 hover:text-red-600 transition duration-200 rounded-lg">
+                    <i class="fas fa-sign-out-alt w-5"></i><span class="ml-3">Logout</span></a></li>
             </ul>
         </nav>
         <div class="p-4 border-t text-xs text-gray-500">
@@ -89,20 +69,14 @@
                 <div class="flex items-center space-x-5">
                     <button class="relative text-gray-600 hover:text-indigo-600">
                         <i class="fas fa-bell text-xl"></i>
-                        <span
-                            class="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">4</span>
+                        <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">4</span>
                     </button>
                     <button class="relative text-gray-600 hover:text-indigo-600">
                         <i class="fas fa-envelope text-xl"></i>
-                        <span
-                            class="absolute -top-1 -right-2 bg-indigo-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
+                        <span class="absolute -top-1 -right-2 bg-indigo-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
                     </button>
                     <div class="flex items-center space-x-2 cursor-pointer">
-                        <img src="https://ui-avatars.com/api/?background=4f46e5&color=fff&name=Recruiter"
-                            class="w-8 h-8 rounded-full">
-                        <!-- ✅ Shows real logged-in employer name from database -->
                         <span class="text-sm font-medium">{{ request.user.get_full_name|default:request.user.username }}</span>
-                        <!-- ✅ Dynamic avatar using the employer's name -->
                         <img src="https://ui-avatars.com/api/?background=4f46e5&color=fff&name={{ request.user.username }}"
                             class="w-8 h-8 rounded-full">
                         <i class="fas fa-chevron-down text-xs"></i>
@@ -112,37 +86,42 @@
         </header>
 
         <div class="p-6">
-            <!-- Analytics Cards (Extended) -->
+
+            <!-- ======================= STAT CARDS ======================= -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm">Total Jobs</p>
-                        <p class="text-2xl font-bold">{{ total_jobs|default:"0" }}</p>
+                        <p class="text-2xl font-bold">{{ total_jobs }}</p>
                     </div>
                     <div class="bg-blue-100 p-3 rounded-full"><i class="fas fa-briefcase text-blue-600"></i></div>
                 </div>
+
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm">Total Applicants</p>
-                        <p class="text-2xl font-bold">{{ total_applications|default:"0" }}</p>
+                        <p class="text-2xl font-bold">{{ total_applications }}</p>
                     </div>
                     <div class="bg-green-100 p-3 rounded-full"><i class="fas fa-users text-green-600"></i></div>
                 </div>
+
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm">Shortlisted</p>
-                        <p class="text-2xl font-bold">{{ shortlisted_count|default:"0" }}</p>
+                        <p class="text-2xl font-bold">{{ shortlisted_count }}</p>
                     </div>
                     <div class="bg-yellow-100 p-3 rounded-full"><i class="fas fa-star text-yellow-600"></i></div>
                 </div>
+
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm">Interviews Scheduled</p>
-                        <p class="text-2xl font-bold">{{ interviews_scheduled|default:"0" }}</p>
+                        <p class="text-2xl font-bold">{{ interviews_scheduled }}</p>
                     </div>
-                    <div class="bg-purple-100 p-3 rounded-full"><i class="fas fa-calendar-check text-purple-600"></i>
-                    </div>
+                    <div class="bg-purple-100 p-3 rounded-full"><i class="fas fa-calendar-check text-purple-600"></i></div>
                 </div>
+
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm">Pending Reviews</p>
@@ -150,6 +129,7 @@
                     </div>
                     <div class="bg-red-100 p-3 rounded-full"><i class="fas fa-clock text-red-600"></i></div>
                 </div>
+
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm">Total Views</p>
@@ -157,80 +137,145 @@
                     </div>
                     <div class="bg-indigo-100 p-3 rounded-full"><i class="fas fa-eye text-indigo-600"></i></div>
                 </div>
+                
             </div>
+            <!-- END Stat Cards -->
 
-            <!-- Chart + Job Performance -->
+            <!-- ======================= CHART + QUICK FILTERS ======================= -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+                <!-- Bar Chart -->
                 <div class="bg-white rounded-xl shadow p-5">
-                    <h3 class="font-semibold text-gray-700 mb-3"><i class="fas fa-chart-bar mr-2"></i>Job Views vs
-                        Applications</h3>
+                    <h3 class="font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-chart-bar mr-2"></i>Job Views vs Applications
+                    </h3>
                     <canvas id="jobChart" height="200"></canvas>
                 </div>
+
+                <!-- Quick Filters – dynamic dropdowns with hardcoded defaults + DB values -->
                 <div class="bg-white rounded-xl shadow p-5">
-                    <h3 class="font-semibold text-gray-700 mb-3"><i class="fas fa-filter mr-2"></i>Quick Filters</h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <select class="border rounded p-2 text-sm">
-                            <option>Experience > 2 years</option>
-                            <option>Experience > 5 years</option>
-                        </select>
-                        <select class="border rounded p-2 text-sm">
-                            <option>Location: Any</option>
-                            <option>Hyderabad</option>
-                            <option>Bangalore</option>
-                        </select>
-                        <select class="border rounded p-2 text-sm">
-                            <option>Skills: Python</option>
-                            <option>Django</option>
-                            <option>React</option>
-                        </select>
-                        <select class="border rounded p-2 text-sm">
-                            <option>Status: Pending</option>
-                            <option>Shortlisted</option>
-                            <option>Rejected</option>
-                        </select>
-                    </div>
-                    <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded text-sm w-full">Apply
-                        Filters</button>
-                </div>
-            </div>
+                    <h3 class="font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-filter mr-2"></i>Quick Filters
+                    </h3>
 
-            <!-- Candidate Pipeline Stages -->
+                    <form method="GET" action="" id="filterForm">
+                        <div class="grid grid-cols-2 gap-3">
+
+                            <!-- Experience filter -->
+                            <select name="experience"
+                                class="border rounded p-2 text-sm"
+                                onchange="document.getElementById('filterForm').submit()">
+                                <option value="">Experience: Any</option>
+                                {% for exp in experience_options %}
+                                    <option value="{{ exp }}" {% if selected_experience == exp %}selected{% endif %}>
+                                        {% if exp == "1" %}1 Year{% else %}{{ exp }} Years{% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- Location filter -->
+                            <select name="location"
+                                class="border rounded p-2 text-sm"
+                                onchange="document.getElementById('filterForm').submit()">
+                                <option value="">Location: Any</option>
+                                {% for loc in location_options %}
+                                    <option value="{{ loc }}" {% if selected_location == loc %}selected{% endif %}>{{ loc }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- Skills filter -->
+                            <select name="skill"
+                                class="border rounded p-2 text-sm"
+                                onchange="document.getElementById('filterForm').submit()">
+                                <option value="">Skills: Any</option>
+                                {% for sk in skill_options %}
+                                    <option value="{{ sk }}" {% if selected_skill == sk %}selected{% endif %}>{{ sk }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- Status filter -->
+                            <select name="status"
+                                class="border rounded p-2 text-sm"
+                                onchange="document.getElementById('filterForm').submit()">
+                                <option value="">Status: Any</option>
+                                {% for s in status_choices %}
+                                    <option value="{{ s }}" {% if selected_status == s %}selected{% endif %}>{{ s }}</option>
+                                {% endfor %}
+                            </select>
+
+                        </div>
+
+                        <!-- Preserve other GET parameters -->
+                        {% for key, value in request.GET.items %}
+                            {% if key != 'experience' and key != 'location' and key != 'skill' and key != 'status' %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                            {% endif %}
+                        {% endfor %}
+
+                        <button type="submit"
+                            class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded text-sm w-full hover:bg-indigo-700 transition">
+                            <i class="fas fa-search mr-1"></i> Apply Filters
+                        </button>
+
+                        {% if request.GET.experience or request.GET.location or request.GET.skill or request.GET.status %}
+                            <a href="{% url 'employer_dashboard' %}"
+                                class="mt-2 block text-center text-sm text-gray-500 hover:text-red-500 transition">
+                                <i class="fas fa-times mr-1"></i> Clear Filters
+                            </a>
+                        {% endif %}
+                    </form>
+                </div>
+
+            </div>
+            <!-- END Chart + Filters -->
+
+            <!-- ======================= HIRING PIPELINE ======================= -->
             <div class="bg-white rounded-xl shadow p-5 mb-8">
-                <h3 class="font-semibold text-gray-700 mb-4"><i class="fas fa-sitemap mr-2"></i>Hiring Pipeline</h3>
+                <h3 class="font-semibold text-gray-700 mb-4">
+                    <i class="fas fa-sitemap mr-2"></i>Hiring Pipeline
+                </h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 text-center text-sm">
-                    <div class="pipeline-stage border-indigo-500 bg-indigo-50 rounded p-2"><span
-                            class="font-bold">Applied</span><br>{{ pipeline.applied }}</div>
-                    <div class="pipeline-stage border-blue-500 bg-blue-50 rounded p-2"><span
-                            class="font-bold">Screening</span><br>{{ pipeline.screening }}</div>
-                    <div class="pipeline-stage border-green-500 bg-green-50 rounded p-2"><span
-                            class="font-bold">Shortlisted</span><br>{{ pipeline.shortlisted }}</div>
-                    <div class="pipeline-stage border-yellow-500 bg-yellow-50 rounded p-2"><span
-                            class="font-bold">Interview</span><br>{{ pipeline.interview }}</div>
-                    <div class="pipeline-stage border-purple-500 bg-purple-50 rounded p-2"><span
-                            class="font-bold">Technical</span><br>{{ pipeline.technical }}</div>
-                    <div class="pipeline-stage border-pink-500 bg-pink-50 rounded p-2"><span class="font-bold">HR
-                            Round</span><br>{{ pipeline.hr }}</div>
-                    <div class="pipeline-stage border-teal-500 bg-teal-50 rounded p-2"><span class="font-bold">Offer
-                            Sent</span><br>{{ pipeline.offer }}</div>
+                    <div class="pipeline-stage border-indigo-500 bg-indigo-50 rounded p-2">
+                        <span class="font-bold">Applied</span><br>{{ pipeline.applied|default:0 }}
+                    </div>
+                    <div class="pipeline-stage border-blue-500 bg-blue-50 rounded p-2">
+                        <span class="font-bold">Screening</span><br>{{ pipeline.screening|default:0 }}
+                    </div>
+                    <div class="pipeline-stage border-green-500 bg-green-50 rounded p-2">
+                        <span class="font-bold">Shortlisted</span><br>{{ pipeline.shortlisted|default:0 }}
+                    </div>
+                    <div class="pipeline-stage border-yellow-500 bg-yellow-50 rounded p-2">
+                        <span class="font-bold">Interview</span><br>{{ pipeline.interview|default:0 }}
+                    </div>
+                    <div class="pipeline-stage border-purple-500 bg-purple-50 rounded p-2">
+                        <span class="font-bold">Technical</span><br>{{ pipeline.technical|default:0 }}
+                    </div>
+                    <div class="pipeline-stage border-pink-500 bg-pink-50 rounded p-2">
+                        <span class="font-bold">HR Round</span><br>{{ pipeline.hr|default:0 }}
+                    </div>
+                    <div class="pipeline-stage border-teal-500 bg-teal-50 rounded p-2">
+                        <span class="font-bold">Offer Sent</span><br>{{ pipeline.offer|default:0 }}
+                    </div>
                 </div>
             </div>
 
-            <!-- Recent Applicants Table (Enhanced) -->
+            <!-- ======================= RECENT APPLICANTS TABLE ======================= -->
             <div class="bg-white rounded-xl shadow overflow-hidden">
                 <div class="px-5 py-3 border-b flex justify-between items-center">
-                    <h3 class="font-semibold text-gray-700"><i class="fas fa-user-check mr-2"></i>Recent Applicants</h3>
-                    <a href="{% url 'all_jobs' %}" class="text-indigo-600 text-sm">View all <i class="fas fa-arrow-right"></i></a>
+                    <h3 class="font-semibold text-gray-700">
+                        <i class="fas fa-user-check mr-2"></i>Recent Applicants
+                    </h3>
+                    <a href="{% url 'all_jobs' %}" class="text-indigo-600 text-sm">
+                        View all <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applicant
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"> {{ job.title }}
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applied On
-                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applicant</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Job Title</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applied On</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                             </tr>
@@ -240,74 +285,73 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-3 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-2">
+                                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-2">
                                             <i class="fas fa-user text-gray-500"></i>
                                         </div>
-                                        <span class="font-medium">{{
-                                            app.applicant.get_full_name|default:app.applicant.username }}</span>
+                                        <span class="font-medium">{{ app.applicant.get_full_name|default:app.applicant.username }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-3">{{ app.job.title }}</td>
                                 <td class="px-6 py-3">{{ app.applied_at|date:"d M Y" }}</td>
                                 <td class="px-6 py-3">
-                                    <span class="px-2 py-1 text-xs rounded-full 
-                                        {% if app.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                                    <span class="px-2 py-1 text-xs rounded-full
+                                        {% if app.status == 'Applied' %}bg-blue-100 text-blue-800
+                                        {% elif app.status == 'Screening' %}bg-orange-100 text-orange-800
                                         {% elif app.status == 'Shortlisted' %}bg-green-100 text-green-800
+                                        {% elif app.status == 'Interview' %}bg-purple-100 text-purple-800
+                                        {% elif app.status == 'Technical' %}bg-indigo-100 text-indigo-800
+                                        {% elif app.status == 'HR' %}bg-pink-100 text-pink-800
+                                        {% elif app.status == 'Offer' %}bg-teal-100 text-teal-800
                                         {% elif app.status == 'Rejected' %}bg-red-100 text-red-800
                                         {% else %}bg-gray-100 text-gray-800{% endif %}">
                                         {{ app.status }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-3 whitespace-nowrap space-x-2">
-                                    <button class="text-indigo-600 hover:text-indigo-800" title="View Resume"><i
-                                            class="fas fa-eye"></i></button>
-                                    <button class="text-green-600 hover:text-green-800" title="Shortlist"><i
-                                            class="fas fa-star"></i></button>
-                                    <button class="text-red-600 hover:text-red-800" title="Reject"><i
-                                            class="fas fa-times"></i></button>
-                                    <button class="text-blue-600 hover:text-blue-800" title="Message"><i
-                                            class="fas fa-comment"></i></button>
+                                    {% if app.resume %}
+                                    <a href="{{ app.resume.url }}" target="_blank" class="text-indigo-600 hover:text-indigo-800" title="View Resume"><i class="fas fa-eye"></i></a>
+                                    {% endif %}
+                                    <a href="{% url 'shortlist_candidate' app.id %}" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs" title="Shortlist"><i class="fas fa-star"></i></a>
+                                    <a href="{% url 'reject_candidate' app.id %}" class="text-red-600 hover:text-red-800" title="Reject"><i class="fas fa-times"></i></a>
+                                    <a href="mailto:{{ app.applicant.email }}" class="text-blue-600 hover:text-blue-800" title="Send Email"><i class="fas fa-comment"></i></a>
                                 </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5" class="text-center py-8 text-gray-500">No applicants yet.</td>
+                                <td colspan="5" class="text-center py-8 text-gray-500">
+                                    <i class="fas fa-inbox text-3xl mb-2 block"></i>
+                                    No applicants yet.
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
+            <!-- END Recent Applicants -->
+
         </div>
     </main>
 </div>
 
-<!-- Chart.js Script (same as yours, with minor fix) -->
+<!-- ======================= CHART SCRIPT ======================= -->
 <script>
-    
-
 document.addEventListener("DOMContentLoaded", function () {
-
     const jobTitles = [
         {% for job in jobs %}
             "{{ job.title|escapejs }}"{% if not forloop.last %},{% endif %}
         {% endfor %}
     ];
-
     const jobViews = [
         {% for job in jobs %}
             {{ job.views }}{% if not forloop.last %},{% endif %}
         {% endfor %}
     ];
-
     const jobApps = [
         {% for job in jobs %}
             {{ job.applications.count }}{% if not forloop.last %},{% endif %}
         {% endfor %}
     ];
-
-
     const ctx = document.getElementById('jobChart');
     if (ctx && jobTitles.length) {
         new Chart(ctx, {
@@ -324,4 +368,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
+
 {% endblock %}

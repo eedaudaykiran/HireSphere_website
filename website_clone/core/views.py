@@ -8,7 +8,7 @@ from django.utils import timezone
 import datetime
 from django.http import HttpResponse, JsonResponse
  
-from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm
+from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm, InterviewScheduleForm
 from .models import JobApplication, UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, Subscription, EmployerSettings
  
  
@@ -604,78 +604,237 @@ def employer_login(request):
  
  
 # ===================== EMPLOYER DASHBOARD =====================
- 
 @login_required
 def employer_dashboard(request):
- 
-    # Step 1: All jobs by this employer
+
+    # =========================
+    # STEP 1: Employer Jobs
+    # =========================
     jobs = Job.objects.filter(employer=request.user)
- 
-    # Step 2: Count total jobs
+
     total_jobs = jobs.count()
- 
-    # Step 3: All applications for this employer's jobs
-    applications = Application.objects.filter(job__employer=request.user)
- 
-    # Step 4: Count total applications
+
+    # =========================
+    # STEP 2: Applications
+    # =========================
+    applications = Application.objects.filter(
+        job__employer=request.user
+    )
+
+    # =========================
+    # STEP 3: Get Selected Filters
+    # =========================
+    experience = request.GET.get('experience')
+    location   = request.GET.get('location')
+    skill      = request.GET.get('skill')
+    status     = request.GET.get('status')
+
+    # =========================
+    # STEP 4: Apply Filters
+    # =========================
+    if experience:
+        applications = applications.filter(
+            experience__gte=experience
+        )
+
+    if location:
+        applications = applications.filter(
+            location__icontains=location
+        )
+
+    if skill:
+        applications = applications.filter(
+            skills__icontains=skill
+        )
+
+    if status:
+        applications = applications.filter(
+            status=status
+        )
+
+    # =========================
+    # STEP 5: Counts
+    # =========================
     total_applications = applications.count()
- 
-    # Step 5: Count shortlisted
-    shortlisted_count = applications.filter(status='Shortlisted').count()
- 
-    # Step 6: 5 most recent applicants
-    # FIX: works now because applied_at field is added to Application model
-    recent_applicants = applications.select_related('applicant', 'job').order_by('-applied_at')[:5]
- 
-    # Step 7: Interviews scheduled
-    interviews_scheduled = applications.filter(status='Interview').count()
- 
-    # Step 8: Pending reviews
-    pending_reviews = applications.filter(status='Applied').count()
- 
-    # Step 9: Total views
+
+    shortlisted_count = applications.filter(
+        status='Shortlisted'
+    ).count()
+
+    interviews_scheduled = applications.filter(
+        status='Interview'
+    ).count()
+
+    pending_reviews = applications.filter(
+        status='Applied'
+    ).count()
+
+    # =========================
+    # STEP 6: Recent Applicants
+    # =========================
+    recent_applicants = applications.select_related(
+        'applicant',
+        'job'
+    ).order_by('-applied_at')[:5]
+
+    # =========================
+    # STEP 7: Total Views
+    # =========================
     total_views = sum(job.views for job in jobs)
- 
-    # Step 10: Pipeline counts
+
+    # =========================
+    # STEP 8: Pipeline
+    # =========================
     pipeline = {
-        'applied':     applications.filter(status='Applied').count(),
-        'screening':   applications.filter(status='Screening').count(),
-        'shortlisted': applications.filter(status='Shortlisted').count(),
-        'interview':   applications.filter(status='Interview').count(),
-        'technical':   applications.filter(status='Technical').count(),
-        'hr':          applications.filter(status='HR').count(),
-        'offer':       applications.filter(status='Offer').count(),
+        'applied': applications.filter(
+            status='Applied'
+        ).count(),
+
+        'screening': applications.filter(
+            status='Screening'
+        ).count(),
+
+        'shortlisted': applications.filter(
+            status='Shortlisted'
+        ).count(),
+
+        'interview': applications.filter(
+            status='Interview'
+        ).count(),
+
+        'technical': applications.filter(
+            status='Technical'
+        ).count(),
+
+        'hr': applications.filter(
+            status='HR'
+        ).count(),
+
+        'offer': applications.filter(
+            status='Offer'
+        ).count(),
     }
- 
-    # Step 11: Application count per job (for chart)
+
+    # =========================
+    # STEP 9: Application Count Per Job
+    # =========================
     for job in jobs:
-        job.application_count = Application.objects.filter(job=job).count()
- 
-    # Step 12: Unread messages badge
+
+        job.application_count = Application.objects.filter(
+            job=job
+        ).count()
+
+    # =========================
+    # STEP 10: Unread Messages
+    # =========================
     unread_messages = Message.objects.filter(
         receiver=request.user,
         is_read=False
     ).count()
- 
+
+    # =========================
+    # STEP 11: Dropdown Options
+    # Hardcoded defaults MERGED with real DB values
+    # so dropdowns always show options even if DB is empty
+    # =========================
+
+    # --- Experience ---
+    # Hardcoded: 0 to 15 years of common experience levels
+    default_experience = [
+        '0', '1', '2', '3', '4', '5',
+        '6', '7', '8', '10', '12', '15'
+    ]
+    db_experience = list(
+        Application.objects.filter(job__employer=request.user)
+        .exclude(experience__isnull=True)
+        .exclude(experience__exact='')
+        .values_list('experience', flat=True)
+        .distinct()
+    )
+    # Merge + deduplicate + sort
+    experience_options = sorted(set(default_experience + db_experience))
+
+    # --- Location ---
+    # Hardcoded: 10 major Indian cities
+    default_locations = [
+        'Hyderabad', 'Bangalore', 'Mumbai', 'Delhi', 'Chennai',
+        'Pune', 'Kolkata', 'Ahmedabad', 'Noida', 'Gurgaon'
+    ]
+    db_locations = list(
+        Application.objects.filter(job__employer=request.user)
+        .exclude(location__isnull=True)
+        .exclude(location__exact='')
+        .values_list('location', flat=True)
+        .distinct()
+    )
+    # Merge + deduplicate + sort
+    location_options = sorted(set(default_locations + db_locations))
+
+    # --- Skills ---
+    # Hardcoded: 15 popular tech skills
+    default_skills = [
+        'Python', 'Django', 'React', 'JavaScript', 'Java',
+        'Node.js', 'SQL', 'MongoDB', 'AWS', 'Docker',
+        'HTML', 'CSS', 'Flutter', 'Machine Learning', 'Data Science'
+    ]
+    db_skills = list(
+        Application.objects.filter(job__employer=request.user)
+        .exclude(skills__isnull=True)
+        .exclude(skills__exact='')
+        .values_list('skills', flat=True)
+        .distinct()
+    )
+    # Merge + deduplicate + sort
+    skill_options = sorted(set(default_skills + db_skills))
+
+    # --- Status ---
+    # Hardcoded: matches Application.STATUS_CHOICES exactly
+    status_choices = [
+        'Applied', 'Screening', 'Shortlisted',
+        'Interview', 'Technical', 'HR', 'Offer', 'Rejected'
+    ]
+
+    # =========================
+    # STEP 12: Context
+    # =========================
     context = {
-        'jobs':                 jobs,
-        'total_jobs':           total_jobs,
-        'total_applications':   total_applications,
-        'shortlisted_count':    shortlisted_count,
-        'recent_applicants':    recent_applicants,
+        'jobs': jobs,
+        'applications': applications,
+
+        'total_jobs': total_jobs,
+        'total_applications': total_applications,
+
+        'shortlisted_count': shortlisted_count,
+        'recent_applicants': recent_applicants,
+
         'interviews_scheduled': interviews_scheduled,
-        'pending_reviews':      pending_reviews,
-        'total_views':          total_views,
-        'pipeline':             pipeline,
-        'unread_messages':      unread_messages,
-        'applications':         applications,
+        'pending_reviews': pending_reviews,
+
+        'total_views': total_views,
+
+        'pipeline': pipeline,
+
+        'unread_messages': unread_messages,
+
+        # Dropdown options (hardcoded defaults + DB values merged)
+        'experience_options': experience_options,
+        'location_options':   location_options,
+        'skill_options':      skill_options,
+        'status_choices':     status_choices,
+
+        # Selected values — keeps dropdowns showing correct
+        # option after the form is submitted
+        'selected_experience': experience,
+        'selected_location':   location,
+        'selected_skill':      skill,
+        'selected_status':     status,
     }
- 
-    # FIX: removed broken 4th argument {applications: applications}
-    # render() only accepts 3 arguments: (request, template, context_dict)
-    return render(request, 'core/employer_dashboard.html', context)
- 
- 
+
+    return render(
+        request,
+        'core/employer_dashboard.html',
+        context
+    )
 # ===================== AJAX REAL-TIME DATA =====================
  
 @login_required
@@ -756,19 +915,39 @@ def shortlist_candidate(request, app_id):
  
     messages.success(request, "✅ Candidate shortlisted successfully.")
     return redirect('employer_dashboard')
- 
- 
+
 # ===================== SHORTLISTED CANDIDATES =====================
- 
+
 @login_required
 def shortlisted_candidates(request):
+
     shortlisted = Application.objects.filter(
         job__employer=request.user,
         status='Shortlisted'
-    ).order_by('-applied_at')   # FIX: works now that applied_at exists in Application model
+    )
+
+    return render(request, 'core/shortlisted.html', {
+        'shortlisted': shortlisted
+    })
  
-    return render(request, 'core/shortlisted.html', {'shortlisted': shortlisted})
- 
+#  ===================== REJECT CANDIDATE =====================
+@login_required
+def reject_candidate(request, app_id):
+
+    application = get_object_or_404(Application, id=app_id)
+
+    # Security check
+    if application.job.employer != request.user:
+        messages.error(request, "Access denied.")
+        return redirect('employer_dashboard')
+
+    # Change status
+    application.status = "Rejected"
+    application.save()
+
+    messages.success(request, "❌ Candidate rejected successfully.")
+
+    return redirect('employer_dashboard')
  
 # ===================== INTERVIEWS =====================
  
@@ -776,6 +955,52 @@ def shortlisted_candidates(request):
 def interviews(request):
     interview_list = Interview.objects.filter(job__employer=request.user)
     return render(request, 'core/interviews.html', {'interviews': interview_list})
+
+# ===================== SCHEDULE INTERVIEW =====================
+
+@login_required
+def schedule_interview(request, app_id):
+
+    application = get_object_or_404(
+        Application,
+        id=app_id
+    )
+
+    # SECURITY CHECK
+
+    if application.job.employer != request.user:
+        return redirect('applicants')
+
+    if request.method == 'POST':
+
+        form = InterviewScheduleForm(
+            request.POST,
+            instance=application
+        )
+
+        if form.is_valid():
+
+            interview = form.save(commit=False)
+
+            # UPDATE STATUS
+
+            interview.status = 'Interview Scheduled'
+
+            interview.save()
+
+            return redirect('applicants')
+
+    else:
+
+        form = InterviewScheduleForm(
+            instance=application
+        )
+
+    return render(
+        request,
+        'core/schedule_interview.html',
+        {'form': form}
+    )
  
  
 # ===================== INBOX MESSAGES =====================

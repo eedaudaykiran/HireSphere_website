@@ -168,16 +168,51 @@ class Application(models.Model):
         ('HR',          'HR'),
         ('Offer',       'Offer'),
         ('Rejected',    'Rejected'),
+        ( 'Interview Scheduled', 'Interview Scheduled'),
     )
  
     job        = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
     applicant  = models.ForeignKey(User, on_delete=models.CASCADE)
     resume     = models.FileField(upload_to='resumes/', null=True, blank=True)
-    status     = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Applied')
+    status     = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending review')
     applied_at = models.DateTimeField(auto_now_add=True)   # ← THIS WAS MISSING
- 
+    experience = models.CharField(max_length=50, blank=True, null=True)
+    location   = models.CharField(max_length=100, blank=True, null=True)
+    skills     = models.CharField(max_length=300, blank=True, null=True)
+    # INTERVIEW FIELDS
+
+    interview_date = models.DateField(
+        null=True,
+        blank=True
+    )
+
+    interview_time = models.TimeField(
+        null=True,
+        blank=True
+    )
+
+    interview_link = models.URLField(
+        null=True,
+        blank=True
+    )
+
+    interview_notes = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.applicant.username
+    
+    @classmethod
+    def get_status_choices(cls):
+        """Return status choices as a list of strings in the original order."""
+        return [choice[0] for choice in cls.STATUS_CHOICES]
+
     def __str__(self):
         return f"{self.applicant.username} applied for {self.job.title}"
+    
+    
  
  
 class JobApplication(models.Model):

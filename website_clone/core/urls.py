@@ -96,17 +96,27 @@ urlpatterns = [
     views.shortlist_candidate,
     name='shortlist_candidate'
     ),
-
+    
     path(
     'shortlisted-candidates/',
     views.shortlisted_candidates,
     name='shortlisted_candidates'
+    ),
+    path(
+    'reject/<int:app_id>/',
+    views.reject_candidate,
+    name='reject_candidate'
     ),
     
     path(
     'interviews/',
     views.interviews,
     name='interviews'
+    ),
+    path(
+    'schedule-interview/<int:app_id>/',
+    views.schedule_interview,
+    name='schedule_interview'
     ),
     # ✅ CORRECT
     path(

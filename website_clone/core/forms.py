@@ -2,7 +2,7 @@ import re  # FIX: removed "from ast import pattern" — that was a wrong import
  
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile, Job, CompanyProfile, EmployerSettings
+from .models import Application, UserProfile, Job, CompanyProfile, EmployerSettings
  
  
 class RegisterForm(forms.Form):
@@ -157,4 +157,42 @@ class EmployerSettingsForm(forms.ModelForm):
         model   = EmployerSettings
         fields  = '__all__'
         exclude = ['employer']
+
+# NEW: Added form for scheduling interviews, which was missing before
+
+class InterviewScheduleForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Application
+
+        fields = [
+            'interview_date',
+            'interview_time',
+            'interview_link',
+            'interview_notes',
+        ]
+
+        widgets = {
+
+            'interview_date': forms.DateInput(
+                attrs={'type': 'date'}
+            ),
+
+            'interview_time': forms.TimeInput(
+                attrs={'type': 'time'}
+            ),
+
+            'interview_link': forms.URLInput(
+                attrs={
+                    'placeholder': 'Google Meet Link'
+                }
+            ),
+
+            'interview_notes': forms.Textarea(
+                attrs={
+                    'placeholder': 'Interview instructions'
+                }
+            ),
+        }
  
