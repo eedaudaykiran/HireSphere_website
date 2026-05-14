@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Job</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial;
+        }
+
+        body {
+            background: #f4f7fb;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .btn {
+            background: #2563eb;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: #1e40af;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>✏️ Edit Job</h1>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <!-- Job Title -->
+            <div class="form-group">
+
+                <label>Job Title</label>
+
+                <input type="text" name="title" value="{{ job.title }}" required>
+
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+
+                <label>Category</label>
+
+                <input type="text" name="category" value="{{ job.category }}" required>
+
+            </div>
+
+            <!-- Job Type -->
+            <div class="form-group">
+
+                <label>Job Type</label>
+
+                <select name="job_type">
+
+                    <option value="Full-Time" {% if job.job_type=='Full-Time' %} selected {% endif %}>
+                        Full-Time
+                    </option>
+
+                    <option value="Part-Time" {% if job.job_type=='Part-Time' %} selected {% endif %}>
+                        Part-Time
+                    </option>
+
+                    <option value="Remote" {% if job.job_type=='Remote' %} selected {% endif %}>
+                        Remote
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- Status -->
+            <div class="form-group">
+
+                <label>Status</label>
+
+                <select name="status">
+
+                    <option value="active" {% if job.status=='active' %} selected {% endif %}>
+                        Active
+                    </option>
+
+                    <option value="closed" {% if job.status=='closed' %} selected {% endif %}>
+                        Closed
+                    </option>
+
+                    <option value="draft" {% if job.status=='draft' %} selected {% endif %}>
+                        Draft
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+
+                <label>Description</label>
+
+                <textarea name="description">{{ job.description }}</textarea>
+
+            </div>
+
+            <!-- Salary -->
+            <div class="form-group">
+
+                <label>Salary</label>
+
+                <input type="number" name="salary" value="{{ job.salary }}">
+
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn">
+                Update Job
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

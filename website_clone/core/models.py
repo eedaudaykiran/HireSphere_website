@@ -75,6 +75,18 @@ class Job(models.Model):
         ('Product', 'Product'),
         ('Unicorn', 'Unicorn'),
     )
+
+    STATUS_CHOICES = (
+        ('active', 'Active'),
+        ('closed', 'Closed'),
+        ('draft', 'Draft'),
+    )
+
+    JOB_TYPES = (
+        ('full_time', 'Full Time'),
+        ('part_time', 'Part Time'),
+        ('internship', 'Internship'),
+    )
  
     title         = models.CharField(max_length=200)
     company       = models.CharField(max_length=200)
@@ -101,6 +113,18 @@ class Job(models.Model):
     description   = models.TextField(blank=True, null=True)
     employer      = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     views         = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    company_name = models.CharField(max_length=100,null=True, blank=True)
+    job_type = models.CharField(
+        max_length=20,
+        choices=JOB_TYPES
+    )
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='active'
+    )
  
     def __str__(self):
         return self.title
@@ -179,6 +203,11 @@ class Application(models.Model):
     experience = models.CharField(max_length=50, blank=True, null=True)
     location   = models.CharField(max_length=100, blank=True, null=True)
     skills     = models.CharField(max_length=300, blank=True, null=True)
+    phone_number = models.CharField(
+    max_length=15,
+    null=True,
+    blank=True
+    )
     # INTERVIEW FIELDS
 
     interview_date = models.DateField(

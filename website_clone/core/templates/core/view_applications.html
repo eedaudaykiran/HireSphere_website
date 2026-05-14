@@ -1,0 +1,33 @@
+<h1>{{ job.title }} Applications</h1>
+
+{% for app in applications %}
+
+<div>
+
+    <h3>
+        {{ app.applicant.username }}
+    </h3>
+
+    <p>
+        Email:
+        {{ app.applicant.email }}
+    </p>
+
+    <p>
+        Phone:
+        {{ app.phone_number }}
+    </p>
+
+    <p>
+        Applied Job:
+        {{ app.job.title }}
+    </p>
+
+    <p>
+        Status:
+        {{ app.status }}
+    </p>
+
+</div>
+
+{% endfor %}

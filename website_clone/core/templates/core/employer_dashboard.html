@@ -1,63 +1,127 @@
 {% load static %}
-
+ 
 {% block extra_css %}
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    .sidebar { transition: all 0.3s; }
-    .stat-card { transition: transform 0.2s; }
+    .sidebar      { transition: all 0.3s; }
+    .stat-card    { transition: transform 0.2s; }
     .stat-card:hover { transform: translateY(-4px); }
     .pipeline-stage { border-left: 3px solid; }
 </style>
 {% endblock %}
-
+ 
 {% block content %}
 <div class="flex h-screen bg-gray-100">
-
+ 
     <!-- ======================= SIDEBAR ======================= -->
     <aside class="sidebar w-64 bg-white shadow-md flex flex-col">
         <div class="p-5 border-b">
-            <h2 class="text-xl font-bold text-indigo-600"><i class="fas fa-briefcase mr-2"></i>RecruitHub</h2>
+            <h2 class="text-xl font-bold text-indigo-600">
+                <i class="fas fa-briefcase mr-2"></i>RecruitHub
+            </h2>
             <p class="text-xs text-gray-500">Employer Portal</p>
         </div>
         <nav class="flex-1 overflow-y-auto py-4">
             <ul class="space-y-1">
-                <li><a href="{% url 'employer_dashboard' %}" class="flex items-center px-5 py-2 text-gray-700 bg-indigo-50 text-indigo-600">
-                    <i class="fas fa-tachometer-alt w-5"></i><span class="ml-3">Dashboard</span></a></li>
-                <li><a href="{% url 'post_job' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-plus-circle w-5"></i><span class="ml-3">Post Job</span></a></li>
-                <li><a href="{% url 'manage_jobs' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-briefcase w-5"></i><span class="ml-3">Manage Jobs</span></a></li>
-                <li><a href="{% url 'applicants' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-users w-5"></i><span class="ml-3">Applicants</span></a></li>
-                <li><a href="{% url 'shortlisted_candidates' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-star w-5"></i><span class="ml-3">Shortlisted</span></a></li>
-                <li><a href="{% url 'interviews' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-calendar-alt w-5"></i><span class="ml-3">Interviews</span></a></li>
-                <li><a href="{% url 'messages' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-comments w-5"></i><span class="ml-3">Messages</span>
-                    <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{{ unread_messages }}</span></a></li>
-                <li><a href="{% url 'reports' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-chart-line w-5"></i><span class="ml-3">Reports</span></a></li>
-                <li><a href="{% url 'company_profile' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-building w-5"></i><span class="ml-3">Company Profile</span></a></li>
-                <li><a href="{% url 'subscription' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-credit-card w-5"></i><span class="ml-3">Subscription</span></a></li>
-                <li><a href="{% url 'settings' %}" class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
-                    <i class="fas fa-cog w-5"></i><span class="ml-3">Settings</span></a></li>
-                <li><a href="{% url 'logout' %}" class="flex items-center px-5 py-2 text-red-500 hover:bg-red-50 hover:text-red-600 transition duration-200 rounded-lg">
-                    <i class="fas fa-sign-out-alt w-5"></i><span class="ml-3">Logout</span></a></li>
+                <li>
+                    <a href="{% url 'employer_dashboard' %}"
+                        class="flex items-center px-5 py-2 text-indigo-600 bg-indigo-50">
+                        <i class="fas fa-tachometer-alt w-5"></i>
+                        <span class="ml-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'post_job' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-plus-circle w-5"></i>
+                        <span class="ml-3">Post Job</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'manage_jobs' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-briefcase w-5"></i>
+                        <span class="ml-3">Manage Jobs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'applicants' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-users w-5"></i>
+                        <span class="ml-3">Applicants</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'shortlisted_candidates' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-star w-5"></i>
+                        <span class="ml-3">Shortlisted</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'interviews' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-calendar-alt w-5"></i>
+                        <span class="ml-3">Interviews</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'messages' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-comments w-5"></i>
+                        <span class="ml-3">Messages</span>
+                        <span class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                            {{ unread_messages }}
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'reports' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span class="ml-3">Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'company_profile' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-building w-5"></i>
+                        <span class="ml-3">Company Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'subscription' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-credit-card w-5"></i>
+                        <span class="ml-3">Subscription</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'settings' %}"
+                        class="flex items-center px-5 py-2 text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-cog w-5"></i>
+                        <span class="ml-3">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'logout' %}"
+                        class="flex items-center px-5 py-2 text-red-500 hover:bg-red-50 hover:text-red-600 transition rounded-lg">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span class="ml-3">Logout</span>
+                    </a>
+                </li>
             </ul>
         </nav>
         <div class="p-4 border-t text-xs text-gray-500">
             <i class="fas fa-shield-alt"></i> Recruiter Access
         </div>
     </aside>
-
+ 
     <!-- ======================= MAIN CONTENT ======================= -->
     <main class="flex-1 overflow-y-auto">
-
+ 
         <!-- Top Navbar -->
         <header class="bg-white shadow-sm sticky top-0 z-10">
             <div class="flex items-center justify-between px-6 py-3">
@@ -69,232 +133,340 @@
                 <div class="flex items-center space-x-5">
                     <button class="relative text-gray-600 hover:text-indigo-600">
                         <i class="fas fa-bell text-xl"></i>
-                        <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">4</span>
-                    </button>
-                    <button class="relative text-gray-600 hover:text-indigo-600">
-                        <i class="fas fa-envelope text-xl"></i>
-                        <span class="absolute -top-1 -right-2 bg-indigo-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
+                        <span class="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                            {{ unread_messages }}
+                        </span>
                     </button>
                     <div class="flex items-center space-x-2 cursor-pointer">
-                        <span class="text-sm font-medium">{{ request.user.get_full_name|default:request.user.username }}</span>
                         <img src="https://ui-avatars.com/api/?background=4f46e5&color=fff&name={{ request.user.username }}"
                             class="w-8 h-8 rounded-full">
+                        <span class="text-sm font-medium">
+                            {{ request.user.get_full_name|default:request.user.username }}
+                        </span>
                         <i class="fas fa-chevron-down text-xs"></i>
                     </div>
                 </div>
             </div>
         </header>
-
+ 
         <div class="p-6">
-
+ 
+            <!-- Django Messages (success/error toasts) -->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="mb-4 px-4 py-3 rounded text-sm
+                    {% if message.tags == 'success' %}bg-green-100 text-green-800
+                    {% elif message.tags == 'error' %}bg-red-100 text-red-800
+                    {% else %}bg-blue-100 text-blue-800{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+ 
             <!-- ======================= STAT CARDS ======================= -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+ 
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Total Jobs</p>
-                        <p class="text-2xl font-bold">{{ total_jobs }}</p>
+                        <p class="text-gray-500 text-xs">Total Jobs</p>
+                        <p class="text-2xl font-bold">{{ total_jobs|default:"0" }}</p>
                     </div>
-                    <div class="bg-blue-100 p-3 rounded-full"><i class="fas fa-briefcase text-blue-600"></i></div>
-                </div>
-
-                <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm">Total Applicants</p>
-                        <p class="text-2xl font-bold">{{ total_applications }}</p>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-briefcase text-blue-600"></i>
                     </div>
-                    <div class="bg-green-100 p-3 rounded-full"><i class="fas fa-users text-green-600"></i></div>
                 </div>
-
+ 
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Shortlisted</p>
-                        <p class="text-2xl font-bold">{{ shortlisted_count }}</p>
+                        <p class="text-gray-500 text-xs">Total Applicants</p>
+                        <p class="text-2xl font-bold">{{ total_applications|default:"0" }}</p>
                     </div>
-                    <div class="bg-yellow-100 p-3 rounded-full"><i class="fas fa-star text-yellow-600"></i></div>
-                </div>
-
-                <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm">Interviews Scheduled</p>
-                        <p class="text-2xl font-bold">{{ interviews_scheduled }}</p>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-users text-green-600"></i>
                     </div>
-                    <div class="bg-purple-100 p-3 rounded-full"><i class="fas fa-calendar-check text-purple-600"></i></div>
                 </div>
-
+ 
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Pending Reviews</p>
+                        <p class="text-gray-500 text-xs">Shortlisted</p>
+                        <p class="text-2xl font-bold">{{ shortlisted_count|default:"0" }}</p>
+                    </div>
+                    <div class="bg-yellow-100 p-3 rounded-full">
+                        <i class="fas fa-star text-yellow-600"></i>
+                    </div>
+                </div>
+ 
+                <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-xs">Interviews Scheduled</p>
+                        <p class="text-2xl font-bold">{{ interviews_scheduled|default:"0" }}</p>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-full">
+                        <i class="fas fa-calendar-check text-purple-600"></i>
+                    </div>
+                </div>
+ 
+                <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-xs">Pending Reviews</p>
                         <p class="text-2xl font-bold">{{ pending_reviews|default:"0" }}</p>
                     </div>
-                    <div class="bg-red-100 p-3 rounded-full"><i class="fas fa-clock text-red-600"></i></div>
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <i class="fas fa-clock text-red-600"></i>
+                    </div>
                 </div>
-
+ 
                 <div class="stat-card bg-white rounded-xl shadow p-4 flex items-center justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Total Views</p>
+                        <p class="text-gray-500 text-xs">Total Views</p>
                         <p class="text-2xl font-bold">{{ total_views|default:"0" }}</p>
                     </div>
-                    <div class="bg-indigo-100 p-3 rounded-full"><i class="fas fa-eye text-indigo-600"></i></div>
+                    <div class="bg-indigo-100 p-3 rounded-full">
+                        <i class="fas fa-eye text-indigo-600"></i>
+                    </div>
                 </div>
-                
+ 
             </div>
-            <!-- END Stat Cards -->
-
+ 
             <!-- ======================= CHART + QUICK FILTERS ======================= -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-
-                <!-- Bar Chart -->
+ 
+                <!-- Bar Chart: Job Views vs Applications -->
                 <div class="bg-white rounded-xl shadow p-5">
                     <h3 class="font-semibold text-gray-700 mb-3">
                         <i class="fas fa-chart-bar mr-2"></i>Job Views vs Applications
                     </h3>
                     <canvas id="jobChart" height="200"></canvas>
                 </div>
-
-                <!-- Quick Filters – dynamic dropdowns with hardcoded defaults + DB values -->
+ 
+                <!-- Quick Filters Form -->
                 <div class="bg-white rounded-xl shadow p-5">
                     <h3 class="font-semibold text-gray-700 mb-3">
                         <i class="fas fa-filter mr-2"></i>Quick Filters
                     </h3>
-
+ 
                     <form method="GET" action="" id="filterForm">
                         <div class="grid grid-cols-2 gap-3">
-
-                            <!-- Experience filter -->
+ 
+                            <!-- FILTER 1: Experience
+                                 Options: 0,1,2,3,4,5,6,7,8,10,12,15 years
+                                 + any extra values from DB -->
                             <select name="experience"
                                 class="border rounded p-2 text-sm"
                                 onchange="document.getElementById('filterForm').submit()">
                                 <option value="">Experience: Any</option>
                                 {% for exp in experience_options %}
-                                    <option value="{{ exp }}" {% if selected_experience == exp %}selected{% endif %}>
+                                    <option value="{{ exp }}"
+                                        {% if selected_experience == exp %}selected{% endif %}>
                                         {% if exp == "1" %}1 Year{% else %}{{ exp }} Years{% endif %}
                                     </option>
                                 {% endfor %}
                             </select>
-
-                            <!-- Location filter -->
+ 
+                            <!-- FILTER 2: Location
+                                 Options: 10 major cities + DB values -->
                             <select name="location"
                                 class="border rounded p-2 text-sm"
                                 onchange="document.getElementById('filterForm').submit()">
                                 <option value="">Location: Any</option>
                                 {% for loc in location_options %}
-                                    <option value="{{ loc }}" {% if selected_location == loc %}selected{% endif %}>{{ loc }}</option>
+                                    <option value="{{ loc }}"
+                                        {% if selected_location == loc %}selected{% endif %}>
+                                        {{ loc }}
+                                    </option>
                                 {% endfor %}
                             </select>
-
-                            <!-- Skills filter -->
+ 
+                            <!-- FILTER 3: Skills
+                                 Options: 15 tech skills + DB values -->
                             <select name="skill"
                                 class="border rounded p-2 text-sm"
                                 onchange="document.getElementById('filterForm').submit()">
                                 <option value="">Skills: Any</option>
                                 {% for sk in skill_options %}
-                                    <option value="{{ sk }}" {% if selected_skill == sk %}selected{% endif %}>{{ sk }}</option>
+                                    <option value="{{ sk }}"
+                                        {% if selected_skill == sk %}selected{% endif %}>
+                                        {{ sk }}
+                                    </option>
                                 {% endfor %}
                             </select>
-
-                            <!-- Status filter -->
+ 
+                            <!-- FILTER 4: Status
+                                 Options: All 8 pipeline statuses -->
                             <select name="status"
                                 class="border rounded p-2 text-sm"
                                 onchange="document.getElementById('filterForm').submit()">
                                 <option value="">Status: Any</option>
                                 {% for s in status_choices %}
-                                    <option value="{{ s }}" {% if selected_status == s %}selected{% endif %}>{{ s }}</option>
+                                    <option value="{{ s }}"
+                                        {% if selected_status == s %}selected{% endif %}>
+                                        {{ s }}
+                                    </option>
                                 {% endfor %}
                             </select>
-
+ 
                         </div>
-
-                        <!-- Preserve other GET parameters -->
+ 
+                        <!-- Preserve other GET params -->
                         {% for key, value in request.GET.items %}
                             {% if key != 'experience' and key != 'location' and key != 'skill' and key != 'status' %}
                                 <input type="hidden" name="{{ key }}" value="{{ value }}">
                             {% endif %}
                         {% endfor %}
-
+ 
                         <button type="submit"
                             class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded text-sm w-full hover:bg-indigo-700 transition">
                             <i class="fas fa-search mr-1"></i> Apply Filters
                         </button>
-
+ 
                         {% if request.GET.experience or request.GET.location or request.GET.skill or request.GET.status %}
                             <a href="{% url 'employer_dashboard' %}"
                                 class="mt-2 block text-center text-sm text-gray-500 hover:text-red-500 transition">
                                 <i class="fas fa-times mr-1"></i> Clear Filters
                             </a>
                         {% endif %}
+ 
                     </form>
                 </div>
-
+ 
             </div>
-            <!-- END Chart + Filters -->
-
+ 
             <!-- ======================= HIRING PIPELINE ======================= -->
+            <!--
+                WHAT EACH STAGE MEANS:
+                Applied     = Candidate just applied, not yet reviewed
+                Screening   = Employer is reviewing the resume
+                Shortlisted = Employer approved, candidate moves forward
+                Interview   = Interview has been scheduled
+                Technical   = Technical test / coding round happening
+                HR          = HR round: salary negotiation, culture fit
+                Offer       = Job offer letter has been sent to candidate
+            -->
             <div class="bg-white rounded-xl shadow p-5 mb-8">
                 <h3 class="font-semibold text-gray-700 mb-4">
                     <i class="fas fa-sitemap mr-2"></i>Hiring Pipeline
+                    <span class="text-xs text-gray-400 ml-2 font-normal">(always shows full counts, not filtered)</span>
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 text-center text-sm">
-                    <div class="pipeline-stage border-indigo-500 bg-indigo-50 rounded p-2">
-                        <span class="font-bold">Applied</span><br>{{ pipeline.applied|default:0 }}
+ 
+                    <div class="pipeline-stage border-indigo-500 bg-indigo-50 rounded p-3 cursor-pointer hover:shadow"
+                         onclick="window.location='{% url 'employer_dashboard' %}?status=Applied'">
+                        <i class="fas fa-file-alt text-indigo-500 mb-1"></i>
+                        <div class="font-bold text-lg">{{ pipeline.applied }}</div>
+                        <div class="text-xs text-gray-500">Applied</div>
                     </div>
-                    <div class="pipeline-stage border-blue-500 bg-blue-50 rounded p-2">
-                        <span class="font-bold">Screening</span><br>{{ pipeline.screening|default:0 }}
+ 
+                    <div class="pipeline-stage border-blue-500 bg-blue-50 rounded p-3 cursor-pointer hover:shadow"
+                         onclick="window.location='{% url 'employer_dashboard' %}?status=Screening'">
+                        <i class="fas fa-search text-blue-500 mb-1"></i>
+                        <div class="font-bold text-lg">{{ pipeline.screening }}</div>
+                        <div class="text-xs text-gray-500">Screening</div>
                     </div>
-                    <div class="pipeline-stage border-green-500 bg-green-50 rounded p-2">
-                        <span class="font-bold">Shortlisted</span><br>{{ pipeline.shortlisted|default:0 }}
+ 
+                    <div class="pipeline-stage border-green-500 bg-green-50 rounded p-3 cursor-pointer hover:shadow"
+                         onclick="window.location='{% url 'employer_dashboard' %}?status=Shortlisted'">
+                        <i class="fas fa-star text-green-500 mb-1"></i>
+                        <div class="font-bold text-lg">{{ pipeline.shortlisted }}</div>
+                        <div class="text-xs text-gray-500">Shortlisted</div>
                     </div>
-                    <div class="pipeline-stage border-yellow-500 bg-yellow-50 rounded p-2">
-                        <span class="font-bold">Interview</span><br>{{ pipeline.interview|default:0 }}
+ 
+                    <div class="pipeline-stage border-yellow-500 bg-yellow-50 rounded p-3 cursor-pointer hover:shadow"
+                         onclick="window.location='{% url 'employer_dashboard' %}?status=Interview'">
+                        <i class="fas fa-calendar-check text-yellow-500 mb-1"></i>
+                        <div class="font-bold text-lg">{{ pipeline.interview }}</div>
+                        <div class="text-xs text-gray-500">Interview</div>
                     </div>
-                    <div class="pipeline-stage border-purple-500 bg-purple-50 rounded p-2">
-                        <span class="font-bold">Technical</span><br>{{ pipeline.technical|default:0 }}
+ 
+                    <div class="pipeline-stage border-purple-500 bg-purple-50 rounded p-3 cursor-pointer hover:shadow"
+                         onclick="window.location='{% url 'employer_dashboard' %}?status=Technical'">
+                        <i class="fas fa-laptop-code text-purple-500 mb-1"></i>
+                        <div class="font-bold text-lg">{{ pipeline.technical }}</div>
+                        <div class="text-xs text-gray-500">Technical</div>
                     </div>
-                    <div class="pipeline-stage border-pink-500 bg-pink-50 rounded p-2">
-                        <span class="font-bold">HR Round</span><br>{{ pipeline.hr|default:0 }}
+ 
+                    <div class="pipeline-stage border-pink-500 bg-pink-50 rounded p-3 cursor-pointer hover:shadow"
+                         onclick="window.location='{% url 'employer_dashboard' %}?status=HR'">
+                        <i class="fas fa-user-tie text-pink-500 mb-1"></i>
+                        <div class="font-bold text-lg">{{ pipeline.hr }}</div>
+                        <div class="text-xs text-gray-500">HR Round</div>
                     </div>
-                    <div class="pipeline-stage border-teal-500 bg-teal-50 rounded p-2">
-                        <span class="font-bold">Offer Sent</span><br>{{ pipeline.offer|default:0 }}
+ 
+                    <div class="pipeline-stage border-teal-500 bg-teal-50 rounded p-3 cursor-pointer hover:shadow"
+                         onclick="window.location='{% url 'employer_dashboard' %}?status=Offer'">
+                        <i class="fas fa-envelope-open-text text-teal-500 mb-1"></i>
+                        <div class="font-bold text-lg">{{ pipeline.offer }}</div>
+                        <div class="text-xs text-gray-500">Offer Sent</div>
                     </div>
+ 
                 </div>
+                <p class="text-xs text-gray-400 mt-3">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Click any stage to filter applicants by that status.
+                </p>
             </div>
-
+ 
             <!-- ======================= RECENT APPLICANTS TABLE ======================= -->
             <div class="bg-white rounded-xl shadow overflow-hidden">
                 <div class="px-5 py-3 border-b flex justify-between items-center">
                     <h3 class="font-semibold text-gray-700">
                         <i class="fas fa-user-check mr-2"></i>Recent Applicants
+                        {% if selected_experience or selected_location or selected_skill or selected_status %}
+                            <span class="ml-2 text-xs text-indigo-500 font-normal">
+                                (filtered)
+                            </span>
+                        {% endif %}
                     </h3>
                     <a href="{% url 'all_jobs' %}" class="text-indigo-600 text-sm">
                         View all <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
+ 
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applicant</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Job Title</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applied On</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applicant</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Job</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applied On</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Current Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Move To Stage</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
+ 
                             {% for app in recent_applicants %}
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-3 whitespace-nowrap">
+ 
+                                <!-- Applicant Name -->
+                                <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-2">
-                                            <i class="fas fa-user text-gray-500"></i>
+                                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-2 text-indigo-600 font-bold text-sm">
+                                            {{ app.applicant.username|first|upper }}
                                         </div>
-                                        <span class="font-medium">{{ app.applicant.get_full_name|default:app.applicant.username }}</span>
+                                        <div>
+                                            <div class="font-medium text-gray-800">
+                                                {{ app.applicant.get_full_name|default:app.applicant.username }}
+                                            </div>
+                                            <div class="text-xs text-gray-400">{{ app.applicant.email }}</div>
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-3">{{ app.job.title }}</td>
-                                <td class="px-6 py-3">{{ app.applied_at|date:"d M Y" }}</td>
-                                <td class="px-6 py-3">
-                                    <span class="px-2 py-1 text-xs rounded-full
+ 
+                                <!-- Job Title -->
+                                <td class="px-4 py-3">
+                                    <div class="font-medium text-gray-700">{{ app.job.title }}</div>
+                                    <div class="text-xs text-gray-400">{{ app.job.company }}</div>
+                                </td>
+ 
+                                <!-- Applied Date -->
+                                <td class="px-4 py-3 text-gray-600">
+                                    {{ app.applied_at|date:"d M Y" }}
+                                </td>
+ 
+                                <!-- Current Status Badge (colour-coded for all 8 statuses) -->
+                                <td class="px-4 py-3">
+                                    <span class="px-2 py-1 text-xs rounded-full font-medium
                                         {% if app.status == 'Applied' %}bg-blue-100 text-blue-800
                                         {% elif app.status == 'Screening' %}bg-orange-100 text-orange-800
                                         {% elif app.status == 'Shortlisted' %}bg-green-100 text-green-800
@@ -304,54 +476,173 @@
                                         {% elif app.status == 'Offer' %}bg-teal-100 text-teal-800
                                         {% elif app.status == 'Rejected' %}bg-red-100 text-red-800
                                         {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {% if app.status == 'Applied' %}<i class="fas fa-file-alt mr-1"></i>
+                                        {% elif app.status == 'Screening' %}<i class="fas fa-search mr-1"></i>
+                                        {% elif app.status == 'Shortlisted' %}<i class="fas fa-star mr-1"></i>
+                                        {% elif app.status == 'Interview' %}<i class="fas fa-calendar-check mr-1"></i>
+                                        {% elif app.status == 'Technical' %}<i class="fas fa-laptop-code mr-1"></i>
+                                        {% elif app.status == 'HR' %}<i class="fas fa-user-tie mr-1"></i>
+                                        {% elif app.status == 'Offer' %}<i class="fas fa-envelope-open-text mr-1"></i>
+                                        {% elif app.status == 'Rejected' %}<i class="fas fa-times mr-1"></i>{% endif %}
                                         {{ app.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-3 whitespace-nowrap space-x-2">
-                                    {% if app.resume %}
-                                    <a href="{{ app.resume.url }}" target="_blank" class="text-indigo-600 hover:text-indigo-800" title="View Resume"><i class="fas fa-eye"></i></a>
-                                    {% endif %}
-                                    <a href="{% url 'shortlist_candidate' app.id %}" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs" title="Shortlist"><i class="fas fa-star"></i></a>
-                                    <a href="{% url 'reject_candidate' app.id %}" class="text-red-600 hover:text-red-800" title="Reject"><i class="fas fa-times"></i></a>
-                                    <a href="mailto:{{ app.applicant.email }}" class="text-blue-600 hover:text-blue-800" title="Send Email"><i class="fas fa-comment"></i></a>
+ 
+                                <!-- Move To Stage Buttons (DYNAMIC — all statuses from DB) -->
+                                <!-- These buttons let the employer move a candidate to the next stage -->
+                                <!-- Clicking calls update_application_status view which saves to DB -->
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-wrap gap-1">
+ 
+                                        <!-- Screening button — shown if candidate is currently Applied -->
+                                        {% if app.status == 'Applied' %}
+                                        <a href="{% url 'update_application_status' app.id 'Screening' %}"
+                                            class="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600"
+                                            title="Move to Screening">
+                                            <i class="fas fa-search mr-1"></i>Screening
+                                        </a>
+                                        {% endif %}
+ 
+                                        <!-- Shortlist button — shown if candidate is Applied or Screening -->
+                                        {% if app.status == 'Applied' or app.status == 'Screening' %}
+                                        <a href="{% url 'update_application_status' app.id 'Shortlisted' %}"
+                                            class="px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                                            title="Shortlist Candidate">
+                                            <i class="fas fa-star mr-1"></i>Shortlist
+                                        </a>
+                                        {% endif %}
+ 
+                                        <!-- Interview button — shown if Shortlisted -->
+                                        {% if app.status == 'Shortlisted' %}
+                                        <a href="{% url 'update_application_status' app.id 'Interview' %}"
+                                            class="px-2 py-1 bg-purple-500 text-white text-xs rounded hover:bg-purple-600"
+                                            title="Schedule Interview">
+                                            <i class="fas fa-calendar-check mr-1"></i>Interview
+                                        </a>
+                                        {% endif %}
+ 
+                                        <!-- Technical button — shown if Interview scheduled -->
+                                        {% if app.status == 'Interview' %}
+                                        <a href="{% url 'update_application_status' app.id 'Technical' %}"
+                                            class="px-2 py-1 bg-indigo-500 text-white text-xs rounded hover:bg-indigo-600"
+                                            title="Move to Technical Round">
+                                            <i class="fas fa-laptop-code mr-1"></i>Technical
+                                        </a>
+                                        {% endif %}
+ 
+                                        <!-- HR button — shown if Technical round done -->
+                                        {% if app.status == 'Technical' %}
+                                        <a href="{% url 'update_application_status' app.id 'HR' %}"
+                                            class="px-2 py-1 bg-pink-500 text-white text-xs rounded hover:bg-pink-600"
+                                            title="Move to HR Round">
+                                            <i class="fas fa-user-tie mr-1"></i>HR Round
+                                        </a>
+                                        {% endif %}
+ 
+                                        <!-- Offer button — shown if HR round done -->
+                                        {% if app.status == 'HR' %}
+                                        <a href="{% url 'update_application_status' app.id 'Offer' %}"
+                                            class="px-2 py-1 bg-teal-500 text-white text-xs rounded hover:bg-teal-600"
+                                            title="Send Offer Letter">
+                                            <i class="fas fa-envelope-open-text mr-1"></i>Send Offer
+                                        </a>
+                                        {% endif %}
+ 
+                                        <!-- Reject button — shown for all except already Rejected or Offer -->
+                                        {% if app.status != 'Rejected' and app.status != 'Offer' %}
+                                        <a href="{% url 'reject_candidate' app.id %}"
+                                            class="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+                                            title="Reject Candidate">
+                                            <i class="fas fa-times mr-1"></i>Reject
+                                        </a>
+                                        {% endif %}
+ 
+                                        <!-- If Offer sent or Rejected, show a done badge -->
+                                        {% if app.status == 'Offer' %}
+                                        <span class="px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded">
+                                            <i class="fas fa-check mr-1"></i>Offer Sent
+                                        </span>
+                                        {% endif %}
+ 
+                                        {% if app.status == 'Rejected' %}
+                                        <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">
+                                            <i class="fas fa-ban mr-1"></i>Rejected
+                                        </span>
+                                        {% endif %}
+ 
+                                    </div>
                                 </td>
+ 
+                                <!-- Extra Actions: View Resume, Email -->
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="flex items-center gap-2">
+ 
+                                        {% if app.resume %}
+                                        <a href="{{ app.resume.url }}" target="_blank"
+                                            class="text-indigo-600 hover:text-indigo-800 text-sm" title="View Resume">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </a>
+                                        {% else %}
+                                        <span class="text-gray-300 text-sm" title="No Resume">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </span>
+                                        {% endif %}
+ 
+                                        <a href="mailto:{{ app.applicant.email }}"
+                                            class="text-blue-600 hover:text-blue-800 text-sm" title="Send Email">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+ 
+                                    </div>
+                                </td>
+ 
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5" class="text-center py-8 text-gray-500">
-                                    <i class="fas fa-inbox text-3xl mb-2 block"></i>
-                                    No applicants yet.
+                                <td colspan="6" class="text-center py-10 text-gray-400">
+                                    <i class="fas fa-inbox text-4xl mb-3 block"></i>
+                                    No applicants found.
+                                    {% if selected_experience or selected_location or selected_skill or selected_status %}
+                                        <br>
+                                        <a href="{% url 'employer_dashboard' %}" class="text-indigo-500 text-sm mt-1 inline-block">
+                                            Clear filters to see all applicants
+                                        </a>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
+ 
                         </tbody>
                     </table>
                 </div>
             </div>
-            <!-- END Recent Applicants -->
-
+ 
         </div>
     </main>
 </div>
-
-<!-- ======================= CHART SCRIPT ======================= -->
+ 
+<!-- Chart Script -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+ 
     const jobTitles = [
         {% for job in jobs %}
             "{{ job.title|escapejs }}"{% if not forloop.last %},{% endif %}
         {% endfor %}
     ];
+ 
     const jobViews = [
         {% for job in jobs %}
             {{ job.views }}{% if not forloop.last %},{% endif %}
         {% endfor %}
     ];
+ 
     const jobApps = [
         {% for job in jobs %}
             {{ job.applications.count }}{% if not forloop.last %},{% endif %}
         {% endfor %}
     ];
+ 
     const ctx = document.getElementById('jobChart');
     if (ctx && jobTitles.length) {
         new Chart(ctx, {
@@ -359,8 +650,8 @@ document.addEventListener("DOMContentLoaded", function () {
             data: {
                 labels: jobTitles,
                 datasets: [
-                    { label: 'Views', data: jobViews, backgroundColor: '#4ade80' },
-                    { label: 'Applications', data: jobApps, backgroundColor: '#f97316' }
+                    { label: 'Views',        data: jobViews, backgroundColor: '#4ade80' },
+                    { label: 'Applications', data: jobApps,  backgroundColor: '#f97316' }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: true }
@@ -368,5 +659,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
-
+ 
 {% endblock %}

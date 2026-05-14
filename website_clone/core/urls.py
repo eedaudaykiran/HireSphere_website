@@ -3,16 +3,18 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import employer_login, employer_register, employer_dashboard
-
+ 
 urlpatterns = [
+    # ===================== BASIC =====================
     path('', views.index, name='index'),
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
-    path("logout/", views.logout_view, name="logout"),
-    path('employer-login/', views.employer_login_page, name='employer_login'),
+    path('logout/', views.logout_view, name='logout'),
     path('search/', views.search_jobs, name='search_jobs'),
+ 
+    # ===================== JOB PAGES =====================
     path('remote-jobs/', views.remote_jobs_page, name='remote_jobs'),
-    path('mnc-jobs/',views.mnc_jobs_page, name='mnc_jobs'),
+    path('mnc-jobs/', views.mnc_jobs_page, name='mnc_jobs'),
     path('banking-finance-jobs/', views.banking_finance_jobs_page, name='banking_finance_jobs'),
     path('startup-jobs/', views.startup_jobs_page, name='startup_jobs'),
     path('software-it-jobs/', views.software_it_jobs_page, name='software_it_jobs'),
@@ -28,12 +30,17 @@ urlpatterns = [
     path('fresher-jobs/', views.fresher_jobs_page, name='fresher_jobs'),
     path('walk-in-jobs/', views.walk_in_jobs_page, name='walk_in_jobs'),
     path('part-time-jobs/', views.part_time_jobs_page, name='part_time_jobs'),
+    path('jobs/', views.all_jobs, name='all_jobs'),
+ 
+    # ===================== CITY JOBS =====================
     path('delhi-jobs/', views.delhi_jobs_page, name='delhi_jobs'),
     path('mumbai-jobs/', views.mumbai_jobs_page, name='mumbai_jobs'),
     path('bangalore-jobs/', views.bangalore_jobs_page, name='bangalore_jobs'),
     path('hyderabad-jobs/', views.hyderabad_jobs_page, name='hyderabad_jobs'),
     path('chennai-jobs/', views.chennai_jobs_page, name='chennai_jobs'),
     path('pune-jobs/', views.pune_jobs_page, name='pune_jobs'),
+ 
+    # ===================== COMPANY TYPE PAGES =====================
     path('company-unicorn/', views.company_unicorn, name='company_unicorn'),
     path('company-mnc/', views.company_mnc_jobs_page, name='company_mnc'),
     path('company-startups/', views.company_startups_jobs_page, name='company_startups'),
@@ -44,112 +51,69 @@ urlpatterns = [
     path('company-fintech-companies-jobs/', views.company_fintech_jobs_page, name='company_fintech_companies_jobs'),
     path('company-sponsored-jobs/', views.company_sponsored_companies_jobs_page, name='company_sponsored_companies_jobs'),
     path('company-featured-jobs/', views.company_featured_companies_jobs_page, name='company_featured_companies_jobs'),
+ 
+    # ===================== CANDIDATE ACTIONS =====================
     path('saved-jobs/', views.saved_jobs_page, name='saved_jobs'),
     path('save-job/<int:job_id>/', views.save_job, name='save_job'),
-    path(
-        'apply-job/<int:job_id>/',
-        views.apply_job,
-        name='apply_job'
-    ),
-    path(
-    'applied-jobs/',
-    views.applied_jobs_page,
-    name='applied_jobs'
-    ),
-    path(
-    'recruiter-applications/',
-    views.recruiter_applications,
-    name='recruiter_applications'
-    ),
-    path(
-    'update-status/<int:app_id>/<str:status>/',
-    views.update_status,
-    name='update_status'
-    ),
-    path(
-        'employer/register/',
-        employer_register,
-        name='employer_register'
-    ),
-    path(
-        'employer/login/',
-        employer_login,
-        name='employer_login'
-    ),
-    path(
-    'employer-login-page/',
-    views.employer_login,
-    name='employer_login_page'
-    ),
-    
+    path('apply-job/<int:job_id>/', views.apply_job, name='apply_job'),
+    path('applied-jobs/', views.applied_jobs_page, name='applied_jobs'),
+ 
+    # ===================== RECRUITER =====================
+    path('recruiter-applications/', views.recruiter_applications, name='recruiter_applications'),
+    path('update-status/<int:app_id>/<str:status>/', views.update_status, name='update_status'),
+ 
+    # ===================== EMPLOYER AUTH =====================
+    path('employer/register/', employer_register, name='employer_register'),
+    path('employer/login/', employer_login, name='employer_login'),
+    path('employer-login/', views.employer_login_page, name='employer_login_page'),
+    path('employer-login-page/', views.employer_login, name='employer_login_page'),
+ 
+    # ===================== EMPLOYER DASHBOARD =====================
     path('employer/dashboard/', views.employer_dashboard, name='employer_dashboard'),
     path('employer/dashboard/data/', views.dashboard_realtime_data, name='dashboard_data'),
+ 
+    # ===================== NEW: UPDATE APPLICATION STATUS =====================
+    # When employer clicks Screening / Interview / Technical / HR / Offer button
+    # URL example: /update-application-status/42/Screening/
+    # 42 = application ID, Screening = new status to set
+    path(
+        'update-application-status/<int:app_id>/<str:new_status>/',
+        views.update_application_status,
+        name='update_application_status'
+    ),
+ 
+    # ===================== EMPLOYER TOOLS =====================
     path('post-job/', views.post_job, name='post_job'),
     path('manage-jobs/', views.manage_jobs, name='manage_jobs'),
-    path(
-    'applicants/',
-    views.applicants,
-    name='applicants'
-    ),
-    path(
-    'shortlist-candidate/<int:app_id>/',
-    views.shortlist_candidate,
-    name='shortlist_candidate'
-    ),
-    
-    path(
-    'shortlisted-candidates/',
-    views.shortlisted_candidates,
-    name='shortlisted_candidates'
-    ),
-    path(
-    'reject/<int:app_id>/',
-    views.reject_candidate,
-    name='reject_candidate'
-    ),
-    
-    path(
-    'interviews/',
-    views.interviews,
-    name='interviews'
-    ),
+    path('applicants/', views.applicants, name='applicants'),
+    path('shortlist-candidate/<int:app_id>/', views.shortlist_candidate, name='shortlist_candidate'),
+    path('shortlisted-candidates/', views.shortlisted_candidates, name='shortlisted_candidates'),
+    path('reject/<int:app_id>/', views.reject_candidate, name='reject_candidate'),
+    path('interviews/', views.interviews, name='interviews'),
+    path('messages/', views.inbox_messages, name='messages'),
+    path('reports/', views.reports, name='reports'),
+    path('company-profile/', views.company_profile, name='company_profile'),
+    path('subscription/', views.subscription, name='subscription'),
+    path('settings/', views.settings, name='settings'),
     path(
     'schedule-interview/<int:app_id>/',
     views.schedule_interview,
     name='schedule_interview'
     ),
-    # ✅ CORRECT
     path(
-    'messages/',
-    views.inbox_messages,   # ← updated to new function name
-    name='messages'         # ← URL name stays same, no HTML changes needed
+    'edit-job/<int:job_id>/',
+    views.edit_job,
+    name='edit_job'
     ),
     path(
-    'reports/',
-    views.reports,
-    name='reports'
+    'delete-job/<int:job_id>/',
+    views.delete_job,
+    name='delete_job'
     ),
     path(
-    'company-profile/',
-    views.company_profile,
-    name='company_profile'
+    'view-applications/<int:job_id>/',
+    views.view_applications,
+    name='view_applications'
     ),
-    path(
-    'subscription/',
-    views.subscription,
-    name='subscription'
-    ),
-    path(
-    'settings/',
-    views.settings,
-    name='settings'
-    ),
-    path(
-    'logout/',
-    views.logout_view,
-    name='logout'
-    ),
-    path('jobs/', views.all_jobs, name='all_jobs'),
-    
-
+ 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

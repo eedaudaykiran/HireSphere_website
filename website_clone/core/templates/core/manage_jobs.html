@@ -921,7 +921,8 @@
                     class="nav-badge">10</span></a>
             <a class="nav-item" href="{% url 'applicants' %}"><span class="nav-icon">👥</span> Applicants <span
                     class="nav-badge">43</span></a>
-            <a class="nav-item" href="{% url 'shortlisted_candidates' %}"><span class="nav-icon">⭐</span> Shortlisted</a>
+            <a class="nav-item" href="{% url 'shortlisted_candidates' %}"><span class="nav-icon">⭐</span>
+                Shortlisted</a>
             <a class="nav-item" href="{% url 'reports' %}"><span class="nav-icon">📊</span> Analytics</a>
             <div class="sidebar-sep"></div>
             <a class="nav-item" href="{% url 'settings' %}"><span class="nav-icon">⚙️</span> Settings</a>
@@ -943,26 +944,58 @@
 
             <!-- Stats -->
             <div class="stats">
+
                 <div class="stat-card" data-icon="💼">
                     <div class="stat-label">Total Jobs</div>
-                    <div class="stat-val" style="color:var(--accent)">10</div>
-                    <div class="stat-delta delta-up">↑ 2 this month</div>
+
+                    <div class="stat-val" style="color:var(--accent)">
+                        {{ total_jobs|default:"0" }}
+                    </div>
+
+                    <div class="stat-delta delta-up">
+                        Active company postings
+                    </div>
                 </div>
+
+
                 <div class="stat-card" data-icon="✅">
                     <div class="stat-label">Active</div>
-                    <div class="stat-val" style="color:var(--green)">7</div>
-                    <div class="stat-delta delta-up">↑ 1 this week</div>
+
+                    <div class="stat-val" style="color:var(--green)">
+                        {{ active_jobs|default:"0" }}
+                    </div>
+
+                    <div class="stat-delta delta-up">
+                        Running jobs
+                    </div>
                 </div>
+
+
                 <div class="stat-card" data-icon="📩">
                     <div class="stat-label">Applications</div>
-                    <div class="stat-val" style="color:var(--purple)">215</div>
-                    <div class="stat-delta delta-up">↑ 34 this week</div>
+
+                    <div class="stat-val" style="color:var(--purple)">
+                        {{ total_applications|default:"0" }}
+                    </div>
+
+                    <div class="stat-delta delta-up">
+                        Total candidates applied
+                    </div>
                 </div>
+
+
                 <div class="stat-card" data-icon="👁️">
                     <div class="stat-label">Total Views</div>
-                    <div class="stat-val" style="color:var(--amber)">4,820</div>
-                    <div class="stat-delta delta-up">↑ 8% vs last week</div>
+
+                    <div class="stat-val" style="color:var(--amber)">
+                        {{ total_views|default:"0" }}
+                    </div>
+
+                    <div class="stat-delta delta-up">
+                        Job page visitors
+                    </div>
                 </div>
+
             </div>
 
             <!-- Toolbar -->
@@ -992,8 +1025,106 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="jobsTbody">
-                        <!-- rows injected by JS -->
+                    <tbody>
+
+                        {% for job in jobs %}
+
+                        <tr>
+
+                            <td>
+                                <div class="job-title-cell">
+
+                                    <div class="job-logo">
+                                        💼
+                                    </div>
+
+                                    <div>
+                                        <div class="job-name">
+                                            {{ job.title }}
+                                        </div>
+
+                                        <div class="job-meta">
+                                            {{ job.category }}
+                                            ·
+                                            {{ job.job_type }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+
+                                {% if job.status == 'active' %}
+                                <span class="badge badge-active">
+                                    Active
+                                </span>
+
+                                {% elif job.status == 'closed' %}
+                                <span class="badge badge-closed">
+                                    Closed
+                                </span>
+
+                                {% else %}
+                                <span class="badge badge-draft">
+                                    Draft
+                                </span>
+                                {% endif %}
+
+                            </td>
+
+                            <td class="hide-mobile">
+
+                                <div class="metric">
+                                    <span class="metric-val">
+                                        {{ job.applications }}
+                                    </span>
+
+                                    <span class="metric-label">
+                                        applicants
+                                    </span>
+                                </div>
+
+                            </td>
+
+                            <td class="hide-mobile">
+
+                                <div class="metric">
+                                    <span class="metric-val">
+                                        {{ job.views }}
+                                    </span>
+
+                                    <span class="metric-label">
+                                        views
+                                    </span>
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a href="{% url 'view_applications' job.id %}">
+                                        👥
+                                    </a>
+
+                                    <a href="{% url 'edit_job' job.id %}">
+                                        ✏️
+                                    </a>
+
+                                    <a href="{% url 'delete_job' job.id %}">
+                                        🗑️
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
                     </tbody>
                 </table>
                 <div class="empty" id="emptyState">
@@ -1037,18 +1168,7 @@
 
     <script>
         /* ── DATA ── */
-        const JOBS = [
-            { id: 1, emoji: '🐍', title: 'Python Developer', meta: 'Backend · Full-Time', status: 'active', apps: 45, views: 1000, posted: '12 May 2025' },
-            { id: 2, emoji: '⚛️', title: 'React Developer', meta: 'Frontend · Full-Time', status: 'active', apps: 20, views: 800, posted: '10 May 2025' },
-            { id: 3, emoji: '🎨', title: 'UI/UX Designer', meta: 'Design · Remote', status: 'closed', apps: 30, views: 600, posted: '02 Apr 2025' },
-            { id: 4, emoji: '🗄️', title: 'Django Backend', meta: 'Backend · On-site', status: 'active', apps: 38, views: 920, posted: '18 May 2025' },
-            { id: 5, emoji: '☁️', title: 'DevOps Engineer', meta: 'Infra · Hybrid', status: 'draft', apps: 0, views: 120, posted: '20 May 2025' },
-            { id: 6, emoji: '📊', title: 'Data Analyst', meta: 'Analytics · Remote', status: 'active', apps: 55, views: 1200, posted: '05 May 2025' },
-            { id: 7, emoji: '🔒', title: 'Cybersecurity Lead', meta: 'Security · Full-Time', status: 'closed', apps: 15, views: 430, posted: '01 Apr 2025' },
-            { id: 8, emoji: '📱', title: 'Android Developer', meta: 'Mobile · Full-Time', status: 'active', apps: 22, views: 560, posted: '14 May 2025' },
-            { id: 9, emoji: '🧪', title: 'QA Engineer', meta: 'Testing · On-site', status: 'active', apps: 18, views: 380, posted: '16 May 2025' },
-            { id: 10, emoji: '🤖', title: 'ML Engineer', meta: 'AI/ML · Remote', status: 'draft', apps: 0, views: 95, posted: '21 May 2025' },
-        ];
+
 
         const APPLICANTS = [
             { name: 'Arjun Sharma', role: 'Python Developer', color: '#4f8aff', initials: 'AS', status: 'short' },
