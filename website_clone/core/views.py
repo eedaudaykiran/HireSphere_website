@@ -7,27 +7,27 @@ from django.db.models import Q, Count
 from django.utils import timezone
 import datetime
 from django.http import HttpResponse, JsonResponse
- 
+
 from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm
-from .models import JobApplication, UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, Subscription, EmployerSettings
- 
- 
+from .models import UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, Subscription, EmployerSettings
+
+
 # ===================== FILTER FUNCTIONS =====================
- 
+
 def filter_by_work_mode(qs, request):
     work_modes = request.GET.getlist('work_mode')
     if work_modes:
         qs = qs.filter(work_mode__in=work_modes)
     return qs, work_modes
- 
- 
+
+
 def filter_by_category(qs, request):
     categories = request.GET.getlist('category')
     if categories:
         qs = qs.filter(category__in=categories)
     return qs, categories
- 
- 
+
+
 def filter_by_location(qs, request):
     locations = request.GET.getlist('location')
     if locations:
@@ -36,8 +36,8 @@ def filter_by_location(qs, request):
             query |= Q(location__icontains=loc)
         qs = qs.filter(query)
     return qs, locations
- 
- 
+
+
 def filter_by_salary(qs, request):
     salaries = request.GET.getlist('salary')
     if salaries:
@@ -50,15 +50,15 @@ def filter_by_salary(qs, request):
                 continue
         qs = qs.filter(query)
     return qs, salaries
- 
- 
+
+
 def filter_by_experience(qs, request):
     exp = request.GET.get('experience')
     if exp and exp != "30":
         qs = qs.filter(experience__icontains=exp)
     return qs, exp
- 
- 
+
+
 def filter_by_freshness(qs, request):
     freshness = request.GET.get('freshness')
     if freshness:
@@ -69,15 +69,15 @@ def filter_by_freshness(qs, request):
         except (ValueError, TypeError):
             pass
     return qs, freshness
- 
- 
+
+
 # ===================== BASIC VIEWS =====================
- 
+
 def index(request):
     jobs = Job.objects.all()
     return render(request, 'core/index.html', {'jobs': jobs})
- 
- 
+
+
 def search_jobs(request):
     keyword    = request.GET.get('keyword', '')
     experience = request.GET.get('experience', '')
@@ -100,8 +100,8 @@ def search_jobs(request):
         'location':   location,
     }
     return render(request, 'core/search_results.html', context)
- 
- 
+
+
 def register_view(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -111,14 +111,14 @@ def register_view(request):
             password      = form.cleaned_data["password"]
             mobile_number = form.cleaned_data["mobile_number"]
             work_status   = form.cleaned_data["work_status"]
- 
+
             base_username = email.split("@")[0]
             username = base_username
             counter = 1
             while User.objects.filter(username=username).exists():
                 username = f"{base_username}{counter}"
                 counter += 1
- 
+
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -138,8 +138,8 @@ def register_view(request):
     else:
         form = RegisterForm()
     return render(request, "core/register.html", {"form": form})
- 
- 
+
+
 def login_view(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -163,60 +163,60 @@ def login_view(request):
     else:
         form = LoginForm()
     return render(request, "core/login.html", {"form": form})
- 
- 
+
+
 def logout_view(request):
     logout(request)
     messages.success(request, "✅ Logged out successfully.")
     return redirect("login")
- 
- 
+
+
 def employer_login_page(request):
     return render(request, 'core/employer_login.html')
- 
- 
+
+
 # ===================== REMOTE JOBS PAGE =====================
- 
+
 def remote_jobs_page(request):
     jobs = Job.objects.all().order_by('-id')
- 
+
     jobs, selected_work_modes = filter_by_work_mode(jobs, request)
     jobs, selected_categories  = filter_by_category(jobs, request)
     jobs, selected_locations   = filter_by_location(jobs, request)
     jobs, selected_salaries    = filter_by_salary(jobs, request)
     jobs, selected_experience  = filter_by_experience(jobs, request)
     jobs, selected_freshness   = filter_by_freshness(jobs, request)
- 
+
     company_types = request.GET.getlist('company_type')
     if company_types:
         jobs = jobs.filter(company_type__in=company_types)
- 
+
     durations = request.GET.getlist('duration')
     if durations:
         jobs = jobs.filter(duration__in=durations)
- 
+
     educations = request.GET.getlist('education')
     if educations:
         jobs = jobs.filter(education__in=educations)
- 
+
     posted_by = request.GET.getlist('posted_by')
     if posted_by:
         jobs = jobs.filter(posted_by__in=posted_by)
- 
+
     industries = request.GET.getlist('industry')
     if industries:
         jobs = jobs.filter(industry__in=industries)
- 
+
     companies = request.GET.getlist('company')
     if companies:
         jobs = jobs.filter(company__in=companies)
- 
+
     roles = request.GET.getlist('role_category')
     if roles:
         jobs = jobs.filter(role_category__in=roles)
- 
+
     all_jobs = Job.objects.all()
- 
+
     salary_ranges = ['0-3', '3-6', '6-10', '10-15', '15-20', '20-25', '25-30', '30-35']
     salary_counts = {}
     for r in salary_ranges:
@@ -226,45 +226,45 @@ def remote_jobs_page(request):
         except:
             cnt = 0
         salary_counts[r] = cnt
- 
+
     category_counts = {
         item['category']: item['total']
         for item in all_jobs.values('category').annotate(total=Count('id'))
     }
- 
+
     location_list = ['Bangalore', 'Delhi', 'Mumbai', 'Hyderabad', 'Pune', 'Chennai']
     location_counts = {
         loc: all_jobs.filter(location__icontains=loc).count()
         for loc in location_list
     }
- 
+
     company_type_counts = {
         item['company_type']: item['total']
         for item in all_jobs.values('company_type').annotate(total=Count('id'))
     }
- 
+
     role_counts = {
         item['role_category']: item['total']
         for item in all_jobs.values('role_category').annotate(total=Count('id'))
     }
- 
+
     all_durations = all_jobs.exclude(duration__isnull=True).exclude(duration='').values_list('duration', flat=True).distinct()
     duration_counts = {d: all_jobs.filter(duration=d).count() for d in all_durations}
- 
+
     all_educations = all_jobs.exclude(education__isnull=True).exclude(education='').values_list('education', flat=True).distinct()
     education_counts = {e: all_jobs.filter(education=e).count() for e in all_educations}
- 
+
     all_posted_by = all_jobs.exclude(posted_by__isnull=True).exclude(posted_by='').values_list('posted_by', flat=True).distinct()
     posted_by_counts = {p: all_jobs.filter(posted_by=p).count() for p in all_posted_by}
- 
+
     all_industries = all_jobs.exclude(industry__isnull=True).exclude(industry='').values_list('industry', flat=True).distinct()
     industry_counts = {i: all_jobs.filter(industry=i).count() for i in all_industries}
- 
+
     company_counts = {
         item['company']: item['total']
         for item in all_jobs.values('company').annotate(total=Count('id'))
     }
- 
+
     stipends = request.GET.getlist('stipend')
     if stipends:
         stipend_query = Q()
@@ -282,7 +282,7 @@ def remote_jobs_page(request):
             elif s == '50+':
                 stipend_query |= Q(min_salary__gte=50)
         jobs = jobs.filter(stipend_query)
- 
+
     stipend_counts = {
         'unpaid': Job.objects.filter(min_salary=0, max_salary=0).count(),
         '0-10':   Job.objects.filter(min_salary__gte=0,  max_salary__lte=10).count(),
@@ -291,7 +291,7 @@ def remote_jobs_page(request):
         '30-50':  Job.objects.filter(min_salary__gte=30, max_salary__lte=50).count(),
         '50+':    Job.objects.filter(min_salary__gte=50).count(),
     }
- 
+
     return render(request, 'core/remote_jobs.html', {
         'jobs':                  jobs,
         'selected_work_modes':   selected_work_modes,
@@ -320,135 +320,135 @@ def remote_jobs_page(request):
         'industry_counts':       industry_counts,
         'company_counts':        company_counts,
     })
- 
- 
+
+
 # ===================== OTHER JOB PAGES =====================
- 
+
 def mnc_jobs_page(request):
     jobs = Job.objects.filter(company_type__iexact="mnc").order_by('-id')
     return render(request, 'core/mnc_jobs.html', {'jobs': jobs})
- 
+
 def banking_finance_jobs_page(request):
     jobs = Job.objects.filter(category__iexact="Banking & Finance", work_mode__iexact="Remote")
     return render(request, 'core/banking_finance_jobs.html', {'jobs': jobs})
- 
+
 def startup_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', company_type__iexact='startup')
     return render(request, 'core/startup_jobs.html', {'jobs': jobs})
- 
+
 def software_it_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='software')
     return render(request, 'core/software_it_jobs.html', {'jobs': jobs})
- 
+
 def internship_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='internship').order_by('-id')
     return render(request, 'core/internship_jobs.html', {'jobs': jobs})
- 
+
 def engineering_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='engineering').order_by('-id')
     return render(request, 'core/engineering_jobs.html', {'jobs': jobs})
- 
+
 def marketing_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='marketing').order_by('-id')
     return render(request, 'core/marketing_jobs.html', {'jobs': jobs})
- 
+
 def fortune_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', company_type__icontains='fortune').order_by('-id')
     return render(request, 'core/fortune_jobs.html', {'jobs': jobs})
- 
+
 def human_resources_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__iexact='Human Resources').order_by('-id')
     return render(request, 'core/human_resources_jobs.html', {'jobs': jobs})
- 
+
 def project_management_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='Project Management').order_by('-id')
     return render(request, 'core/project_management_jobs.html', {'jobs': jobs})
- 
+
 def it_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='IT').order_by('-id')
     return render(request, 'core/it_jobs.html', {'jobs': jobs})
- 
+
 def sales_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='Sales').order_by('-id')
     return render(request, 'core/sales_jobs.html', {'jobs': jobs})
- 
+
 def data_science_jobs_page(request):
     jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='Data Science').order_by('-id')
     return render(request, 'core/data_science_jobs.html', {'jobs': jobs})
- 
+
 def fresher_jobs_page(request):
     jobs = Job.objects.filter(experience__iexact='Fresher', work_mode__iexact='Remote').order_by('-id')
     return render(request, 'core/fresher_jobs.html', {'jobs': jobs})
- 
+
 def walk_in_jobs_page(request):
     jobs = Job.objects.filter(work_mode__icontains='walk').order_by('-id')
     return render(request, 'core/walk_in_jobs.html', {'jobs': jobs})
- 
+
 def part_time_jobs_page(request):
     jobs = Job.objects.filter(work_mode__icontains='part time').order_by('-id')
     return render(request, 'core/part_time_jobs.html', {'jobs': jobs})
- 
+
 def delhi_jobs_page(request):
     jobs = Job.objects.filter(location__icontains='Delhi', work_mode__iexact='Remote').order_by('-id')
     return render(request, 'core/delhi_jobs.html', {'jobs': jobs})
- 
+
 def mumbai_jobs_page(request):
     jobs = Job.objects.filter(location__icontains='Mumbai', work_mode__iexact='Remote').order_by('-id')
     return render(request, 'core/mumbai_jobs.html', {'jobs': jobs})
- 
+
 def bangalore_jobs_page(request):
     jobs = Job.objects.filter(
         Q(location__icontains='Bangalore') | Q(location__icontains='Bengaluru'),
         work_mode__iexact='Remote'
     ).order_by('-id')
     return render(request, 'core/bangalore_jobs.html', {'jobs': jobs})
- 
+
 def hyderabad_jobs_page(request):
     jobs = Job.objects.filter(location__icontains='Hyderabad').filter(
         Q(work_mode__iexact='Remote') | Q(work_mode__iexact='Hybrid') | Q(work_mode__iexact='On-site')
     ).order_by('-id')
     return render(request, 'core/hyderabad_jobs.html', {'jobs': jobs})
- 
+
 def chennai_jobs_page(request):
     jobs = Job.objects.filter(location__icontains='Chennai').filter(
         Q(work_mode__iexact='Remote') | Q(work_mode__iexact='Hybrid') | Q(work_mode__iexact='On-site')
     ).order_by('-id')
     return render(request, 'core/chennai_jobs.html', {'jobs': jobs})
- 
+
 def pune_jobs_page(request):
     jobs = Job.objects.filter(location__icontains='Pune').filter(
         Q(work_mode__iexact='Remote') | Q(work_mode__iexact='Hybrid') | Q(work_mode__iexact='On-site')
     ).order_by('-id')
     return render(request, 'core/pune_jobs.html', {'jobs': jobs})
- 
+
 def company_unicorn(request):
     jobs = Job.objects.filter(company_type__icontains='unicorn').order_by('-id')
     return render(request, 'core/company_unicorn.html', {'jobs': jobs})
- 
+
 def company_mnc_jobs_page(request):
     jobs = Job.objects.filter(
         Q(company_type__icontains='mnc') | Q(company_type__icontains='multinational')
     ).order_by('-id')
     return render(request, 'core/company_mnc_jobs.html', {'jobs': jobs})
- 
+
 def company_startups_jobs_page(request):
     jobs = Job.objects.filter(
         Q(company_type__icontains='startup') | Q(company_type__icontains='start-up')
     ).order_by('-id')
     return render(request, 'core/company_startups_jobs.html', {'jobs': jobs})
- 
+
 def company_product_based_jobs_page(request):
     jobs = Job.objects.filter(
         Q(category__icontains='product') | Q(category__icontains='product based')
     ).order_by('-id')
     return render(request, 'core/company_product_based_jobs.html', {'jobs': jobs})
- 
+
 def company_internet_jobs_page(request):
     jobs = Job.objects.filter(
         Q(company_type__icontains='internet') | Q(company_type__icontains='online') | Q(company_type__icontains='web')
     ).order_by('-id')
     return render(request, 'core/company_internet_jobs.html', {'jobs': jobs})
- 
+
 def company_top_companies_jobs_page(request):
     company_keywords = ['unicorn', 'mnc', 'multinational', 'startup', 'start-up', 'internet', 'online', 'web']
     category_keywords = ['product']
@@ -459,7 +459,7 @@ def company_top_companies_jobs_page(request):
         query |= Q(category__icontains=word)
     jobs = Job.objects.filter(query).order_by('-id').distinct()
     return render(request, 'core/company_top_companies_jobs.html', {'jobs': jobs})
- 
+
 def company_it_companies_jobs_page(request):
     keywords = ['information technology', 'technology', 'tech', 'software']
     query = Q()
@@ -467,7 +467,7 @@ def company_it_companies_jobs_page(request):
         query |= Q(company_type__icontains=word)
     jobs = Job.objects.filter(query).order_by('-id').distinct()
     return render(request, 'core/company_it_companies_jobs.html', {'jobs': jobs})
- 
+
 def company_fintech_jobs_page(request):
     keywords = ['fintech', 'financial technology', 'finance technology', 'payments', 'digital payments', 'banking', 'nbfc']
     query = Q()
@@ -475,18 +475,18 @@ def company_fintech_jobs_page(request):
         query |= Q(company_type__icontains=word)
     jobs = Job.objects.filter(query).order_by('-id').distinct()
     return render(request, 'core/company_fintech_companies_jobs.html', {'jobs': jobs})
- 
+
 def company_sponsored_companies_jobs_page(request):
     jobs = Job.objects.filter(is_sponsored=True).order_by('-id')
     return render(request, 'core/company_sponsored_companies_jobs.html', {'jobs': jobs})
- 
+
 def company_featured_companies_jobs_page(request):
     jobs = Job.objects.filter(is_featured=True).order_by('-id')
     return render(request, 'core/company_featured_companies_jobs.html', {'jobs': jobs})
- 
- 
+
+
 # ===================== SAVE JOB =====================
- 
+
 @login_required
 def save_job(request, job_id):
     if request.method != 'POST':
@@ -498,77 +498,89 @@ def save_job(request, job_id):
     else:
         saved.delete()
         return JsonResponse({'status': 'removed', 'message': 'Removed from saved jobs!'})
- 
- 
+
+
 # ===================== APPLY JOB =====================
- 
+
 @login_required
 def apply_job(request, job_id):
- 
+
+    # Get job safely
     job = get_object_or_404(Job, id=job_id)
- 
+
+    # ──────────────────────────────────────────────────────────────
+    # IMPORTANT CHECK: Was this job posted by an employer?
+    # If job.employer is None (job created via admin without employer),
+    # it will NEVER show in any employer's dashboard because the filter
+    # is: Application.objects.filter(job__employer=request.user)
+    # Fix: always set employer when posting a job via post_job view.
+    # ──────────────────────────────────────────────────────────────
+
+    # Check already applied
     already_applied = Application.objects.filter(
         applicant=request.user,
         job=job
     ).exists()
- 
+
     if already_applied:
         messages.warning(request, "You already applied for this job.")
-        return redirect('remote_jobs')
- 
-    if request.method == "POST":
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        phone_number = request.POST.get('phone_number')
         resume = request.FILES.get('resume')
- 
-        application = Application(
-            job=job,
+
+        Application.objects.create(
             applicant=request.user,
+            job=job,
+            phone_number=phone_number,
             resume=resume,
             status='Applied'
         )
-        application.save()
- 
-        messages.success(request, "✅ Job applied successfully!")
-        return redirect('remote_jobs')
- 
+
+        messages.success(request, "✅ Application submitted successfully!")
+        return redirect('applied_jobs')   # FIX: redirect to applied_jobs so Ram can see it
+
     return render(request, 'core/apply_job.html', {'job': job})
- 
- 
+
+
 # ===================== SAVED JOBS =====================
- 
+
 @login_required
 def saved_jobs_page(request):
     saved = SavedJob.objects.filter(user=request.user).select_related('job').order_by('-saved_at')
     return render(request, 'core/saved_jobs.html', {'saved_jobs': saved})
- 
- 
+
+
 # ===================== APPLIED JOBS =====================
- 
+
 @login_required
 def applied_jobs_page(request):
+    # FIX: filter by applicant=request.user so only RAM sees HIS applications
     applied_jobs = Application.objects.filter(
         applicant=request.user
     ).select_related('job').order_by('-applied_at')
     return render(request, 'core/applied_jobs.html', {'applied_jobs': applied_jobs})
- 
- 
+
+
 # ===================== RECRUITER APPLICATIONS =====================
- 
+
 @login_required
 def recruiter_applications(request):
     applications = ApplyJob.objects.select_related('user', 'job').all().order_by('-applied_at')
     return render(request, 'core/recruiter_applications.html', {'applications': applications})
- 
- 
+
+
 @login_required
 def update_status(request, app_id, status):
     application = ApplyJob.objects.get(id=app_id)
     application.status = status
     application.save()
     return redirect('recruiter_applications')
- 
- 
+
+
 # ===================== EMPLOYER REGISTER =====================
- 
+
 def employer_register(request):
     if request.method == "POST":
         form = EmployerRegisterForm(request.POST)
@@ -585,10 +597,10 @@ def employer_register(request):
     else:
         form = EmployerRegisterForm()
     return render(request, 'core/employer_register.html', {'form': form})
- 
- 
+
+
 # ===================== EMPLOYER LOGIN =====================
- 
+
 def employer_login(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -601,281 +613,181 @@ def employer_login(request):
             else:
                 return HttpResponse("Only employers can login here")
     return render(request, 'core/employer_login_page.html')
- 
- 
+
+
 # ===================== EMPLOYER DASHBOARD =====================
- 
+
 @login_required
 def employer_dashboard(request):
- 
-    # =========================
-    # STEP 1: Employer Jobs
-    # =========================
+
+    # STEP 1: Jobs posted by this employer (Karthikeya)
+    # This works ONLY if job.employer was set when the job was posted.
+    # If job.employer is None → this returns empty → dashboard shows 0.
     jobs = Job.objects.filter(employer=request.user)
- 
-    total_jobs = jobs.count()
 
-    active_jobs = jobs.filter(is_active=True).count()
+    total_jobs   = jobs.count()
+    active_jobs  = jobs.filter(is_active=True).count()
 
-    total_applications = JobApplication.objects.filter(
-        job__employer=request.user
-    ).count()
- 
-    # =========================
-    # STEP 2: All Applications for this employer
-   
-    all_applications = Application.objects.filter(
-        job__employer=request.user
-    )
- 
-    # =========================
-    # STEP 3: Get Selected Filter values from URL
-    # Example URL: /employer/dashboard/?experience=3&location=Hyderabad
-    # =========================
-    experience = request.GET.get('experience')  # e.g. "3"
-    location   = request.GET.get('location')    # e.g. "Hyderabad"
-    skill      = request.GET.get('skill')       # e.g. "Python"
-    status     = request.GET.get('status')      # e.g. "Shortlisted"
- 
-    # Start with all applications, then narrow down
+    # All applications for jobs posted by this employer
+    all_applications = Application.objects.filter(job__employer=request.user)
+
+    total_applications = all_applications.count()
+
+    # STEP 3: Filters from URL
+    experience = request.GET.get('experience')
+    location   = request.GET.get('location')
+    skill      = request.GET.get('skill')
+    status     = request.GET.get('status')
+
     applications = all_applications
- 
-    # =========================
-    # STEP 4: Apply Filters (only if a filter was selected)
-    if experience:
-        applications = applications.filter(
-            experience__gte=experience
-        )
- 
-    # Filter by location — partial match (Hyderabad matches "Hyderabad, India")
-    if location:
-        applications = applications.filter(
-            location__icontains=location
-        )
- 
-    # Filter by skill — partial match (Python matches "Python, Django")
-    if skill:
-        applications = applications.filter(
-            skills__icontains=skill
-        )
- 
-    # Filter by status — exact match (Applied, Shortlisted, etc.)
-    if status:
-        applications = applications.filter(
-            status=status
-        )
- 
-    # =========================
-    # STEP 5: Counts (based on FILTERED applications)
 
-    total_applications   = applications.count()
+    if experience:
+        applications = applications.filter(experience__gte=experience)
+
+    if location:
+        applications = applications.filter(location__icontains=location)
+
+    if skill:
+        applications = applications.filter(skills__icontains=skill)
+
+    if status:
+        applications = applications.filter(status=status)
+
+    # STEP 5: Counts
     shortlisted_count    = applications.filter(status='Shortlisted').count()
     interviews_scheduled = applications.filter(status='Interview').count()
     pending_reviews      = applications.filter(status='Applied').count()
- 
-    
-    # STEP 6: Recent Applicants (last 5, filtered)
-    # =========================
+
+    # STEP 6: Recent 5 applicants
     recent_applicants = applications.select_related(
         'applicant', 'job'
     ).order_by('-applied_at')[:5]
- 
-    # =========================
-    # STEP 7: Total Views across all employer jobs
-    # =========================
+
+    # STEP 7: Total views
     total_views = sum(job.views for job in jobs)
- 
-    # =========================
-    # STEP 8: Pipeline counts (ALWAYS from all_applications, NOT filtered)
-    
+
+    # STEP 8: Pipeline (always from all_applications, never filtered)
     pipeline = {
-        # Applied = candidate just submitted, employer hasn't reviewed
-        'applied': all_applications.filter(status='Applied').count(),
- 
-        # Screening = employer is reviewing the resume
-        'screening': all_applications.filter(status='Screening').count(),
- 
-        # Shortlisted = employer liked the candidate, moving forward
+        'applied':     all_applications.filter(status='Applied').count(),
+        'screening':   all_applications.filter(status='Screening').count(),
         'shortlisted': all_applications.filter(status='Shortlisted').count(),
- 
-        # Interview = interview has been scheduled
-        'interview': all_applications.filter(status='Interview').count(),
- 
-        # Technical = technical test/round is happening
-        'technical': all_applications.filter(status='Technical').count(),
- 
-        # HR = HR round is happening (salary, culture fit discussion)
-        'hr': all_applications.filter(status='HR').count(),
- 
-        # Offer = job offer letter has been sent to candidate
-        'offer': all_applications.filter(status='Offer').count(),
+        'interview':   all_applications.filter(status='Interview').count(),
+        'technical':   all_applications.filter(status='Technical').count(),
+        'hr':          all_applications.filter(status='HR').count(),
+        'offer':       all_applications.filter(status='Offer').count(),
     }
- 
-    # =========================
+
     # STEP 9: Application count per job (for chart)
-    # =========================
     for job in jobs:
         job.application_count = Application.objects.filter(job=job).count()
- 
-    # =========================
-    # STEP 10: Unread Messages count for notification badge
-    # =========================
+
+    # STEP 10: Unread messages
     unread_messages = Message.objects.filter(
         receiver=request.user,
         is_read=False
     ).count()
- 
-    # =========================
-    # STEP 11: Dropdown Options
-    
-    # =========================
- 
-    # --- Experience Dropdown ---
-    default_experience = [
-        '0', '1', '2', '3', '4', '5',
-        '6', '7', '8', '10', '12', '15'
-    ]
-    # Also get any experience values candidates actually entered in DB
+
+    # STEP 11: Dropdown options
+    default_experience = ['0','1','2','3','4','5','6','7','8','10','12','15']
     db_experience = list(
         Application.objects.filter(job__employer=request.user)
-        .exclude(experience__isnull=True)
-        .exclude(experience__exact='')
-        .values_list('experience', flat=True)
-        .distinct()
+        .exclude(experience__isnull=True).exclude(experience__exact='')
+        .values_list('experience', flat=True).distinct()
     )
-    # Merge hardcoded + DB, remove duplicates, sort alphabetically
     experience_options = sorted(set(default_experience + db_experience))
- 
-    # --- Location Dropdown ---
+
     default_locations = [
-        'Ahmedabad', 'Bangalore', 'Chennai', 'Delhi',
-        'Gurgaon', 'Hyderabad', 'Kolkata', 'Mumbai',
-        'Noida', 'Pune'
+        'Ahmedabad','Bangalore','Chennai','Delhi',
+        'Gurgaon','Hyderabad','Kolkata','Mumbai','Noida','Pune'
     ]
-    # Also get any locations candidates actually entered in DB
     db_locations = list(
         Application.objects.filter(job__employer=request.user)
-        .exclude(location__isnull=True)
-        .exclude(location__exact='')
-        .values_list('location', flat=True)
-        .distinct()
+        .exclude(location__isnull=True).exclude(location__exact='')
+        .values_list('location', flat=True).distinct()
     )
-    # Merge + deduplicate + sort
     location_options = sorted(set(default_locations + db_locations))
- 
-    # --- Skills Dropdown ---
-    # Hardcoded: 15 popular tech skills
+
     default_skills = [
-        'AWS', 'CSS', 'Data Science', 'Django', 'Docker',
-        'Flutter', 'HTML', 'Java', 'JavaScript', 'Machine Learning',
-        'MongoDB', 'Node.js', 'Python', 'React', 'SQL'
+        'AWS','CSS','Data Science','Django','Docker',
+        'Flutter','HTML','Java','JavaScript','Machine Learning',
+        'MongoDB','Node.js','Python','React','SQL'
     ]
-    # Also get any skills candidates actually entered in DB
     db_skills = list(
         Application.objects.filter(job__employer=request.user)
-        .exclude(skills__isnull=True)
-        .exclude(skills__exact='')
-        .values_list('skills', flat=True)
-        .distinct()
+        .exclude(skills__isnull=True).exclude(skills__exact='')
+        .values_list('skills', flat=True).distinct()
     )
-    # Merge + deduplicate + sort
     skill_options = sorted(set(default_skills + db_skills))
- 
+
     status_choices = [
-        'Applied', 'Screening', 'Shortlisted',
-        'Interview', 'Technical', 'HR', 'Offer', 'Rejected'
+        'Applied','Screening','Shortlisted',
+        'Interview','Technical','HR','Offer','Rejected'
     ]
- 
-    # =========================
-    # STEP 12: Context — everything the template needs
-    # =========================
+
     context = {
-        # Jobs and Applications
-        'jobs':         jobs,
-        'applications': applications,
-        'active_jobs': active_jobs,
- 
-        # Stat card numbers
-        'total_jobs':           total_jobs,
-        'total_applications':   total_applications,
-        'shortlisted_count':    shortlisted_count,
-        'interviews_scheduled': interviews_scheduled,
-        'pending_reviews':      pending_reviews,
-        'total_views':          total_views,
- 
-        # Recent applicants table
-        'recent_applicants': recent_applicants,
- 
-        # Hiring pipeline counts (always full, not filtered)
-        'pipeline': pipeline,
- 
-        # Sidebar notification badge
-        'unread_messages': unread_messages,
- 
-        # Quick filter dropdown options (hardcoded + DB merged)
-        'experience_options': experience_options,
-        'location_options':   location_options,
-        'skill_options':      skill_options,
-        'status_choices':     status_choices,
- 
-        # Currently selected filter values
-        # Used to keep the dropdown showing the right option after submit
-        'selected_experience': experience,
-        'selected_location':   location,
-        'selected_skill':      skill,
-        'selected_status':     status,
+        'jobs':                  jobs,
+        'applications':          applications,
+        'active_jobs':           active_jobs,
+        'total_jobs':            total_jobs,
+        'total_applications':    total_applications,
+        'shortlisted_count':     shortlisted_count,
+        'interviews_scheduled':  interviews_scheduled,
+        'pending_reviews':       pending_reviews,
+        'total_views':           total_views,
+        'recent_applicants':     recent_applicants,
+        'pipeline':              pipeline,
+        'unread_messages':       unread_messages,
+        'experience_options':    experience_options,
+        'location_options':      location_options,
+        'skill_options':         skill_options,
+        'status_choices':        status_choices,
+        'selected_experience':   experience,
+        'selected_location':     location,
+        'selected_skill':        skill,
+        'selected_status':       status,
     }
- 
+
     return render(request, 'core/employer_dashboard.html', context)
- 
- 
+
+
 # ===================== UPDATE APPLICATION STATUS =====================
-# NEW VIEW: Employer clicks a button to change a candidate's status
-# This is what makes Screening, Interview, Technical, HR, Offer work
-# URL: /update-application-status/<app_id>/<new_status>/
-# Example: /update-application-status/42/Screening/
- 
+
 @login_required
 def update_application_status(request, app_id, new_status):
- 
-    # Get the application or show 404 if not found
+
     application = get_object_or_404(Application, id=app_id)
- 
-    # Security check: only the employer who owns this job can change status
+
     if application.job.employer != request.user:
         messages.error(request, "Access denied.")
         return redirect('employer_dashboard')
- 
-    # List of all valid statuses — only accept these, reject anything else
+
     valid_statuses = [
-        'Applied', 'Screening', 'Shortlisted',
-        'Interview', 'Technical', 'HR', 'Offer', 'Rejected'
+        'Applied','Screening','Shortlisted',
+        'Interview','Technical','HR','Offer','Rejected'
     ]
- 
+
     if new_status not in valid_statuses:
         messages.error(request, f"Invalid status: {new_status}")
         return redirect('employer_dashboard')
- 
-    # Save the new status to database
+
     application.status = new_status
     application.save()
- 
-    # Show success message with candidate name and new status
+
     candidate_name = application.applicant.get_full_name() or application.applicant.username
     messages.success(request, f"✅ {candidate_name}'s status updated to '{new_status}'.")
- 
+
     return redirect('employer_dashboard')
- 
- 
+
+
 # ===================== AJAX REAL-TIME DATA =====================
- 
+
 @login_required
 def dashboard_realtime_data(request):
     jobs = Job.objects.filter(employer=request.user)
     recent = Application.objects.filter(
         job__in=jobs
     ).select_related('applicant', 'job').order_by('-applied_at')[:10]
- 
+
     data = {
         'total_applications': Application.objects.filter(job__in=jobs).count(),
         'applicants': [
@@ -889,68 +801,69 @@ def dashboard_realtime_data(request):
         ]
     }
     return JsonResponse(data)
- 
- 
+
+
 # ===================== POST JOB =====================
- 
+
 @login_required
 def post_job(request):
     if request.method == 'POST':
         form = JobForm(request.POST, request.FILES)
         if form.is_valid():
             job = form.save(commit=False)
-            job.employer = request.user
+            job.employer = request.user   # ← This is what links the job to Karthikeya
             job.save()
             messages.success(request, '✅ Job posted successfully!')
             return redirect('post_job')
     else:
         form = JobForm()
- 
+
     jobs = Job.objects.filter(employer=request.user).order_by('-created_at')
- 
+
     context = {
         'form': form,
         'jobs': jobs,
     }
- 
+
     return render(request, 'core/post_job.html', context)
- 
- 
+
+
 # ===================== MANAGE JOBS =====================
- 
+
 @login_required
 def manage_jobs(request):
     jobs = Job.objects.filter(employer=request.user)
     return render(request, 'core/manage_jobs.html', {'jobs': jobs})
- 
- 
+
+
 # ===================== APPLICANTS =====================
- 
+
 @login_required
 def applicants(request):
-    applications = JobApplication.objects.filter(job__employer=request.user)
+    # FIX: was JobApplication (doesn't exist) → changed to Application
+    applications = Application.objects.filter(job__employer=request.user)
     return render(request, 'core/applicants.html', {'applications': applications})
- 
- 
+
+
 # ===================== SHORTLIST CANDIDATE =====================
- 
+
 @login_required
 def shortlist_candidate(request, app_id):
     application = get_object_or_404(Application, id=app_id)
- 
+
     if application.job.employer != request.user:
         messages.error(request, "Access denied.")
         return redirect('employer_dashboard')
- 
+
     application.status = "Shortlisted"
     application.save()
- 
+
     messages.success(request, "✅ Candidate shortlisted successfully.")
     return redirect('employer_dashboard')
- 
- 
+
+
 # ===================== SHORTLISTED CANDIDATES =====================
- 
+
 @login_required
 def shortlisted_candidates(request):
     shortlisted = Application.objects.filter(
@@ -958,75 +871,79 @@ def shortlisted_candidates(request):
         status='Shortlisted'
     )
     return render(request, 'core/shortlisted.html', {'shortlisted': shortlisted})
- 
- 
+
+
 # ===================== REJECT CANDIDATE =====================
- 
+
 @login_required
 def reject_candidate(request, app_id):
     application = get_object_or_404(Application, id=app_id)
- 
+
     if application.job.employer != request.user:
         messages.error(request, "Access denied.")
         return redirect('employer_dashboard')
- 
+
     application.status = "Rejected"
     application.save()
- 
+
     messages.success(request, "Candidate rejected.")
     return redirect('employer_dashboard')
- 
- 
+
+
 # ===================== INTERVIEWS =====================
- 
+
 @login_required
 def interviews(request):
     interview_list = Interview.objects.filter(job__employer=request.user)
     return render(request, 'core/interviews.html', {'interviews': interview_list})
 
+
 # ===================== SCHEDULE INTERVIEW =====================
+
 @login_required
 def schedule_interview(request, app_id):
-    application = get_object_or_404(JobApplication, id=app_id)
+    # FIX: was JobApplication (doesn't exist) → changed to Application
+    application = get_object_or_404(Application, id=app_id)
 
     application.status = 'Interview Scheduled'
     application.save()
 
     return redirect('employer_dashboard')
- 
- 
+
+
 # ===================== INBOX MESSAGES =====================
- 
+
 @login_required
 def inbox_messages(request):
     inbox = Message.objects.filter(
         receiver=request.user
     ).order_by('-created_at')
- 
+
     unread_count = Message.objects.filter(
         receiver=request.user,
         is_read=False
     ).count()
- 
+
     context = {
         'inbox':        inbox,
         'unread_count': unread_count,
     }
     return render(request, 'core/messages.html', context)
- 
- 
+
+
 # ===================== REPORTS =====================
- 
+
 @login_required
 def reports(request):
     jobs = Job.objects.filter(employer=request.user)
     total_jobs         = jobs.count()
-    total_applications = JobApplication.objects.filter(job__employer=request.user).count()
-    shortlisted_count  = JobApplication.objects.filter(job__employer=request.user, status='Shortlisted').count()
-    rejected_count     = JobApplication.objects.filter(job__employer=request.user, status='Rejected').count()
+    # FIX: was JobApplication (doesn't exist) → changed to Application
+    total_applications = Application.objects.filter(job__employer=request.user).count()
+    shortlisted_count  = Application.objects.filter(job__employer=request.user, status='Shortlisted').count()
+    rejected_count     = Application.objects.filter(job__employer=request.user, status='Rejected').count()
     interview_count    = Interview.objects.filter(job__employer=request.user).count()
     total_views        = sum(job.views for job in jobs)
- 
+
     context = {
         'total_jobs':         total_jobs,
         'total_applications': total_applications,
@@ -1036,10 +953,10 @@ def reports(request):
         'total_views':        total_views,
     }
     return render(request, 'core/reports.html', context)
- 
- 
+
+
 # ===================== COMPANY PROFILE =====================
- 
+
 @login_required
 def company_profile(request):
     profile, created = CompanyProfile.objects.get_or_create(employer=request.user)
@@ -1053,18 +970,18 @@ def company_profile(request):
     else:
         form = CompanyProfileForm(instance=profile)
     return render(request, 'core/company_profile.html', {'form': form, 'profile': profile})
- 
- 
+
+
 # ===================== SUBSCRIPTION =====================
- 
+
 @login_required
 def subscription(request):
     sub = Subscription.objects.filter(employer=request.user).first()
     return render(request, 'core/subscription.html', {'subscription': sub})
- 
- 
+
+
 # ===================== SETTINGS =====================
- 
+
 @login_required
 def settings(request):
     employer_settings, created = EmployerSettings.objects.get_or_create(employer=request.user)
@@ -1078,76 +995,49 @@ def settings(request):
     else:
         form = EmployerSettingsForm(instance=employer_settings)
     return render(request, 'core/settings.html', {'form': form})
- 
- 
+
+
 # ===================== ALL JOBS =====================
- 
+
 def all_jobs(request):
     jobs = Job.objects.all()
     return render(request, 'core/all_jobs.html', {'jobs': jobs})
 
 
 # ===================== DELETE JOB =====================
+
 @login_required
 def delete_job(request, job_id):
-
-    job = get_object_or_404(
-        Job,
-        id=job_id,
-        employer=request.user
-    )
-
+    job = get_object_or_404(Job, id=job_id, employer=request.user)
     job.delete()
-
     return redirect('employer_dashboard')
 
+
 # ===================== EDIT JOB =====================
+
 @login_required
 def edit_job(request, job_id):
-
-    job = get_object_or_404(
-        Job,
-        id=job_id,
-        employer=request.user
-    )
+    job = get_object_or_404(Job, id=job_id, employer=request.user)
 
     if request.method == 'POST':
-
-        job.title = request.POST.get('title')
-
+        job.title    = request.POST.get('title')
         job.category = request.POST.get('category')
-
         job.job_type = request.POST.get('work_mode')
-
         job.save()
-
         return redirect('employer_dashboard')
 
-    return render(
-        request,
-        'core/edit_job.html',
-        {'job': job}
-    )
+    return render(request, 'core/edit_job.html', {'job': job})
+
 
 # ===================== VIEW APPLICATIONS =====================
+
 def view_applications(request, job_id):
-
-    job = get_object_or_404(
-        Job,
-        id=job_id
-    )
-
-    applications = JobApplication.objects.filter(
-        job=job
-    )
+    job = get_object_or_404(Job, id=job_id)
+    # FIX: was JobApplication (doesn't exist) → changed to Application
+    applications = Application.objects.filter(job=job)
 
     context = {
-        'job': job,
-        'applications': applications
+        'job':          job,
+        'applications': applications,
     }
-
-    return render(
-        request,
-        'core/view_applications.html',
-        context
-    )
+    return render(request, 'core/view_applications.html', context)

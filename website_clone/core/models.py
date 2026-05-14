@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
- 
+
 # FIX: removed "from urllib import request" — that was a wrong import that doesn't belong here
- 
  
 class UserProfile(models.Model):
  
@@ -115,6 +114,7 @@ class Job(models.Model):
     views         = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     company_name = models.CharField(max_length=100,null=True, blank=True)
+    
     job_type = models.CharField(
         max_length=20,
         choices=JOB_TYPES
@@ -171,88 +171,81 @@ class EmailVerification(models.Model):
     token          = models.UUIDField(default=uuid.uuid4, editable=False)
     email_verified = models.BooleanField(default=False)
  
- 
 class Application(models.Model):
+
     # ══════════════════════════════════════════════════════
-    # ROOT CAUSE FIX:
-    # 'applied_at' field was COMPLETELY MISSING from this model.
-    # Every view that used .order_by('-applied_at') crashed with:
-    #   FieldError: Cannot resolve keyword 'applied_at'
-    # Adding it here fixes: employer_dashboard, applied_jobs_page,
-    # shortlisted_candidates, and dashboard_realtime_data.
-    # After saving this file run: python manage.py makemigrations && python manage.py migrate
+    # STATUS CHOICES — the pipeline stages a job application moves through.
+    # Each tuple is: ('stored_value', 'display_label')
+    # 'Applied' is now the default (was 'pending review' which didn't
+    # match any choice — that was a hidden bug).
     # ══════════════════════════════════════════════════════
- 
     STATUS_CHOICES = (
-        ('Applied',     'Applied'),
-        ('Screening',   'Screening'),
-        ('Shortlisted', 'Shortlisted'),
-        ('Interview',   'Interview'),
-        ('Technical',   'Technical'),
-        ('HR',          'HR'),
-        ('Offer',       'Offer'),
-        ('Rejected',    'Rejected'),
-        ( 'Interview Scheduled', 'Interview Scheduled'),
-    )
- 
-    job        = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
-    applicant  = models.ForeignKey(User, on_delete=models.CASCADE)
-    resume     = models.FileField(upload_to='resumes/', null=True, blank=True)
-    status     = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending review')
-    applied_at = models.DateTimeField(auto_now_add=True)   # ← THIS WAS MISSING
-    experience = models.CharField(max_length=50, blank=True, null=True)
-    location   = models.CharField(max_length=100, blank=True, null=True)
-    skills     = models.CharField(max_length=300, blank=True, null=True)
-    phone_number = models.CharField(
-    max_length=15,
-    null=True,
-    blank=True
-    )
-    # INTERVIEW FIELDS
-
-    interview_date = models.DateField(
-        null=True,
-        blank=True
+        ('Applied',              'Applied'),
+        ('Screening',            'Screening'),
+        ('Shortlisted',          'Shortlisted'),
+        ('Interview',            'Interview'),
+        ('Interview Scheduled',  'Interview Scheduled'),
+        ('Technical',            'Technical'),
+        ('HR',                   'HR'),
+        ('Offer',                'Offer'),
+        ('Rejected',             'Rejected'),
     )
 
-    interview_time = models.TimeField(
-        null=True,
-        blank=True
+    # ── Core relationship fields ───────────────────────────
+    job       = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE,
+        related_name='applications'   # lets you do job.applications.all()
+    )
+    applicant = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE      # deletes applications if user is deleted
     )
 
-    interview_link = models.URLField(
-        null=True,
-        blank=True
+    # ── Application details ────────────────────────────────
+    resume   = models.FileField(upload_to='resumes/', null=True, blank=True)
+    status   = models.CharField(
+        max_length=50,
+        choices=STATUS_CHOICES,
+        default='Applied'             # FIX: was 'pending review' — not in STATUS_CHOICES
     )
 
-    interview_notes = models.TextField(
-        null=True,
-        blank=True
-    )
+    # ── Timestamp ─────────────────────────────────────────
+    # FIX: This field was completely missing before.
+    # Its absence caused FieldError crashes in:
+    #   employer_dashboard, applied_jobs_page,
+    #   shortlisted_candidates, dashboard_realtime_data
+    # After adding this field run:
+    #   python manage.py makemigrations
+    #   python manage.py migrate
+    applied_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.applicant.username
-    
+    # ── Applicant profile snapshot ─────────────────────────
+    # These store info AT THE TIME of applying (in case profile changes later)
+    experience   = models.CharField(max_length=50,  blank=True, null=True)
+    location     = models.CharField(max_length=100, blank=True, null=True)
+    skills       = models.CharField(max_length=300, blank=True, null=True)
+    phone_number = models.CharField(max_length=15,  blank=True, null=True)
+
+    # ── Interview scheduling fields ────────────────────────
+    interview_date  = models.DateField(null=True, blank=True)
+    interview_time  = models.TimeField(null=True, blank=True)
+    interview_link  = models.URLField(null=True,  blank=True)
+    interview_notes = models.TextField(null=True, blank=True)
+
+    # ── Helper methods ─────────────────────────────────────
     @classmethod
     def get_status_choices(cls):
-        """Return status choices as a list of strings in the original order."""
+        """Returns all status values as a plain list.
+        Useful for template dropdowns or validation logic.
+        Example: Application.get_status_choices()
+        → ['Applied', 'Screening', 'Shortlisted', ...]
+        """
         return [choice[0] for choice in cls.STATUS_CHOICES]
 
     def __str__(self):
-        return f"{self.applicant.username} applied for {self.job.title}"
-    
-    
- 
- 
-class JobApplication(models.Model):
- 
-    applicant  = models.ForeignKey(User, on_delete=models.CASCADE)
-    job        = models.ForeignKey(Job, on_delete=models.CASCADE)
-    applied_at = models.DateTimeField(auto_now_add=True)   # FIX: was defined twice before, kept once
-    status     = models.CharField(max_length=50, default='Pending')
- 
-    def __str__(self):
-        return f"{self.applicant.username} applied for {self.job.title}"
+        # Human-readable label shown in Django admin and shell
+        return f"{self.applicant.username} applied for {self.job.title}" 
  
  
 class Interview(models.Model):
