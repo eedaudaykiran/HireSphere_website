@@ -587,6 +587,7 @@ def save_job(request, job_id):
 
 
 # ===================== APPLY JOB =====================
+
 @candidate_required
 def apply_job(request, job_id):
     job = get_object_or_404(Job, id=job_id)
@@ -601,20 +602,23 @@ def apply_job(request, job_id):
         return redirect('applied_jobs')
 
     if request.method == 'POST':
-        # ── Get from form ──
-        phone_number = request.POST.get('phone_number', '').strip()
-        skills       = request.POST.get('skills', '').strip()
-        location     = request.POST.get('location', '').strip()
-        experience   = request.POST.get('experience', '').strip()
+        phone_number = request.POST.get('phone_number', '')
         resume       = request.FILES.get('resume')
 
-        # ── Fallback to UserProfile if form fields empty ──
-        try:
-            profile = request.user.userprofile
-            if not experience:
-                experience = profile.work_status or ''
-        except:
-            pass
+        # Pull from form fields first, fallback to profile
+        skills   = request.POST.get('skills', '')
+        location = request.POST.get('location', '')
+        experience = request.POST.get('experience', '')
+
+        # If form didn't send them, try UserProfile
+        if not skills or not location or not experience:
+            try:
+                profile    = request.user.userprofile
+                skills     = skills     or ''
+                location   = location   or ''
+                experience = experience or profile.work_status or ''
+            except:
+                pass
 
         Application.objects.create(
             applicant=request.user,
@@ -659,12 +663,31 @@ def recruiter_applications(request):
     return render(request, 'core/recruiter_applications.html', {'applications': applications})
 
 
-@login_required
+# ✅ CORRECT — uses Application model + redirects back to applicants
+@employer_required
 def update_status(request, app_id, status):
-    application = ApplyJob.objects.get(id=app_id)
+    application = get_object_or_404(Application, id=app_id)
+
+    # Security check — only this employer can update
+    if application.job.employer != request.user:
+        messages.error(request, "❌ Access denied.")
+        return redirect('applicants')
+
+    valid_statuses = [
+        'Applied', 'Screening', 'Shortlisted',
+        'Interview', 'Technical', 'HR', 'Offer', 'Rejected'
+    ]
+
+    if status not in valid_statuses:
+        messages.error(request, f"❌ Invalid status: {status}")
+        return redirect('applicants')
+
     application.status = status
     application.save()
-    return redirect('recruiter_applications')
+
+    candidate_name = application.applicant.get_full_name() or application.applicant.username
+    messages.success(request, f"✅ {candidate_name} marked as {status}.")
+    return redirect('applicants')
 
 
 # ===================== EMPLOYER REGISTER =====================

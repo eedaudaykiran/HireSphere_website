@@ -1346,7 +1346,8 @@
             if (a.resume) { resumeBtn.href = a.resume; resumeBtn.style.opacity = '1'; resumeBtn.style.pointerEvents = 'auto'; }
             else { resumeBtn.href = '#'; resumeBtn.style.opacity = '.4'; resumeBtn.style.pointerEvents = 'none'; }
 
-            // Status update form action
+            // ✅ CORRECT — status comes from button value
+
             document.getElementById('statusUpdateForm').action = `/update-status/${id}/`;
 
             document.getElementById('profileModal').classList.add('open');
