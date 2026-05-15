@@ -587,22 +587,10 @@ def save_job(request, job_id):
 
 
 # ===================== APPLY JOB =====================
-
 @candidate_required
 def apply_job(request, job_id):
-
-    # Get job safely
     job = get_object_or_404(Job, id=job_id)
 
-    # ──────────────────────────────────────────────────────────────
-    # IMPORTANT CHECK: Was this job posted by an employer?
-    # If job.employer is None (job created via admin without employer),
-    # it will NEVER show in any employer's dashboard because the filter
-    # is: Application.objects.filter(job__employer=request.user)
-    # Fix: always set employer when posting a job via post_job view.
-    # ──────────────────────────────────────────────────────────────
-
-    # Check already applied
     already_applied = Application.objects.filter(
         applicant=request.user,
         job=job
@@ -613,22 +601,36 @@ def apply_job(request, job_id):
         return redirect('applied_jobs')
 
     if request.method == 'POST':
-        phone_number = request.POST.get('phone_number')
-        resume = request.FILES.get('resume')
+        # ── Get from form ──
+        phone_number = request.POST.get('phone_number', '').strip()
+        skills       = request.POST.get('skills', '').strip()
+        location     = request.POST.get('location', '').strip()
+        experience   = request.POST.get('experience', '').strip()
+        resume       = request.FILES.get('resume')
+
+        # ── Fallback to UserProfile if form fields empty ──
+        try:
+            profile = request.user.userprofile
+            if not experience:
+                experience = profile.work_status or ''
+        except:
+            pass
 
         Application.objects.create(
             applicant=request.user,
             job=job,
             phone_number=phone_number,
             resume=resume,
-            status='Applied'
+            status='Applied',
+            skills=skills,
+            location=location,
+            experience=experience,
         )
 
         messages.success(request, "✅ Application submitted successfully!")
-        return redirect('applied_jobs')   # FIX: redirect to applied_jobs so Ram can see it
+        return redirect('applied_jobs')
 
     return render(request, 'core/apply_job.html', {'job': job})
-
 
 # ===================== SAVED JOBS =====================
 
@@ -919,18 +921,101 @@ def post_job(request):
 
 @employer_required
 def manage_jobs(request):
-    jobs = Job.objects.filter(employer=request.user)
-    return render(request, 'core/manage_jobs.html', {'jobs': jobs})
+    jobs = Job.objects.filter(employer=request.user).order_by('-created_at')
 
+    total_jobs         = jobs.count()
+    active_jobs        = jobs.filter(is_active=True, status='active').count()
+    closed_jobs        = jobs.filter(status='closed').count()
+    draft_jobs         = jobs.filter(status='draft').count()
+    total_applications = Application.objects.filter(job__employer=request.user).count()
+    total_views        = sum(job.views for job in jobs)
+
+    # Recent 5 applicants for analytics panel
+    recent_applicants = Application.objects.filter(
+        job__employer=request.user
+    ).select_related('applicant', 'job').order_by('-applied_at')[:5]
+
+    context = {
+        'jobs':               jobs,
+        'total_jobs':         total_jobs,
+        'active_jobs':        active_jobs,
+        'closed_jobs':        closed_jobs,
+        'draft_jobs':         draft_jobs,
+        'total_applications': total_applications,
+        'total_views':        total_views,
+        'recent_applicants':  recent_applicants,
+    }
+    return render(request, 'core/manage_jobs.html', context)
+
+@employer_required
+def toggle_job_status(request, job_id):
+    if request.method == 'POST':
+        job = get_object_or_404(Job, id=job_id, employer=request.user)
+        job.is_active = not job.is_active
+        job.status = 'active' if job.is_active else 'closed'
+        job.save()
+        messages.success(request, f"✅ '{job.title}' is now {'Active' if job.is_active else 'Closed'}.")
+    return redirect('manage_jobs')
 
 # ===================== APPLICANTS =====================
 
+import json
+
 @employer_required
 def applicants(request):
-    # FIX: was JobApplication (doesn't exist) → changed to Application
-    applications = Application.objects.filter(job__employer=request.user)
-    return render(request, 'core/applicants.html', {'applications': applications})
 
+    # ── Only THIS employer's job applications ──
+    applications = Application.objects.filter(
+        job__employer=request.user          # ← KEY: only this employer
+    ).select_related('applicant', 'job').order_by('-applied_at')
+
+    # ── Correct counts (all filtered to this employer) ──
+    total_applications = applications.count()     # should be 7 not 1974
+    pending_count      = applications.filter(status='Applied').count()
+    shortlisted_count  = applications.filter(status='Shortlisted').count()
+    interview_count    = applications.filter(status='Interview').count()
+    rejected_count     = applications.filter(status='Rejected').count()
+
+    # ── This employer's jobs only (for dropdown) ──
+    employer_jobs = Job.objects.filter(employer=request.user).order_by('title')
+    total_jobs    = employer_jobs.count()         # should be 23
+
+    # ── Build JSON → feeds the JS cards ──
+    apps_list = []
+    for a in applications:
+        apps_list.append({
+            'id':         a.id,
+            'name':       a.applicant.get_full_name() or a.applicant.username,
+            'email':      a.applicant.email,
+            'phone':      a.phone_number or '',
+            'job_title':  a.job.title,
+            'job_id':     a.job.id,
+            'status':     a.status,
+            'skills':     a.skills or '',
+            'location':   a.location or '',
+            'experience': a.experience or '',
+            'resume':     a.resume.url if a.resume else '',
+            'applied_at': a.applied_at.strftime('%d %b %Y'),
+        })
+
+    status_choices = [
+        'Applied', 'Screening', 'Shortlisted',
+        'Interview', 'Technical', 'HR', 'Offer', 'Rejected'
+    ]
+
+    context = {
+        # ✅ CORRECT — pass the list directly, let json_script handle encoding
+        'applications_json': apps_list,
+        'total_applications': total_applications,      # ← should be 7
+        'pending_count':      pending_count,
+        'shortlisted_count':  shortlisted_count,
+        'interview_count':    interview_count,
+        'rejected_count':     rejected_count,
+        'employer_jobs':      employer_jobs,
+        'total_jobs':         total_jobs,              # ← should be 23
+        'status_choices':     status_choices,
+    }
+    return render(request, 'core/applicants.html', context)
 
 # ===================== SHORTLIST CANDIDATE =====================
 
@@ -1130,4 +1215,9 @@ def view_applications(request, job_id):
         'applications': applications,
     }
     return render(request, 'core/view_applications.html', context)
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Job
+
+
 

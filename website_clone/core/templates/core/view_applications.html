@@ -1,33 +1,121 @@
-<h1>{{ job.title }} Applications</h1>
+<!DOCTYPE html>
+<html>
 
-{% for app in applications %}
+<head>
+    <title>Applications</title>
 
-<div>
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
 
-    <h3>
-        {{ app.applicant.username }}
-    </h3>
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #111827;
+            background-color: aliceblue;
+        }
 
-    <p>
-        Email:
-        {{ app.applicant.email }}
-    </p>
+        .applications-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
 
-    <p>
-        Phone:
-        {{ app.phone_number }}
-    </p>
+        .application-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
-    <p>
-        Applied Job:
-        {{ app.job.title }}
-    </p>
+            border-left: 6px solid #2563eb;
 
-    <p>
-        Status:
-        {{ app.status }}
-    </p>
+            transition: 0.3s;
+        }
 
-</div>
+        .application-card:hover {
+            transform: translateY(-5px);
+        }
 
-{% endfor %}
+        .candidate-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+
+        .detail {
+            margin-bottom: 10px;
+            color: #374151;
+            font-size: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>
+        {{ job.title }} Applications
+    </h1>
+
+    <div class="applications-container">
+
+        {% for app in applications %}
+
+        <div class="application-card">
+
+            <div class="candidate-name">
+                👤 {{ app.applicant.username }}
+            </div>
+
+            <div class="detail">
+                <span class="label">📧 Email:</span>
+                {{ app.applicant.email }}
+            </div>
+
+            <div class="detail">
+                <span class="label">📱 Phone:</span>
+                {{ app.phone_number }}
+            </div>
+
+            <div class="detail">
+                <span class="label">💼 Applied Job:</span>
+                {{ app.job.title }}
+            </div>
+
+            <div class="detail">
+                <span class="label">📅 Status:</span>
+
+                <span class="status">
+                    {{ app.status }}
+                </span>
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+
+</html>

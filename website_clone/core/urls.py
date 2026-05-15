@@ -115,5 +115,5 @@ urlpatterns = [
     views.view_applications,
     name='view_applications'
     ),
- 
+    path('jobs/toggle/<int:job_id>/', views.toggle_job_status, name='toggle_job_status'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

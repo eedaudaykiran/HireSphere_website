@@ -110,15 +110,15 @@
 
                 <select name="job_type">
 
-                    <option value="Full-Time" {% if job.job_type=='Full-Time' %} selected {% endif %}>
+                    <option value="Full-Time" {% if job.job_type == 'Full-Time' %} selected {% endif %}>
                         Full-Time
                     </option>
 
-                    <option value="Part-Time" {% if job.job_type=='Part-Time' %} selected {% endif %}>
+                    <option value="Part-Time" {% if job.job_type == 'Part-Time' %} selected {% endif %}>
                         Part-Time
                     </option>
 
-                    <option value="Remote" {% if job.job_type=='Remote' %} selected {% endif %}>
+                    <option value="Remote" {% if job.job_type == 'Remote' %} selected {% endif %}>
                         Remote
                     </option>
 
@@ -133,15 +133,15 @@
 
                 <select name="status">
 
-                    <option value="active" {% if job.status=='active' %} selected {% endif %}>
+                    <option value="active" {% if job.status == 'active' %} selected {% endif %}>
                         Active
                     </option>
 
-                    <option value="closed" {% if job.status=='closed' %} selected {% endif %}>
+                    <option value="closed" {% if job.status == 'closed' %} selected {% endif %}>
                         Closed
                     </option>
 
-                    <option value="draft" {% if job.status=='draft' %} selected {% endif %}>
+                    <option value="draft" {% if job.status == 'draft' %} selected {% endif %}>
                         Draft
                     </option>
 

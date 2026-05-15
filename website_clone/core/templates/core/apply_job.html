@@ -53,12 +53,32 @@
         margin-top: 1.8rem;
     }
 
-    .file-label {
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-label {
         display: block;
         font-weight: 600;
         color: #1e293b;
         margin-bottom: 0.5rem;
         font-size: 0.95rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 16px;
+        background: #ffffff;
+        transition: all 0.25s ease;
+        font-size: 0.95rem;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
     .file-input {
@@ -86,7 +106,7 @@
         border-radius: 40px;
         cursor: pointer;
         width: 100%;
-        margin-top: 1.8rem;
+        margin-top: 1rem;
         transition: all 0.25s ease;
         box-shadow: 0 6px 14px rgba(99, 102, 241, 0.3);
     }
@@ -123,8 +143,37 @@
     <form method="POST" enctype="multipart/form-data" class="apply-form">
         {% csrf_token %}
 
-        <label class="file-label">📎 Upload Resume (optional)</label><br>
-        <input type="file" name="resume" accept=".pdf,.doc,.docx" class="file-input"><br><br>
+        <!-- Phone Number Field -->
+        <div class="form-group">
+            <label class="form-label">📞 Phone Number</label>
+            <input type="tel" name="phone_number" placeholder="Your phone number" class="form-input" required>
+        </div>
+
+        <!-- Skills Field (prefilled from user profile if available) -->
+        <div class="form-group">
+            <label class="form-label">🛠️ Skills (comma separated)</label>
+            <input type="text" name="skills" placeholder="e.g. Python, Django, React"
+                value="{{ request.user.userprofile.skills|default:'' }}" class="form-input">
+        </div>
+
+        <!-- Location Field -->
+        <div class="form-group">
+            <label class="form-label">📍 Your Location</label>
+            <input type="text" name="location" placeholder="e.g. Hyderabad, Bangalore" class="form-input">
+        </div>
+
+        <!-- Experience Field (prefilled from user profile work_status) -->
+        <div class="form-group">
+            <label class="form-label">💼 Years of Experience</label>
+            <input type="text" name="experience" placeholder="e.g. 2 Years, Fresher"
+                value="{{ request.user.userprofile.work_status|default:'' }}" class="form-input">
+        </div>
+
+        <!-- Resume Upload -->
+        <div class="form-group">
+            <label class="form-label">📎 Upload Resume (PDF, DOC, DOCX)</label>
+            <input type="file" name="resume" accept=".pdf,.doc,.docx" class="file-input">
+        </div>
 
         <button type="submit" class="btn-submit">🚀 Submit Application</button>
     </form>

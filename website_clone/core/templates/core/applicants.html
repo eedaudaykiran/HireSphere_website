@@ -37,7 +37,7 @@
             --purple: #7048e8;
             --purple-bg: #f0ebff;
             --radius: 16px;
-            --shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+            --shadow: 0 2px 16px rgba(0, 0, 0, .07);
         }
 
         body {
@@ -47,7 +47,7 @@
             min-height: 100vh;
         }
 
-        /* ── TOPBAR ── */
+        /* TOPBAR */
         .topbar {
             background: var(--white);
             border-bottom: 1px solid var(--border);
@@ -90,7 +90,7 @@
             font-size: 15px;
             cursor: pointer;
             position: relative;
-            transition: border-color 0.2s;
+            transition: border-color .2s;
         }
 
         .tb-btn:hover {
@@ -122,13 +122,13 @@
             cursor: pointer;
         }
 
-        /* ── LAYOUT ── */
+        /* LAYOUT */
         .layout {
             display: flex;
             min-height: calc(100vh - 62px);
         }
 
-        /* ── SIDEBAR ── */
+        /* SIDEBAR */
         .sidebar {
             width: 230px;
             min-width: 230px;
@@ -144,7 +144,7 @@
             font-size: 10.5px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: .1em;
             color: var(--muted);
             padding: 14px 12px 6px;
         }
@@ -159,7 +159,7 @@
             font-size: 13.5px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all .15s;
             text-decoration: none;
         }
 
@@ -200,14 +200,14 @@
             margin: 10px 4px;
         }
 
-        /* ── MAIN ── */
+        /* MAIN */
         .main {
             flex: 1;
             padding: 32px 36px;
             min-width: 0;
         }
 
-        /* ── PAGE HEADER ── */
+        /* PAGE HEADER */
         .page-hdr {
             display: flex;
             align-items: flex-start;
@@ -246,10 +246,11 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.18s;
+            transition: all .18s;
             display: flex;
             align-items: center;
             gap: 6px;
+            text-decoration: none;
         }
 
         .btn-outline:hover {
@@ -267,14 +268,14 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.18s;
+            transition: all .18s;
         }
 
         .btn-primary:hover {
             background: var(--accent);
         }
 
-        /* ── STATS ── */
+        /* STATS */
         .stats {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -287,7 +288,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 18px 20px;
-            animation: up 0.4s ease both;
+            animation: up .4s ease both;
         }
 
         .stat:nth-child(1) {
@@ -352,7 +353,7 @@
             margin-top: 2px;
         }
 
-        /* ── TOOLBAR ── */
+        /* TOOLBAR */
         .toolbar {
             display: flex;
             align-items: center;
@@ -377,7 +378,7 @@
             font-size: 13.5px;
             color: var(--ink);
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color .2s;
         }
 
         .search-box input::placeholder {
@@ -408,7 +409,7 @@
             font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all .15s;
             white-space: nowrap;
         }
 
@@ -429,7 +430,7 @@
             color: var(--ink);
             outline: none;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: border-color .2s;
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%236e6e85' stroke-width='2' stroke-linecap='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -441,7 +442,7 @@
             border-color: var(--accent);
         }
 
-        /* ── APPLICANT COUNT BAR ── */
+        /* COUNT BAR */
         .count-bar {
             display: flex;
             align-items: center;
@@ -467,7 +468,7 @@
             color: var(--muted);
         }
 
-        /* ── APPLICANT CARDS ── */
+        /* CARDS */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -479,8 +480,8 @@
             border: 1.5px solid var(--border);
             border-radius: var(--radius);
             padding: 20px;
-            transition: box-shadow 0.2s, border-color 0.2s;
-            animation: up 0.4s ease both;
+            transition: box-shadow .2s, border-color .2s;
+            animation: up .4s ease both;
             position: relative;
             overflow: hidden;
         }
@@ -488,6 +489,17 @@
         .acard:hover {
             box-shadow: var(--shadow);
             border-color: var(--accent);
+        }
+
+        .acard.featured::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent), var(--purple));
+            border-radius: 3px 0 0 3px;
         }
 
         .acard-top {
@@ -547,10 +559,6 @@
             margin-top: 4px;
         }
 
-        .cbadge {
-            flex-shrink: 0;
-        }
-
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -561,32 +569,47 @@
             font-weight: 700;
         }
 
-        .s-pending {
+        .s-Applied {
             background: var(--amber-bg);
             color: var(--amber);
         }
 
-        .s-shortlisted {
-            background: var(--green-bg);
-            color: var(--green);
-        }
-
-        .s-rejected {
-            background: var(--red-bg);
-            color: var(--red);
-        }
-
-        .s-reviewed {
+        .s-Screening {
             background: var(--sky-bg);
             color: var(--sky);
         }
 
-        .s-interview {
+        .s-Shortlisted {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .s-Interview,
+        .s-Interview\ Scheduled {
             background: var(--purple-bg);
             color: var(--purple);
         }
 
-        /* Skills */
+        .s-Technical {
+            background: var(--accent-bg);
+            color: var(--accent);
+        }
+
+        .s-HR {
+            background: var(--sky-bg);
+            color: var(--sky);
+        }
+
+        .s-Offer {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .s-Rejected {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
         .skills-row {
             display: flex;
             flex-wrap: wrap;
@@ -604,7 +627,6 @@
             border-radius: 20px;
         }
 
-        /* Meta row */
         .meta-row {
             display: flex;
             align-items: center;
@@ -622,14 +644,12 @@
             font-weight: 500;
         }
 
-        /* Divider */
         .card-sep {
             height: 1px;
             background: var(--border);
             margin-bottom: 14px;
         }
 
-        /* Actions */
         .card-actions {
             display: flex;
             align-items: center;
@@ -644,9 +664,11 @@
             font-weight: 700;
             font-family: 'Plus Jakarta Sans', sans-serif;
             cursor: pointer;
-            transition: all 0.18s;
+            transition: all .18s;
             text-align: center;
             border: none;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .act-view {
@@ -690,7 +712,8 @@
             justify-content: center;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.18s;
+            transition: all .18s;
+            text-decoration: none;
         }
 
         .act-icon:hover {
@@ -698,24 +721,15 @@
             color: var(--accent);
         }
 
-        /* Featured stripe */
-        .acard.featured::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, var(--accent), var(--purple));
-            border-radius: 3px 0 0 3px;
-        }
-
-        /* Empty state */
-        .empty {
-            display: none;
-            grid-column: 1/-1;
+        /* EMPTY */
+        .empty-state {
             text-align: center;
             padding: 60px 20px;
+            display: none;
+        }
+
+        .empty-state.show {
+            display: block;
         }
 
         .empty-icon {
@@ -723,17 +737,17 @@
             margin-bottom: 14px;
         }
 
-        .empty p {
+        .empty-state p {
             color: var(--muted);
             font-size: 15px;
         }
 
-        /* ── PROFILE MODAL ── */
+        /* PROFILE MODAL */
         .overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, .45);
             z-index: 200;
             align-items: center;
             justify-content: center;
@@ -751,8 +765,8 @@
             max-width: 520px;
             max-height: 90vh;
             overflow-y: auto;
-            animation: up 0.25s ease;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+            animation: up .25s ease;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .18);
         }
 
         .modal-head {
@@ -810,7 +824,7 @@
             font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: .1em;
             color: var(--muted);
             margin-bottom: 12px;
         }
@@ -867,7 +881,41 @@
             font-size: 13.5px;
         }
 
-        /* ── RESPONSIVE ── */
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 13px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all .3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: var(--green);
+        }
+
+        .toast.error {
+            background: var(--red);
+        }
+
+        .toast.info {
+            background: var(--accent);
+        }
+
+        /* RESPONSIVE */
         @media(max-width:1100px) {
             .stats {
                 grid-template-columns: repeat(3, 1fr);
@@ -925,7 +973,9 @@
             <div class="tb-btn">🔔<div class="dot"></div>
             </div>
             <div class="tb-btn hide-sm">📧</div>
-            <div class="avatar">RC</div>
+            <div class="avatar">
+                {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+            </div>
         </div>
     </div>
 
@@ -935,15 +985,19 @@
         <aside class="sidebar">
             <div class="nav-group-label">Main</div>
             <a class="nav-item" href="{% url 'employer_dashboard' %}"><span class="nav-icon">🏠</span>Overview</a>
-            <a class="nav-item" href="{% url 'manage_jobs' %}"><span class="nav-icon">💼</span>Manage Jobs<span class="nav-chip">10</span></a>
-            <a class="nav-item active" href="{% url 'applicants' %}"><span class="nav-icon">👥</span>Applicants<span
-                    class="nav-chip red">43</span></a>
+            <a class="nav-item" href="{% url 'manage_jobs' %}">
+                <span class="nav-icon">💼</span>Manage Jobs
+                <span class="nav-chip">{{ total_jobs }}</span>
+            </a>
+            <a class="nav-item active" href="{% url 'applicants' %}">
+                <span class="nav-icon">👥</span>Applicants
+                <span class="nav-chip red">{{ total_applications }}</span>
+            </a>
             <a class="nav-item" href="{% url 'shortlisted_candidates' %}"><span class="nav-icon">⭐</span>Shortlisted</a>
             <a class="nav-item" href="{% url 'interviews' %}"><span class="nav-icon">📅</span>Interviews</a>
             <div class="sep"></div>
             <div class="nav-group-label">Reports</div>
             <a class="nav-item" href="{% url 'reports' %}"><span class="nav-icon">📊</span>Analytics</a>
-            <a class="nav-item" href="{% url 'reports' %}"><span class="nav-icon">📄</span>Reports</a>
             <div class="sep"></div>
             <a class="nav-item" href="{% url 'settings' %}"><span class="nav-icon">⚙️</span>Settings</a>
             <a class="nav-item" href="{% url 'logout' %}"><span class="nav-icon">🚪</span>Logout</a>
@@ -959,47 +1013,46 @@
                     <div class="page-sub">Review, shortlist, and manage all candidates who applied to your jobs.</div>
                 </div>
                 <div class="hdr-actions">
-                    <button class="btn-outline">⬇️ Export CSV</button>
-                    <button class="btn-primary">+ Invite Candidate</button>
+                    <a class="btn-outline" href="{% url 'applicants' %}?export=csv">⬇️ Export CSV</a>
                 </div>
             </div>
 
-            <!-- Stats -->
+            <!-- Stats — all dynamic from Django context -->
             <div class="stats">
                 <div class="stat">
                     <div class="stat-top">
                         <div class="stat-icon" style="background:#eef1ff">📩</div>
-                        <span style="font-size:11px;color:var(--green);font-weight:700;">+12 today</span>
+                        <span style="font-size:11px;color:var(--green);font-weight:700;">Total</span>
                     </div>
-                    <div class="stat-num" style="color:var(--accent)">43</div>
+                    <div class="stat-num" style="color:var(--accent)">{{ total_applications|default:"0" }}</div>
                     <div class="stat-label">Total Applicants</div>
                 </div>
                 <div class="stat">
                     <div class="stat-top">
                         <div class="stat-icon" style="background:var(--amber-bg)">🕐</div>
                     </div>
-                    <div class="stat-num" style="color:var(--amber)">18</div>
+                    <div class="stat-num" style="color:var(--amber)">{{ pending_count|default:"0" }}</div>
                     <div class="stat-label">Pending Review</div>
                 </div>
                 <div class="stat">
                     <div class="stat-top">
                         <div class="stat-icon" style="background:var(--green-bg)">✅</div>
                     </div>
-                    <div class="stat-num" style="color:var(--green)">14</div>
+                    <div class="stat-num" style="color:var(--green)">{{ shortlisted_count|default:"0" }}</div>
                     <div class="stat-label">Shortlisted</div>
                 </div>
                 <div class="stat">
                     <div class="stat-top">
                         <div class="stat-icon" style="background:var(--purple-bg)">📅</div>
                     </div>
-                    <div class="stat-num" style="color:var(--purple)">6</div>
+                    <div class="stat-num" style="color:var(--purple)">{{ interview_count|default:"0" }}</div>
                     <div class="stat-label">Interviews Set</div>
                 </div>
                 <div class="stat">
                     <div class="stat-top">
                         <div class="stat-icon" style="background:var(--red-bg)">❌</div>
                     </div>
-                    <div class="stat-num" style="color:var(--red)">5</div>
+                    <div class="stat-num" style="color:var(--red)">{{ rejected_count|default:"0" }}</div>
                     <div class="stat-label">Rejected</div>
                 </div>
             </div>
@@ -1011,52 +1064,65 @@
                     <input type="text" id="searchInput" placeholder="Search by name, skills, location..."
                         oninput="applyFilters()" />
                 </div>
+                <!-- Job filter — only THIS employer's jobs -->
                 <select class="select-box" id="jobFilter" onchange="applyFilters()">
                     <option value="">All Jobs</option>
-                    <option>Python Developer</option>
-                    <option>React Developer</option>
-                    <option>Django Backend</option>
-                    <option>Data Analyst</option>
-                    <option>ML Engineer</option>
+                    {% for job in employer_jobs %}
+                    <option value="{{ job.id }}">{{ job.title }}</option>
+                    {% endfor %}
                 </select>
-                <select class="select-box hide-sm" id="expFilter" onchange="applyFilters()">
-                    <option value="">Experience</option>
-                    <option>Fresher</option>
-                    <option>1-3 Years</option>
-                    <option>3-5 Years</option>
-                    <option>5+ Years</option>
+                <select class="select-box hide-sm" id="statusFilter" onchange="applyFilters()">
+                    <option value="">All Statuses</option>
+                    <option value="Applied">Applied</option>
+                    <option value="Screening">Screening</option>
+                    <option value="Shortlisted">Shortlisted</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Technical">Technical</option>
+                    <option value="HR">HR</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
                 </select>
             </div>
 
             <!-- Status Filter Pills -->
             <div class="toolbar" style="margin-bottom:16px;">
-                <button class="filter-pill on" onclick="filterStatus('all',this)">All (43)</button>
-                <button class="filter-pill" onclick="filterStatus('pending',this)">🕐 Pending (18)</button>
-                <button class="filter-pill" onclick="filterStatus('reviewed',this)">👁️ Reviewed (7)</button>
-                <button class="filter-pill" onclick="filterStatus('shortlisted',this)">⭐ Shortlisted (14)</button>
-                <button class="filter-pill" onclick="filterStatus('interview',this)">📅 Interview (6)</button>
-                <button class="filter-pill" onclick="filterStatus('rejected',this)">❌ Rejected (5)</button>
+                <button class="filter-pill on" onclick="filterPill('',this)">
+                    All ({{ total_applications }})
+                </button>
+                <button class="filter-pill" onclick="filterPill('Applied',this)">
+                    🕐 Applied ({{ pending_count }})
+                </button>
+                <button class="filter-pill" onclick="filterPill('Shortlisted',this)">
+                    ⭐ Shortlisted ({{ shortlisted_count }})
+                </button>
+                <button class="filter-pill" onclick="filterPill('Interview',this)">
+                    📅 Interview ({{ interview_count }})
+                </button>
+                <button class="filter-pill" onclick="filterPill('Rejected',this)">
+                    ❌ Rejected ({{ rejected_count }})
+                </button>
             </div>
 
             <!-- Count Bar -->
             <div class="count-bar">
-                <div class="count-text">Showing <strong id="countText">8</strong> applicants</div>
+                <div class="count-text">Showing <strong id="countText">{{ total_applications }}</strong> applicants
+                </div>
                 <div class="sort-row">
                     Sort:
-                    <select class="select-box" style="padding:6px 28px 6px 10px;font-size:12.5px;">
-                        <option>Newest First</option>
-                        <option>Oldest First</option>
-                        <option>Name A–Z</option>
+                    <select class="select-box" id="sortSelect" style="padding:6px 28px 6px 10px;font-size:12.5px;"
+                        onchange="applyFilters()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="name">Name A–Z</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Cards Grid -->
-            <div class="cards-grid" id="cardsGrid">
-                <div class="empty" id="emptyState">
-                    <div class="empty-icon">🔍</div>
-                    <p>No applicants match your current filter.</p>
-                </div>
+            <!-- Cards Grid — rendered by JS from Django JSON data -->
+            <div class="cards-grid" id="cardsGrid"></div>
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🔍</div>
+                <p>No applicants match your current filter.</p>
             </div>
 
         </main>
@@ -1084,156 +1150,238 @@
                     </div>
                 </div>
                 <div class="modal-section">
-                    <h4>Education</h4>
+                    <h4>Application Details</h4>
                     <div class="info-grid">
-                        <div class="info-cell"><span>Degree</span><strong id="mDegree"></strong></div>
                         <div class="info-cell"><span>Applied For</span><strong id="mJob"></strong></div>
+                        <div class="info-cell"><span>Applied On</span><strong id="mDate"></strong></div>
+                        <div class="info-cell"><span>Current Status</span><strong id="mStatus"></strong></div>
+                        <div class="info-cell"><span>Resume</span><strong id="mResume"></strong></div>
                     </div>
                 </div>
                 <div class="modal-section">
                     <h4>Skills</h4>
                     <div class="modal-skills" id="mSkills"></div>
                 </div>
+                <!-- Status Update Form -->
+                <div class="modal-section">
+                    <h4>Update Status</h4>
+                    <form id="statusUpdateForm" method="POST">
+                        {% csrf_token %}
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            {% for status_val in status_choices %}
+                            <button type="submit" name="new_status" value="{{ status_val }}"
+                                style="padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;"
+                                onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+                                onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink)'">
+                                {{ status_val }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="modal-actions">
-                <button class="act-btn act-view" onclick="alert('Downloading resume PDF...')">⬇️ Download
-                    Resume</button>
-                <button class="act-btn act-shortlist" id="mShortlistBtn"></button>
-                <button class="act-btn act-reject" onclick="closeModal()">✕ Reject</button>
+                <a class="act-btn act-view" id="mResumeBtn" href="#" target="_blank">⬇️ Download Resume</a>
+                <button class="act-btn act-shortlist" id="mShortlistBtn" onclick="quickAction('Shortlisted')">☆
+                    Shortlist</button>
+                <button class="act-btn act-reject" onclick="quickAction('Rejected')">✕ Reject</button>
             </div>
         </div>
     </div>
 
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Django data injected as JSON for JS rendering -->
+    {{ applications_json|json_script:"applicationsData" }}
+    
+
     <script>
-        const COLORS = ['#1a56ff', '#7048e8', '#0ca678', '#e67700', '#0277b5', '#e03131', '#6741d9', '#2f9e44'];
+        // ── LOAD DJANGO DATA ──
+        
+        const RAW = JSON.parse(document.getElementById('applicationsData').textContent);
+        let DATA = Array.isArray(RAW) ? RAW : JSON.parse(RAW);  // working copy
+        let currentAppId = null;
 
-        const APPLICANTS = [
-            { id: 1, name: 'Arjun Sharma', role: 'Python Developer', exp: '3 Years', loc: 'Hyderabad', email: 'arjun@email.com', phone: '+91 98765 43210', degree: 'B.Tech CSE', skills: ['Python', 'Django', 'REST API', 'PostgreSQL'], date: '2 days ago', status: 'pending', color: COLORS[0], featured: true },
-            { id: 2, name: 'Priya Nair', role: 'React Developer', exp: '2 Years', loc: 'Bangalore', email: 'priya@email.com', phone: '+91 91234 56789', degree: 'B.E. IT', skills: ['React', 'TypeScript', 'Redux', 'Tailwind'], date: '1 day ago', status: 'shortlisted', color: COLORS[1], featured: false },
-            { id: 3, name: 'Rahul Mehta', role: 'Django Backend', exp: '4 Years', loc: 'Mumbai', email: 'rahul@email.com', phone: '+91 99887 76655', degree: 'MCA', skills: ['Django', 'Python', 'MySQL', 'Docker'], date: '3 days ago', status: 'interview', color: COLORS[2], featured: true },
-            { id: 4, name: 'Divya Reddy', role: 'Data Analyst', exp: 'Fresher', loc: 'Chennai', email: 'divya@email.com', phone: '+91 80001 23456', degree: 'B.Sc Stats', skills: ['SQL', 'Excel', 'Power BI', 'Python'], date: '5 days ago', status: 'reviewed', color: COLORS[3], featured: false },
-            { id: 5, name: 'Kiran Patel', role: 'ML Engineer', exp: '2 Years', loc: 'Pune', email: 'kiran@email.com', phone: '+91 77665 44332', degree: 'M.Tech AI', skills: ['Python', 'TensorFlow', 'Scikit-learn', 'NLP'], date: '4 days ago', status: 'rejected', color: COLORS[4], featured: false },
-            { id: 6, name: 'Sneha Iyer', role: 'Python Developer', exp: '1-3 Years', loc: 'Hyderabad', email: 'sneha@email.com', phone: '+91 88990 11223', degree: 'B.Tech IT', skills: ['Python', 'Flask', 'MongoDB', 'Redis'], date: 'Today', status: 'pending', color: COLORS[5], featured: false },
-            { id: 7, name: 'Vikram Joshi', role: 'React Developer', exp: '5+ Years', loc: 'Delhi', email: 'vikram@email.com', phone: '+91 98001 55667', degree: 'B.E. CSE', skills: ['React', 'Node.js', 'GraphQL', 'AWS'], date: '6 days ago', status: 'shortlisted', color: COLORS[6], featured: true },
-            { id: 8, name: 'Ananya Singh', role: 'Django Backend', exp: '3-5 Years', loc: 'Kolkata', email: 'ananya@email.com', phone: '+91 70099 88776', degree: 'B.Tech CSE', skills: ['Django', 'DRF', 'Celery', 'Redis'], date: '2 days ago', status: 'interview', color: COLORS[7], featured: false },
-        ];
+        const COLORS = ['#1a56ff', '#7048e8', '#0ca678', '#e67700', '#0277b5', '#e03131', '#6741d9', '#2f9e44', '#ae3ec9', '#1098ad'];
 
-        let currentStatusFilter = 'all';
-        let openApplicant = null;
+        function getColor(idx) { return COLORS[idx % COLORS.length]; }
 
-        const STATUS_META = {
-            pending: { label: 'Pending', cls: 's-pending' },
-            reviewed: { label: 'Reviewed', cls: 's-reviewed' },
-            shortlisted: { label: 'Shortlisted', cls: 's-shortlisted' },
-            interview: { label: 'Interview', cls: 's-interview' },
-            rejected: { label: 'Rejected', cls: 's-rejected' },
+        function initials(name) {
+            if (!name) return '?';
+            return name.split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        const STATUS_RING = {
+            'Shortlisted': '#0ca678', 'Interview': '#7048e8', 'Offer': '#0ca678',
+            'Rejected': '#e03131', 'Applied': '#6e6e85', 'Screening': '#0277b5',
+            'Technical': '#1a56ff', 'HR': '#0277b5'
         };
 
-        function initials(n) { return n.split(' ').map(w => w[0]).join('').toUpperCase(); }
-
+        // ── RENDER CARDS ──
         function renderCards(list) {
             const grid = document.getElementById('cardsGrid');
             const empty = document.getElementById('emptyState');
-            // Remove old cards
-            grid.querySelectorAll('.acard').forEach(c => c.remove());
+            grid.innerHTML = '';
             document.getElementById('countText').textContent = list.length;
-            if (!list.length) { empty.style.display = 'block'; return; }
-            empty.style.display = 'none';
+
+            if (!list.length) {
+                empty.classList.add('show');
+                return;
+            }
+            empty.classList.remove('show');
+
             list.forEach((a, i) => {
-                const sm = STATUS_META[a.status];
-                const div = document.createElement('div');
-                div.className = 'acard' + (a.featured ? ' featured' : '');
-                div.style.animationDelay = (i * 0.06) + 's';
-                div.innerHTML = `
-      <div class="acard-top">
-        <div class="cphoto" style="background:${a.color}">
-          ${initials(a.name)}
-          <div class="online-ring" style="background:${a.status === 'interview' ? 'var(--purple)' : a.status === 'shortlisted' ? 'var(--green)' : 'var(--muted)'}"></div>
-        </div>
-        <div class="cinfo">
-          <div class="cname">${a.name}</div>
-          <div class="crole">Applied for: <strong>${a.role}</strong></div>
-          <div class="cdate">🕐 ${a.date}</div>
-        </div>
-        <div class="cbadge">
-          <span class="status-badge ${sm.cls}">${sm.label}</span>
-        </div>
-      </div>
-      <div class="skills-row">
-        ${a.skills.slice(0, 3).map(s => `<span class="skill-tag">${s}</span>`).join('')}
-        ${a.skills.length > 3 ? `<span class="skill-tag">+${a.skills.length - 3}</span>` : ''}
-      </div>
-      <div class="meta-row">
-        <div class="meta-item">💼 ${a.exp}</div>
-        <div class="meta-item">📍 ${a.loc}</div>
-        <div class="meta-item">🎓 ${a.degree}</div>
-      </div>
-      <div class="card-sep"></div>
-      <div class="card-actions">
-        <button class="act-btn act-view" onclick="openProfile(${a.id})">👁️ View Profile</button>
-        <button class="act-btn act-shortlist" onclick="changeStatus(${a.id},'shortlisted',this)">
-          ${a.status === 'shortlisted' ? '⭐ Shortlisted' : '☆ Shortlist'}
-        </button>
-        <button class="act-btn act-reject" onclick="changeStatus(${a.id},'rejected',this)">✕</button>
-        <div class="act-icon" title="Download Resume" onclick="alert('Downloading resume for ${a.name}...')">⬇️</div>
-      </div>
-    `;
-                grid.appendChild(div);
+                const color = getColor(i);
+                const ring = STATUS_RING[a.status] || '#6e6e85';
+                const skillTags = (a.skills || '').split(',').map(s => s.trim()).filter(Boolean);
+                const displaySkills = skillTags.slice(0, 3).map(s => `<span class="skill-tag">${s}</span>`).join('');
+                const extraSkills = skillTags.length > 3 ? `<span class="skill-tag">+${skillTags.length - 3}</span>` : '';
+
+                const card = document.createElement('div');
+                card.className = 'acard' + (a.status === 'Shortlisted' ? ' featured' : '');
+                card.style.animationDelay = (i * 0.05) + 's';
+                card.dataset.name = (a.name || '').toLowerCase();
+                card.dataset.skills = (a.skills || '').toLowerCase();
+                card.dataset.location = (a.location || '').toLowerCase();
+                card.dataset.status = a.status || '';
+                card.dataset.jobid = a.job_id || '';
+
+                card.innerHTML = `
+<div class="acard-top">
+    <div class="cphoto" style="background:${color}">
+        ${initials(a.name)}
+        <div class="online-ring" style="background:${ring}"></div>
+    </div>
+    <div class="cinfo">
+        <div class="cname">${a.name || '—'}</div>
+        <div class="crole">Applied for: <strong>${a.job_title || '—'}</strong></div>
+        <div class="cdate">🕐 ${a.applied_at || '—'}</div>
+    </div>
+    <div>
+        <span class="status-badge s-${(a.status || '').replace(' ', '\\ ')}">${a.status || '—'}</span>
+    </div>
+</div>
+<div class="skills-row">${displaySkills}${extraSkills}</div>
+<div class="meta-row">
+    <div class="meta-item">💼 ${a.experience || 'N/A'}</div>
+    <div class="meta-item">📍 ${a.location || 'N/A'}</div>
+    <div class="meta-item">📧 ${a.email || '—'}</div>
+</div>
+<div class="card-sep"></div>
+<div class="card-actions">
+    <button class="act-btn act-view" onclick="openProfile(${a.id})">👁️ View Profile</button>
+    <a class="act-btn act-shortlist" href="/update-status/${a.id}/Shortlisted/">☆ Shortlist</a>
+    <a class="act-btn act-reject"   href="/update-status/${a.id}/Rejected/">✕</a>
+    ${a.resume ? `<a class="act-icon" href="${a.resume}" target="_blank" title="Download Resume">⬇️</a>` : `<span class="act-icon" style="opacity:.4;cursor:not-allowed;" title="No resume">📎</span>`}
+</div>`;
+
+                grid.appendChild(card);
             });
         }
 
+        // ── FILTERS ──
+        let pillStatus = '';
+
         function applyFilters() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            const job = document.getElementById('jobFilter').value;
-            const exp = document.getElementById('expFilter')?.value || '';
-            let list = APPLICANTS.filter(a => {
-                const matchStatus = currentStatusFilter === 'all' || a.status === currentStatusFilter;
-                const matchQ = !q || a.name.toLowerCase().includes(q) || a.skills.join(' ').toLowerCase().includes(q) || a.loc.toLowerCase().includes(q);
-                const matchJob = !job || a.role === job;
-                const matchExp = !exp || a.exp === exp;
-                return matchStatus && matchQ && matchJob && matchExp;
+            const q = document.getElementById('searchInput').value.toLowerCase().trim();
+            const jobId = document.getElementById('jobFilter').value;
+            const status = document.getElementById('statusFilter').value || pillStatus;
+            const sort = document.getElementById('sortSelect').value;
+
+            let list = DATA.filter(a => {
+                const matchQ = !q ||
+                    (a.name || '').toLowerCase().includes(q) ||
+                    (a.skills || '').toLowerCase().includes(q) ||
+                    (a.location || '').toLowerCase().includes(q);
+                const matchJob = !jobId || String(a.job_id) === jobId;
+                const matchStatus = !status || a.status === status;
+                return matchQ && matchJob && matchStatus;
             });
+
+            if (sort === 'oldest') list.sort((a, b) => a.id - b.id);
+            else if (sort === 'name') list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            else list.sort((a, b) => b.id - a.id);  // newest
+
             renderCards(list);
         }
 
-        function filterStatus(status, btn) {
-            currentStatusFilter = status;
+        function filterPill(status, btn) {
+            pillStatus = status;
             document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('on'));
             btn.classList.add('on');
+            // sync select box
+            document.getElementById('statusFilter').value = status;
             applyFilters();
         }
 
-        function changeStatus(id, newStatus, btn) {
-            const a = APPLICANTS.find(x => x.id === id);
-            if (!a) return;
-            a.status = newStatus;
-            applyFilters();
-        }
-
+        // ── PROFILE MODAL ──
         function openProfile(id) {
-            const a = APPLICANTS.find(x => x.id === id);
+            const a = DATA.find(x => x.id === id);
             if (!a) return;
-            openApplicant = a;
-            document.getElementById('mPhoto').style.background = a.color;
+            currentAppId = id;
+
+            const color = getColor(DATA.indexOf(a));
+            document.getElementById('mPhoto').style.background = color;
             document.getElementById('mPhoto').textContent = initials(a.name);
-            document.getElementById('mName').textContent = a.name;
-            document.getElementById('mRole').textContent = 'Applied for ' + a.role;
-            document.getElementById('mEmail').textContent = a.email;
-            document.getElementById('mPhone').textContent = a.phone;
-            document.getElementById('mLocation').textContent = a.loc;
-            document.getElementById('mExp').textContent = a.exp;
-            document.getElementById('mDegree').textContent = a.degree;
-            document.getElementById('mJob').textContent = a.role;
-            document.getElementById('mSkills').innerHTML = a.skills.map(s => `<span class="modal-skill">${s}</span>`).join('');
-            document.getElementById('mShortlistBtn').textContent = a.status === 'shortlisted' ? '⭐ Shortlisted' : '☆ Shortlist';
+            document.getElementById('mName').textContent = a.name || '—';
+            document.getElementById('mRole').textContent = 'Applied for ' + (a.job_title || '—');
+            document.getElementById('mEmail').textContent = a.email || '—';
+            document.getElementById('mPhone').textContent = a.phone || '—';
+            document.getElementById('mLocation').textContent = a.location || '—';
+            document.getElementById('mExp').textContent = a.experience || '—';
+            document.getElementById('mJob').textContent = a.job_title || '—';
+            document.getElementById('mDate').textContent = a.applied_at || '—';
+            document.getElementById('mStatus').textContent = a.status || '—';
+            document.getElementById('mResume').textContent = a.resume ? 'Available' : 'Not uploaded';
+
+            // Skills
+            const skills = (a.skills || '').split(',').map(s => s.trim()).filter(Boolean);
+            document.getElementById('mSkills').innerHTML = skills.length
+                ? skills.map(s => `<span class="modal-skill">${s}</span>`).join('')
+                : '<span style="color:var(--muted);font-size:13px;">No skills listed</span>';
+
+            // Resume link
+            const resumeBtn = document.getElementById('mResumeBtn');
+            if (a.resume) { resumeBtn.href = a.resume; resumeBtn.style.opacity = '1'; resumeBtn.style.pointerEvents = 'auto'; }
+            else { resumeBtn.href = '#'; resumeBtn.style.opacity = '.4'; resumeBtn.style.pointerEvents = 'none'; }
+
+            // Status update form action
+            document.getElementById('statusUpdateForm').action = `/update-status/${id}/`;
+
             document.getElementById('profileModal').classList.add('open');
         }
 
-        function closeModal() { document.getElementById('profileModal').classList.remove('open'); }
-        document.getElementById('profileModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+        function quickAction(newStatus) {
+            if (!currentAppId) return;
+            window.location.href = `/update-status/${currentAppId}/${newStatus}/`;
+        }
 
-        // Init
-        renderCards(APPLICANTS);
+        function closeModal() {
+            document.getElementById('profileModal').classList.remove('open');
+            currentAppId = null;
+        }
+        document.getElementById('profileModal').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+
+        // ── TOAST (for Django messages) ──
+        function showToast(msg, type = 'info') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast show ' + type;
+            setTimeout(() => { t.className = 'toast'; }, 3000);
+        }
+
+        {% if messages %}
+        {% for message in messages %}
+        showToast("{{ message|escapejs }}", "{{ message.tags|escapejs }}");
+        {% endfor %}
+        {% endif %}
+
+        // ── INIT ──
+        renderCards(DATA);
+        
     </script>
 </body>
 
