@@ -1,5 +1,5 @@
 {% block title %}Settings | HireHub{% endblock %}
-
+ 
 {% block extra_css %}
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -10,9 +10,7 @@
         backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .settings-section {
-        transition: all 0.2s;
-    }
+    .settings-section { transition: all 0.2s; }
     .danger-zone {
         border: 1px solid rgba(239, 68, 68, 0.3);
         background: rgba(239, 68, 68, 0.05);
@@ -27,9 +25,8 @@
         outline: none;
         transition: border 0.2s;
     }
-    input:focus, select:focus, textarea:focus {
-        border-color: #6366f1;
-    }
+    input:focus, select:focus, textarea:focus { border-color: #6366f1; }
+    input[type="file"] { padding: 8px; }
     label {
         font-size: 0.875rem;
         font-weight: 500;
@@ -43,294 +40,561 @@
         border-radius: 40px;
         font-weight: 600;
         transition: all 0.2s;
+        cursor: pointer;
     }
-    .btn-primary:hover {
-        transform: scale(1.02);
-        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
-    }
+    .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(79,70,229,0.3); }
     .btn-outline {
         border: 1px solid rgba(255,255,255,0.3);
         padding: 8px 18px;
         border-radius: 40px;
         font-weight: 500;
+        cursor: pointer;
     }
-    .btn-outline:hover {
-        background: rgba(255,255,255,0.1);
-    }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+ 
+    /* Toggle slider */
     .checkbox-slider {
-        width: 44px;
-        height: 24px;
+        width: 44px; height: 24px;
         background: #334155;
         border-radius: 999px;
         position: relative;
         cursor: pointer;
         transition: 0.2s;
+        flex-shrink: 0;
     }
-    .checkbox-slider.active {
-        background: #4f46e5;
-    }
-    .checkbox-slider:after {
+    .checkbox-slider.active { background: #4f46e5; }
+    .checkbox-slider::after {
         content: '';
         position: absolute;
-        width: 20px;
-        height: 20px;
+        width: 20px; height: 20px;
         background: white;
         border-radius: 50%;
-        top: 2px;
-        left: 2px;
+        top: 2px; left: 2px;
         transition: 0.2s;
     }
-    .checkbox-slider.active:after {
-        left: 22px;
-    }
+    .checkbox-slider.active::after { left: 22px; }
+ 
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
     ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
-    @media (max-width: 768px) {
-        .settings-grid { grid-template-columns: 1fr !important; }
-    }
+    @media (max-width: 768px) { .settings-grid { grid-template-columns: 1fr !important; } }
 </style>
 {% endblock %}
-
+ 
 {% block content %}
 <div class="min-h-screen bg-[#0b1120] text-white overflow-hidden">
-    <!-- Background blur orbs -->
     <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 blur-[120px] rounded-full"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full"></div>
-
+ 
     <div class="relative z-10 flex">
-        <!-- Sidebar (same as previous) -->
+ 
+        <!-- SIDEBAR -->
         <aside class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
             <h1 class="text-3xl font-extrabold mb-10">Hire<span class="text-indigo-400">Hub</span></h1>
             <nav class="space-y-3">
-                <a href="{% url 'applicants' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥 Applicants</a>
-                <a href="{% url 'manage_jobs' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage Jobs</a>
+                <a href="{% url 'applicants' %}"             class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥 Applicants</a>
+                <a href="{% url 'manage_jobs' %}"            class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage Jobs</a>
                 <a href="{% url 'shortlisted_candidates' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⭐ Shortlisted</a>
-                <a href="{% url 'interviews' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📅 Interviews</a>
-                <a href="{% url 'messages' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💬 Messages</a>
-                <a href="{% url 'reports' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📊 Reports</a>
-                <a href="{% url 'subscription' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💰 Subscription</a>
-                <a href="{% url 'settings' %}" class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">⚙️ Settings</a>
+                <a href="{% url 'interviews' %}"             class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📅 Interviews</a>
+                <a href="{% url 'messages' %}"               class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💬 Messages</a>
+                <a href="{% url 'reports' %}"                class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📊 Reports</a>
+                <a href="{% url 'subscription' %}"           class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💰 Subscription</a>
+                <a href="{% url 'settings' %}"               class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">⚙️ Settings</a>
             </nav>
         </aside>
-
-        <!-- MAIN CONTENT -->
+ 
         <main class="flex-1 p-4 sm:p-8">
+ 
             <!-- Header -->
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
                 <div>
                     <h2 class="text-4xl sm:text-5xl font-extrabold">⚙️ Settings</h2>
                     <p class="text-gray-400 mt-2 text-lg">Manage your account, security, and preferences.</p>
                 </div>
-                <button type="submit" form="mainSettingsForm" class="btn-primary px-6 py-3 flex items-center gap-2"><i class="fas fa-save"></i> Save All Changes</button>
+                <!--
+                    Save All Changes button submits the main form below.
+                    form="mainSettingsForm" links it to the <form> id.
+                    POST → settings view → saves to auth_user + UserProfile + EmployerSettings
+                -->
+                <button type="submit" form="mainSettingsForm" class="btn-primary px-6 py-3 flex items-center gap-2">
+                    <i class="fas fa-save"></i> Save All Changes
+                </button>
             </div>
-
-            <!-- Display messages (success/error) -->
+ 
+            <!--
+            Django messages — shown after successful save or error.
+            settings view does: messages.success(request, '✅ Settings saved successfully!')
+            then redirect('settings') so the message shows on reload.
+            -->
             {% if messages %}
             <div class="mb-6 space-y-2">
                 {% for message in messages %}
-                <div class="glass-card rounded-xl p-3 text-sm {% if message.tags == 'success' %}text-green-400 border-green-400/30{% else %}text-red-400 border-red-400/30{% endif %}">
+                <div class="glass-card rounded-xl p-3 text-sm
+                    {% if message.tags == 'success' %}text-green-400 border border-green-400/30
+                    {% else %}text-red-400 border border-red-400/30{% endif %}">
                     {{ message }}
                 </div>
                 {% endfor %}
             </div>
             {% endif %}
-
-            <!-- MAIN FORM (Profile + Notifications + Preferences) -->
+ 
+            <!--
+            MAIN FORM
+            POST → settings view in views.py
+            enctype="multipart/form-data" needed for profile_image FileField
+            -->
             <form method="POST" enctype="multipart/form-data" id="mainSettingsForm">
                 {% csrf_token %}
-
-                <!-- PROFILE SETTINGS -->
+ 
+                <!--
+                ════════════════════════════════════════════════
+                PROFILE INFORMATION
+                ════════════════════════════════════════════════
+                Where each field comes from and saves to:
+ 
+                full_name
+                  READS:  user.get_full_name → auth_user.first_name + last_name
+                  SAVES:  auth_user.first_name, auth_user.last_name
+ 
+                email
+                  READS:  user.email → auth_user.email
+                  SAVES:  auth_user.email
+ 
+                phone
+                  READS:  employer_settings.phone_number → EmployerSettings.phone_number
+                  SAVES:  EmployerSettings.phone_number
+ 
+                company
+                  READS:  user.userprofile.company_name → UserProfile.company_name
+                  SAVES:  UserProfile.company_name
+ 
+                profile_image
+                  READS:  employer_settings.profile_image → EmployerSettings.profile_image (ImageField)
+                  SAVES:  EmployerSettings.profile_image (upload_to='profile_images/')
+                ════════════════════════════════════════════════
+                -->
                 <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
-                    <h3 class="text-xl font-bold mb-5"><i class="fas fa-user-circle mr-2 text-indigo-400"></i> Profile Information</h3>
+                    <h3 class="text-xl font-bold mb-5">
+                        <i class="fas fa-user-circle mr-2 text-indigo-400"></i> Profile Information
+                    </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ 
                         <div>
                             <label>Full Name</label>
-                            <input type="text" name="full_name" value="{{ user.get_full_name|default:user.username }}" class="w-full">
+                            <!--
+                                user.get_full_name → auth_user first_name + last_name
+                                Falls back to username if name not set
+                            -->
+                            <input type="text" name="full_name"
+                                value="{{ user.get_full_name|default:user.username }}">
                         </div>
+ 
                         <div>
                             <label>Email Address</label>
-                            <input type="email" name="email" value="{{ user.email }}" class="w-full">
+                            <!-- user.email → auth_user.email field -->
+                            <input type="email" name="email"
+                                value="{{ user.email }}">
                         </div>
+ 
                         <div>
                             <label>Phone Number</label>
-                            <input type="text" name="phone" value="{{ user.profile.phone|default:'' }}" placeholder="+91 98765 43210">
+                            <!--
+                                FIX: was user.profile.phone (wrong)
+                                CORRECT: employer_settings.phone_number
+                                employer_settings passed from settings() view as context
+                                employer_settings = EmployerSettings.objects.get_or_create(employer=request.user)
+                            -->
+                            <input type="text" name="phone"
+                                value="{{ employer_settings.phone_number|default:'' }}"
+                                placeholder="+91 98765 43210">
                         </div>
+ 
                         <div>
                             <label>Company Name</label>
-                            <input type="text" name="company" value="{{ user.profile.company|default:'' }}" placeholder="Your startup / organization">
+                            <!--
+                                FIX: was user.profile.company (wrong)
+                                CORRECT: user.userprofile.company_name
+                                UserProfile.company_name is the correct field
+                            -->
+                            <input type="text" name="company"
+                                value="{% if user.userprofile %}{{ user.userprofile.company_name|default:'' }}{% endif %}"
+                                placeholder="Your startup / organization">
                         </div>
+ 
                         <div class="md:col-span-2">
                             <label>Profile Image</label>
                             <div class="flex items-center gap-4">
-                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xl font-bold">
-                                    {{ user.username|slice:":1"|upper }}
-                                </div>
-                                <input type="file" name="profile_image" accept="image/*">
+                                <!--
+                                    Show existing profile image if uploaded,
+                                    otherwise show letter avatar from username
+                                -->
+                                {% if employer_settings.profile_image %}
+                                    <img src="{{ employer_settings.profile_image.url }}"
+                                        class="w-16 h-16 rounded-full object-cover border-2 border-indigo-500"
+                                        alt="Profile">
+                                {% else %}
+                                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                                        {{ user.username|slice:":1"|upper }}
+                                    </div>
+                                {% endif %}
+                                <!--
+                                    FileField upload — saved to EmployerSettings.profile_image
+                                    upload_to='profile_images/' defined in model
+                                -->
+                                <input type="file" name="profile_image" accept="image/*" class="flex-1">
                             </div>
                         </div>
+ 
                     </div>
                 </div>
-
-                <!-- NOTIFICATION SETTINGS -->
+ 
+                <!--
+                ════════════════════════════════════════════════
+                NOTIFICATION SETTINGS
+                ════════════════════════════════════════════════
+                email_notifications
+                  READS:  employer_settings.email_notifications → BooleanField on EmployerSettings
+                  SAVES:  EmployerSettings.email_notifications
+ 
+                SMS alerts and applicant_alerts:
+                  These fields do NOT exist in your EmployerSettings model.
+                  So they are shown in UI but not saved to DB.
+                  To save them later, add BooleanField to EmployerSettings model:
+                    sms_alerts      = models.BooleanField(default=False)
+                    applicant_alerts = models.BooleanField(default=False)
+                  Then run: python manage.py makemigrations && python manage.py migrate
+ 
+                two_factor_auth
+                  READS:  employer_settings.two_factor_auth → BooleanField on EmployerSettings
+                  SAVES:  EmployerSettings.two_factor_auth
+                ════════════════════════════════════════════════
+                -->
                 <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
-                    <h3 class="text-xl font-bold mb-5"><i class="fas fa-bell mr-2 text-indigo-400"></i> Notifications</h3>
-                    <div class="space-y-4">
+                    <h3 class="text-xl font-bold mb-5">
+                        <i class="fas fa-bell mr-2 text-indigo-400"></i> Notifications
+                    </h3>
+                    <div class="space-y-5">
+ 
+                        <!-- Email Notifications — BooleanField on EmployerSettings -->
                         <div class="flex justify-between items-center">
-                            <div><span class="font-medium">Email notifications</span><p class="text-xs text-gray-400">Receive job alerts and application updates</p></div>
-                            <div class="checkbox-slider" data-target="email_notif"></div>
-                            <input type="hidden" name="email_notifications" value="{% if user.profile.email_notifications %}on{% endif %}" id="email_notif">
+                            <div>
+                                <span class="font-medium">Email notifications</span>
+                                <p class="text-xs text-gray-400">Receive job alerts and application updates</p>
+                            </div>
+                            <!--
+                                Slider is toggled by JS.
+                                If employer_settings.email_notifications is True in DB
+                                → hidden input value = 'on'
+                                → JS adds 'active' class to slider (shows as ON)
+                                When user clicks → JS toggles value → form submits 'on' or 'off'
+                                → view saves: email_notifications = (POST value == 'on')
+                            -->
+                            <div class="checkbox-slider {% if employer_settings.email_notifications %}active{% endif %}"
+                                data-target="email_notif_input">
+                            </div>
+                            <input type="hidden" name="email_notifications" id="email_notif_input"
+                                value="{% if employer_settings.email_notifications %}on{% else %}off{% endif %}">
                         </div>
+ 
+                        <!-- SMS Alerts — field not in model yet, UI only -->
                         <div class="flex justify-between items-center">
-                            <div><span class="font-medium">SMS alerts</span><p class="text-xs text-gray-400">Get interview reminders via SMS</p></div>
-                            <div class="checkbox-slider" data-target="sms_notif"></div>
-                            <input type="hidden" name="sms_alerts" value="{% if user.profile.sms_alerts %}on{% endif %}" id="sms_notif">
+                            <div>
+                                <span class="font-medium">SMS alerts</span>
+                                <p class="text-xs text-gray-400">Get interview reminders via SMS</p>
+                            </div>
+                            <div class="checkbox-slider" data-target="sms_notif_input"></div>
+                            <input type="hidden" name="sms_alerts" id="sms_notif_input" value="off">
                         </div>
+ 
+                        <!-- New Applicant Alerts — field not in model yet, UI only -->
                         <div class="flex justify-between items-center">
-                            <div><span class="font-medium">New applicant alerts</span><p class="text-xs text-gray-400">Notify when a candidate applies</p></div>
-                            <div class="checkbox-slider" data-target="applicant_notif"></div>
-                            <input type="hidden" name="applicant_alerts" value="{% if user.profile.applicant_alerts %}on{% endif %}" id="applicant_notif">
+                            <div>
+                                <span class="font-medium">New applicant alerts</span>
+                                <p class="text-xs text-gray-400">Notify when a candidate applies</p>
+                            </div>
+                            <div class="checkbox-slider" data-target="applicant_notif_input"></div>
+                            <input type="hidden" name="applicant_alerts" id="applicant_notif_input" value="off">
                         </div>
+ 
                     </div>
                 </div>
-
-                <!-- PREFERENCES (Theme + Language) -->
+ 
+                <!--
+                ════════════════════════════════════════════════
+                PREFERENCES — Language
+                ════════════════════════════════════════════════
+                language
+                  READS:  employer_settings.language → CharField default='English'
+                  SAVES:  EmployerSettings.language
+ 
+                theme: not in model, UI only for now
+                ════════════════════════════════════════════════
+                -->
                 <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
-                    <h3 class="text-xl font-bold mb-5"><i class="fas fa-palette mr-2 text-indigo-400"></i> Preferences</h3>
+                    <h3 class="text-xl font-bold mb-5">
+                        <i class="fas fa-palette mr-2 text-indigo-400"></i> Preferences
+                    </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ 
                         <div>
                             <label>Theme</label>
+                            <!-- Not saved to DB yet — visual only -->
                             <select name="theme">
                                 <option value="dark" selected>Dark Mode</option>
                                 <option value="light">Light Mode</option>
                                 <option value="system">System Default</option>
                             </select>
                         </div>
+ 
                         <div>
                             <label>Language</label>
+                            <!--
+                                employer_settings.language → EmployerSettings.language CharField
+                                selected attribute shows current DB value as selected option
+                            -->
                             <select name="language">
-                                <option value="en">English</option>
-                                <option value="hi">हिन्दी</option>
-                                <option value="te">తెలుగు</option>
+                                <option value="English"  {% if employer_settings.language == 'English' %}selected{% endif %}>English</option>
+                                <option value="Hindi"    {% if employer_settings.language == 'Hindi' %}selected{% endif %}>हिन्दी</option>
+                                <option value="Telugu"   {% if employer_settings.language == 'Telugu' %}selected{% endif %}>తెలుగు</option>
                             </select>
                         </div>
+ 
                     </div>
                 </div>
-
-                <!-- Hidden two-factor field (will be set by JS) -->
-                <input type="hidden" name="two_factor_enabled" id="two_factor_hidden" value="{% if user.profile.two_factor %}on{% endif %}">
+ 
+                <!--
+                    Hidden field for 2FA — value set by JS when slider is toggled.
+                    READS:  employer_settings.two_factor_auth → BooleanField
+                    SAVES:  EmployerSettings.two_factor_auth
+                -->
+                <input type="hidden" name="two_factor_enabled" id="two_factor_hidden"
+                    value="{% if employer_settings.two_factor_auth %}on{% else %}off{% endif %}">
+ 
             </form>
-
-            <!-- SECURITY SECTION (Password change + 2FA) -->
+            <!-- END mainSettingsForm -->
+ 
+            <!--
+            ════════════════════════════════════════════════
+            SECURITY — outside the main form
+            Password change uses AJAX → change_password view
+            2FA toggle updates hidden field inside main form
+            ════════════════════════════════════════════════
+            -->
             <div class="glass-card rounded-3xl p-6 mb-8 settings-section">
-                <h3 class="text-xl font-bold mb-5"><i class="fas fa-shield-alt mr-2 text-indigo-400"></i> Security</h3>
+                <h3 class="text-xl font-bold mb-5">
+                    <i class="fas fa-shield-alt mr-2 text-indigo-400"></i> Security
+                </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ 
+                    <!-- Password Change -->
                     <div>
                         <label>Current Password</label>
-                        <input type="password" id="current_password" class="w-full">
-                        <label class="mt-3">New Password</label>
-                        <input type="password" id="new_password" class="w-full">
-                        <label class="mt-3">Confirm New Password</label>
-                        <input type="password" id="confirm_password" class="w-full">
-                        <button onclick="changePassword()" class="mt-4 btn-primary w-full">Change Password</button>
+                        <input type="password" id="current_password" placeholder="Enter current password">
+                        <label class="mt-4">New Password</label>
+                        <input type="password" id="new_password" placeholder="Min 6 characters">
+                        <label class="mt-4">Confirm New Password</label>
+                        <input type="password" id="confirm_password" placeholder="Repeat new password">
+                        <button onclick="changePassword()" class="mt-5 btn-primary w-full flex items-center justify-center gap-2">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                        <!-- Result message shown here by JS -->
+                        <div id="pwdMessage" class="mt-3 text-sm hidden"></div>
                     </div>
+ 
+                    <!-- 2FA Toggle -->
                     <div>
                         <div class="flex justify-between items-center mb-3">
                             <span class="font-medium">Two‑Factor Authentication (2FA)</span>
-                            <div class="checkbox-slider" id="twofaSlider"></div>
+                            <!--
+                                FIX: was user.profile.two_factor (wrong)
+                                CORRECT: employer_settings.two_factor_auth
+                                Slider JS updates #two_factor_hidden inside the main form
+                                So when Save All Changes is clicked, 2FA value is included
+                            -->
+                            <div class="checkbox-slider {% if employer_settings.two_factor_auth %}active{% endif %}"
+                                id="twofaSlider">
+                            </div>
                         </div>
                         <p class="text-xs text-gray-400">Add an extra layer of security with OTP verification.</p>
+                        <p class="text-xs text-indigo-400 mt-3">
+                            * Toggle 2FA then click "Save All Changes" to apply.
+                        </p>
                     </div>
+ 
                 </div>
             </div>
-
-            <!-- DANGER ZONE (Account Deactivation) -->
+ 
+            <!-- DANGER ZONE -->
             <div class="glass-card rounded-3xl p-6 danger-zone settings-section">
-                <h3 class="text-xl font-bold mb-3 text-red-400"><i class="fas fa-exclamation-triangle mr-2"></i> Danger Zone</h3>
-                <p class="text-gray-300 text-sm mb-4">Once you deactivate your account, all your jobs and data will be hidden. You can reactivate later.</p>
-                <button onclick="openDeactivateModal()" class="bg-red-600/30 hover:bg-red-600/50 text-red-300 px-5 py-2 rounded-xl transition">Deactivate Account</button>
+                <h3 class="text-xl font-bold mb-3 text-red-400">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> Danger Zone
+                </h3>
+                <p class="text-gray-300 text-sm mb-4">
+                    Once you deactivate your account, all your jobs will be hidden and you won't receive applications.
+                </p>
+                <!--
+                    Opens modal → user confirms → JS calls /employer/deactivate-account/
+                    → deactivate_account view sets user.is_active=False
+                    → sets all jobs is_active=False
+                    → logs out → redirects to login
+                -->
+                <button onclick="openDeactivateModal()"
+                    class="bg-red-600/30 hover:bg-red-600/50 text-red-300 px-5 py-2 rounded-xl transition">
+                    Deactivate Account
+                </button>
             </div>
+ 
         </main>
     </div>
 </div>
-
-<!-- Deactivation Modal -->
-<div id="deactivateModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden transition-all">
+ 
+<!-- Deactivation Confirmation Modal -->
+<div id="deactivateModal"
+    class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
     <div class="glass-card rounded-3xl p-8 max-w-md w-full mx-4">
         <h3 class="text-2xl font-bold mb-3">Deactivate Account?</h3>
-        <p class="text-gray-300 mb-5">Your jobs will no longer be visible, and you won’t receive applications. You can reactivate by contacting support.</p>
+        <p class="text-gray-300 mb-5">
+            Your jobs will no longer be visible and you won't receive applications. Contact support to reactivate.
+        </p>
         <div class="flex gap-3">
             <button onclick="closeDeactivateModal()" class="flex-1 btn-outline">Cancel</button>
-            <button onclick="confirmDeactivate()" class="flex-1 bg-red-600 hover:bg-red-700 py-2 rounded-xl font-semibold">Confirm</button>
+            <button onclick="confirmDeactivate()"
+                class="flex-1 bg-red-600 hover:bg-red-700 py-2 rounded-xl font-semibold">
+                Yes, Deactivate
+            </button>
         </div>
     </div>
 </div>
-
+ 
 <script>
-    // Toggle sliders for notification settings & 2FA
-    document.querySelectorAll('.checkbox-slider').forEach(slider => {
-        const targetId = slider.getAttribute('data-target');
-        const hiddenInput = targetId ? document.getElementById(targetId) : null;
-        if (hiddenInput && hiddenInput.value === 'on') slider.classList.add('active');
-        slider.addEventListener('click', function() {
-            this.classList.toggle('active');
-            if (hiddenInput) hiddenInput.value = this.classList.contains('active') ? 'on' : 'off';
-            if (this.id === 'twofaSlider') {
-                document.getElementById('two_factor_hidden').value = this.classList.contains('active') ? 'on' : 'off';
-            }
-        });
-    });
-
-    // Two-factor slider (separate)
-    const twofaSlider = document.createElement('div');
-    twofaSlider.className = 'checkbox-slider';
-    twofaSlider.id = 'twofaSlider';
-    if (document.getElementById('two_factor_hidden').value === 'on') twofaSlider.classList.add('active');
-    twofaSlider.addEventListener('click', function() {
+// ════════════════════════════════════════════════════════════
+// TOGGLE SLIDERS
+// ════════════════════════════════════════════════════════════
+// Each .checkbox-slider has data-target="input_id"
+// When clicked → toggle 'active' class (CSS shows ON/OFF)
+// → update the hidden input value to 'on' or 'off'
+// → when form submits, 'on'/'off' goes to view
+// → view saves: field = (POST value == 'on') → True/False in DB
+ 
+document.querySelectorAll('.checkbox-slider[data-target]').forEach(function (slider) {
+    slider.addEventListener('click', function () {
         this.classList.toggle('active');
-        document.getElementById('two_factor_hidden').value = this.classList.contains('active') ? 'on' : 'off';
+        const input = document.getElementById(this.getAttribute('data-target'));
+        if (input) {
+            input.value = this.classList.contains('active') ? 'on' : 'off';
+        }
     });
-    document.querySelector('#twofaSlider').parentNode.replaceChild(twofaSlider, document.querySelector('#twofaSlider'));
-
-    // Password change (AJAX simulation)
-    function changePassword() {
-        const cur = document.getElementById('current_password').value;
-        const newPwd = document.getElementById('new_password').value;
-        const confirm = document.getElementById('confirm_password').value;
-        if (!cur || !newPwd || !confirm) {
-            alert("Please fill all password fields.");
-            return;
-        }
-        if (newPwd !== confirm) {
-            alert("New passwords do not match.");
-            return;
-        }
-        // Send AJAX POST to /employer/change-password/
-        fetch('/employer/change-password/', {
-            method: 'POST',
-            headers: { 'X-CSRFToken': '{{ csrf_token }}', 'Content-Type': 'application/json' },
-            body: JSON.stringify({ current_password: cur, new_password: newPwd })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) alert("Password changed successfully.");
-            else alert("Error: " + (data.error || "Please try again."));
-        })
-        .catch(() => alert("Server error. Try again."));
+});
+ 
+// 2FA slider — updates the hidden field inside the main form
+// so it gets submitted with Save All Changes
+const twofaSlider = document.getElementById('twofaSlider');
+if (twofaSlider) {
+    twofaSlider.addEventListener('click', function () {
+        this.classList.toggle('active');
+        document.getElementById('two_factor_hidden').value =
+            this.classList.contains('active') ? 'on' : 'off';
+    });
+}
+ 
+// ════════════════════════════════════════════════════════════
+// CHANGE PASSWORD — AJAX
+// ════════════════════════════════════════════════════════════
+// Sends POST to /employer/change-password/ (change_password view)
+// View checks current password with user.check_password()
+// If correct → user.set_password(new) → update_session_auth_hash
+// Returns JSON: {success: true} or {success: false, error: "..."}
+// update_session_auth_hash keeps user logged in after password change
+ 
+function changePassword() {
+    const cur     = document.getElementById('current_password').value.trim();
+    const newPwd  = document.getElementById('new_password').value.trim();
+    const confirm = document.getElementById('confirm_password').value.trim();
+    const msgDiv  = document.getElementById('pwdMessage');
+ 
+    // Client-side validation
+    if (!cur || !newPwd || !confirm) {
+        showPwdMsg('Please fill all password fields.', false);
+        return;
     }
-
-    // Deactivation modal
-    const deactModal = document.getElementById('deactivateModal');
-    function openDeactivateModal() { deactModal.classList.remove('hidden'); }
-    function closeDeactivateModal() { deactModal.classList.add('hidden'); }
-    function confirmDeactivate() {
-        fetch('/employer/deactivate-account/', { method: 'POST', headers: { 'X-CSRFToken': '{{ csrf_token }}' } })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) window.location.href = '/logout/';
-            else alert("Deactivation failed. Contact support.");
-        });
+    if (newPwd !== confirm) {
+        showPwdMsg('New passwords do not match.', false);
+        return;
     }
-    window.onclick = (e) => { if (e.target === deactModal) closeDeactivateModal(); };
+    if (newPwd.length < 6) {
+        showPwdMsg('New password must be at least 6 characters.', false);
+        return;
+    }
+ 
+    // AJAX POST to change_password view
+    fetch('/employer/change-password/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            current_password: cur,
+            new_password: newPwd
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showPwdMsg('✅ Password changed successfully!', true);
+            // Clear fields
+            document.getElementById('current_password').value = '';
+            document.getElementById('new_password').value     = '';
+            document.getElementById('confirm_password').value = '';
+        } else {
+            showPwdMsg('❌ ' + (data.error || 'Please try again.'), false);
+        }
+    })
+    .catch(() => showPwdMsg('❌ Server error. Try again.', false));
+}
+ 
+function showPwdMsg(text, success) {
+    const div = document.getElementById('pwdMessage');
+    div.textContent = text;
+    div.className   = 'mt-3 text-sm ' + (success ? 'text-green-400' : 'text-red-400');
+    div.classList.remove('hidden');
+}
+ 
+// ════════════════════════════════════════════════════════════
+// DEACTIVATE ACCOUNT — AJAX
+// ════════════════════════════════════════════════════════════
+// Sends POST to /employer/deactivate-account/ (deactivate_account view)
+// View does:
+//   1. Job.objects.filter(employer=request.user).update(is_active=False)
+//   2. request.user.is_active = False → request.user.save()
+//   3. logout(request)
+//   Returns JSON: {success: true}
+// JS then redirects to /logout/ to clear session
+ 
+const deactModal = document.getElementById('deactivateModal');
+ 
+function openDeactivateModal()  { deactModal.classList.remove('hidden'); }
+function closeDeactivateModal() { deactModal.classList.add('hidden'); }
+ 
+function confirmDeactivate() {
+    fetch('/employer/deactivate-account/', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/logout/';
+        } else {
+            alert('Deactivation failed: ' + (data.error || 'Contact support.'));
+        }
+    })
+    .catch(() => alert('Server error. Please try again.'));
+}
+ 
+// Close modal if user clicks outside it
+window.addEventListener('click', function (e) {
+    if (e.target === deactModal) closeDeactivateModal();
+});
 </script>
 {% endblock %}

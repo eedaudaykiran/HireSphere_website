@@ -118,4 +118,8 @@ urlpatterns = [
     name='view_applications'
     ),
     path('jobs/toggle/<int:job_id>/', views.toggle_job_status, name='toggle_job_status'),
+    path('reports/export/pdf/',   views.export_reports_pdf,   name='export_reports_pdf'),
+    path('reports/export/excel/', views.export_reports_excel, name='export_reports_excel'),
+    path('employer/change-password/',   views.change_password,   name='change_password'),
+    path('employer/deactivate-account/', views.deactivate_account, name='deactivate_account'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

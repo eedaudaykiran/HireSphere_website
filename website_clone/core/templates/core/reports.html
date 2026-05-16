@@ -1,272 +1,346 @@
 {% block title %}Reports & Analytics | HireHub{% endblock %}
-
+ 
 {% block extra_css %}
-<!-- Tailwind CSS + Font Awesome + Chart.js -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-    body {
-        background: #0b1120;
-    }
-
+    body { background: #0b1120; }
     .glass-card {
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    .stat-card {
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.3);
-    }
-
-    .chart-container {
-        transition: all 0.3s;
-    }
-
-    ::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #1e293b;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #4f46e5;
-        border-radius: 10px;
-    }
-
+    .stat-card { transition: transform 0.2s, box-shadow 0.2s; }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.3); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
     @media (max-width: 768px) {
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-
-        .chart-grid {
-            grid-template-columns: 1fr !important;
-        }
+        .stats-grid  { grid-template-columns: repeat(2, 1fr) !important; }
+        .chart-grid  { grid-template-columns: 1fr !important; }
     }
 </style>
 {% endblock %}
-
+ 
 {% block content %}
 <div class="min-h-screen bg-[#0b1120] text-white overflow-hidden">
-    <!-- Background blur orbs -->
     <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 blur-[120px] rounded-full"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full"></div>
-
+ 
     <div class="relative z-10 flex">
-        <!-- Sidebar (same style as previous pages) -->
-        <aside
-            class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
+ 
+        <!-- SIDEBAR -->
+        <aside class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
             <h1 class="text-3xl font-extrabold mb-10">Hire<span class="text-indigo-400">Hub</span></h1>
             <nav class="space-y-3">
-                <a href="{% url 'applicants' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥
-                    Applicants</a>
-                <a href="{% url 'manage_jobs' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage
-                    Jobs</a>
-                <a href="{% url 'shortlisted_candidates' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⭐
-                    Shortlisted</a>
-                <a href="{% url 'interviews' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📅
-                    Interviews</a>
-                <a href="{% url 'messages' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💬
-                    Messages</a>
-                <a href="{% url 'reports' %}"
-                    class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">📊
-                    Reports</a>
-                <a href="{% url 'settings' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⚙️
-                    Settings</a>
+                <a href="{% url 'applicants' %}"             class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥 Applicants</a>
+                <a href="{% url 'manage_jobs' %}"            class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage Jobs</a>
+                <a href="{% url 'shortlisted_candidates' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⭐ Shortlisted</a>
+                <a href="{% url 'interviews' %}"             class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📅 Interviews</a>
+                <a href="{% url 'messages' %}"               class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💬 Messages</a>
+                <a href="{% url 'reports' %}"                class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">📊 Reports</a>
+                <a href="{% url 'settings' %}"               class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⚙️ Settings</a>
             </nav>
         </aside>
-
-        <!-- MAIN CONTENT: REPORTS -->
+ 
         <main class="flex-1 p-4 sm:p-8">
-            <!-- Page Header -->
+ 
+            <!-- Header -->
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
                 <div>
                     <h2 class="text-4xl sm:text-5xl font-extrabold">📊 Reports & Analytics</h2>
-                    <p class="text-gray-400 mt-2 text-lg">Hiring statistics, recruitment performance, and data insights.
-                    </p>
+                    <p class="text-gray-400 mt-2 text-lg">Hiring statistics, recruitment performance, and data insights.</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <button
-                        class="bg-white/10 hover:bg-white/20 px-5 py-2.5 rounded-xl font-semibold transition text-sm flex items-center gap-2"><i
-                            class="fas fa-file-pdf"></i> Export PDF</button>
-                    <button
-                        class="bg-white/10 hover:bg-white/20 px-5 py-2.5 rounded-xl font-semibold transition text-sm flex items-center gap-2"><i
-                            class="fas fa-file-excel"></i> Export Excel</button>
-                </div>
+    <a href="{% url 'export_reports_pdf' %}"
+        class="bg-white/10 hover:bg-white/20 px-5 py-2.5 rounded-xl font-semibold transition text-sm flex items-center gap-2">
+        <i class="fas fa-file-pdf"></i> Export PDF
+    </a>
+    <a href="{% url 'export_reports_excel' %}"
+        class="bg-white/10 hover:bg-white/20 px-5 py-2.5 rounded-xl font-semibold transition text-sm flex items-center gap-2">
+        <i class="fas fa-file-excel"></i> Export Excel
+    </a>
+</div>
             </div>
-
-            <!-- Filter Bar (date range & job filter) -->
-            <div class="glass-card rounded-3xl p-5 mb-10">
-                <div class="flex flex-col md:flex-row gap-4 items-end">
-                    <div class="flex-1">
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Date Range</label>
-                        <div class="flex gap-3">
-                            <input type="date"
-                                class="bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-sm w-full">
-                            <span class="text-gray-400 self-center">to</span>
-                            <input type="date"
-                                class="bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-sm w-full">
-                        </div>
-                    </div>
-                    <div class="w-full md:w-48">
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Job Title</label>
-                        <select class="bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-sm w-full">
-                            <option>All Jobs</option>
-                            <option>Python Developer</option>
-                            <option>React Developer</option>
-                            <option>Django Backend</option>
-                        </select>
-                    </div>
-                    <button class="bg-indigo-600 hover:bg-indigo-700 px-6 py-2 rounded-xl font-semibold transition"><i
-                            class="fas fa-filter mr-1"></i> Apply</button>
-                </div>
+ 
+            <!-- Filter Bar -->
+            <form method="GET" action="{% url 'reports' %}">
+<div class="glass-card rounded-3xl p-5 mb-10">
+    <div class="flex flex-col md:flex-row gap-4 items-end">
+        <div class="flex-1">
+            <label class="block text-xs font-semibold text-gray-400 mb-1">Date Range</label>
+            <div class="flex gap-3">
+                <input type="date" name="date_from"
+                    class="bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-sm w-full text-white">
+                <span class="text-gray-400 self-center">to</span>
+                <input type="date" name="date_to"
+                    class="bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-sm w-full text-white">
             </div>
-
-            <!-- STATS CARDS (6 cards – all dynamic from context) -->
+        </div>
+        <div class="w-full md:w-48">
+            <label class="block text-xs font-semibold text-gray-400 mb-1">Job Title</label>
+            <select name="job_title" class="bg-white/10 border border-white/10 rounded-xl px-4 py-2 text-sm w-full text-blue-700">
+                <option value="">All Jobs</option>
+                {% for job in top_jobs %}
+                    <option value="{{ job.title }}" {% if selected_job == job.title %}selected{% endif %}>
+                        {{ job.title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-2 rounded-xl font-semibold transition">
+            <i class="fas fa-filter mr-1"></i> Apply
+        </button>
+    </div>
+</div>
+</form>
+ 
+            <!--
+            ══════════════════════════════════════════════════
+            STATS CARDS — ALL REAL DATA FROM DB
+            ══════════════════════════════════════════════════
+            total_jobs         → Job.objects.filter(employer=request.user).count()
+            total_applications → Application.objects.filter(job__employer=...).count()
+            shortlisted_count  → Application.objects.filter(..., status='Shortlisted').count()
+            rejected_count     → Application.objects.filter(..., status='Rejected').count()
+            interview_count    → Interview.objects.filter(job__employer=...).count()
+            total_views        → sum(job.views for job in jobs)
+            All passed from reports() view in views.py
+            ══════════════════════════════════════════════════
+            -->
             <div class="stats-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5 mb-10">
+ 
                 <div class="glass-card rounded-2xl p-5 stat-card">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center"><i
-                                class="fas fa-briefcase text-blue-400 text-xl"></i></div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                            <i class="fas fa-briefcase text-blue-400 text-xl"></i>
+                        </div>
                         <span class="text-xs text-gray-400">Total</span>
                     </div>
-                    <p class="text-xl font-bold mt-3">{{ total_jobs|default:"0" }}</p>
+                    <!-- total_jobs = Job.objects.filter(employer=request.user).count() -->
+                    <p class="text-xl font-bold mt-3">{{ total_jobs }}</p>
                     <p class="text-gray-400 text-sm mt-1">Jobs Posted</p>
                 </div>
+ 
                 <div class="glass-card rounded-2xl p-5 stat-card">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center"><i
-                                class="fas fa-users text-indigo-400 text-xl"></i></div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center">
+                            <i class="fas fa-users text-indigo-400 text-xl"></i>
+                        </div>
                         <span class="text-xs text-gray-400">Total</span>
                     </div>
-                    <p class="text-xl font-bold mt-3">{{ total_applications|default:"0" }}</p>
+                    <!-- total_applications = Application.objects.filter(job__employer=request.user).count() -->
+                    <p class="text-xl font-bold mt-3">{{ total_applications }}</p>
                     <p class="text-gray-400 text-sm mt-1">Applications</p>
                 </div>
+ 
                 <div class="glass-card rounded-2xl p-5 stat-card">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center"><i
-                                class="fas fa-star text-green-400 text-xl"></i></div>
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
+                            <i class="fas fa-star text-green-400 text-xl"></i>
+                        </div>
                         <span class="text-xs text-gray-400">Selected</span>
                     </div>
-                    <p class="text-xl font-bold mt-3">{{ shortlisted_count|default:"0" }}</p>
+                    <!-- shortlisted_count = Application.objects.filter(..., status='Shortlisted').count() -->
+                    <p class="text-xl font-bold mt-3">{{ shortlisted_count }}</p>
                     <p class="text-gray-400 text-sm mt-1">Shortlisted</p>
                 </div>
+ 
                 <div class="glass-card rounded-2xl p-5 stat-card">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center"><i
-                                class="fas fa-times-circle text-red-400 text-xl"></i></div>
+                        <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
+                            <i class="fas fa-times-circle text-red-400 text-xl"></i>
+                        </div>
                         <span class="text-xs text-gray-400">Rejected</span>
                     </div>
-                    <p class="text-xl font-bold mt-3">{{ rejected_count|default:"0" }}</p>
+                    <!-- rejected_count = Application.objects.filter(..., status='Rejected').count() -->
+                    <p class="text-xl font-bold mt-3">{{ rejected_count }}</p>
                     <p class="text-gray-400 text-sm mt-1">Rejected</p>
                 </div>
+ 
                 <div class="glass-card rounded-2xl p-5 stat-card">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center"><i
-                                class="fas fa-calendar-check text-purple-400 text-xl"></i></div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <i class="fas fa-calendar-check text-purple-400 text-xl"></i>
+                        </div>
                         <span class="text-xs text-gray-400">Scheduled</span>
                     </div>
-                    <p class="text-xl font-bold mt-3">{{ interview_count|default:"0" }}</p>
+                    <!-- interview_count = Interview.objects.filter(job__employer=request.user).count() -->
+                    <p class="text-xl font-bold mt-3">{{ interview_count }}</p>
                     <p class="text-gray-400 text-sm mt-1">Interviews</p>
                 </div>
+ 
                 <div class="glass-card rounded-2xl p-5 stat-card">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center"><i
-                                class="fas fa-eye text-yellow-400 text-xl"></i></div>
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
+                            <i class="fas fa-eye text-yellow-400 text-xl"></i>
+                        </div>
                         <span class="text-xs text-gray-400">Total</span>
                     </div>
-                    <p class="text-xl font-bold mt-3">{{ total_views|default:"0" }}</p>
+                    <!-- total_views = sum(job.views for job in jobs) -->
+                    <p class="text-xl font-bold mt-3">{{ total_views }}</p>
                     <p class="text-gray-400 text-sm mt-1">Job Views</p>
                 </div>
+ 
             </div>
-
-            <!-- CHARTS SECTION (Bar + Line + Pie) -->
+ 
+            <!-- CHARTS SECTION -->
             <div class="chart-grid grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
-                <!-- Bar Chart: Applications per job -->
-                <div class="glass-card rounded-3xl p-6 chart-container">
-                    <h3 class="text-lg font-bold mb-4"><i class="fas fa-chart-bar mr-2 text-indigo-400"></i>
-                        Applications per Job</h3>
+ 
+                <!--
+                Bar Chart: Applications per Job
+                bar_labels = [job.title, ...] from top_jobs queryset
+                bar_data   = [job.applications_count, ...] from annotate(Count('applications'))
+                Both passed as json.dumps() from view so JS can use them directly
+                -->
+                <div class="glass-card rounded-3xl p-6">
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-chart-bar mr-2 text-indigo-400"></i> Applications per Job
+                    </h3>
                     <canvas id="appsPerJobChart" height="250"></canvas>
+                    {% if not top_jobs %}
+                        <p class="text-center text-gray-500 mt-4">No job data yet</p>
+                    {% endif %}
                 </div>
-                <!-- Line Chart: Monthly hiring trend -->
-                <div class="glass-card rounded-3xl p-6 chart-container">
-                    <h3 class="text-lg font-bold mb-4"><i class="fas fa-chart-line mr-2 text-green-400"></i> Monthly
-                        Hiring Trend</h3>
+ 
+                <!--
+                Line Chart: Monthly Hiring Trend (last 6 months)
+                month_labels         = ['Dec','Jan','Feb','Mar','Apr','May'] — real months
+                monthly_applications = [count per month] from Application.applied_at
+                monthly_hires        = [count per month where status='Offer']
+                All 3 passed as json.dumps() from view — REAL DB data, not hardcoded
+                -->
+                <div class="glass-card rounded-3xl p-6">
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-chart-line mr-2 text-green-400"></i> Monthly Hiring Trend
+                    </h3>
                     <canvas id="monthlyTrendChart" height="250"></canvas>
                 </div>
-                <!-- Pie Chart: Candidate status distribution -->
-                <div class="glass-card rounded-3xl p-6 chart-container xl:col-span-2">
-                    <h3 class="text-lg font-bold mb-4"><i class="fas fa-chart-pie mr-2 text-purple-400"></i> Candidate
-                        Status Distribution</h3>
-                    <div class="flex flex-wrap gap-8 items-center">
-                        <canvas id="statusPieChart" width="300" height="300"
-                            style="max-width: 280px; max-height: 280px;"></canvas>
-                        <div id="pieLegend" class="text-sm space-y-2"></div>
+ 
+                <!--
+                Pie Chart: Candidate Status Distribution
+                Uses pending_count, shortlisted_count, rejected_count, interview_count
+                All from DB via the reports() view
+                -->
+                <div class="glass-card rounded-3xl p-6 xl:col-span-2">
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-chart-pie mr-2 text-purple-400"></i> Candidate Status Distribution
+                    </h3>
+                    <div class="flex flex-wrap gap-8 items-center justify-center">
+                        <canvas id="statusPieChart" width="300" height="300" style="max-width:280px; max-height:280px;"></canvas>
+                        <div id="pieLegend" class="text-sm space-y-3"></div>
                     </div>
+                    {% if total_applications == 0 %}
+                        <p class="text-center text-gray-500 mt-4">No application data yet</p>
+                    {% endif %}
                 </div>
+ 
             </div>
-
-            <!-- HIRING FUNNEL (Recruitment pipeline) -->
+ 
+            <!--
+            ══════════════════════════════════════════════════
+            HIRING FUNNEL — REAL PERCENTAGES FROM DB
+            ══════════════════════════════════════════════════
+            All percentages calculated in view as:
+                pct(count) = round((count / total_applications) * 100)
+ 
+            screened_percent    = pct(status='Screening' count)
+            shortlisted_percent = pct(status='Shortlisted' count)
+            interview_percent   = pct(status IN ['Interview','Interview Scheduled'] count)
+            selected_percent    = pct(status='Offer' count)
+ 
+            Bar width = the percentage value directly
+            If total_applications = 0, all show 0%
+            ══════════════════════════════════════════════════
+            -->
             <div class="glass-card rounded-3xl p-6 mb-10">
-                <h3 class="text-lg font-bold mb-6"><i class="fas fa-funnel-dollar mr-2 text-indigo-400"></i> Hiring
-                    Funnel (Recruitment Pipeline)</h3>
+                <h3 class="text-lg font-bold mb-6">
+                    <i class="fas fa-funnel-dollar mr-2 text-indigo-400"></i> Hiring Funnel (Recruitment Pipeline)
+                </h3>
                 <div class="space-y-4">
+ 
+                    <!-- Applied: always 100% as baseline -->
                     <div>
-                        <div class="flex justify-between text-sm mb-1"><span>Applied</span><span>{{
-                                total_applications|default:"0" }}</span></div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Applied</span>
+                            <span>{{ total_applications }} (100%)</span>
+                        </div>
                         <div class="h-3 bg-white/10 rounded-full overflow-hidden">
                             <div class="h-full bg-blue-500 rounded-full" style="width: 100%"></div>
                         </div>
                     </div>
+ 
+                    <!-- Screened: Application.status='Screening' / total * 100 -->
                     <div>
-                        <div class="flex justify-between text-sm mb-1"><span>Screened</span><span>{{
-                                screened_percent|default:"70" }}%</span></div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Screened</span>
+                            <span>{{ screened_percent }}%</span>
+                        </div>
                         <div class="h-3 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-cyan-500 rounded-full"
-                                style="width: {{ screened_percent|default:70 }}%"></div>
+                            <div class="h-full bg-cyan-500 rounded-full" style="width: {{ screened_percent }}%"></div>
                         </div>
                     </div>
+ 
+                    <!-- Shortlisted: Application.status='Shortlisted' / total * 100 -->
                     <div>
-                        <div class="flex justify-between text-sm mb-1"><span>Shortlisted</span><span>{{
-                                shortlisted_percent|default:"35" }}%</span></div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Shortlisted</span>
+                            <span>{{ shortlisted_percent }}%</span>
+                        </div>
                         <div class="h-3 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-green-500 rounded-full"
-                                style="width: {{ shortlisted_percent|default:35 }}%"></div>
+                            <div class="h-full bg-green-500 rounded-full" style="width: {{ shortlisted_percent }}%"></div>
                         </div>
                     </div>
+ 
+                    <!-- Interviewed: status IN ['Interview','Interview Scheduled'] / total * 100 -->
                     <div>
-                        <div class="flex justify-between text-sm mb-1"><span>Interviewed</span><span>{{
-                                interview_percent|default:"20" }}%</span></div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Interviewed</span>
+                            <span>{{ interview_percent }}%</span>
+                        </div>
                         <div class="h-3 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-purple-500 rounded-full"
-                                style="width: {{ interview_percent|default:20 }}%"></div>
+                            <div class="h-full bg-purple-500 rounded-full" style="width: {{ interview_percent }}%"></div>
                         </div>
                     </div>
+ 
+                    <!-- Selected/Offer: Application.status='Offer' / total * 100 -->
                     <div>
-                        <div class="flex justify-between text-sm mb-1"><span>Selected</span><span>{{
-                                selected_percent|default:"12" }}%</span></div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Offer Given</span>
+                            <span>{{ selected_percent }}%</span>
+                        </div>
                         <div class="h-3 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-indigo-600 rounded-full"
-                                style="width: {{ selected_percent|default:12 }}%"></div>
+                            <div class="h-full bg-indigo-600 rounded-full" style="width: {{ selected_percent }}%"></div>
                         </div>
                     </div>
+ 
                 </div>
                 <p class="text-xs text-gray-400 mt-4">* Percentages shown relative to total applicants.</p>
             </div>
-
-            <!-- RECENT ACTIVITY TABLE (optional: top jobs by applicants) -->
+ 
+            <!--
+            ══════════════════════════════════════════════════
+            TOP PERFORMING JOBS TABLE — REAL DB DATA
+            ══════════════════════════════════════════════════
+            top_jobs passed from view as a list of dicts:
+            [
+              {
+                'title':              job.title,
+                'applications_count': annotated Count('applications'),
+                'shortlisted_count':  Application.filter(job=job, status='Shortlisted').count(),
+                'views':              job.views,
+                'hire_rate':          shortlisted / applications * 100
+              },
+              ...
+            ]
+            Ordered by applications_count descending, top 8 jobs
+            ══════════════════════════════════════════════════
+            -->
             <div class="glass-card rounded-3xl overflow-hidden">
                 <div class="p-5 border-b border-white/10 flex justify-between">
                     <h3 class="font-bold"><i class="fas fa-table mr-2"></i> Top Performing Jobs</h3>
-                    <a href="#" class="text-indigo-400 text-sm hover:underline">View Details</a>
+                    <a href="{% url 'manage_jobs' %}" class="text-indigo-400 text-sm hover:underline">View All Jobs</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
@@ -281,65 +355,176 @@
                         </thead>
                         <tbody>
                             {% for job in top_jobs %}
-                            <tr class="border-t border-white/5 hover:bg-white/5">
-                                <td class="p-4">{{ job.title }}</td>
+                            <tr class="border-t border-white/5 hover:bg-white/5 transition text-white">
+                                <!-- job.title → Job.title CharField -->
+                                <td class="p-4 font-medium">{{ job.title }}</td>
+                                <!-- job.applications_count → annotated Count('applications') -->
                                 <td class="p-4">{{ job.applications_count }}</td>
+                                <!-- job.shortlisted_count → Application.filter(status='Shortlisted').count() -->
                                 <td class="p-4">{{ job.shortlisted_count }}</td>
+                                <!-- job.views → Job.views IntegerField -->
                                 <td class="p-4">{{ job.views }}</td>
-                                <td class="p-4">{{ job.hire_rate|default:"0" }}%</td>
+                                <!-- job.hire_rate → shortlisted/applications * 100 (calculated in view) -->
+                                <td class="p-4">
+                                    <span class="{% if job.hire_rate >= 50 %}text-green-400{% elif job.hire_rate >= 20 %}text-yellow-400{% else %}text-red-400{% endif %} font-semibold">
+                                        {{ job.hire_rate }}%
+                                    </span>
+                                </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5" class="p-8 text-center text-gray-400">No job data available</td>
+                                <td colspan="5" class="p-8 text-center text-gray-400">
+                                    No job data available yet.
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
+ 
         </main>
     </div>
 </div>
-
+ 
+<!--
+══════════════════════════════════════════════════════════
+CHART.JS SCRIPTS — ALL DATA FROM DB VIA DJANGO CONTEXT
+══════════════════════════════════════════════════════════
+ 
+bar_labels  → json.dumps([job.title, ...])           from view
+bar_data    → json.dumps([applications_count, ...])  from view
+month_labels         → json.dumps(['Jan','Feb',...]) from view (last 6 months)
+monthly_applications → json.dumps([count, ...])      from view (real Application.applied_at counts)
+monthly_hires        → json.dumps([count, ...])      from view (real status='Offer' counts)
+ 
+Pie chart uses Django template variables directly:
+    pending_count, shortlisted_count, rejected_count, interview_count
+    These are integers passed from view, safe to use directly in JS
+══════════════════════════════════════════════════════════
+-->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // 1) Bar Chart: Applications per job
-        const jobLabels = [{% for job in top_jobs %}"{{ job.title|escapejs }}", {% endfor %}];
-    const appCounts = [{% for job in top_jobs %}{{ job.applications_count }}, {% endfor %}];
+document.addEventListener('DOMContentLoaded', function () {
+ 
+    // ── 1. BAR CHART: Applications per Job ──────────────────────────────────
+    // bar_labels and bar_data come from view as json.dumps() strings
+    // {{ bar_labels }} renders as a valid JS array e.g. ["Python Dev", "React Dev"]
+    const barLabels = {{ bar_labels|safe }};
+    const barData   = {{ bar_data|safe }};
+ 
     const ctxBar = document.getElementById('appsPerJobChart')?.getContext('2d');
-    if (ctxBar && jobLabels.length) {
+    if (ctxBar && barLabels.length > 0) {
         new Chart(ctxBar, {
             type: 'bar',
-            data: { labels: jobLabels, datasets: [{ label: 'Applications', data: appCounts, backgroundColor: '#4f46e5', borderRadius: 8 }] },
-            options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: true, grid: { color: '#334155' } }, x: { ticks: { color: '#cbd5e1' } } }, plugins: { legend: { labels: { color: '#cbd5e1' } } } }
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    label: 'Applications',
+                    data: barData,
+                    backgroundColor: '#4f46e5',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#334155' }, ticks: { color: '#cbd5e1' } },
+                    x: { ticks: { color: '#cbd5e1' } }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1' } } }
+            }
         });
     }
-
-    // 2) Line Chart: Monthly trend (example data – replace with real from context)
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    const monthlyApps = {{ monthly_applications|default:'[45,62,78]' }};
-    const monthlyHires = {{ monthly_hires|default:'[8,12,15]' }};
+ 
+    // ── 2. LINE CHART: Monthly Hiring Trend ─────────────────────────────────
+    // month_labels         = last 6 month names from view e.g. ['Dec','Jan',...]
+    // monthly_applications = real Application counts per month from DB
+    // monthly_hires        = real status='Offer' counts per month from DB
+    // ALL from json.dumps() in view — NOT hardcoded
+    const monthLabels        = {{ month_labels|safe }};
+    const monthlyApps        = {{ monthly_applications|safe }};
+    const monthlyHires       = {{ monthly_hires|safe }};
+ 
     const ctxLine = document.getElementById('monthlyTrendChart')?.getContext('2d');
     if (ctxLine) {
         new Chart(ctxLine, {
             type: 'line',
-            data: { labels: months, datasets: [{ label: 'Applications', data: monthlyApps, borderColor: '#4f46e5', tension: 0.3, fill: false }, { label: 'Hires', data: monthlyHires, borderColor: '#10b981', tension: 0.3, fill: false }] },
-            options: { responsive: true, scales: { y: { beginAtZero: true, grid: { color: '#334155' } }, x: { ticks: { color: '#cbd5e1' } } }, plugins: { legend: { labels: { color: '#cbd5e1' } } } }
+            data: {
+                labels: monthLabels,
+                datasets: [
+                    {
+                        label: 'Applications',
+                        data: monthlyApps,
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79,70,229,0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#4f46e5'
+                    },
+                    {
+                        label: 'Offers Given',
+                        data: monthlyHires,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16,185,129,0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#10b981'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#334155' }, ticks: { color: '#cbd5e1' } },
+                    x: { ticks: { color: '#cbd5e1' } }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1' } } }
+            }
         });
     }
-
-    // 3) Pie Chart: Status distribution (pending, shortlisted, rejected, interviewed)
-    const statusLabels = ['Pending', 'Shortlisted', 'Rejected', 'Interview'];
-    const statusData = [{{ pending_count|default:0 }}, {{ shortlisted_count|default:0 }}, {{ rejected_count|default:0 }}, {{ interview_count|default:0 }}];
+ 
+    // ── 3. PIE CHART: Candidate Status Distribution ──────────────────────────
+    // All 4 values are Django template integers from DB — safe to use in JS directly
+    // pending_count      = Application.status='Applied' count
+    // shortlisted_count  = Application.status='Shortlisted' count
+    // rejected_count     = Application.status='Rejected' count
+    // interview_count    = Interview table count for this employer
+    const pieLabels = ['Pending', 'Shortlisted', 'Rejected', 'Interview'];
+    const pieData   = [
+        {{ pending_count }},
+        {{ shortlisted_count }},
+        {{ rejected_count }},
+        {{ interview_count }}
+    ];
     const pieColors = ['#eab308', '#10b981', '#ef4444', '#8b5cf6'];
+ 
     const ctxPie = document.getElementById('statusPieChart')?.getContext('2d');
     if (ctxPie) {
         new Chart(ctxPie, {
             type: 'pie',
-            data: { labels: statusLabels, datasets: [{ data: statusData, backgroundColor: pieColors, borderWidth: 0 }] },
-            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1' } } } }
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieData,
+                    backgroundColor: pieColors,
+                    borderWidth: 2,
+                    borderColor: '#0b1120'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#cbd5e1', padding: 16 }
+                    }
+                }
+            }
         });
     }
-    });
+ 
+});
 </script>
 {% endblock %}

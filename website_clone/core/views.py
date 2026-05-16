@@ -1189,25 +1189,311 @@ def inbox_messages(request):
 
 @employer_required
 def reports(request):
-    jobs = Job.objects.filter(employer=request.user)
+    from django.db.models import Count
+    from django.utils import timezone
+    import json
+
+    today = timezone.now().date()
+    jobs  = Job.objects.filter(employer=request.user)
+
+    # ── Read filter values from Apply button ──────────────────
+    date_from    = request.GET.get('date_from', '')
+    date_to      = request.GET.get('date_to', '')
+    selected_job = request.GET.get('job_title', '')
+
+    # ── Base queryset — only this employer's applications ─────
+    applications_qs = Application.objects.filter(job__employer=request.user)
+
+    # ── Apply date range filter if provided ───────────────────
+    if date_from:
+        applications_qs = applications_qs.filter(applied_at__date__gte=date_from)
+    if date_to:
+        applications_qs = applications_qs.filter(applied_at__date__lte=date_to)
+
+    # ── Apply job title filter if provided ────────────────────
+    if selected_job:
+        applications_qs = applications_qs.filter(job__title=selected_job)
+
+    # ── Stat card counts (all from filtered queryset) ─────────
     total_jobs         = jobs.count()
-    # FIX: was JobApplication (doesn't exist) → changed to Application
+    total_applications = applications_qs.count()
+    shortlisted_count  = applications_qs.filter(status='Shortlisted').count()
+    rejected_count     = applications_qs.filter(status='Rejected').count()
+    pending_count      = applications_qs.filter(status='Applied').count()
+    interview_count    = Interview.objects.filter(job__employer=request.user).count()
+    total_views        = sum(job.views for job in jobs)
+
+    # ── Hiring funnel percentages ─────────────────────────────
+    def pct(count):
+        if total_applications == 0:
+            return 0
+        return round((count / total_applications) * 100)
+
+    screened_count    = applications_qs.filter(status='Screening').count()
+    interviewed_count = applications_qs.filter(
+        status__in=['Interview', 'Interview Scheduled']
+    ).count()
+    offer_count       = applications_qs.filter(status='Offer').count()
+
+    screened_percent    = pct(screened_count)
+    shortlisted_percent = pct(shortlisted_count)
+    interview_percent   = pct(interviewed_count)
+    selected_percent    = pct(offer_count)
+
+    # ── Top jobs table ────────────────────────────────────────
+    top_jobs_qs = jobs.annotate(
+        applications_count=Count('applications')
+    ).order_by('-applications_count')[:8]
+
+    top_jobs = []
+    for job in top_jobs_qs:
+        sc        = Application.objects.filter(job=job, status='Shortlisted').count()
+        hire_rate = round((sc / job.applications_count) * 100) if job.applications_count else 0
+        top_jobs.append({
+            'title':              job.title,
+            'applications_count': job.applications_count,
+            'shortlisted_count':  sc,
+            'views':              job.views,
+            'hire_rate':          hire_rate,
+        })
+
+    # ── Bar chart: applications per job ──────────────────────
+    bar_labels = [j['title']              for j in top_jobs]
+    bar_data   = [j['applications_count'] for j in top_jobs]
+
+    # ── Line chart: last 6 months real data ──────────────────
+    monthly_applications = []
+    monthly_hires        = []
+    month_labels         = []
+
+    for i in range(5, -1, -1):
+        month = (today.month - i - 1) % 12 + 1
+        year  = today.year + ((today.month - i - 1) // 12)
+        label = timezone.datetime(year, month, 1).strftime('%b')
+        month_labels.append(label)
+
+        apps = Application.objects.filter(
+            job__employer=request.user,
+            applied_at__year=year,
+            applied_at__month=month
+        ).count()
+        hires = Application.objects.filter(
+            job__employer=request.user,
+            applied_at__year=year,
+            applied_at__month=month,
+            status='Offer'
+        ).count()
+        monthly_applications.append(apps)
+        monthly_hires.append(hires)
+
+    context = {
+        # Stat cards
+        'total_jobs':           total_jobs,
+        'total_applications':   total_applications,
+        'shortlisted_count':    shortlisted_count,
+        'rejected_count':       rejected_count,
+        'pending_count':        pending_count,
+        'interview_count':      interview_count,
+        'total_views':          total_views,
+
+        # Funnel percentages
+        'screened_percent':     screened_percent,
+        'shortlisted_percent':  shortlisted_percent,
+        'interview_percent':    interview_percent,
+        'selected_percent':     selected_percent,
+
+        # Top jobs table
+        'top_jobs':             top_jobs,
+
+        # Charts (json.dumps so JS can use directly)
+        'bar_labels':           json.dumps(bar_labels),
+        'bar_data':             json.dumps(bar_data),
+        'month_labels':         json.dumps(month_labels),
+        'monthly_applications': json.dumps(monthly_applications),
+        'monthly_hires':        json.dumps(monthly_hires),
+
+        # Filter state (keeps form values after Apply is clicked)
+        'selected_job':         selected_job,
+        'date_from':            date_from,
+        'date_to':              date_to,
+    }
+
+    return render(request, 'core/reports.html', context)
+
+# ===================== EXPORT PDF =====================
+@employer_required
+def export_reports_pdf(request):
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+    import io
+
+    buffer = io.BytesIO()
+    doc    = SimpleDocTemplate(buffer, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story  = []
+
+    # Title
+    story.append(Paragraph("HireHub — Recruitment Report", styles['Title']))
+    story.append(Spacer(1, 12))
+
+    # Stat summary
     total_applications = Application.objects.filter(job__employer=request.user).count()
     shortlisted_count  = Application.objects.filter(job__employer=request.user, status='Shortlisted').count()
     rejected_count     = Application.objects.filter(job__employer=request.user, status='Rejected').count()
     interview_count    = Interview.objects.filter(job__employer=request.user).count()
-    total_views        = sum(job.views for job in jobs)
+    total_jobs         = Job.objects.filter(employer=request.user).count()
 
-    context = {
-        'total_jobs':         total_jobs,
-        'total_applications': total_applications,
-        'shortlisted_count':  shortlisted_count,
-        'rejected_count':     rejected_count,
-        'interview_count':    interview_count,
-        'total_views':        total_views,
-    }
-    return render(request, 'core/reports.html', context)
+    summary_data = [
+        ['Metric',            'Count'],
+        ['Total Jobs Posted',  str(total_jobs)],
+        ['Total Applications', str(total_applications)],
+        ['Shortlisted',        str(shortlisted_count)],
+        ['Interviews',         str(interview_count)],
+        ['Rejected',           str(rejected_count)],
+    ]
+    summary_table = Table(summary_data, colWidths=[300, 150])
+    summary_table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#4f46e5')),
+        ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+        ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+        ('ALIGN',      (0,0), (-1,-1), 'LEFT'),
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.whitesmoke, colors.white]),
+        ('GRID',       (0,0), (-1,-1), 0.5, colors.grey),
+        ('PADDING',    (0,0), (-1,-1), 8),
+    ]))
+    story.append(summary_table)
+    story.append(Spacer(1, 24))
 
+    # Applications table
+    story.append(Paragraph("All Applications", styles['Heading2']))
+    story.append(Spacer(1, 8))
+
+    applications = Application.objects.filter(
+        job__employer=request.user
+    ).select_related('applicant', 'job').order_by('-applied_at')[:50]
+
+    app_data = [['Candidate', 'Job Title', 'Status', 'Applied Date']]
+    for app in applications:
+        app_data.append([
+            app.applicant.get_full_name() or app.applicant.username,
+            app.job.title,
+            app.status,
+            app.applied_at.strftime('%d %b %Y'),
+        ])
+
+    app_table = Table(app_data, colWidths=[150, 150, 100, 100])
+    app_table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#4f46e5')),
+        ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+        ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+        ('FONTSIZE',   (0,0), (-1,-1), 8),
+        ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.whitesmoke, colors.white]),
+        ('GRID',       (0,0), (-1,-1), 0.5, colors.grey),
+        ('PADDING',    (0,0), (-1,-1), 6),
+    ]))
+    story.append(app_table)
+
+    doc.build(story)
+    buffer.seek(0)
+
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="hirehub_report.pdf"'
+    return response
+
+
+# ===================== EXPORT EXCEL =====================
+@employer_required
+def export_reports_excel(request):
+    import openpyxl
+    from openpyxl.styles import Font, PatternFill, Alignment
+    import io
+
+    wb = openpyxl.Workbook()
+
+    # ── Sheet 1: Summary ──────────────────────────────────
+    ws1 = wb.active
+    ws1.title = 'Summary'
+
+    total_jobs         = Job.objects.filter(employer=request.user).count()
+    total_applications = Application.objects.filter(job__employer=request.user).count()
+    shortlisted_count  = Application.objects.filter(job__employer=request.user, status='Shortlisted').count()
+    rejected_count     = Application.objects.filter(job__employer=request.user, status='Rejected').count()
+    interview_count    = Interview.objects.filter(job__employer=request.user).count()
+
+    header_fill = PatternFill(start_color='4f46e5', end_color='4f46e5', fill_type='solid')
+    header_font = Font(color='FFFFFF', bold=True)
+
+    ws1.append(['Metric', 'Count'])
+    ws1.append(['Total Jobs Posted',  total_jobs])
+    ws1.append(['Total Applications', total_applications])
+    ws1.append(['Shortlisted',        shortlisted_count])
+    ws1.append(['Interviews',         interview_count])
+    ws1.append(['Rejected',           rejected_count])
+
+    for cell in ws1[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+
+    ws1.column_dimensions['A'].width = 25
+    ws1.column_dimensions['B'].width = 15
+
+    # ── Sheet 2: All Applications ─────────────────────────
+    ws2 = wb.create_sheet('Applications')
+    ws2.append(['Candidate', 'Email', 'Job Title', 'Status', 'Location', 'Experience', 'Applied Date'])
+
+    for cell in ws2[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+
+    applications = Application.objects.filter(
+        job__employer=request.user
+    ).select_related('applicant', 'job').order_by('-applied_at')
+
+    for app in applications:
+        ws2.append([
+            app.applicant.get_full_name() or app.applicant.username,
+            app.applicant.email,
+            app.job.title,
+            app.status,
+            app.location  or '—',
+            app.experience or '—',
+            app.applied_at.strftime('%d %b %Y'),
+        ])
+
+    for col in ['A','B','C','D','E','F','G']:
+        ws2.column_dimensions[col].width = 20
+
+    # ── Sheet 3: Top Jobs ─────────────────────────────────
+    ws3 = wb.create_sheet('Top Jobs')
+    ws3.append(['Job Title', 'Applications', 'Shortlisted', 'Views', 'Hire Rate %'])
+
+    for cell in ws3[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+
+    jobs = Job.objects.filter(employer=request.user)
+    for job in jobs:
+        app_count = Application.objects.filter(job=job).count()
+        sc        = Application.objects.filter(job=job, status='Shortlisted').count()
+        hire_rate = round((sc / app_count) * 100) if app_count else 0
+        ws3.append([job.title, app_count, sc, job.views, hire_rate])
+
+    for col in ['A','B','C','D','E']:
+        ws3.column_dimensions[col].width = 20
+
+    # ── Save and return ───────────────────────────────────
+    buffer = io.BytesIO()
+    wb.save(buffer)
+    buffer.seek(0)
+
+    response = HttpResponse(
+        buffer,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="hirehub_report.xlsx"'
+    return response
 
 # ===================== COMPANY PROFILE =====================
 
@@ -1236,20 +1522,93 @@ def subscription(request):
 
 # ===================== SETTINGS =====================
 
+# ===================== SETTINGS =====================
 @employer_required
 def settings(request):
-    employer_settings, created = EmployerSettings.objects.get_or_create(employer=request.user)
+    employer_settings, _ = EmployerSettings.objects.get_or_create(
+        employer=request.user
+    )
     if request.method == 'POST':
-        form = EmployerSettingsForm(request.POST, request.FILES, instance=employer_settings)
-        if form.is_valid():
-            settings_data = form.save(commit=False)
-            settings_data.employer = request.user
-            settings_data.save()
-            return redirect('settings')
-    else:
-        form = EmployerSettingsForm(instance=employer_settings)
-    return render(request, 'core/settings.html', {'form': form})
+        # ── Profile fields ─────────────────────────────
+        full_name    = request.POST.get('full_name', '').strip()
+        email        = request.POST.get('email', '').strip()
+        phone        = request.POST.get('phone', '').strip()
+        company_name = request.POST.get('company', '').strip()
+        language     = request.POST.get('language', 'English')
 
+        # Save to auth_user
+        if full_name:
+            parts = full_name.split(' ', 1)
+            request.user.first_name = parts[0]
+            request.user.last_name  = parts[1] if len(parts) > 1 else ''
+        if email:
+            request.user.email = email
+        request.user.save()
+
+        # Save to UserProfile
+        try:
+            profile = request.user.userprofile
+            if company_name:
+                profile.company_name = company_name
+            profile.save()
+        except:
+            pass
+
+        # Save to EmployerSettings
+        employer_settings.phone_number        = phone
+        employer_settings.email_notifications = (request.POST.get('email_notifications') == 'on')
+        employer_settings.two_factor_auth     = (request.POST.get('two_factor_enabled') == 'on')
+        employer_settings.language            = language
+        if request.FILES.get('profile_image'):
+            employer_settings.profile_image   = request.FILES['profile_image']
+        employer_settings.save()
+
+        messages.success(request, '✅ Settings saved successfully!')
+        return redirect('settings')
+
+    return render(request, 'core/settings.html', {
+        'employer_settings': employer_settings,
+    })
+
+
+# ===================== CHANGE PASSWORD =====================
+@employer_required
+def change_password(request):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Method not allowed'}, status=405)
+    import json
+    from django.contrib.auth import update_session_auth_hash
+    try:
+        data            = json.loads(request.body)
+        current_password = data.get('current_password', '')
+        new_password     = data.get('new_password', '')
+        if not request.user.check_password(current_password):
+            return JsonResponse({'success': False, 'error': 'Current password is incorrect.'})
+        if len(new_password) < 6:
+            return JsonResponse({'success': False, 'error': 'New password must be at least 6 characters.'})
+        request.user.set_password(new_password)
+        request.user.save()
+        update_session_auth_hash(request, request.user)  # keeps user logged in
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+
+# ===================== DEACTIVATE ACCOUNT =====================
+@employer_required
+def deactivate_account(request):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Method not allowed'}, status=405)
+    try:
+        # Hide all jobs by this employer
+        Job.objects.filter(employer=request.user).update(is_active=False)
+        # Deactivate the user account
+        request.user.is_active = False
+        request.user.save()
+        logout(request)
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
 
 # ===================== ALL JOBS =====================
 
