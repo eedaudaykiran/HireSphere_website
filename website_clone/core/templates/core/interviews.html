@@ -1,7 +1,6 @@
 {% block title %}Interview Schedule | HireHub{% endblock %}
 
 {% block extra_css %}
-<!-- Tailwind CSS + Font Awesome -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
@@ -37,10 +36,17 @@
     select:focus {
         border-color: #6366f1 !important;
         outline: none;
-        ring: 2px solid #6366f1;
     }
 
-    /* Responsive table (for desktop) */
+    /* Hide rows/cards that don't match filter */
+    .interview-row.hidden-by-filter {
+        display: none !important;
+    }
+
+    .interview-card.hidden-by-filter {
+        display: none !important;
+    }
+
     @media (max-width: 1024px) {
         .desktop-table {
             display: none;
@@ -61,34 +67,38 @@
 
 {% block content %}
 <div class="min-h-screen bg-[#0b1120] text-white overflow-hidden">
-    <!-- Background soft orbs -->
+
     <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 blur-[120px] rounded-full"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full"></div>
 
     <div class="relative z-10 flex">
-        <!-- SIDEBAR (matches your existing) -->
+
+        <!-- SIDEBAR -->
         <aside
             class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
             <h1 class="text-3xl font-extrabold mb-10">Hire<span class="text-indigo-400">Hub</span></h1>
             <nav class="space-y-3">
-                <a href="{% url 'applicants' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥
-                    Applicants</a>
-                <a href="{% url 'manage_jobs' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage
+                <a href="{% url 'applicants' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">👥 Applicants</a>
+                <a href="{% url 'manage_jobs' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">💼 Manage
                     Jobs</a>
-                <a href="{% url 'shortlisted_candidates' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⭐
-                    Shortlisted</a>
+                <a href="{% url 'shortlisted_candidates' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⭐ Shortlisted</a>
                 <a href="{% url 'interviews' %}"
                     class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">📅
                     Interviews</a>
-                <a href="{% url 'reports' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📊
-                    Analytics</a>
-                <a href="{% url 'settings' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⚙️
-                    Settings</a>
+                <a href="{% url 'reports' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">📊 Analytics</a>
+                <a href="{% url 'settings' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">⚙️ Settings</a>
+                <a href="{% url 'logout' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">🚪 Logout</a>
             </nav>
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="flex-1 p-4 sm:p-8">
+
             <!-- Header -->
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
                 <div>
@@ -96,63 +106,168 @@
                     <p class="text-gray-400 mt-3 text-lg">Manage upcoming interviews, reschedule, or send reminders.</p>
                 </div>
                 <div class="flex flex-wrap gap-4">
-                    <button class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl font-semibold transition">📅
-                        Export Calendar</button>
-                    <button
-                        class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition px-6 py-3 rounded-2xl font-bold shadow-xl">+
-                        Schedule New Interview</button>
+                    <button class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl font-semibold transition">
+                        📅 Export Calendar
+                    </button>
+                    <a href="{% url 'shortlisted_candidates' %}"
+                        class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition px-6 py-3 rounded-2xl font-bold shadow-xl">
+                        + Schedule New Interview
+                    </a>
                 </div>
             </div>
 
-            <!-- STATS CARDS (dynamic) -->
+            <!--
+            ══════════════════════════════════════════════════════════
+            STATS CARDS — ALL REAL DATA FROM DATABASE
+            ══════════════════════════════════════════════════════════
+ 
+            interviews|length
+              → Interview.objects.filter(job__employer=request.user)
+              → Total rows in Interview table for this employer
+ 
+            upcoming_count
+              → interview_date >= today AND status = 'Scheduled'
+              → Interviews that haven't happened yet
+ 
+            completed_count
+              → status = 'Completed'
+              → Interviews that are done
+ 
+            cancelled_count
+              → status = 'Cancelled'
+              → Interviews that were cancelled
+ 
+            ALL 4 values passed from the interviews() view in views.py
+            ══════════════════════════════════════════════════════════
+            -->
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+
                 <div class="bg-white/10 border border-white/10 backdrop-blur-xl rounded-3xl p-6">
                     <div class="text-5xl mb-4">📋</div>
                     <h3 class="text-4xl font-extrabold">{{ interviews|length }}</h3>
                     <p class="text-gray-400 mt-2">Total Interviews</p>
                 </div>
+
                 <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-3xl p-6">
                     <div class="text-5xl mb-4">⏳</div>
-                    <h3 class="text-4xl font-extrabold text-yellow-400">{{ upcoming_count|default:"0" }}</h3>
+                    <h3 class="text-4xl font-extrabold text-yellow-400">{{ upcoming_count }}</h3>
                     <p class="text-gray-300 mt-2">Upcoming</p>
                 </div>
+
                 <div class="bg-green-500/10 border border-green-500/20 rounded-3xl p-6">
                     <div class="text-5xl mb-4">✅</div>
-                    <h3 class="text-4xl font-extrabold text-green-400">{{ completed_count|default:"0" }}</h3>
+                    <h3 class="text-4xl font-extrabold text-green-400">{{ completed_count }}</h3>
                     <p class="text-gray-300 mt-2">Completed</p>
                 </div>
+
                 <div class="bg-red-500/10 border border-red-500/20 rounded-3xl p-6">
                     <div class="text-5xl mb-4">❌</div>
-                    <h3 class="text-4xl font-extrabold text-red-400">{{ cancelled_count|default:"0" }}</h3>
+                    <h3 class="text-4xl font-extrabold text-red-400">{{ cancelled_count }}</h3>
                     <p class="text-gray-300 mt-2">Cancelled</p>
                 </div>
+
             </div>
 
-            <!-- Search + Filter -->
+            <!--
+            ══════════════════════════════════════════════════════════
+            SEARCH + FILTER BAR
+            ══════════════════════════════════════════════════════════
+ 
+            searchInterview  → filters by candidate name OR job title
+                               reads data-name and data-job on each row/card
+ 
+            statusFilter     → filters by interview status
+                               OPTIONS come from REAL DB values (statuses variable)
+                               passed from view: interview_list.values_list('status').distinct()
+                               So if your DB has 'Scheduled','Completed' → only those show
+ 
+            roundFilter      → filters by round type
+                               OPTIONS come from REAL DB values (round_types variable)
+                               passed from view: interview_list.values_list('round_type').distinct()
+                               So if your DB has 'Technical','HR' → only those show
+                               No more hardcoded guesses that don't match DB data
+            ══════════════════════════════════════════════════════════
+            -->
             <div class="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 mb-10">
                 <div class="flex flex-col lg:flex-row gap-4">
+
+                    <!-- Search box: JS reads this and checks data-name + data-job -->
                     <input type="text" id="searchInterview" placeholder="Search by candidate, job, round..."
-                        class="flex-1 bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-white placeholder-gray-400">
+                        class="flex-1 bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-white placeholder-gray-400"
+                        autocomplete="off">
+
+                    <!--
+                        STATUS FILTER DROPDOWN
+                        ──────────────────────
+                        OLD (broken): hardcoded options that may not match DB
+                            <option>Scheduled</option>
+                            <option>Completed</option>  ← what if DB has none?
+ 
+                        NEW (fixed): options come from REAL DB values
+                            {{ statuses }} = Interview.objects
+                                .filter(job__employer=request.user)
+                                .values_list('status', flat=True)
+                                .distinct()
+                        So the dropdown ONLY shows statuses that actually exist in DB.
+                    -->
                     <select id="statusFilter"
-                        class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none text-white">
+                        class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none text-blue-300">
                         <option value="">All Status</option>
-                        <option>Scheduled</option>
-                        <option>Completed</option>
-                        <option>Cancelled</option>
-                        <option>Rescheduled</option>
+                        {% for status in statuses %}
+                        <option value="{{ status|lower }}">{{ status }}</option>
+                        {% empty %}
+                        <!-- Fallback options if no interviews in DB yet -->
+                        <option value="scheduled">Scheduled</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="rescheduled">Rescheduled</option>
+                        {% endfor %}
                     </select>
+
+                    <!--
+                        ROUND FILTER DROPDOWN
+                        ─────────────────────
+                        OLD (broken): hardcoded options that may not match DB
+                            <option>Technical</option>
+                            <option>HR</option>  ← what if your DB has 'Technical Round'?
+ 
+                        NEW (fixed): options come from REAL DB values
+                            {{ round_types }} = Interview.objects
+                                .filter(job__employer=request.user)
+                                .values_list('round_type', flat=True)
+                                .distinct()
+                        So the dropdown ONLY shows round types actually stored in DB.
+                    -->
                     <select id="roundFilter"
-                        class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none text-white">
+                        class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none text-blue-300">
                         <option value="">All Rounds</option>
-                        <option>Technical</option>
-                        <option>HR</option>
-                        <option>Managerial</option>
-                        <option>Assignment</option>
+                        {% for round in round_types %}
+                        <option value="{{ round|lower }}">{{ round }}</option>
+                        {% empty %}
+                        <!-- Fallback options if no interviews in DB yet -->
+                        <option value="technical">Technical</option>
+                        <option value="hr">HR</option>
+                        <option value="managerial">Managerial</option>
+                        <option value="assignment">Assignment</option>
+                        {% endfor %}
                     </select>
+
                 </div>
             </div>
 
-            <!-- DESKTOP TABLE VERSION (clean, minimal) -->
+            <!--
+            ══════════════════════════════════════════════════════════
+            DESKTOP TABLE
+            ══════════════════════════════════════════════════════════
+            Each <tr> has class="interview-row" and 4 data-* attributes:
+                data-name   = candidate full name (lowercased) from auth_user
+                data-job    = job title (lowercased) from Job model
+                data-status = interview status (lowercased) from Interview model
+                data-round  = round type (lowercased) from Interview model
+ 
+            JS reads these attributes to filter rows instantly.
+            ══════════════════════════════════════════════════════════
+            -->
             <div class="desktop-table overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -168,16 +283,28 @@
                     </thead>
                     <tbody id="interviewTableBody">
                         {% for interview in interviews %}
-                        <tr class="border-b border-white/5 hover:bg-white/5 transition"
-                            data-status="{{ interview.status }}" data-round="{{ interview.round_type }}"
-                            data-name="{{ interview.candidate.username|lower }}"
-                            data-job="{{ interview.job.title|lower }}">
-                            <td class="py-4 px-4 font-medium">{{
-                                interview.candidate.get_full_name|default:interview.candidate.username }}</td>
+                        <tr class="interview-row border-b border-white/5 hover:bg-white/5 transition text-white"
+                            data-name="{{ interview.candidate.get_full_name|default:interview.candidate.username|lower }}"
+                            data-job="{{ interview.job.title|lower }}" data-status="{{ interview.status|lower }}"
+                            data-round="{{ interview.round_type|lower }}">
+                            <!-- interview.candidate → FK to auth_user -->
+                            <td class="py-4 px-4 font-medium">
+                                {{ interview.candidate.get_full_name|default:interview.candidate.username }}
+                            </td>
+
+                            <!-- interview.job.title → Job model via FK -->
                             <td class="py-4 px-4">{{ interview.job.title }}</td>
+
+                            <!-- interview.round_type → CharField on Interview model -->
                             <td class="py-4 px-4">{{ interview.round_type }}</td>
+
+                            <!-- interview.interview_date → DateField -->
                             <td class="py-4 px-4">{{ interview.interview_date|date:"d M Y" }}</td>
+
+                            <!-- interview.interview_time → TimeField -->
                             <td class="py-4 px-4">{{ interview.interview_time|time:"g:i A" }}</td>
+
+                            <!-- interview.status → CharField, default='Scheduled' -->
                             <td class="py-4 px-4">
                                 {% if interview.status == "Scheduled" %}
                                 <span
@@ -188,45 +315,78 @@
                                 {% elif interview.status == "Cancelled" %}
                                 <span
                                     class="bg-red-500/20 text-red-300 px-3 py-1 rounded-full text-xs font-semibold">Cancelled</span>
+                                {% elif interview.status == "Rescheduled" %}
+                                <span
+                                    class="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-semibold">Rescheduled</span>
                                 {% else %}
                                 <span
                                     class="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold">{{
                                     interview.status }}</span>
                                 {% endif %}
                             </td>
+
+                            <!-- Actions -->
                             <td class="py-4 px-4">
                                 <div class="flex gap-2">
+                                    <!-- Join: interview.meeting_link → URLField on Interview model -->
+                                    {% if interview.meeting_link %}
+                                    <a href="{{ interview.meeting_link }}" target="_blank"
+                                        class="bg-indigo-600/30 hover:bg-indigo-600/50 text-white px-3 py-1 rounded-lg text-sm transition"
+                                        title="Join Meeting">
+                                        <i class="fas fa-video"></i>
+                                    </a>
+                                    {% else %}
+                                    <button disabled
+                                        class="bg-white/10 text-gray-500 px-3 py-1 rounded-lg text-sm cursor-not-allowed"
+                                        title="No meeting link">
+                                        <i class="fas fa-video"></i>
+                                    </button>
+                                    {% endif %}
+
                                     <button
-                                        class="bg-indigo-600/30 hover:bg-indigo-600/50 text-white px-3 py-1 rounded-lg text-sm transition"><i
-                                            class="fas fa-video"></i></button>
+                                        class="bg-yellow-600/30 hover:bg-yellow-600/50 text-white px-3 py-1 rounded-lg text-sm transition"
+                                        title="Reschedule">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </button>
+
                                     <button
-                                        class="bg-yellow-600/30 hover:bg-yellow-600/50 text-white px-3 py-1 rounded-lg text-sm transition"><i
-                                            class="fas fa-calendar-alt"></i></button>
-                                    <button
-                                        class="bg-red-600/30 hover:bg-red-600/50 text-white px-3 py-1 rounded-lg text-sm transition"><i
-                                            class="fas fa-times"></i></button>
+                                        class="bg-red-600/30 hover:bg-red-600/50 text-white px-3 py-1 rounded-lg text-sm transition"
+                                        title="Cancel">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
                         {% empty %}
-                        <tr>
-                            <td colspan="7" class="text-center py-12 text-gray-400">No interviews scheduled yet.</td>
+                        <tr class="interview-row">
+                            <td colspan="7" class="text-center py-12 text-gray-400">
+                                No interviews scheduled yet.
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
 
-            <!-- MOBILE CARDS VERSION -->
+            <!--
+            ══════════════════════════════════════════════════════════
+            MOBILE CARDS
+            ══════════════════════════════════════════════════════════
+            Same data-* attributes as table rows.
+            Same JS filter works on both table and cards simultaneously.
+            ══════════════════════════════════════════════════════════
+            -->
             <div class="mobile-cards grid grid-cols-1 gap-6" id="interviewCardsContainer">
                 {% for interview in interviews %}
-                <div class="glass-card rounded-3xl p-5 hover-glow transition" data-status="{{ interview.status }}"
-                    data-round="{{ interview.round_type }}" data-name="{{ interview.candidate.username|lower }}"
-                    data-job="{{ interview.job.title|lower }}">
+                <div class="interview-card glass-card rounded-3xl p-5 hover-glow transition"
+                    data-name="{{ interview.candidate.get_full_name|default:interview.candidate.username|lower }}"
+                    data-job="{{ interview.job.title|lower }}" data-status="{{ interview.status|lower }}"
+                    data-round="{{ interview.round_type|lower }}">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="text-xl font-bold">{{
-                                interview.candidate.get_full_name|default:interview.candidate.username }}</h3>
+                            <h3 class="text-xl font-bold">
+                                {{ interview.candidate.get_full_name|default:interview.candidate.username }}
+                            </h3>
                             <p class="text-indigo-300 text-sm mt-1">{{ interview.job.title }}</p>
                         </div>
                         <div>
@@ -239,86 +399,191 @@
                             {% elif interview.status == "Cancelled" %}
                             <span
                                 class="bg-red-500/20 text-red-300 px-3 py-1 rounded-full text-xs font-semibold">Cancelled</span>
+                            {% elif interview.status == "Rescheduled" %}
+                            <span
+                                class="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-semibold">Rescheduled</span>
                             {% else %}
                             <span class="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold">{{
                                 interview.status }}</span>
                             {% endif %}
                         </div>
                     </div>
+
                     <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-                        <div><i class="fas fa-bullhorn text-indigo-400 mr-2"></i> Round: {{ interview.round_type }}
-                        </div>
-                        <div><i class="fas fa-calendar-day text-indigo-400 mr-2"></i> {{
-                            interview.interview_date|date:"d M Y" }}</div>
-                        <div><i class="fas fa-clock text-indigo-400 mr-2"></i> {{ interview.interview_time|time:"g:i A"
+                        <div><i class="fas fa-bullhorn text-indigo-400 mr-2"></i>Round: {{ interview.round_type }}</div>
+                        <div><i class="fas fa-calendar-day text-indigo-400 mr-2"></i>{{ interview.interview_date|date:"d
+                            M Y" }}</div>
+                        <div><i class="fas fa-clock text-indigo-400 mr-2"></i>{{ interview.interview_time|time:"g:i A"
                             }}</div>
-                        <div><i class="fas fa-chalkboard-user text-indigo-400 mr-2"></i> Status: {{ interview.status }}
-                        </div>
+                        <div><i class="fas fa-chalkboard-user text-indigo-400 mr-2"></i>{{ interview.status }}</div>
                     </div>
+
                     <div class="flex gap-3 mt-6">
+                        {% if interview.meeting_link %}
+                        <a href="{{ interview.meeting_link }}" target="_blank"
+                            class="flex-1 bg-indigo-600/30 hover:bg-indigo-600/50 py-2 rounded-xl text-sm font-semibold transition text-center">
+                            <i class="fas fa-video mr-1"></i> Join
+                        </a>
+                        {% else %}
+                        <button disabled
+                            class="flex-1 bg-white/10 text-gray-500 py-2 rounded-xl text-sm font-semibold cursor-not-allowed">
+                            <i class="fas fa-video mr-1"></i> No Link
+                        </button>
+                        {% endif %}
+
                         <button
-                            class="flex-1 bg-indigo-600/30 hover:bg-indigo-600/50 py-2 rounded-xl text-sm font-semibold transition"><i
-                                class="fas fa-video mr-1"></i> Join</button>
+                            class="flex-1 bg-yellow-600/30 hover:bg-yellow-600/50 py-2 rounded-xl text-sm font-semibold transition">
+                            <i class="fas fa-edit mr-1"></i> Reschedule
+                        </button>
                         <button
-                            class="flex-1 bg-yellow-600/30 hover:bg-yellow-600/50 py-2 rounded-xl text-sm font-semibold transition"><i
-                                class="fas fa-edit mr-1"></i> Reschedule</button>
-                        <button
-                            class="flex-1 bg-red-600/30 hover:bg-red-600/50 py-2 rounded-xl text-sm font-semibold transition"><i
-                                class="fas fa-ban mr-1"></i> Cancel</button>
+                            class="flex-1 bg-red-600/30 hover:bg-red-600/50 py-2 rounded-xl text-sm font-semibold transition">
+                            <i class="fas fa-ban mr-1"></i> Cancel
+                        </button>
                     </div>
                 </div>
                 {% empty %}
                 <div class="glass-card rounded-3xl p-12 text-center">
                     <div class="text-6xl mb-4">📅</div>
                     <h3 class="text-2xl font-bold">No Interviews Scheduled</h3>
-                    <p class="text-gray-400 mt-2">Click "Schedule New Interview" to get started.</p>
+                    <p class="text-gray-400 mt-2">
+                        Go to <a href="{% url 'shortlisted_candidates' %}"
+                            class="text-indigo-400 underline font-semibold">Shortlisted</a> and schedule interviews from
+                        there.
+                    </p>
                 </div>
                 {% endfor %}
             </div>
+
+            <!-- No results message shown by JS -->
+            <div id="noResults" class="hidden bg-white/10 border border-white/10 rounded-3xl p-16 text-center mt-8">
+                <div class="text-6xl mb-4">🔍</div>
+                <h3 class="text-2xl font-bold">No Matches Found</h3>
+                <p class="text-gray-400 mt-2">Try a different name, status, or round.</p>
+            </div>
+
         </main>
     </div>
 </div>
 
-<!-- Simple filter script -->
+<!--
+══════════════════════════════════════════════════════════
+JAVASCRIPT FILTER — HOW IT WORKS
+══════════════════════════════════════════════════════════
+ 
+3 inputs control the filter:
+  1. searchInterview  → text input → checks data-name and data-job
+  2. statusFilter     → dropdown   → checks data-status (exact match)
+  3. roundFilter      → dropdown   → checks data-round (contains match)
+ 
+Every row (.interview-row) and card (.interview-card) has:
+  data-name   = candidate name from DB (already lowercased in template)
+  data-job    = job title from DB (already lowercased in template)
+  data-status = interview status from DB (already lowercased in template)
+  data-round  = round type from DB (already lowercased in template)
+ 
+WHY dropdown values are lowercased in <option value="{{ status|lower }}">:
+  Because data-status is also lowercased in the template.
+  So "Scheduled" in DB → data-status="scheduled" on row
+  And option value="scheduled" → they match perfectly.
+ 
+WHY data-round uses .includes() but data-status uses strict ===:
+  Status is a fixed set (Scheduled/Completed/Cancelled).
+  Round type could be "Technical Round 1", "HR Round" etc.
+  .includes() catches partial matches for rounds.
+══════════════════════════════════════════════════════════
+-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+
         const searchInput = document.getElementById('searchInterview');
         const statusFilter = document.getElementById('statusFilter');
         const roundFilter = document.getElementById('roundFilter');
+        const noResults = document.getElementById('noResults');
 
-        // For table rows
-        const tableRows = document.querySelectorAll('#interviewTableBody tr');
-        // For mobile cards
-        const cards = document.querySelectorAll('.mobile-cards .glass-card');
+        // All table rows (desktop) and all cards (mobile)
+        const tableRows = document.querySelectorAll('.interview-row');
+        const cards = document.querySelectorAll('.interview-card');
 
-        function filterElements(elements) {
-            const searchTerm = searchInput.value.toLowerCase();
-            const statusVal = statusFilter.value.toLowerCase();
-            const roundVal = roundFilter.value.toLowerCase();
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const statusVal = statusFilter.value.toLowerCase();   // e.g. "scheduled" or "" for all
+            const roundVal = roundFilter.value.toLowerCase();    // e.g. "technical" or "" for all
 
-            elements.forEach(el => {
+            let visibleCount = 0;
+
+            // Filter table rows (desktop view)
+            tableRows.forEach(function (row) {
+                const name = row.dataset.name || '';   // from data-name attr (DB value)
+                const job = row.dataset.job || '';   // from data-job attr (DB value)
+                const status = row.dataset.status || '';   // from data-status attr (DB value)
+                const round = row.dataset.round || '';   // from data-round attr (DB value)
+
                 let show = true;
-                const name = (el.getAttribute('data-name') || '').toLowerCase();
-                const job = (el.getAttribute('data-job') || '').toLowerCase();
-                const status = (el.getAttribute('data-status') || '').toLowerCase();
-                const round = (el.getAttribute('data-round') || '').toLowerCase();
 
-                if (searchTerm && !(name.includes(searchTerm) || job.includes(searchTerm))) show = false;
-                if (statusVal && status !== statusVal) show = false;
-                if (roundVal && round !== roundVal) show = false;
+                // Search: candidate name OR job title must contain search term
+                if (searchTerm && !name.includes(searchTerm) && !job.includes(searchTerm)) {
+                    show = false;
+                }
 
-                el.style.display = show ? '' : 'none';
+                // Status: must exactly match selected option (both lowercased)
+                // Empty statusVal ("") means "All Status" → show everything
+                if (statusVal && status !== statusVal) {
+                    show = false;
+                }
+
+                // Round: must contain selected option (partial match for flexibility)
+                // Empty roundVal ("") means "All Rounds" → show everything
+                if (roundVal && !round.includes(roundVal)) {
+                    show = false;
+                }
+
+                if (show) {
+                    row.classList.remove('hidden-by-filter');
+                    visibleCount++;
+                } else {
+                    row.classList.add('hidden-by-filter');
+                }
             });
+
+            // Filter mobile cards (same logic, same data-* attributes)
+            cards.forEach(function (card) {
+                const name = card.dataset.name || '';
+                const job = card.dataset.job || '';
+                const status = card.dataset.status || '';
+                const round = card.dataset.round || '';
+
+                let show = true;
+
+                if (searchTerm && !name.includes(searchTerm) && !job.includes(searchTerm)) {
+                    show = false;
+                }
+                if (statusVal && status !== statusVal) {
+                    show = false;
+                }
+                if (roundVal && !round.includes(roundVal)) {
+                    show = false;
+                }
+
+                if (show) {
+                    card.classList.remove('hidden-by-filter');
+                } else {
+                    card.classList.add('hidden-by-filter');
+                }
+            });
+
+            // Show "no results" message if nothing visible
+            const anyVisible = visibleCount > 0 || cards.length === 0;
+            if (!anyVisible && (searchTerm || statusVal || roundVal)) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
         }
 
-        function filterAll() {
-            filterElements(tableRows);
-            filterElements(cards);
-        }
-
-        searchInput.addEventListener('input', filterAll);
-        statusFilter.addEventListener('change', filterAll);
-        roundFilter.addEventListener('change', filterAll);
+        // Wire up all 3 inputs to the same filter function
+        searchInput.addEventListener('input', applyFilters);
+        statusFilter.addEventListener('change', applyFilters);
+        roundFilter.addEventListener('change', applyFilters);
     });
 </script>
 {% endblock %}

@@ -1065,6 +1065,11 @@ def shortlisted_candidates(request):
         job__employer=request.user,
         status='Shortlisted'
     )
+    for app in shortlisted:
+        if app.skills:
+            app.skills_list = app.skills.split(',')
+        else:
+            app.skills_list = []
     return render(request, 'core/shortlisted.html', {'shortlisted': shortlisted})
 
 
@@ -1089,21 +1094,75 @@ def reject_candidate(request, app_id):
 
 @employer_required
 def interviews(request):
-    interview_list = Interview.objects.filter(job__employer=request.user)
-    return render(request, 'core/interviews.html', {'interviews': interview_list})
+    from django.utils import timezone
+    today = timezone.now().date()
 
+    interview_list = Interview.objects.filter(
+        job__employer=request.user
+    ).select_related('candidate', 'job').order_by('interview_date', 'interview_time')
+
+    upcoming_count  = interview_list.filter(interview_date__gte=today, status='Scheduled').count()
+    completed_count = interview_list.filter(status='Completed').count()
+    cancelled_count = interview_list.filter(status='Cancelled').count()
+
+    # Get all REAL round types from DB for the dropdown
+    round_types = interview_list.values_list(
+        'round_type', flat=True
+    ).distinct()
+
+    # Get all REAL statuses from DB for the dropdown
+    statuses = interview_list.values_list(
+        'status', flat=True
+    ).distinct()
+
+    return render(request, 'core/interviews.html', {
+        'interviews':       interview_list,
+        'upcoming_count':   upcoming_count,
+        'completed_count':  completed_count,
+        'cancelled_count':  cancelled_count,
+        'round_types':      round_types,   # ← real rounds from DB
+        'statuses':         statuses,      # ← real statuses from DB
+    })
 
 # ===================== SCHEDULE INTERVIEW =====================
 
 @employer_required
 def schedule_interview(request, app_id):
-    # FIX: was JobApplication (doesn't exist) → changed to Application
     application = get_object_or_404(Application, id=app_id)
 
-    application.status = 'Interview Scheduled'
-    application.save()
+    # Security check
+    if application.job.employer != request.user:
+        messages.error(request, "Access denied.")
+        return redirect('shortlisted_candidates')
 
-    return redirect('employer_dashboard')
+    if request.method == 'POST':
+        round_type      = request.POST.get('round_type', 'Technical')
+        interview_date  = request.POST.get('interview_date')
+        interview_time  = request.POST.get('interview_time')
+        meeting_link    = request.POST.get('meeting_link', '')
+
+        # Create a real Interview row in the DB
+        Interview.objects.create(
+            candidate      = application.applicant,
+            job            = application.job,
+            round_type     = round_type,
+            interview_date = interview_date,
+            interview_time = interview_time,
+            meeting_link   = meeting_link,
+            status         = 'Scheduled',
+        )
+
+        # Also update Application status
+        application.status = 'Interview Scheduled'
+        application.save()
+
+        messages.success(request, f"✅ Interview scheduled for {application.applicant.get_full_name() or application.applicant.username}!")
+        return redirect('interviews')
+
+    # GET request → show the scheduling form
+    return render(request, 'core/schedule_interview.html', {
+        'application': application,
+    })
 
 
 # ===================== INBOX MESSAGES =====================

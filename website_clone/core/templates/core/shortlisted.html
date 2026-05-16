@@ -1,31 +1,32 @@
-{% block title %}Applicants Dashboard | HireHub{% endblock %}
+{% block title %}Shortlisted Candidates | HireHub{% endblock %}
 
 {% block extra_css %}
-<!-- Tailwind CSS + Font Awesome -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<!-- Custom override (fix Tailwind base + glass effects) -->
 <style>
-    /* Ensures the dark background and blur effects work */
     body {
         background: #0b1120;
     }
+
     .glass-card {
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
+
     .hover-glow:hover {
         box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
         transform: translateY(-4px);
     }
-    /* Custom scrollbar (optional) */
+
     ::-webkit-scrollbar {
         width: 6px;
     }
+
     ::-webkit-scrollbar-track {
         background: #1e293b;
     }
+
     ::-webkit-scrollbar-thumb {
         background: #4f46e5;
         border-radius: 10px;
@@ -43,29 +44,38 @@
     <!-- Main Layout -->
     <div class="relative z-10 flex">
 
-        <!-- SIDEBAR (hidden on mobile) -->
-        <aside class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
+        <!-- SIDEBAR -->
+        <aside
+            class="hidden lg:flex flex-col w-72 min-h-screen bg-white/5 backdrop-blur-xl border-r border-white/10 p-6">
             <h1 class="text-3xl font-extrabold mb-10">Hire<span class="text-indigo-400">Hub</span></h1>
             <nav class="space-y-3">
-                <a href="{% url 'applicants' %}" class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">
+                <a href="{% url 'applicants' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
                     👥 Applicants
                 </a>
-                <a href="{% url 'manage_jobs' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
+                <a href="{% url 'manage_jobs' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
                     💼 Manage Jobs
                 </a>
-                <a href="{% url 'shortlisted_candidates' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
+                <!-- ⭐ Shortlisted is ACTIVE page -->
+                <a href="{% url 'shortlisted_candidates' %}"
+                    class="flex items-center gap-3 bg-indigo-600 text-white px-5 py-4 rounded-2xl font-semibold transition-all">
                     ⭐ Shortlisted
                 </a>
-                <a href="{% url 'interviews' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
+                <a href="{% url 'interviews' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
                     📅 Interviews
                 </a>
-                <a href="{% url 'reports' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
+                <a href="{% url 'reports' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
                     📊 Analytics
                 </a>
-                <a href="{% url 'settings' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
+                <a href="{% url 'settings' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
                     ⚙️ Settings
                 </a>
-                <a href="{% url 'logout' %}" class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
+                <a href="{% url 'logout' %}"
+                    class="flex items-center gap-3 hover:bg-white/10 px-5 py-4 rounded-2xl transition">
                     🚪 Logout
                 </a>
             </nav>
@@ -77,160 +87,236 @@
             <!-- Page Header -->
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
                 <div>
-                    <h2 class="text-4xl sm:text-5xl font-extrabold">Applicants Dashboard</h2>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold">Shortlisted Candidates</h2>
                     <p class="text-gray-400 mt-3 text-lg">
-                        Manage applicants, shortlist candidates, schedule interviews, and track hiring process.
+                        Candidates you have shortlisted — schedule interviews or move them forward.
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-4">
-                    <button class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl font-semibold transition">
-                        ⬇ Export
-                    </button>
-                    <button class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition px-6 py-3 rounded-2xl font-bold shadow-xl">
-                        + Invite Candidate
-                    </button>
+                    <a href="{% url 'applicants' %}"
+                        class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl font-semibold transition">
+                        ← All Applicants
+                    </a>
+                    <a href="{% url 'interviews' %}"
+                        class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition px-6 py-3 rounded-2xl font-bold shadow-xl">
+                        📅 View Interviews
+                    </a>
                 </div>
             </div>
 
-            <!-- STATS CARDS (dynamic, hardcoded numbers – replace with real counts from context) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6 mb-10">
-                <div class="bg-white/10 border border-white/10 backdrop-blur-xl rounded-3xl p-6">
-                    <div class="text-5xl mb-4">📩</div>
-                    <h3 class="text-4xl font-extrabold">{{ applications|length }}</h3>
-                    <p class="text-gray-400 mt-2">Total Applicants</p>
+            <!-- STATS CARDS — real counts from DB via view -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+
+                <!-- Total Shortlisted -->
+                <div class="bg-green-500/10 border border-green-500/20 backdrop-blur-xl rounded-3xl p-6">
+                    <div class="text-5xl mb-4">⭐</div>
+                    <h3 class="text-4xl font-extrabold text-green-400">{{ shortlisted|length }}</h3>
+                    <p class="text-gray-300 mt-2">Total Shortlisted</p>
                 </div>
+
+                <!-- Awaiting Interview — status still 'Shortlisted' (not yet moved to Interview) -->
                 <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-3xl p-6">
                     <div class="text-5xl mb-4">🕐</div>
-                    <h3 class="text-4xl font-extrabold text-yellow-400">{{ pending_count|default:"0" }}</h3>
-                    <p class="text-gray-300 mt-2">Pending Review</p>
+                    <h3 class="text-4xl font-extrabold text-yellow-400">
+                        {% with awaiting=shortlisted|length %}{{ awaiting }}{% endwith %}
+                    </h3>
+                    <p class="text-gray-300 mt-2">Awaiting Interview</p>
                 </div>
-                <div class="bg-green-500/10 border border-green-500/20 rounded-3xl p-6">
-                    <div class="text-5xl mb-4">⭐</div>
-                    <h3 class="text-4xl font-extrabold text-green-400">{{ shortlisted_count|default:"0" }}</h3>
-                    <p class="text-gray-300 mt-2">Shortlisted</p>
-                </div>
+
+                <!-- Interviews Scheduled — applications moved to Interview status -->
                 <div class="bg-purple-500/10 border border-purple-500/20 rounded-3xl p-6">
                     <div class="text-5xl mb-4">📅</div>
                     <h3 class="text-4xl font-extrabold text-purple-400">{{ interview_count|default:"0" }}</h3>
-                    <p class="text-gray-300 mt-2">Interviews</p>
+                    <p class="text-gray-300 mt-2">Interviews Scheduled</p>
                 </div>
-                <div class="bg-red-500/10 border border-red-500/20 rounded-3xl p-6">
-                    <div class="text-5xl mb-4">❌</div>
-                    <h3 class="text-4xl font-extrabold text-red-400">{{ rejected_count|default:"0" }}</h3>
-                    <p class="text-gray-300 mt-2">Rejected</p>
-                </div>
+
             </div>
 
-            <!-- Search + Filters -->
+            <!-- Search Bar (JS client-side filter) -->
             <div class="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 mb-10">
                 <div class="flex flex-col lg:flex-row gap-4">
-                    <input type="text" placeholder="Search applicants by name, skill, location..."
-                        class="flex-1 bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-white placeholder-gray-400">
-                    <select class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none text-white">
-                        <option>Status</option>
-                        <option>Pending</option>
-                        <option>Reviewed</option>
-                        <option>Shortlisted</option>
-                        <option>Rejected</option>
-                    </select>
-                    <select class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none text-white">
-                        <option>Experience</option>
-                        <option>Fresher</option>
-                        <option>1-3 Years</option>
-                        <option>3-5 Years</option>
-                    </select>
+                    <input type="text" id="searchInput" placeholder="Search by name, job, skills, location..."
+                        class="flex-1 bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-white placeholder-gray-400"
+                        onkeyup="filterCards()">
                 </div>
             </div>
 
-            <!-- APPLICANTS GRID (cards) -->
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                {% for app in applications %}
-                <div class="bg-white text-gray-900 rounded-[32px] p-7 shadow-2xl hover:-translate-y-2 transition duration-300 hover-glow">
-                    <!-- Card top: avatar, info, status -->
+            <!-- SHORTLISTED CANDIDATES GRID — real data from DB -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8" id="candidatesGrid">
+
+                {% for app in shortlisted %}
+                <!--
+                    app.applicant         → Django User object
+                    app.job               → Job object (FK)
+                    app.applied_at        → DateTimeField (auto_now_add)
+                    app.experience        → CharField stored at apply time
+                    app.location          → CharField stored at apply time
+                    app.skills            → CharField stored at apply time
+                    app.resume            → FileField (may be empty)
+                    app.status            → 'Shortlisted' always here
+                    app.interview_date    → DateField (null if not scheduled)
+                -->
+                <div class="bg-white text-gray-900 rounded-[32px] p-7 shadow-2xl hover:-translate-y-2 transition duration-300 hover-glow candidate-card"
+                    data-name="{{ app.applicant.get_full_name|default:app.applicant.username|lower }}"
+                    data-job="{{ app.job.title|lower }}" data-skills="{{ app.skills|default:''|lower }}"
+                    data-location="{{ app.location|default:''|lower }}">
+                    <!-- Card top: avatar + info + status badge -->
                     <div class="flex items-start gap-5">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
+
+                        <!-- Avatar: first 2 letters of username -->
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg flex-shrink-0">
                             {{ app.applicant.username|slice:":2"|upper }}
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-2xl font-extrabold">{{ app.applicant.get_full_name|default:app.applicant.username }}</h3>
-                            <p class="text-gray-500 mt-1">Applied for <span class="font-bold text-indigo-600">{{ app.job.title }}</span></p>
-                            <div class="flex flex-wrap gap-3 mt-4">
-                                <!-- Example skills – you can loop over applicant.skills if you have them -->
-                                <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-semibold">Python</span>
-                                <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-semibold">Django</span>
-                                <span class="bg-pink-100 text-pink-700 px-4 py-2 rounded-full text-sm font-semibold">REST API</span>
+
+                        <!-- Name + job title + skills -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-2xl font-extrabold truncate">
+                                {{ app.applicant.get_full_name|default:app.applicant.username }}
+                            </h3>
+                            <p class="text-gray-500 mt-1 text-sm">
+                                Applied for
+                                <span class="font-bold text-indigo-600">{{ app.job.title }}</span>
+                            </p>
+
+                            <!-- Skills: real from Application.skills field -->
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                {% if app.skills %}
+                                {% for skill in app.skills_list %}
+                                <span
+                                    class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                    {{ skill|striptags|truncatechars:20 }}
+                                </span>
+                                {% endfor %}
+                                {% else %}
+                                <span class="bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-xs font-semibold">
+                                    No skills listed
+                                </span>
+                                {% endif %}
                             </div>
                         </div>
-                        <div>
-                            {% if app.status == "Pending" %}
-                                <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm font-bold">🕐 Pending</span>
-                            {% elif app.status == "Shortlisted" %}
-                                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-bold">⭐ Shortlisted</span>
-                            {% elif app.status == "Rejected" %}
-                                <span class="bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold">❌ Rejected</span>
-                            {% elif app.status == "Interview" %}
-                                <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-bold">📅 Interview</span>
-                            {% else %}
-                                <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-bold">👁 Reviewed</span>
-                            {% endif %}
+
+                        <!-- Status badge — always Shortlisted on this page -->
+                        <div class="flex-shrink-0">
+                            <span
+                                class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap">
+                                ⭐ Shortlisted
+                            </span>
                         </div>
+
                     </div>
 
-                    <!-- Meta info (experience, location, date) – replace with real fields -->
+                    <!-- Meta: experience / location / applied date — all from DB -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
                         <div class="bg-gray-100 rounded-2xl p-4">
                             <p class="text-gray-500 text-sm">Experience</p>
-                            <h4 class="font-bold mt-1">{{ app.applicant.experience|default:"Fresher" }}</h4>
+                            <!-- app.experience is stored at apply time in Application model -->
+                            <h4 class="font-bold mt-1">{{ app.experience|default:"Not specified" }}</h4>
                         </div>
                         <div class="bg-gray-100 rounded-2xl p-4">
                             <p class="text-gray-500 text-sm">Location</p>
-                            <h4 class="font-bold mt-1">{{ app.applicant.location|default:"India" }}</h4>
+                            <!-- app.location is stored at apply time in Application model -->
+                            <h4 class="font-bold mt-1">{{ app.location|default:"Not specified" }}</h4>
                         </div>
                         <div class="bg-gray-100 rounded-2xl p-4">
                             <p class="text-gray-500 text-sm">Applied Date</p>
+                            <!-- app.applied_at is DateTimeField on Application model -->
                             <h4 class="font-bold mt-1">{{ app.applied_at|date:"d M Y" }}</h4>
                         </div>
                     </div>
 
-                    <!-- Action buttons (shortlist / reject / view) -->
+                    <!-- Primary actions: Reject | Schedule Interview -->
                     <div class="flex flex-wrap gap-4 mt-8">
-                        <button class="flex-1 bg-gray-900 hover:bg-indigo-600 text-white py-4 rounded-2xl font-bold transition">
+
+                        <!-- View Profile button (no profile page yet — placeholder) -->
+                        <button
+                            class="flex-1 bg-gray-900 hover:bg-indigo-600 text-white py-4 rounded-2xl font-bold transition">
                             👁 View Profile
                         </button>
-                        <button class="flex-1 bg-green-100 hover:bg-green-200 text-green-700 py-4 rounded-2xl font-bold transition">
-                            ⭐ Shortlist
-                        </button>
-                        <button class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 py-4 rounded-2xl font-bold transition">
+
+                        <!-- Schedule Interview → calls schedule_interview view (sets status to 'Interview Scheduled') -->
+                        <a href="{% url 'schedule_interview' app.id %}"
+                            class="flex-1 bg-purple-100 hover:bg-purple-200 text-purple-700 py-4 rounded-2xl font-bold transition text-center">
+                            📅 Schedule Interview
+                        </a>
+
+                        <!-- Reject → calls update_status view (sets status to 'Rejected') -->
+                        <a href="{% url 'update_status' app.id 'Rejected' %}"
+                            class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 py-4 rounded-2xl font-bold transition text-center"
+                            onclick="return confirm('Are you sure you want to reject {{ app.applicant.get_full_name|default:app.applicant.username }}?')">
                             ❌ Reject
-                        </button>
+                        </a>
+
                     </div>
 
-                    <!-- Extra actions (download resume / schedule interview) -->
+                    <!-- Secondary actions: Download Resume | Move to HR -->
                     <div class="flex flex-wrap gap-4 mt-5">
-                        <button class="flex-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 py-3 rounded-2xl font-semibold transition">
+
+                        <!-- Download Resume — app.resume is FileField on Application -->
+                        {% if app.resume %}
+                        <a href="{{ app.resume.url }}" download
+                            class="flex-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 py-3 rounded-2xl font-semibold transition text-center">
                             📄 Download Resume
+                        </a>
+                        {% else %}
+                        <button disabled
+                            class="flex-1 bg-gray-100 text-gray-400 py-3 rounded-2xl font-semibold cursor-not-allowed text-center">
+                            📄 No Resume
                         </button>
-                        <button class="flex-1 bg-purple-100 hover:bg-purple-200 text-purple-700 py-3 rounded-2xl font-semibold transition">
-                            📅 Schedule Interview
-                        </button>
+                        {% endif %}
+
+                        <!-- Move to HR round → update_status view -->
+                        <a href="{% url 'update_status' app.id 'HR' %}"
+                            class="flex-1 bg-green-100 hover:bg-green-200 text-green-700 py-3 rounded-2xl font-semibold transition text-center">
+                            ✅ Move to HR
+                        </a>
+
                     </div>
+
                 </div>
                 {% empty %}
+                <!-- Empty state — shown when no shortlisted candidates -->
                 <div class="col-span-full bg-white/10 border border-white/10 rounded-3xl p-20 text-center">
-                    <div class="text-7xl mb-6">📭</div>
-                    <h3 class="text-3xl font-bold">No Applicants Yet</h3>
-                    <p class="text-gray-400 mt-4 text-lg">Once candidates apply for your jobs, they will appear here.</p>
+                    <div class="text-7xl mb-6">⭐</div>
+                    <h3 class="text-3xl font-bold">No Shortlisted Candidates Yet</h3>
+                    <p class="text-gray-400 mt-4 text-lg">
+                        Go to the
+                        <a href="{% url 'applicants' %}" class="text-indigo-400 underline font-semibold">
+                            Applicants page
+                        </a>
+                        and shortlist candidates to see them here.
+                    </p>
                 </div>
                 {% endfor %}
+
             </div>
+            <!-- END candidates grid -->
 
         </main>
     </div>
 </div>
 
-<!-- optional: add simple filter interactivity with JavaScript (optional) -->
 <script>
-    // Minimal script to show you can wire up filters later
-    console.log("Applicants dashboard ready");
+    // ── Client-side search filter ──────────────────────────────────────────────
+    // Reads data-name / data-job / data-skills / data-location attributes
+    // set on each card above. No server round-trip needed.
+    function filterCards() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.candidate-card');
+
+        cards.forEach(card => {
+            const name = card.dataset.name || '';
+            const job = card.dataset.job || '';
+            const skills = card.dataset.skills || '';
+            const location = card.dataset.location || '';
+
+            const matches = name.includes(query)
+                || job.includes(query)
+                || skills.includes(query)
+                || location.includes(query);
+
+            card.style.display = matches ? '' : 'none';
+        });
+    }
 </script>
 {% endblock %}

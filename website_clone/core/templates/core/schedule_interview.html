@@ -1,18 +1,126 @@
-<p>
-Date: {{ app.interview_date }}
-</p>
-
-<p>
-Time: {{ app.interview_time }}
-</p>
-
-<p>
-Link:
-<a href="{{ app.interview_link }}">
-    Join Interview
-</a>
-</p>
-
-<p>
-Notes: {{ app.interview_notes }}
-</p>
+{% block title %}Schedule Interview | HireHub{% endblock %}
+ 
+{% block extra_css %}
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { background: #0b1120; }
+</style>
+{% endblock %}
+ 
+{% block content %}
+<div class="min-h-screen bg-[#0b1120] text-white flex items-center justify-center p-6">
+ 
+    <div class="absolute top-0 left-0 w-96 h-96 bg-purple-600/20 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full"></div>
+ 
+    <div class="relative z-10 w-full max-w-xl">
+ 
+        <!-- Card -->
+        <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+ 
+            <!-- Header -->
+            <div class="mb-8">
+                <h2 class="text-3xl font-extrabold">📅 Schedule Interview</h2>
+                <p class="text-gray-400 mt-2">
+                    Candidate:
+                    <span class="text-white font-bold">
+                        {{ application.applicant.get_full_name|default:application.applicant.username }}
+                    </span>
+                </p>
+                <p class="text-gray-400 mt-1">
+                    Job:
+                    <span class="text-indigo-400 font-bold">{{ application.job.title }}</span>
+                </p>
+            </div>
+ 
+            <!--
+            FORM — POST to same URL
+            On submit → schedule_interview view creates:
+                1. Interview row in DB (candidate, job, round_type, date, time, link, status)
+                2. Updates Application.status = 'Interview Scheduled'
+            Then redirects to interviews page so you can see it immediately.
+            -->
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+ 
+                <!-- Round Type -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">
+                        Round Type <span class="text-red-400">*</span>
+                    </label>
+                    <select
+                        name="round_type"
+                        required
+                        class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-blue-300"
+                    >
+                        <!--
+                            These are the REAL values that will be stored in
+                            Interview.round_type → then shown in interviews.html dropdown
+                        -->
+                        <option value="Technical">Technical</option>
+                        <option value="HR">HR</option>
+                        <option value="Managerial">Managerial</option>
+                        <option value="Assignment">Assignment</option>
+                        <option value="Cultural Fit">Cultural Fit</option>
+                    </select>
+                </div>
+ 
+                <!-- Interview Date -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">
+                        Interview Date <span class="text-red-400">*</span>
+                    </label>
+                    <input
+                        type="date"
+                        name="interview_date"
+                        required
+                        class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-white"
+                    >
+                </div>
+ 
+                <!-- Interview Time -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">
+                        Interview Time <span class="text-red-400">*</span>
+                    </label>
+                    <input
+                        type="time"
+                        name="interview_time"
+                        required
+                        class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-white"
+                    >
+                </div>
+ 
+                <!-- Meeting Link -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">
+                        Meeting Link (Google Meet / Zoom)
+                    </label>
+                    <input
+                        type="url"
+                        name="meeting_link"
+                        placeholder="https://meet.google.com/..."
+                        class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-indigo-500 text-white placeholder-gray-500"
+                    >
+                    <p class="text-gray-500 text-xs mt-2">Optional — candidate can join via this link</p>
+                </div>
+ 
+                <!-- Buttons -->
+                <div class="flex gap-4 pt-2">
+                    <a href="{% url 'shortlisted_candidates' %}"
+                        class="flex-1 bg-white/10 hover:bg-white/20 text-white py-4 rounded-2xl font-semibold transition text-center">
+                        ← Cancel
+                    </a>
+                    <button
+                        type="submit"
+                        class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition text-white py-4 rounded-2xl font-bold shadow-xl">
+                        📅 Schedule Interview
+                    </button>
+                </div>
+ 
+            </form>
+ 
+        </div>
+    </div>
+</div>
+{% endblock %}
