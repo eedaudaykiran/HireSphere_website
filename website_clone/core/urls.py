@@ -95,7 +95,6 @@ urlpatterns = [
     path('messages/', views.inbox_messages, name='messages'),
     path('reports/', views.reports, name='reports'),
     path('company-profile/', views.company_profile, name='company_profile'),
-    path('subscription/', views.subscription, name='subscription'),
     path('settings/', views.settings, name='settings'),
     path(
     'schedule-interview/<int:app_id>/',
@@ -122,4 +121,6 @@ urlpatterns = [
     path('reports/export/excel/', views.export_reports_excel, name='export_reports_excel'),
     path('employer/change-password/',   views.change_password,   name='change_password'),
     path('employer/deactivate-account/', views.deactivate_account, name='deactivate_account'),
+    path('send-message/',                  views.send_message,    name='send_message'),
+    path('fetch-messages/<int:candidate_id>/', views.fetch_messages, name='fetch_messages'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

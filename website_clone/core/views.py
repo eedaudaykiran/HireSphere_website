@@ -10,7 +10,7 @@ import datetime
 from django.http import HttpResponse, JsonResponse
 
 from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm
-from .models import UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, Subscription, EmployerSettings
+from .models import UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, EmployerSettings
 
 
 def candidate_required(view_func):
@@ -1167,22 +1167,104 @@ def schedule_interview(request, app_id):
 
 # ===================== INBOX MESSAGES =====================
 
+# ===================== INBOX MESSAGES =====================
 @employer_required
 def inbox_messages(request):
-    inbox = Message.objects.filter(
-        receiver=request.user
-    ).order_by('-created_at')
+    from django.db.models import Q
 
+    # Get all unique candidates who messaged this employer or received messages
+    all_messages = Message.objects.filter(
+        Q(sender=request.user) | Q(receiver=request.user)
+    ).select_related('sender', 'receiver').order_by('created_at')
+
+    # Build conversation list — group by the OTHER person (candidate)
+    conversations = {}
+    for msg in all_messages:
+        other = msg.receiver if msg.sender == request.user else msg.sender
+        if other.id not in conversations:
+            conversations[other.id] = {
+                'candidate':        other,
+                'messages':         [],
+                'unread_count':     0,
+                'last_message':     '',
+                'last_message_time': msg.created_at,
+            }
+        conversations[other.id]['messages'].append(msg)
+        conversations[other.id]['last_message']      = msg.message
+        conversations[other.id]['last_message_time'] = msg.created_at
+        if not msg.is_read and msg.receiver == request.user:
+            conversations[other.id]['unread_count'] += 1
+
+    conversations_list = list(conversations.values())
+
+    # Mark messages as read for first conversation
     unread_count = Message.objects.filter(
-        receiver=request.user,
-        is_read=False
+        receiver=request.user, is_read=False
     ).count()
 
-    context = {
-        'inbox':        inbox,
-        'unread_count': unread_count,
-    }
-    return render(request, 'core/messages.html', context)
+    return render(request, 'core/messages.html', {
+        'conversations': conversations_list,
+        'unread_count':  unread_count,
+    })
+
+
+# ===================== SEND MESSAGE =====================
+@employer_required
+def send_message(request):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Method not allowed'}, status=405)
+
+    import json
+    try:
+        data         = json.loads(request.body)
+        receiver_id  = data.get('receiver_id')
+        message_text = data.get('message', '').strip()
+
+        if not receiver_id or not message_text:
+            return JsonResponse({'success': False, 'error': 'Missing receiver or message'})
+
+        receiver = User.objects.get(id=receiver_id)
+
+        msg = Message.objects.create(
+            sender   = request.user,
+            receiver = receiver,
+            message  = message_text,
+            is_read  = False,
+        )
+
+        return JsonResponse({
+            'success':    True,
+            'message_id': msg.id,
+            'text':       msg.message,
+            'time':       msg.created_at.strftime('%H:%M'),
+            'sender_id':  request.user.id,
+        })
+    except User.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Candidate not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+
+# ===================== FETCH MESSAGES (AJAX polling) =====================
+@employer_required
+def fetch_messages(request, candidate_id):
+    from django.db.models import Q
+    messages_qs = Message.objects.filter(
+        Q(sender=request.user,   receiver_id=candidate_id) |
+        Q(sender_id=candidate_id, receiver=request.user)
+    ).order_by('created_at')
+
+    # Mark as read
+    messages_qs.filter(receiver=request.user, is_read=False).update(is_read=True)
+
+    data = [{
+        'id':        m.id,
+        'text':      m.message,
+        'sender_id': m.sender.id,
+        'time':      m.created_at.strftime('%H:%M'),
+    } for m in messages_qs]
+
+    return JsonResponse({'success': True, 'messages': data})
 
 
 # ===================== REPORTS =====================
@@ -1499,28 +1581,67 @@ def export_reports_excel(request):
 
 @employer_required
 def company_profile(request):
-    profile, created = CompanyProfile.objects.get_or_create(employer=request.user)
+    profile, created = CompanyProfile.objects.get_or_create(
+        employer=request.user
+    )
+
     if request.method == 'POST':
-        form = CompanyProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            company = form.save(commit=False)
-            company.employer = request.user
-            company.save()
-            return redirect('company_profile')
-    else:
-        form = CompanyProfileForm(instance=profile)
-    return render(request, 'core/company_profile.html', {'form': form, 'profile': profile})
+        # ── Basic Info ──────────────────────────────────────
+        profile.company_name   = request.POST.get('company_name', '').strip()
+        profile.industry       = request.POST.get('industry', '').strip()
+        profile.description    = request.POST.get('description', '').strip()
+        profile.founded_year   = request.POST.get('founded_year') or None
+        profile.employee_count = request.POST.get('company_size', '').strip()
+        profile.company_type   = request.POST.get('company_type', '').strip()
 
+        # ── Location ────────────────────────────────────────
+        profile.city    = request.POST.get('city', '').strip()
+        profile.state   = request.POST.get('state', '').strip()
+        profile.country = request.POST.get('country', '').strip()
+        profile.location = f"{profile.city}, {profile.state}, {profile.country}".strip(', ')
 
-# ===================== SUBSCRIPTION =====================
+        # ── Contact ─────────────────────────────────────────
+        profile.website    = request.POST.get('website', '').strip() or None
+        profile.hr_email   = request.POST.get('hr_email', '').strip()
+        profile.phone      = request.POST.get('phone', '').strip()
+        profile.hr_contact = request.POST.get('hr_contact', '').strip()
 
-@employer_required
-def subscription(request):
-    sub = Subscription.objects.filter(employer=request.user).first()
-    return render(request, 'core/subscription.html', {'subscription': sub})
+        # ── Social Media ────────────────────────────────────
+        profile.linkedin   = request.POST.get('linkedin', '').strip() or None
+        profile.twitter    = request.POST.get('twitter', '').strip() or None
+        profile.instagram  = request.POST.get('instagram', '').strip() or None
+        profile.other_link = request.POST.get('other_link', '').strip() or None
 
+        # ── Perks & Tech ────────────────────────────────────
+        profile.benefits     = request.POST.get('benefits', '').strip()
+        profile.technologies = request.POST.get('technologies', '').strip()
 
-# ===================== SETTINGS =====================
+        # ── Logo upload ─────────────────────────────────────
+        if request.FILES.get('logo'):
+            profile.logo = request.FILES['logo']
+
+        profile.save()
+        messages.success(request, '✅ Company profile saved successfully!')
+        return redirect('company_profile')
+
+    return render(request, 'core/company_profile.html', {
+        'profile': profile,
+    })
+    context = {
+    'profile': profile,
+    'industry_options': [
+        'Software / IT', 'Banking / Finance', 'Healthcare',
+        'E-commerce', 'Education', 'Manufacturing', 'Other'
+    ],
+    'size_options': [
+        '1–10 Employees', '11–50 Employees', '51–200 Employees',
+        '201–500 Employees', '500+ Employees'
+    ],
+    'type_options': [
+        'Private Ltd', 'Public Ltd', 'Startup', 'MNC', 'Government'
+    ],
+}
+
 
 # ===================== SETTINGS =====================
 @employer_required

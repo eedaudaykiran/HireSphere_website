@@ -1,870 +1,560 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company Profile | HireHub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0b1120;
-            color: #e2e8f0;
-            min-height: 100vh;
-        }
-
-        /* ── LAYOUT ── */
-        .page-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* ── SIDEBAR ── */
-        .sidebar {
-            width: 260px;
-            background: rgba(255, 255, 255, 0.04);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 28px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .sidebar-logo {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 28px;
-            padding: 0 8px;
-        }
-
-        .sidebar-logo span {
-            color: #818cf8;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 14px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            color: #94a3b8;
-            text-decoration: none;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.07);
-            color: #e2e8f0;
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .nav-item i {
-            width: 18px;
-            text-align: center;
-        }
-
-        /* ── MAIN ── */
-        .main {
-            flex: 1;
-            padding: 36px 32px;
-            overflow-y: auto;
-        }
-
-        /* ── PAGE HEADER ── */
-        .page-header {
-            margin-bottom: 32px;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .page-header h1 i {
-            color: #818cf8;
-        }
-
-        .page-header p {
-            color: #64748b;
-            margin-top: 6px;
-            font-size: 0.95rem;
-        }
-
-        /* ── CARD ── */
-        .card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 28px 32px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(10px);
-        }
-
-        .card-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #c7d2fe;
-            margin-bottom: 22px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        }
-
-        .card-title i {
-            color: #818cf8;
-        }
-
-        /* ── LOGO UPLOAD ── */
-        .logo-upload-area {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-        }
-
-        .logo-preview {
-            width: 96px;
-            height: 96px;
-            border-radius: 20px;
-            background: rgba(79, 70, 229, 0.15);
-            border: 2px dashed rgba(129, 140, 248, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #818cf8;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .logo-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .logo-upload-info h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .logo-upload-info p {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 12px;
-        }
-
-        .btn-upload {
-            background: rgba(79, 70, 229, 0.2);
-            border: 1px solid rgba(129, 140, 248, 0.3);
-            color: #a5b4fc;
-            padding: 8px 18px;
-            border-radius: 10px;
-            font-size: 0.82rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .btn-upload:hover {
-            background: rgba(79, 70, 229, 0.35);
-            color: #fff;
-        }
-
-        /* ── FORM GRID ── */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-grid.cols-3 {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
-
-        .form-group label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .form-group label .req {
-            color: #f87171;
-            margin-left: 3px;
-        }
-
-        /* Inputs */
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 11px 16px;
-            color: #e2e8f0;
-            font-size: 0.9rem;
-            transition: border-color 0.2s, background 0.2s;
-            outline: none;
-            width: 100%;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.08);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #475569;
-        }
-
-        .form-group select option {
-            background: #1e293b;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 110px;
-        }
-
-        /* Input with icon */
-        .input-icon-wrap {
-            position: relative;
-        }
-
-        .input-icon-wrap i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #475569;
-            font-size: 0.85rem;
-            pointer-events: none;
-        }
-
-        .input-icon-wrap input {
-            padding-left: 38px;
-        }
-
-        /* Character counter */
-        .char-counter {
-            font-size: 0.75rem;
-            color: #475569;
-            text-align: right;
-            margin-top: 3px;
-        }
-
-        /* ── SOCIAL LINKS ── */
-        .social-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .social-item {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .social-item label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .social-item label i {
-            font-size: 0.9rem;
-        }
-
-        .fa-linkedin {
-            color: #0077b5;
-        }
-
-        .fa-twitter {
-            color: #1da1f2;
-        }
-
-        .fa-instagram {
-            color: #e1306c;
-        }
-
-        .fa-globe {
-            color: #10b981;
-        }
-
-        /* ── BENEFITS / PERKS ── */
-        .perks-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 6px;
-        }
-
-        .perk-chip {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 0.83rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-        }
-
-        .perk-chip:hover {
-            border-color: #6366f1;
-            color: #a5b4fc;
-        }
-
-        .perk-chip.selected {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: #6366f1;
-            color: #c7d2fe;
-        }
-
-        .perk-chip i {
-            font-size: 0.85rem;
-        }
-
-        /* ── ACTION BUTTONS ── */
-        .form-actions {
-            display: flex;
-            gap: 14px;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            margin-top: 8px;
-        }
-
-        .btn {
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.07);
-            color: #94a3b8;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            color: #e2e8f0;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(79, 70, 229, 0.5);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        /* ── PROGRESS BAR ── */
-        .profile-progress {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 20px 24px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .progress-text {
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .progress-text h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .progress-text p {
-            font-size: 0.78rem;
-            color: #64748b;
-            margin-top: 3px;
-        }
-
-        .progress-bar-wrap {
-            flex: 2;
-            min-width: 200px;
-        }
-
-        .progress-bar-bg {
-            background: rgba(255, 255, 255, 0.07);
-            border-radius: 99px;
-            height: 8px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            border-radius: 99px;
-            background: linear-gradient(90deg, #4f46e5, #7c3aed);
-            width: 60%;
-            transition: width 0.5s ease;
-        }
-
-        .progress-pct {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #a5b4fc;
-            min-width: 48px;
-            text-align: right;
-        }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 220px;
-            }
-
-            .main {
-                padding: 28px 22px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-
-            .main {
-                padding: 20px 16px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid.cols-3 {
-                grid-template-columns: 1fr;
-            }
-
-            .social-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .card {
-                padding: 20px 18px;
-            }
-
-            .page-header h1 {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .logo-upload-area {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0b1120; color: #e2e8f0; min-height: 100vh; }
+        .page-wrapper { display: flex; min-height: 100vh; }
+ 
+        /* SIDEBAR */
+        .sidebar { width: 260px; background: rgba(255,255,255,0.04); border-right: 1px solid rgba(255,255,255,0.08); padding: 28px 20px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+        .sidebar-logo { font-size: 1.6rem; font-weight: 800; margin-bottom: 28px; padding: 0 8px; }
+        .sidebar-logo span { color: #818cf8; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 14px; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; color: #94a3b8; text-decoration: none; }
+        .nav-item:hover { background: rgba(255,255,255,0.07); color: #e2e8f0; }
+        .nav-item.active { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; font-weight: 600; }
+        .nav-item i { width: 18px; text-align: center; }
+ 
+        /* MAIN */
+        .main { flex: 1; padding: 36px 32px; overflow-y: auto; }
+        .page-header { margin-bottom: 32px; }
+        .page-header h1 { font-size: 2rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+        .page-header h1 i { color: #818cf8; }
+        .page-header p { color: #64748b; margin-top: 6px; font-size: 0.95rem; }
+ 
+        /* CARD */
+        .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 28px 32px; margin-bottom: 24px; backdrop-filter: blur(10px); }
+        .card-title { font-size: 1rem; font-weight: 700; color: #c7d2fe; margin-bottom: 22px; display: flex; align-items: center; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .card-title i { color: #818cf8; }
+ 
+        /* LOGO */
+        .logo-upload-area { display: flex; align-items: center; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+        .logo-preview { width: 96px; height: 96px; border-radius: 20px; background: rgba(79,70,229,0.15); border: 2px dashed rgba(129,140,248,0.4); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #818cf8; overflow: hidden; flex-shrink: 0; }
+        .logo-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .logo-upload-info h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+        .logo-upload-info p { font-size: 0.8rem; color: #64748b; margin-bottom: 12px; }
+        .btn-upload { background: rgba(79,70,229,0.2); border: 1px solid rgba(129,140,248,0.3); color: #a5b4fc; padding: 8px 18px; border-radius: 10px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px; }
+        .btn-upload:hover { background: rgba(79,70,229,0.35); color: #fff; }
+ 
+        /* FORM */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-group label { font-size: 0.8rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; }
+        .form-group label .req { color: #f87171; margin-left: 3px; }
+        .form-group input, .form-group select, .form-group textarea { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 11px 16px; color: #e2e8f0; font-size: 0.9rem; transition: border-color 0.2s, background 0.2s; outline: none; width: 100%; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #6366f1; background: rgba(99,102,241,0.08); }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: #475569; }
+        .form-group select option { background: #1e293b; }
+        .form-group textarea { resize: vertical; min-height: 110px; }
+        .input-icon-wrap { position: relative; }
+        .input-icon-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #475569; font-size: 0.85rem; pointer-events: none; }
+        .input-icon-wrap input { padding-left: 38px; }
+        .char-counter { font-size: 0.75rem; color: #475569; text-align: right; margin-top: 3px; }
+ 
+        /* SOCIAL */
+        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .social-item { display: flex; flex-direction: column; gap: 7px; }
+        .social-item label { font-size: 0.8rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; gap: 7px; }
+        .fa-linkedin { color: #0077b5; }
+        .fa-twitter  { color: #1da1f2; }
+        .fa-instagram { color: #e1306c; }
+        .fa-globe    { color: #10b981; }
+ 
+        /* PERKS */
+        .perks-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+        .perk-chip { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 8px 16px; font-size: 0.83rem; cursor: pointer; transition: all 0.2s; user-select: none; }
+        .perk-chip:hover { border-color: #6366f1; color: #a5b4fc; }
+        .perk-chip.selected { background: rgba(99,102,241,0.2); border-color: #6366f1; color: #c7d2fe; }
+        .perk-chip i { font-size: 0.85rem; }
+ 
+        /* ACTIONS */
+        .form-actions { display: flex; gap: 14px; justify-content: flex-end; flex-wrap: wrap; margin-top: 8px; }
+        .btn { padding: 12px 28px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-secondary { background: rgba(255,255,255,0.07); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.12); color: #e2e8f0; }
+        .btn-primary { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; box-shadow: 0 4px 20px rgba(79,70,229,0.4); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,70,229,0.5); }
+ 
+        /* PROGRESS */
+        .profile-progress { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .progress-text { flex: 1; min-width: 180px; }
+        .progress-text h4 { font-size: 0.9rem; font-weight: 600; }
+        .progress-text p { font-size: 0.78rem; color: #64748b; margin-top: 3px; }
+        .progress-bar-wrap { flex: 2; min-width: 200px; }
+        .progress-bar-bg { background: rgba(255,255,255,0.07); border-radius: 99px; height: 8px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4f46e5, #7c3aed); transition: width 0.5s ease; }
+        .progress-pct { font-size: 1.1rem; font-weight: 800; color: #a5b4fc; min-width: 48px; text-align: right; }
+ 
+        /* MESSAGES */
+        .msg-success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #34d399; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-size: 0.9rem; }
+        .msg-error   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.3);  color: #f87171; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-size: 0.9rem; }
+ 
+        @media (max-width: 1024px) { .sidebar { width: 220px; } .main { padding: 28px 22px; } }
+        @media (max-width: 768px)  { .sidebar { display: none; } .main { padding: 20px 16px; } .form-grid { grid-template-columns: 1fr; } .form-grid.cols-3 { grid-template-columns: 1fr; } .social-grid { grid-template-columns: 1fr; } .card { padding: 20px 18px; } .page-header h1 { font-size: 1.5rem; } }
+        @media (max-width: 480px)  { .form-actions { flex-direction: column; } .btn { width: 100%; justify-content: center; } .logo-upload-area { flex-direction: column; align-items: flex-start; } }
     </style>
 </head>
-
 <body>
-
-    <div class="page-wrapper">
-
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">Hire<span>Hub</span></div>
-            <a href="{% url 'employer_dashboard' %}" class="nav-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="{% url 'applicants' %}" class="nav-item"><i class="fas fa-users"></i> Applicants</a>
-            <a href="{% url 'manage_jobs' %}" class="nav-item"><i class="fas fa-briefcase"></i> Manage Jobs</a>
-            <a href="{% url 'shortlisted_candidates' %}" class="nav-item"><i class="fas fa-star"></i> Shortlisted</a>
-            <a href="{% url 'interviews' %}" class="nav-item"><i class="fas fa-calendar-check"></i> Interviews</a>
-            <a href="{% url 'reports' %}" class="nav-item"><i class="fas fa-chart-bar"></i> Reports</a>
-            <a href="{% url 'company_profile' %}" class="nav-item active"><i class="fas fa-building"></i> Company Profile</a>
-            <a href="{% url 'settings' %}" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
-        </aside>
-
-        <!-- MAIN -->
-        <main class="main">
-
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1><i class="fas fa-building"></i> Company Profile</h1>
-                <p>Manage your company details to attract the best candidates.</p>
-            </div>
-
-            <!-- Profile Completion Bar -->
-            <div class="profile-progress">
-                <div class="progress-text">
-                    <h4>Profile Completion</h4>
-                    <p>Complete your profile to build candidate trust</p>
+<div class="page-wrapper">
+ 
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">Hire<span>Hub</span></div>
+        <a href="{% url 'employer_dashboard' %}"    class="nav-item"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'applicants' %}"            class="nav-item"><i class="fas fa-users"></i> Applicants</a>
+        <a href="{% url 'manage_jobs' %}"           class="nav-item"><i class="fas fa-briefcase"></i> Manage Jobs</a>
+        <a href="{% url 'shortlisted_candidates' %}" class="nav-item"><i class="fas fa-star"></i> Shortlisted</a>
+        <a href="{% url 'interviews' %}"            class="nav-item"><i class="fas fa-calendar-check"></i> Interviews</a>
+        <a href="{% url 'reports' %}"               class="nav-item"><i class="fas fa-chart-bar"></i> Reports</a>
+        <a href="{% url 'company_profile' %}"       class="nav-item active"><i class="fas fa-building"></i> Company Profile</a>
+        <a href="{% url 'settings' %}"              class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+    </aside>
+ 
+    <!-- MAIN -->
+    <main class="main">
+ 
+        <!-- Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-building"></i> Company Profile</h1>
+            <p>Manage your company details to attract the best candidates.</p>
+        </div>
+ 
+        <!--
+        DJANGO MESSAGES
+        After POST → view does messages.success() → redirect → shown here
+        Green = success, Red = error
+        -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}msg-success{% else %}msg-error{% endif %}">
+                    {{ message }}
                 </div>
-                <div class="progress-bar-wrap">
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progressFill"></div>
-                    </div>
-                </div>
-                <div class="progress-pct" id="progressPct">60%</div>
+            {% endfor %}
+        {% endif %}
+ 
+        <!--
+        PROFILE COMPLETION PROGRESS BAR
+        Calculated by JS — counts how many fields are filled
+        Updates live as employer types
+        -->
+        <div class="profile-progress">
+            <div class="progress-text">
+                <h4>Profile Completion</h4>
+                <p>Complete your profile to build candidate trust</p>
             </div>
-
-            <!--
-      ======================================================
-      DJANGO FORM — same structure you have:
-        <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit">Save Profile</button>
-        </form>
-
-      Below we style it section by section.
-      In your real template, replace the fake inputs
-      with {{ form.field_name }} inside each .form-group.
-      ======================================================
-    -->
-            <form method="POST" enctype="multipart/form-data" id="profileForm">
-                <!-- {% csrf_token %} -->
-
-                <!-- ── SECTION 1: LOGO & BRAND ── -->
-                <div class="card">
-                    <div class="card-title"><i class="fas fa-image"></i> Logo & Brand Identity</div>
-
-                    <div class="logo-upload-area">
-                        <div class="logo-preview" id="logoPreview">
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="progress-pct" id="progressPct">0%</div>
+        </div>
+ 
+        <!--
+        ════════════════════════════════════════════════════
+        MAIN FORM
+        ════════════════════════════════════════════════════
+        POST → company_profile view in views.py
+        View reads each field from request.POST
+        Saves to CompanyProfile model in DB
+        Redirects back with success message
+ 
+        profile = CompanyProfile.objects.get_or_create(employer=request.user)
+        All value="{{ profile.field_name }}" pulls REAL data from DB
+        ════════════════════════════════════════════════════
+        -->
+        <form method="POST" enctype="multipart/form-data" id="profileForm">
+            {% csrf_token %}
+ 
+            <!-- ══ SECTION 1: LOGO & BRAND ══ -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-image"></i> Logo & Brand Identity</div>
+ 
+                <div class="logo-upload-area">
+                    <!--
+                        LOGO PREVIEW
+                        If profile.logo exists in DB (ImageField) → show the image
+                        profile.logo.url → /media/company_logos/filename.png
+                        If no logo → show building icon placeholder
+                    -->
+                    <div class="logo-preview" id="logoPreview">
+                        {% if profile.logo %}
+                            <img src="{{ profile.logo.url }}" alt="Company Logo">
+                        {% else %}
                             <i class="fas fa-building"></i>
-                        </div>
-                        <div class="logo-upload-info">
-                            <h3>Company Logo</h3>
-                            <p>PNG, JPG or SVG &bull; Max 2MB &bull; Recommended 200×200px</p>
-                            <!-- In Django: {{ form.logo }} -->
-                            <label class="btn-upload" for="logoInput">
-                                <i class="fas fa-cloud-upload-alt"></i> Upload Logo
-                            </label>
-                            <input type="file" id="logoInput" name="logo" accept="image/*" style="display:none">
-                        </div>
+                        {% endif %}
                     </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Company Name <span class="req">*</span></label>
-                            <!-- {{ form.company_name }} -->
-                            <input type="text" name="company_name" placeholder="e.g. Infosys Pvt Ltd">
-                        </div>
-                        <div class="form-group">
-                            <label>Industry Type <span class="req">*</span></label>
-                            <!-- {{ form.industry }} -->
-                            <select name="industry">
-                                <option value="">Select industry…</option>
-                                <option>Software / IT</option>
-                                <option>Banking / Finance</option>
-                                <option>Healthcare</option>
-                                <option>E-commerce</option>
-                                <option>Education</option>
-                                <option>Manufacturing</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group full">
-                            <label>About Company <span class="req">*</span></label>
-                            <!-- {{ form.description }} -->
-                            <textarea name="description" id="aboutTextarea"
-                                placeholder="Describe your company, culture, and what makes you unique…"
-                                maxlength="500"></textarea>
-                            <div class="char-counter"><span id="charCount">0</span> / 500</div>
-                        </div>
+                    <div class="logo-upload-info">
+                        <h3>Company Logo</h3>
+                        <p>PNG, JPG or SVG &bull; Max 2MB &bull; Recommended 200×200px</p>
+                        <label class="btn-upload" for="logoInput">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            {% if profile.logo %}Change Logo{% else %}Upload Logo{% endif %}
+                        </label>
+                        <!--
+                            name="logo" → view reads request.FILES.get('logo')
+                            Saved to CompanyProfile.logo (ImageField, upload_to='company_logos/')
+                        -->
+                        <input type="file" id="logoInput" name="logo" accept="image/*" style="display:none">
                     </div>
                 </div>
-
-                <!-- ── SECTION 2: LOCATION & DETAILS ── -->
-                <div class="card">
-                    <div class="card-title"><i class="fas fa-map-marker-alt"></i> Location & Company Details</div>
-                    <div class="form-grid cols-3">
-                        <div class="form-group">
-                            <label>City</label>
-                            <div class="input-icon-wrap">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <!-- {{ form.city }} -->
-                                <input type="text" name="city" placeholder="e.g. Hyderabad">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>State</label>
-                            <!-- {{ form.state }} -->
-                            <input type="text" name="state" placeholder="e.g. Telangana">
-                        </div>
-                        <div class="form-group">
-                            <label>Country</label>
-                            <!-- {{ form.country }} -->
-                            <input type="text" name="country" placeholder="e.g. India">
-                        </div>
-                        <div class="form-group">
-                            <label>Founded Year</label>
-                            <div class="input-icon-wrap">
-                                <i class="fas fa-calendar"></i>
-                                <!-- {{ form.founded_year }} -->
-                                <input type="number" name="founded_year" placeholder="e.g. 2015" min="1900" max="2025">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Company Size</label>
-                            <!-- {{ form.company_size }} -->
-                            <select name="company_size">
-                                <option value="">Select size…</option>
-                                <option>1–10 Employees</option>
-                                <option>11–50 Employees</option>
-                                <option>51–200 Employees</option>
-                                <option>201–500 Employees</option>
-                                <option>500+ Employees</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Company Type</label>
-                            <!-- {{ form.company_type }} -->
-                            <select name="company_type">
-                                <option value="">Select type…</option>
-                                <option>Private Ltd</option>
-                                <option>Public Ltd</option>
-                                <option>Startup</option>
-                                <option>MNC</option>
-                                <option>Government</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ── SECTION 3: CONTACT & WEBSITE ── -->
-                <div class="card">
-                    <div class="card-title"><i class="fas fa-address-card"></i> Contact & Website</div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Official Website</label>
-                            <div class="input-icon-wrap">
-                                <i class="fas fa-globe"></i>
-                                <!-- {{ form.website }} -->
-                                <input type="url" name="website" placeholder="https://www.yourcompany.com">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>HR Email</label>
-                            <div class="input-icon-wrap">
-                                <i class="fas fa-envelope"></i>
-                                <!-- {{ form.hr_email }} -->
-                                <input type="email" name="hr_email" placeholder="hr@company.com">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <div class="input-icon-wrap">
-                                <i class="fas fa-phone"></i>
-                                <!-- {{ form.phone }} -->
-                                <input type="tel" name="phone" placeholder="+91 9876543210">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>HR Contact Name</label>
-                            <div class="input-icon-wrap">
-                                <i class="fas fa-user-tie"></i>
-                                <!-- {{ form.hr_contact }} -->
-                                <input type="text" name="hr_contact" placeholder="e.g. Ramesh Kumar">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ── SECTION 4: SOCIAL MEDIA ── -->
-                <div class="card">
-                    <div class="card-title"><i class="fas fa-share-alt"></i> Social Media Links</div>
-                    <div class="social-grid">
-                        <div class="social-item">
-                            <label><i class="fab fa-linkedin fa-linkedin"></i> LinkedIn</label>
-                            <!-- {{ form.linkedin }} -->
-                            <input type="url" name="linkedin" placeholder="https://linkedin.com/company/yourcompany">
-                        </div>
-                        <div class="social-item">
-                            <label><i class="fab fa-twitter fa-twitter"></i> Twitter / X</label>
-                            <!-- {{ form.twitter }} -->
-                            <input type="url" name="twitter" placeholder="https://twitter.com/yourcompany">
-                        </div>
-                        <div class="social-item">
-                            <label><i class="fab fa-instagram fa-instagram"></i> Instagram</label>
-                            <!-- {{ form.instagram }} -->
-                            <input type="url" name="instagram" placeholder="https://instagram.com/yourcompany">
-                        </div>
-                        <div class="social-item">
-                            <label><i class="fas fa-globe fa-globe"></i> Other Link</label>
-                            <!-- {{ form.other_link }} -->
-                            <input type="url" name="other_link" placeholder="https://...">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ── SECTION 5: PERKS & BENEFITS ── -->
-                <div class="card">
-                    <div class="card-title"><i class="fas fa-gift"></i> Perks & Benefits</div>
-                    <p style="font-size:0.82rem;color:#64748b;margin-bottom:14px;">Click to select benefits your company
-                        offers. Candidates love seeing this!</p>
-                    <div class="perks-grid" id="perksGrid">
-                        <div class="perk-chip selected" data-val="wfh"><i class="fas fa-home"></i> Work From Home</div>
-                        <div class="perk-chip selected" data-val="health"><i class="fas fa-heartbeat"></i> Health
-                            Insurance</div>
-                        <div class="perk-chip" data-val="bonus"><i class="fas fa-coins"></i> Performance Bonus</div>
-                        <div class="perk-chip" data-val="flex"><i class="fas fa-clock"></i> Flexible Timing</div>
-                        <div class="perk-chip" data-val="cab"><i class="fas fa-car"></i> Cab Facility</div>
-                        <div class="perk-chip" data-val="food"><i class="fas fa-utensils"></i> Free Meals</div>
-                        <div class="perk-chip" data-val="gym"><i class="fas fa-dumbbell"></i> Gym Access</div>
-                        <div class="perk-chip" data-val="learn"><i class="fas fa-graduation-cap"></i> Learning Budget
-                        </div>
-                        <div class="perk-chip" data-val="stock"><i class="fas fa-chart-line"></i> Stock Options</div>
-                        <div class="perk-chip" data-val="leave"><i class="fas fa-umbrella-beach"></i> Paid Leave</div>
-                    </div>
-                    <!-- Hidden input stores selected perks — in Django: {{ form.benefits }} -->
-                    <input type="hidden" name="benefits" id="benefitsInput">
-                </div>
-
-                <!-- ── SECTION 6: TECHNOLOGIES ── -->
-                <div class="card">
-                    <div class="card-title"><i class="fas fa-code"></i> Technologies Used</div>
-                    <!-- {{ form.technologies }} -->
+ 
+                <div class="form-grid">
                     <div class="form-group">
-                        <label>Tech Stack</label>
-                        <input type="text" name="technologies"
-                            placeholder="e.g. Python, Django, React, AWS, PostgreSQL">
-                        <span style="font-size:0.75rem;color:#475569;margin-top:4px;">Separate with commas</span>
+                        <label>Company Name <span class="req">*</span></label>
+                        <!--
+                            value="{{ profile.company_name }}"
+                            Reads CompanyProfile.company_name CharField from DB
+                            After save → next page load shows what was saved
+                        -->
+                        <input type="text" name="company_name"
+                            value="{{ profile.company_name }}"
+                            placeholder="e.g. Infosys Pvt Ltd">
+                    </div>
+                    <div class="form-group">
+                        <label>Industry Type <span class="req">*</span></label>
+                        <!--
+                            profile.industry → CompanyProfile.industry CharField
+                            selected attribute shows the saved value as selected option
+                        -->
+                        <select name="industry">
+                            <option value="">Select industry…</option>
+                            <option value="Software / IT"     {% if profile.industry == "Software / IT" %}selected{% endif %}>Software / IT</option>
+<option value="Banking / Finance" {% if profile.industry == "Banking / Finance" %}selected{% endif %}>Banking / Finance</option>
+<option value="Healthcare"        {% if profile.industry == "Healthcare" %}selected{% endif %}>Healthcare</option>
+<option value="E-commerce"        {% if profile.industry == "E-commerce" %}selected{% endif %}>E-commerce</option>
+<option value="Education"         {% if profile.industry == "Education" %}selected{% endif %}>Education</option>
+<option value="Manufacturing"     {% if profile.industry == "Manufacturing" %}selected{% endif %}>Manufacturing</option>
+<option value="Other"             {% if profile.industry == "Other" %}selected{% endif %}>Other</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label>About Company <span class="req">*</span></label>
+                        <!--
+                            profile.description → CompanyProfile.description TextField
+                            Shown inside textarea (not value attr, inside the tag)
+                        -->
+                        <textarea name="description" id="aboutTextarea"
+                            placeholder="Describe your company, culture, and what makes you unique…"
+                            maxlength="500">{{ profile.description }}</textarea>
+                        <div class="char-counter">
+                            <span id="charCount">{{ profile.description|length }}</span> / 500
+                        </div>
                     </div>
                 </div>
+            </div>
+ 
+            <!-- ══ SECTION 2: LOCATION & DETAILS ══ -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-map-marker-alt"></i> Location & Company Details</div>
+                <div class="form-grid cols-3">
+                    <div class="form-group">
+                        <label>City</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <!-- profile.city → CompanyProfile.city CharField -->
+                            <input type="text" name="city"
+                                value="{{ profile.city }}"
+                                placeholder="e.g. Hyderabad">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <!-- profile.state → CompanyProfile.state CharField -->
+                        <input type="text" name="state"
+                            value="{{ profile.state }}"
+                            placeholder="e.g. Telangana">
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <!-- profile.country → CompanyProfile.country CharField -->
+                        <input type="text" name="country"
+                            value="{{ profile.country|default:'India' }}"
+                            placeholder="e.g. India">
+                    </div>
+                    <div class="form-group">
+                        <label>Founded Year</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-calendar"></i>
+                            <!-- profile.founded_year → CompanyProfile.founded_year IntegerField -->
+                            <input type="number" name="founded_year"
+                                value="{{ profile.founded_year|default:'' }}"
+                                placeholder="e.g. 2015" min="1900" max="2030">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Size</label>
+                        <!--
+                            profile.employee_count → CompanyProfile.employee_count CharField
+                            selected shows current saved value
+                        -->
+                        <select name="company_size">
+                            <option value="1–10 Employees"   {% if profile.employee_count == "1–10 Employees" %}selected{% endif %}>1–10 Employees</option>
+<option value="11–50 Employees"  {% if profile.employee_count == "11–50 Employees" %}selected{% endif %}>11–50 Employees</option>
+<option value="51–200 Employees" {% if profile.employee_count == "51–200 Employees" %}selected{% endif %}>51–200 Employees</option>
+<option value="201–500 Employees"{% if profile.employee_count == "201–500 Employees" %}selected{% endif %}>201–500 Employees</option>
+<option value="500+ Employees"   {% if profile.employee_count == "500+ Employees" %}selected{% endif %}>500+ Employees</option>
 
-                <!-- ── ACTIONS ── -->
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary"><i class="fas fa-eye"></i> Preview Profile</button>
-                    <!-- This is your {{ form }} submit button -->
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Profile</button>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Type</label>
+                        <!--
+                            profile.company_type → CompanyProfile.company_type CharField
+                        -->
+                        <select name="company_type">
+                            <option value="">Select type…</option>
+                            <option value="Private Ltd" {% if profile.company_type == "Private Ltd" %}selected{% endif %}>Private Ltd</option>
+<option value="Public Ltd"  {% if profile.company_type == "Public Ltd" %}selected{% endif %}>Public Ltd</option>
+<option value="Startup"     {% if profile.company_type == "Startup" %}selected{% endif %}>Startup</option>
+<option value="MNC"         {% if profile.company_type == "MNC" %}selected{% endif %}>MNC</option>
+<option value="Government"  {% if profile.company_type == "Government" %}selected{% endif %}>Government</option>
+
+                        </select>
+                    </div>
                 </div>
-
-            </form>
-        </main>
-    </div>
-
-    <script>
-        // Logo preview
-        document.getElementById('logoInput').addEventListener('change', function (e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = ev => {
-                document.getElementById('logoPreview').innerHTML =
-                    `<img src="${ev.target.result}" alt="logo">`;
-            };
-            reader.readAsDataURL(file);
-        });
-
-        // Textarea char counter
-        const textarea = document.getElementById('aboutTextarea');
-        const counter = document.getElementById('charCount');
-        textarea.addEventListener('input', () => {
-            counter.textContent = textarea.value.length;
-        });
-
-        // Perk chips toggle
-        const chips = document.querySelectorAll('.perk-chip');
-        const benefitsInput = document.getElementById('benefitsInput');
-        function updateBenefits() {
-            const selected = [...chips]
-                .filter(c => c.classList.contains('selected'))
-                .map(c => c.dataset.val);
-            benefitsInput.value = selected.join(',');
-        }
-        chips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                chip.classList.toggle('selected');
-                updateBenefits();
-            });
-        });
-        updateBenefits(); // init
-
-        // Profile progress (updates as user fills fields)
-        const fields = document.querySelectorAll('input[type="text"], input[type="url"], input[type="email"], input[type="tel"], input[type="number"], select, textarea');
-        function updateProgress() {
-            let filled = 0;
-            fields.forEach(f => { if (f.value.trim()) filled++; });
-            const pct = Math.min(100, Math.round((filled / fields.length) * 100));
-            document.getElementById('progressFill').style.width = pct + '%';
-            document.getElementById('progressPct').textContent = pct + '%';
-        }
-        fields.forEach(f => f.addEventListener('input', updateProgress));
-        fields.forEach(f => f.addEventListener('change', updateProgress));
-        updateProgress();
-    </script>
+            </div>
+ 
+            <!-- ══ SECTION 3: CONTACT & WEBSITE ══ -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-address-card"></i> Contact & Website</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Official Website</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-globe"></i>
+                            <!-- profile.website → CompanyProfile.website URLField -->
+                            <input type="url" name="website"
+                                value="{{ profile.website|default:'' }}"
+                                placeholder="https://www.yourcompany.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>HR Email</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <!-- profile.hr_email → CompanyProfile.hr_email EmailField -->
+                            <input type="email" name="hr_email"
+                                value="{{ profile.hr_email }}"
+                                placeholder="hr@company.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-phone"></i>
+                            <!-- profile.phone → CompanyProfile.phone CharField -->
+                            <input type="tel" name="phone"
+                                value="{{ profile.phone }}"
+                                placeholder="+91 9876543210">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>HR Contact Name</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-user-tie"></i>
+                            <!-- profile.hr_contact → CompanyProfile.hr_contact CharField -->
+                            <input type="text" name="hr_contact"
+                                value="{{ profile.hr_contact }}"
+                                placeholder="e.g. Ramesh Kumar">
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- ══ SECTION 4: SOCIAL MEDIA ══ -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-share-alt"></i> Social Media Links</div>
+                <div class="social-grid">
+                    <div class="social-item">
+                        <label><i class="fab fa-linkedin"></i> LinkedIn</label>
+                        <!-- profile.linkedin → CompanyProfile.linkedin URLField -->
+                        <input type="url" name="linkedin"
+                            value="{{ profile.linkedin|default:'' }}"
+                            placeholder="https://linkedin.com/company/yourcompany">
+                    </div>
+                    <div class="social-item">
+                        <label><i class="fab fa-twitter"></i> Twitter / X</label>
+                        <!-- profile.twitter → CompanyProfile.twitter URLField -->
+                        <input type="url" name="twitter"
+                            value="{{ profile.twitter|default:'' }}"
+                            placeholder="https://twitter.com/yourcompany">
+                    </div>
+                    <div class="social-item">
+                        <label><i class="fab fa-instagram"></i> Instagram</label>
+                        <!-- profile.instagram → CompanyProfile.instagram URLField -->
+                        <input type="url" name="instagram"
+                            value="{{ profile.instagram|default:'' }}"
+                            placeholder="https://instagram.com/yourcompany">
+                    </div>
+                    <div class="social-item">
+                        <label><i class="fas fa-globe"></i> Other Link</label>
+                        <!-- profile.other_link → CompanyProfile.other_link URLField -->
+                        <input type="url" name="other_link"
+                            value="{{ profile.other_link|default:'' }}"
+                            placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- ══ SECTION 5: PERKS & BENEFITS ══ -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-gift"></i> Perks & Benefits</div>
+                <p style="font-size:0.82rem;color:#64748b;margin-bottom:14px;">
+                    Click to select benefits your company offers.
+                </p>
+                <!--
+                    profile.benefits → CompanyProfile.benefits CharField
+                    Stored as comma-separated string: "wfh,health,bonus"
+                    JS reads this and adds 'selected' class to matching chips on page load
+                    When chips are clicked → JS updates hidden input value
+                    On Save → view reads request.POST.get('benefits') → saves to DB
+                -->
+                <div class="perks-grid" id="perksGrid">
+                    <div class="perk-chip" data-val="wfh"><i class="fas fa-home"></i> Work From Home</div>
+                    <div class="perk-chip" data-val="health"><i class="fas fa-heartbeat"></i> Health Insurance</div>
+                    <div class="perk-chip" data-val="bonus"><i class="fas fa-coins"></i> Performance Bonus</div>
+                    <div class="perk-chip" data-val="flex"><i class="fas fa-clock"></i> Flexible Timing</div>
+                    <div class="perk-chip" data-val="cab"><i class="fas fa-car"></i> Cab Facility</div>
+                    <div class="perk-chip" data-val="food"><i class="fas fa-utensils"></i> Free Meals</div>
+                    <div class="perk-chip" data-val="gym"><i class="fas fa-dumbbell"></i> Gym Access</div>
+                    <div class="perk-chip" data-val="learn"><i class="fas fa-graduation-cap"></i> Learning Budget</div>
+                    <div class="perk-chip" data-val="stock"><i class="fas fa-chart-line"></i> Stock Options</div>
+                    <div class="perk-chip" data-val="leave"><i class="fas fa-umbrella-beach"></i> Paid Leave</div>
+                </div>
+                <input type="hidden" name="benefits" id="benefitsInput" value="{{ profile.benefits }}">
+            </div>
+ 
+            <!-- ══ SECTION 6: TECHNOLOGIES ══ -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-code"></i> Technologies Used</div>
+                <div class="form-group">
+                    <label>Tech Stack</label>
+                    <!--
+                        profile.technologies → CompanyProfile.technologies CharField
+                        Stored as comma-separated: "Python, Django, React, AWS"
+                    -->
+                    <input type="text" name="technologies"
+                        value="{{ profile.technologies }}"
+                        placeholder="e.g. Python, Django, React, AWS, PostgreSQL">
+                    <span style="font-size:0.75rem;color:#475569;margin-top:4px;">Separate with commas</span>
+                </div>
+            </div>
+ 
+            <!-- ══ ACTIONS ══ -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Preview Profile
+                </button>
+                <!--
+                    type="submit" → submits this entire form via POST
+                    → company_profile view runs
+                    → saves all fields to CompanyProfile in DB
+                    → redirects back with success message
+                -->
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Profile
+                </button>
+            </div>
+ 
+        </form>
+    </main>
+</div>
+ 
+<script>
+// ════════════════════════════════════════════════════════════
+// LOGO PREVIEW
+// When employer selects a file → show preview immediately
+// Actual upload happens on form submit → saved to DB
+// ════════════════════════════════════════════════════════════
+document.getElementById('logoInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+        document.getElementById('logoPreview').innerHTML =
+            `<img src="${ev.target.result}" alt="logo">`;
+    };
+    reader.readAsDataURL(file);
+});
+ 
+// ════════════════════════════════════════════════════════════
+// TEXTAREA CHARACTER COUNTER
+// ════════════════════════════════════════════════════════════
+const textarea = document.getElementById('aboutTextarea');
+const counter  = document.getElementById('charCount');
+textarea.addEventListener('input', function () {
+    counter.textContent = this.value.length;
+});
+ 
+// ════════════════════════════════════════════════════════════
+// PERK CHIPS — read from DB, toggle on click, save to DB
+// ════════════════════════════════════════════════════════════
+// Step 1: Read saved benefits from DB (via hidden input)
+//   profile.benefits = "wfh,health,bonus" (saved in DB)
+//   Django renders: value="wfh,health,bonus" in hidden input
+// Step 2: JS splits by comma → ["wfh", "health", "bonus"]
+// Step 3: For each chip with matching data-val → add 'selected' class
+// Step 4: When chip clicked → toggle selected class
+// Step 5: updateBenefits() → joins selected values → updates hidden input
+// Step 6: On form submit → hidden input value sent to view → saved to DB
+ 
+const benefitsInput  = document.getElementById('benefitsInput');
+const savedBenefits  = (benefitsInput.value || '').split(',').map(v => v.trim()).filter(Boolean);
+const chips          = document.querySelectorAll('.perk-chip');
+ 
+// Mark saved benefits as selected on page load
+chips.forEach(function (chip) {
+    if (savedBenefits.includes(chip.dataset.val)) {
+        chip.classList.add('selected');
+    }
+    chip.addEventListener('click', function () {
+        this.classList.toggle('selected');
+        updateBenefits();
+    });
+});
+ 
+function updateBenefits() {
+    const selected = [...chips]
+        .filter(c => c.classList.contains('selected'))
+        .map(c => c.dataset.val);
+    benefitsInput.value = selected.join(',');
+}
+ 
+// ════════════════════════════════════════════════════════════
+// PROFILE COMPLETION PROGRESS BAR
+// Counts filled fields → shows % complete
+// Updates live as employer types
+// ════════════════════════════════════════════════════════════
+const fields = document.querySelectorAll(
+    'input[type="text"], input[type="url"], input[type="email"], ' +
+    'input[type="tel"], input[type="number"], select, textarea'
+);
+ 
+function updateProgress() {
+    let filled = 0;
+    fields.forEach(function (f) {
+        if (f.value && f.value.trim()) filled++;
+    });
+    const pct = Math.min(100, Math.round((filled / fields.length) * 100));
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent  = pct + '%';
+}
+ 
+fields.forEach(function (f) {
+    f.addEventListener('input',  updateProgress);
+    f.addEventListener('change', updateProgress);
+});
+ 
+// Run on page load so progress shows current DB data
+updateProgress();
+</script>
 </body>
-
 </html>
