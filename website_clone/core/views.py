@@ -643,6 +643,8 @@ def saved_jobs_page(request):
     saved = SavedJob.objects.filter(user=request.user).select_related('job').order_by('-saved_at')
     return render(request, 'core/saved_jobs.html', {'saved_jobs': saved})
 
+# ===================== ALL JOBS =====================
+
 # ===================== JOB DETAIL =====================
 def job_detail(request, job_id):
 
