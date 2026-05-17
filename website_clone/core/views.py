@@ -643,6 +643,30 @@ def saved_jobs_page(request):
     saved = SavedJob.objects.filter(user=request.user).select_related('job').order_by('-saved_at')
     return render(request, 'core/saved_jobs.html', {'saved_jobs': saved})
 
+# ===================== JOB DETAIL =====================
+def job_detail(request, job_id):
+
+    job = get_object_or_404(
+        Job,
+        id=job_id
+    )
+
+    return render(request, 'core/job_detail.html', {
+        'job': job
+    })
+
+# ===================== REMOVE SAVED JOB =====================
+def remove_saved_job(request, saved_job_id):
+
+    saved_job = get_object_or_404(
+        SavedJob,
+        id=saved_job_id,
+        user=request.user
+    )
+
+    saved_job.delete()
+
+    return redirect('saved_jobs')
 
 # ===================== APPLIED JOBS =====================
 
@@ -1778,8 +1802,7 @@ def view_applications(request, job_id):
     }
     return render(request, 'core/view_applications.html', context)
 
-from django.shortcuts import get_object_or_404, redirect
-from .models import Job
+
 
 
 

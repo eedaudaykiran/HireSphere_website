@@ -54,6 +54,16 @@ urlpatterns = [
  
     # ===================== CANDIDATE ACTIONS =====================
     path('saved-jobs/', views.saved_jobs_page, name='saved_jobs'),
+    path(
+    'job/<int:job_id>/',
+    views.job_detail,
+    name='job_detail'
+    ),
+    path(
+    'remove-saved-job/<int:saved_job_id>/',
+    views.remove_saved_job,
+    name='remove_saved_job'
+    ),
     path('save-job/<int:job_id>/', views.save_job, name='save_job'),
     path('apply-job/<int:job_id>/', views.apply_job, name='apply_job'),
     path('applied-jobs/', views.applied_jobs_page, name='applied_jobs'),
@@ -123,4 +133,5 @@ urlpatterns = [
     path('employer/deactivate-account/', views.deactivate_account, name='deactivate_account'),
     path('send-message/',                  views.send_message,    name='send_message'),
     path('fetch-messages/<int:candidate_id>/', views.fetch_messages, name='fetch_messages'),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
