@@ -133,5 +133,63 @@ urlpatterns = [
     path('employer/deactivate-account/', views.deactivate_account, name='deactivate_account'),
     path('send-message/',                  views.send_message,    name='send_message'),
     path('fetch-messages/<int:candidate_id>/', views.fetch_messages, name='fetch_messages'),
-    
+    path(
+    'supply-chain-jobs/',
+    views.supply_chain_jobs_page,
+    name='supply_chain_jobs'
+    ),
+    path(
+    'foreign-mnc-jobs/',
+    views.foreign_mnc_jobs_page,
+    name='foreign_mnc_jobs'
+    ),
+    path(
+    'work-from-home-jobs/',
+    views.work_from_home_jobs_page,
+    name='work_from_home_jobs'
+    ),
+    path(
+    'analytics-bi-jobs/',
+    views.analytics_bi_jobs_page,
+    name='analytics_bi_jobs'
+    ),
+    path(
+    'datascience-jobs/',
+    views.datascience_jobs_page,
+    name='datascience_jobs'
+    ),
+    path('startup-jobs/',
+        views.startup_jobs_page,
+        name='startup_jobs'
+    ),
+    path(
+    'salesjobs-page/',
+    views.salesjobs_page,
+    name='salesjobs_page'
+    ),
+    path(
+    'marketingjobs-page/',
+    views.marketingjobs_page,
+    name='marketingjobs_page'
+    ),
+    path(
+    'banking-financejobs-page/',
+    views.banking_financejobs_page,
+    name='banking_financejobs_page'
+    ),
+    path(
+    'engineeringjobs-page/',
+    views.engineeringjobs_page,
+    name='engineeringjobs_page'
+    ),
+    path(
+    'hr-jobs-page/',
+    views.hr_jobs_page,
+    name='hr_jobs_page'
+    ),
+    path(
+    'fresherjobs-page/',
+    views.fresherjobs_page,
+    name='fresherjobs_page'
+),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

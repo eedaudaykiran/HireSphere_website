@@ -305,7 +305,7 @@
                         </label>
                         <div class="rj-more-items" id="more-dept" style="display:none;">
                             <label class="rj-cb-row">
-                                <input type="checkbox" name="category" value="Finance" onchange="this.form.submit()">
+                                <input type="checkbox" name="category" value="Finance" {% if 'Finance' in selected_categories %}checked{% endif %} onchange="this.form.submit()">
                                 <span>Finance &amp; Accounting</span>
                                 <span class="rj-count">({{ category_counts.Finance|default:0 }})</span>
                             </label>

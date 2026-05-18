@@ -8,9 +8,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mnc Jobs</title>
+    <title>Marketing Jobs</title>
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/mnc.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/remote.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -180,33 +180,6 @@
 
 {% endif %}
 
-    <!-- Mobile Nav Drawer -->
-    
-
-    <!-- ═══════════════════════════════════════
-         CATEGORY CAROUSEL STRIP
-    ═══════════════════════════════════════ -->
-    <div class="rj-cat-strip">
-        <div class="rj-cat-track-wrap">
-            <div class="rj-cat-track" id="catTrack">
-                <a href="#" class="rj-cat-pill">Supply Chain Jobs</a>
-                <a href="#" class="rj-cat-pill">Foreign MNC Jobs</a>
-                <a href="#" class="rj-cat-pill">Work from Home Jobs</a>
-                <a href="#" class="rj-cat-pill">Startup Jobs</a>
-                <a href="#" class="rj-cat-pill">Sales Jobs</a>
-                <a href="#" class="rj-cat-pill">Analytics &amp; BI Jobs</a>
-                <a href="#" class="rj-cat-pill">Marketing Jobs</a>
-                <a href="#" class="rj-cat-pill">Data Science Jobs</a>
-                <a href="#" class="rj-cat-pill">Banking &amp; Finance Jobs</a>
-                <a href="#" class="rj-cat-pill">Engineering Jobs</a>
-                <a href="#" class="rj-cat-pill">HR Jobs</a>
-                <a href="#" class="rj-cat-pill">IT Jobs</a>
-                <a href="#" class="rj-cat-pill">Fresher Jobs</a>
-            </div>
-        </div>
-        <button class="rj-cat-arrow rj-cat-next" id="catNext"><i class="fa fa-chevron-right"></i></button>
-        <button class="rj-cat-arrow rj-cat-prev" id="catPrev" style="display:none;"><i class="fa fa-chevron-left"></i></button>
-    </div>
 
     <!-- ═══════════════════════════════════════
          RESULT BAR
@@ -305,15 +278,24 @@
                         </label>
                         <div class="rj-more-items" id="more-dept" style="display:none;">
                             <label class="rj-cb-row">
-                                <input type="checkbox" name="category" value="Finance & Accounting" {% if 'Finance & Accounting' in selected_categories %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Finance &amp; Accounting</span>
-                                <span class="rj-count">({{ category_counts.Finance|default:0 }})</span>
+                                <input type="checkbox" 
+                                name="category" 
+                                value="Finance" 
+                                    {% if 'Finance' in selected_categories %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>Finance &amp; Accounting</span>
+                            <span class="rj-count">({{ category_counts.Finance|default:0 }})</span>
                             </label>
+
                             <label class="rj-cb-row">
-                                <input type="checkbox" name="category" value="Marketing" onchange="this.form.submit()">
-                                <span>Marketing</span>
-                                <span class="rj-count">({{ category_counts.Marketing|default:0 }})</span>
-                            </label>
+                                <input type="checkbox" 
+                                    name="category" 
+                                    value="Marketing" 
+                                {% if 'Marketing' in selected_categories %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Marketing</span>
+                        <span class="rj-count">({{ category_counts.Marketing|default:0 }})</span>
+                        </label>
                         </div>
                         <span class="rj-view-more" id="toggle-dept" onclick="toggleMore('dept')">View more</span>
                     </div>
