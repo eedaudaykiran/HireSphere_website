@@ -134,7 +134,14 @@ class Job(models.Model):
     def skills_list(self):
         return [skill.strip() for skill in self.skills.split(',')] if self.skills else []
  
- 
+        def conditions_list(self):
+            if not self.conditions:
+                return []
+    #  by bullet • or by comma
+            if '•' in self.conditions:
+                return [c.strip() for c in self.conditions.split('•') if c.strip()]
+            return [c.strip() for c in self.conditions.split(',') if c.strip()]
+
 class ApplyJob(models.Model):
  
     STATUS_CHOICES = (
