@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mnc Jobs</title>
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/remote.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/mnc.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -305,7 +305,7 @@
                         </label>
                         <div class="rj-more-items" id="more-dept" style="display:none;">
                             <label class="rj-cb-row">
-                                <input type="checkbox" name="category" value="Finance" onchange="this.form.submit()">
+                                <input type="checkbox" name="category" value="Finance & Accounting" onchange="this.form.submit()">
                                 <span>Finance &amp; Accounting</span>
                                 <span class="rj-count">({{ category_counts.Finance|default:0 }})</span>
                             </label>

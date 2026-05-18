@@ -40,11 +40,20 @@ class Job(models.Model):
     )
  
     CATEGORY_CHOICES = (
-        ('IT',      'IT'),
-        ('Sales',   'Sales'),
-        ('HR',      'HR'),
-        ('General', 'General'),
-    )
+
+    ('IT', 'IT'),
+
+    ('Sales', 'Sales'),
+
+    ('HR', 'HR'),
+
+    ('General', 'General'),
+
+    ('Finance & Accounting', 'Finance & Accounting'),
+
+    ('Marketing', 'Marketing'),
+
+)
  
     EDUCATION_CHOICES = [
         ("PG",    "Any Postgraduate"),
@@ -134,13 +143,13 @@ class Job(models.Model):
     def skills_list(self):
         return [skill.strip() for skill in self.skills.split(',')] if self.skills else []
  
-        def conditions_list(self):
-            if not self.conditions:
-                return []
+    def conditions_list(self):
+        if not self.conditions:
+            return []
     #  by bullet • or by comma
-            if '•' in self.conditions:
-                return [c.strip() for c in self.conditions.split('•') if c.strip()]
-            return [c.strip() for c in self.conditions.split(',') if c.strip()]
+        if '•' in self.conditions:
+            return [c.strip() for c in self.conditions.split('•') if c.strip()]
+        return [c.strip() for c in self.conditions.split(',') if c.strip()]
 
 class ApplyJob(models.Model):
  
