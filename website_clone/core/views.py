@@ -2850,128 +2850,58 @@ def engineering_jobs_page(request):
 
 @login_required
 def marketing_jobs_page(request):
+    from django.db.models import Count
 
-    # ===================== BASE QUERY =====================
-
-    jobs = Job.objects.filter(
-        category__icontains='Marketing'
-    ).order_by('-id')
-
-    # ===================== COMMON FILTERS =====================
+    jobs = Job.objects.filter(category__icontains='Marketing').order_by('-id')
 
     jobs, selected_work_modes = filter_by_work_mode(jobs, request)
-
     jobs, selected_categories = filter_by_category(jobs, request)
-
-    jobs, selected_locations = filter_by_location(jobs, request)
-
-    jobs, selected_salaries = filter_by_salary(jobs, request)
-
+    jobs, selected_locations  = filter_by_location(jobs, request)
+    jobs, selected_salaries   = filter_by_salary(jobs, request)
     jobs, selected_experience = filter_by_experience(jobs, request)
-
-    jobs, selected_freshness = filter_by_freshness(jobs, request)
-
-    # ===================== COMPANY TYPE =====================
+    jobs, selected_freshness  = filter_by_freshness(jobs, request)
 
     company_types = request.GET.getlist('company_type')
-
     if company_types:
         jobs = jobs.filter(company_type__in=company_types)
 
-    # ===================== DURATION =====================
-
-    durations = request.GET.getlist('duration')
-
-    if durations:
-        jobs = jobs.filter(duration__in=durations)
-
-    # ===================== EDUCATION =====================
-
     educations = request.GET.getlist('education')
-
     if educations:
         jobs = jobs.filter(education__in=educations)
 
-    # ===================== POSTED BY =====================
-
     posted_by = request.GET.getlist('posted_by')
-
     if posted_by:
         jobs = jobs.filter(posted_by__in=posted_by)
 
-    # ===================== INDUSTRY =====================
-
-    industries = request.GET.getlist('industry')
-
-    if industries:
-        jobs = jobs.filter(industry__in=industries)
-
-    # ===================== COMPANY =====================
-
-    companies = request.GET.getlist('company')
-
-    if companies:
-        jobs = jobs.filter(company__in=companies)
-
-    # ===================== ROLE CATEGORY =====================
-
     roles = request.GET.getlist('role_category')
-
     if roles:
         jobs = jobs.filter(role_category__in=roles)
 
-    # ===================== ALL MARKETING JOBS =====================
-
-    all_jobs = Job.objects.filter(
-        category__icontains='Marketing'
-    )
-
-    # ===================== SALARY COUNTS =====================
+    all_jobs = Job.objects.filter(category__icontains='Marketing')
 
     salary_ranges = [
-        '0-3',
-        '3-6',
-        '6-10',
-        '10-15',
-        '15-20',
-        '20-25',
-        '25-30',
-        '30-35'
+        '0-3','3-6','6-10','10-15',
+        '15-20','20-25','25-30','30-35'
     ]
 
     salary_counts = {}
 
     for r in salary_ranges:
-
         try:
-
             low, high = r.split('-')
 
-            cnt = all_jobs.filter(
+            salary_counts[r] = all_jobs.filter(
                 min_salary__gte=int(low),
                 max_salary__lte=int(high)
             ).count()
 
         except:
-
-            cnt = 0
-
-        salary_counts[r] = cnt
-
-    # ===================== CATEGORY COUNTS =====================
+            salary_counts[r] = 0
 
     category_counts = {
-
         item['category']: item['total']
-
-        for item in all_jobs.values(
-            'category'
-        ).annotate(
-            total=Count('id')
-        )
+        for item in all_jobs.values('category').annotate(total=Count('id'))
     }
-
-    # ===================== LOCATION COUNTS =====================
 
     location_list = [
         'Bangalore',
@@ -2983,65 +2913,21 @@ def marketing_jobs_page(request):
     ]
 
     location_counts = {
-
-        loc: all_jobs.filter(
-            location__icontains=loc
-        ).count()
-
+        loc: all_jobs.filter(location__icontains=loc).count()
         for loc in location_list
     }
 
-    # ===================== COMPANY TYPE COUNTS =====================
-
     company_type_counts = {
-
         item['company_type']: item['total']
-
-        for item in all_jobs.values(
-            'company_type'
-        ).annotate(
-            total=Count('id')
-        )
+        for item in all_jobs.values('company_type').annotate(total=Count('id'))
     }
-
-    # ===================== ROLE COUNTS =====================
 
     role_counts = {
-
         item['role_category']: item['total']
-
-        for item in all_jobs.values(
-            'role_category'
-        ).annotate(
-            total=Count('id')
-        )
+        for item in all_jobs.values('role_category').annotate(total=Count('id'))
     }
-
-    # ===================== DURATION COUNTS =====================
-
-    all_durations = all_jobs.exclude(
-        duration__isnull=True
-    ).exclude(
-        duration=''
-    ).values_list(
-        'duration',
-        flat=True
-    ).distinct()
-
-    duration_counts = {
-
-        d: all_jobs.filter(
-            duration=d
-        ).count()
-
-        for d in all_durations
-    }
-
-    # ===================== EDUCATION COUNTS =====================
 
     all_educations = all_jobs.exclude(
-        education__isnull=True
-    ).exclude(
         education=''
     ).values_list(
         'education',
@@ -3049,19 +2935,11 @@ def marketing_jobs_page(request):
     ).distinct()
 
     education_counts = {
-
-        e: all_jobs.filter(
-            education=e
-        ).count()
-
+        e: all_jobs.filter(education=e).count()
         for e in all_educations
     }
 
-    # ===================== POSTED BY COUNTS =====================
-
     all_posted_by = all_jobs.exclude(
-        posted_by__isnull=True
-    ).exclude(
         posted_by=''
     ).values_list(
         'posted_by',
@@ -3069,196 +2947,30 @@ def marketing_jobs_page(request):
     ).distinct()
 
     posted_by_counts = {
-
-        p: all_jobs.filter(
-            posted_by=p
-        ).count()
-
+        p: all_jobs.filter(posted_by=p).count()
         for p in all_posted_by
     }
 
-    # ===================== INDUSTRY COUNTS =====================
-
-    all_industries = all_jobs.exclude(
-        industry__isnull=True
-    ).exclude(
-        industry=''
-    ).values_list(
-        'industry',
-        flat=True
-    ).distinct()
-
-    industry_counts = {
-
-        i: all_jobs.filter(
-            industry=i
-        ).count()
-
-        for i in all_industries
-    }
-
-    # ===================== COMPANY COUNTS =====================
-
-    company_counts = {
-
-        item['company']: item['total']
-
-        for item in all_jobs.values(
-            'company'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== STIPEND FILTER =====================
-
-    stipends = request.GET.getlist('stipend')
-
-    if stipends:
-
-        stipend_query = Q()
-
-        for s in stipends:
-
-            if s == 'unpaid':
-
-                stipend_query |= Q(
-                    min_salary=0,
-                    max_salary=0
-                )
-
-            elif s == '0-10':
-
-                stipend_query |= Q(
-                    min_salary__gte=0,
-                    max_salary__lte=10
-                )
-
-            elif s == '10-20':
-
-                stipend_query |= Q(
-                    min_salary__gte=10,
-                    max_salary__lte=20
-                )
-
-            elif s == '20-30':
-
-                stipend_query |= Q(
-                    min_salary__gte=20,
-                    max_salary__lte=30
-                )
-
-            elif s == '30-50':
-
-                stipend_query |= Q(
-                    min_salary__gte=30,
-                    max_salary__lte=50
-                )
-
-            elif s == '50+':
-
-                stipend_query |= Q(
-                    min_salary__gte=50
-                )
-
-        jobs = jobs.filter(stipend_query)
-
-    # ===================== STIPEND COUNTS =====================
-
-    stipend_counts = {
-
-        'unpaid': all_jobs.filter(
-            min_salary=0,
-            max_salary=0
-        ).count(),
-
-        '0-10': all_jobs.filter(
-            min_salary__gte=0,
-            max_salary__lte=10
-        ).count(),
-
-        '10-20': all_jobs.filter(
-            min_salary__gte=10,
-            max_salary__lte=20
-        ).count(),
-
-        '20-30': all_jobs.filter(
-            min_salary__gte=20,
-            max_salary__lte=30
-        ).count(),
-
-        '30-50': all_jobs.filter(
-            min_salary__gte=30,
-            max_salary__lte=50
-        ).count(),
-
-        '50+': all_jobs.filter(
-            min_salary__gte=50
-        ).count(),
-    }
-
-    # ===================== FINAL CONTEXT =====================
-
-    context = {
-
-        'jobs': jobs,
-
-        'selected_work_modes': selected_work_modes,
-
-        'selected_categories': selected_categories,
-
+    return render(request, 'core/marketing_jobs.html', {
+        'jobs':                   jobs,
+        'selected_work_modes':    selected_work_modes,
+        'selected_categories':    selected_categories,
         'selected_company_types': company_types,
-
-        'selected_locations': selected_locations,
-
-        'selected_salaries': selected_salaries,
-
-        'selected_experience': selected_experience,
-
-        'selected_freshness': selected_freshness,
-
-        'selected_roles': roles,
-
-        'selected_stipends': stipends,
-
-        'selected_durations': durations,
-
-        'selected_educations': educations,
-
-        'selected_posted': posted_by,
-
-        'selected_industries': industries,
-
-        'selected_companies': companies,
-
-        'salary_counts': salary_counts,
-
-        'category_counts': category_counts,
-
-        'location_counts': location_counts,
-
-        'company_type_counts': company_type_counts,
-
-        'role_counts': role_counts,
-
-        'stipend_counts': stipend_counts,
-
-        'duration_counts': duration_counts,
-
-        'education_counts': education_counts,
-
-        'posted_by_counts': posted_by_counts,
-
-        'industry_counts': industry_counts,
-
-        'company_counts': company_counts,
-    }
-
-    return render(
-        request,
-        'core/marketing_jobs.html',
-        context
-    )
+        'selected_locations':     selected_locations,
+        'selected_salaries':      selected_salaries,
+        'selected_experience':    selected_experience,
+        'selected_freshness':     selected_freshness,
+        'selected_roles':         roles,
+        'selected_educations':    educations,
+        'selected_posted':        posted_by,
+        'salary_counts':          salary_counts,
+        'category_counts':        category_counts,
+        'location_counts':        location_counts,
+        'company_type_counts':    company_type_counts,
+        'role_counts':            role_counts,
+        'education_counts':       education_counts,
+        'posted_by_counts':       posted_by_counts,
+    })
 
 @login_required
 def fortune_jobs_page(request):
@@ -9868,72 +9580,2164 @@ def fresherjobs_page(request):
 
 @login_required
 def it_jobs_page(request):
-    jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='IT').order_by('-id')
-    return render(request, 'core/it_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(category__icontains='IT').order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+    jobs, selected_categories = filter_by_category(jobs, request)
+    jobs, selected_locations  = filter_by_location(jobs, request)
+    jobs, selected_salaries   = filter_by_salary(jobs, request)
+    jobs, selected_experience = filter_by_experience(jobs, request)
+    jobs, selected_freshness  = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(category__icontains='IT')
+
+    salary_ranges = ['0-3','3-6','6-10','10-15','15-20','20-25','25-30','30-35']
+    salary_counts = {}
+    for r in salary_ranges:
+        try:
+            low, high = r.split('-')
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low), max_salary__lte=int(high)
+            ).count()
+        except:
+            salary_counts[r] = 0
+
+    category_counts = {
+        item['category']: item['total']
+        for item in all_jobs.values('category').annotate(total=Count('id'))
+    }
+
+    location_list = ['Bangalore','Delhi','Mumbai','Hyderabad','Pune','Chennai']
+    location_counts = {
+        loc: all_jobs.filter(location__icontains=loc).count()
+        for loc in location_list
+    }
+
+    company_type_counts = {
+        item['company_type']: item['total']
+        for item in all_jobs.values('company_type').annotate(total=Count('id'))
+    }
+
+    role_counts = {
+        item['role_category']: item['total']
+        for item in all_jobs.values('role_category').annotate(total=Count('id'))
+    }
+
+    all_educations = all_jobs.exclude(education='').values_list('education', flat=True).distinct()
+    education_counts = {e: all_jobs.filter(education=e).count() for e in all_educations}
+
+    all_posted_by = all_jobs.exclude(posted_by='').values_list('posted_by', flat=True).distinct()
+    posted_by_counts = {p: all_jobs.filter(posted_by=p).count() for p in all_posted_by}
+
+    return render(request, 'core/it_jobs.html', {
+        'jobs':                   jobs,
+        'selected_work_modes':    selected_work_modes,
+        'selected_categories':    selected_categories,
+        'selected_company_types': company_types,
+        'selected_locations':     selected_locations,
+        'selected_salaries':      selected_salaries,
+        'selected_experience':    selected_experience,
+        'selected_freshness':     selected_freshness,
+        'selected_roles':         roles,
+        'selected_educations':    educations,
+        'selected_posted':        posted_by,
+        'salary_counts':          salary_counts,
+        'category_counts':        category_counts,
+        'location_counts':        location_counts,
+        'company_type_counts':    company_type_counts,
+        'role_counts':            role_counts,
+        'education_counts':       education_counts,
+        'posted_by_counts':       posted_by_counts,
+    })
 
 @login_required
 def sales_jobs_page(request):
-    jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='Sales').order_by('-id')
-    return render(request, 'core/sales_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(category__icontains='Sales').order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+    jobs, selected_categories = filter_by_category(jobs, request)
+    jobs, selected_locations  = filter_by_location(jobs, request)
+    jobs, selected_salaries   = filter_by_salary(jobs, request)
+    jobs, selected_experience = filter_by_experience(jobs, request)
+    jobs, selected_freshness  = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(category__icontains='Sales')
+
+    salary_ranges = ['0-3','3-6','6-10','10-15','15-20','20-25','25-30','30-35']
+    salary_counts = {}
+
+    for r in salary_ranges:
+        try:
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+            salary_counts[r] = 0
+
+    category_counts = {
+        item['category']: item['total']
+        for item in all_jobs.values('category').annotate(total=Count('id'))
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+        loc: all_jobs.filter(location__icontains=loc).count()
+        for loc in location_list
+    }
+
+    company_type_counts = {
+        item['company_type']: item['total']
+        for item in all_jobs.values('company_type').annotate(total=Count('id'))
+    }
+
+    role_counts = {
+        item['role_category']: item['total']
+        for item in all_jobs.values('role_category').annotate(total=Count('id'))
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+        e: all_jobs.filter(education=e).count()
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+        p: all_jobs.filter(posted_by=p).count()
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/sales_jobs.html', {
+        'jobs':                   jobs,
+        'selected_work_modes':    selected_work_modes,
+        'selected_categories':    selected_categories,
+        'selected_company_types': company_types,
+        'selected_locations':     selected_locations,
+        'selected_salaries':      selected_salaries,
+        'selected_experience':    selected_experience,
+        'selected_freshness':     selected_freshness,
+        'selected_roles':         roles,
+        'selected_educations':    educations,
+        'selected_posted':        posted_by,
+        'salary_counts':          salary_counts,
+        'category_counts':        category_counts,
+        'location_counts':        location_counts,
+        'company_type_counts':    company_type_counts,
+        'role_counts':            role_counts,
+        'education_counts':       education_counts,
+        'posted_by_counts':       posted_by_counts,
+    })
 
 @login_required
 def data_science_jobs_page(request):
-    jobs = Job.objects.filter(work_mode__iexact='Remote', category__icontains='Data Science').order_by('-id')
-    return render(request, 'core/data_science_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        category__icontains='Data Science'
+    ).order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        category__icontains='Data Science'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/data_science_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
 
 @login_required
 def fresher_jobs_page(request):
-    jobs = Job.objects.filter(experience__iexact='Fresher', work_mode__iexact='Remote').order_by('-id')
-    return render(request, 'core/fresher_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        experience='Fresher'
+    ).order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        experience='Fresher'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/fresher_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
 
 @login_required
 def walk_in_jobs_page(request):
-    jobs = Job.objects.filter(work_mode__icontains='walk').order_by('-id')
-    return render(request, 'core/walk_in_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        job_type__icontains='Walk In'
+    ).order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        job_type__icontains='Walk In'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/walk_in_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
 
 @login_required
 def part_time_jobs_page(request):
-    jobs = Job.objects.filter(work_mode__icontains='part time').order_by('-id')
-    return render(request, 'core/part_time_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        job_type__icontains='Part Time'
+    ).order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        job_type__icontains='Part Time'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/part_time_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
 
 @login_required
 def delhi_jobs_page(request):
-    jobs = Job.objects.filter(location__icontains='Delhi', work_mode__iexact='Remote').order_by('-id')
-    return render(request, 'core/delhi_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        location__icontains='Delhi'
+    ).order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        location__icontains='Delhi'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/delhi_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
+
 
 @login_required
 def mumbai_jobs_page(request):
-    jobs = Job.objects.filter(location__icontains='Mumbai', work_mode__iexact='Remote').order_by('-id')
-    return render(request, 'core/mumbai_jobs.html', {'jobs': jobs})
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        location__icontains='Mumbai'
+    ).order_by('-id')
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        location__icontains='Mumbai'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/mumbai_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
 
 @login_required
 def bangalore_jobs_page(request):
+    from django.db.models import Count
+
     jobs = Job.objects.filter(
-        Q(location__icontains='Bangalore') | Q(location__icontains='Bengaluru'),
-        work_mode__iexact='Remote'
+        location__icontains='Bangalore'
     ).order_by('-id')
-    return render(request, 'core/bangalore_jobs.html', {'jobs': jobs})
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        location__icontains='Bangalore'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/bangalore_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
+
 
 @login_required
 def hyderabad_jobs_page(request):
-    jobs = Job.objects.filter(location__icontains='Hyderabad').filter(
-        Q(work_mode__iexact='Remote') | Q(work_mode__iexact='Hybrid') | Q(work_mode__iexact='On-site')
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        location__icontains='Hyderabad'
     ).order_by('-id')
-    return render(request, 'core/hyderabad_jobs.html', {'jobs': jobs})
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        location__icontains='Hyderabad'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/hyderabad_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
 
 @login_required
 def chennai_jobs_page(request):
-    jobs = Job.objects.filter(location__icontains='Chennai').filter(
-        Q(work_mode__iexact='Remote') | Q(work_mode__iexact='Hybrid') | Q(work_mode__iexact='On-site')
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        location__icontains='Chennai'
     ).order_by('-id')
-    return render(request, 'core/chennai_jobs.html', {'jobs': jobs})
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        location__icontains='Chennai'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/chennai_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
 
 @login_required
 def pune_jobs_page(request):
-    jobs = Job.objects.filter(location__icontains='Pune').filter(
-        Q(work_mode__iexact='Remote') | Q(work_mode__iexact='Hybrid') | Q(work_mode__iexact='On-site')
+    from django.db.models import Count
+
+    jobs = Job.objects.filter(
+        location__icontains='Pune'
     ).order_by('-id')
-    return render(request, 'core/pune_jobs.html', {'jobs': jobs})
+
+    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
+
+    jobs, selected_categories = filter_by_category(jobs, request)
+
+    jobs, selected_locations = filter_by_location(jobs, request)
+
+    jobs, selected_salaries = filter_by_salary(jobs, request)
+
+    jobs, selected_experience = filter_by_experience(jobs, request)
+
+    jobs, selected_freshness = filter_by_freshness(jobs, request)
+
+    company_types = request.GET.getlist('company_type')
+
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+
+    educations = request.GET.getlist('education')
+
+    if educations:
+        jobs = jobs.filter(education__in=educations)
+
+    posted_by = request.GET.getlist('posted_by')
+
+    if posted_by:
+        jobs = jobs.filter(posted_by__in=posted_by)
+
+    roles = request.GET.getlist('role_category')
+
+    if roles:
+        jobs = jobs.filter(role_category__in=roles)
+
+    all_jobs = Job.objects.filter(
+        location__icontains='Pune'
+    )
+
+    salary_ranges = [
+        '0-3',
+        '3-6',
+        '6-10',
+        '10-15',
+        '15-20',
+        '20-25',
+        '25-30',
+        '30-35'
+    ]
+
+    salary_counts = {}
+
+    for r in salary_ranges:
+
+        try:
+
+            low, high = r.split('-')
+
+            salary_counts[r] = all_jobs.filter(
+                min_salary__gte=int(low),
+                max_salary__lte=int(high)
+            ).count()
+
+        except:
+
+            salary_counts[r] = 0
+
+    category_counts = {
+
+        item['category']: item['total']
+
+        for item in all_jobs.values(
+            'category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    location_list = [
+        'Bangalore',
+        'Delhi',
+        'Mumbai',
+        'Hyderabad',
+        'Pune',
+        'Chennai'
+    ]
+
+    location_counts = {
+
+        loc: all_jobs.filter(
+            location__icontains=loc
+        ).count()
+
+        for loc in location_list
+    }
+
+    company_type_counts = {
+
+        item['company_type']: item['total']
+
+        for item in all_jobs.values(
+            'company_type'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    role_counts = {
+
+        item['role_category']: item['total']
+
+        for item in all_jobs.values(
+            'role_category'
+        ).annotate(
+            total=Count('id')
+        )
+    }
+
+    all_educations = all_jobs.exclude(
+        education=''
+    ).values_list(
+        'education',
+        flat=True
+    ).distinct()
+
+    education_counts = {
+
+        e: all_jobs.filter(
+            education=e
+        ).count()
+
+        for e in all_educations
+    }
+
+    all_posted_by = all_jobs.exclude(
+        posted_by=''
+    ).values_list(
+        'posted_by',
+        flat=True
+    ).distinct()
+
+    posted_by_counts = {
+
+        p: all_jobs.filter(
+            posted_by=p
+        ).count()
+
+        for p in all_posted_by
+    }
+
+    return render(request, 'core/pune_jobs.html', {
+
+        'jobs': jobs,
+
+        'selected_work_modes': selected_work_modes,
+
+        'selected_categories': selected_categories,
+
+        'selected_company_types': company_types,
+
+        'selected_locations': selected_locations,
+
+        'selected_salaries': selected_salaries,
+
+        'selected_experience': selected_experience,
+
+        'selected_freshness': selected_freshness,
+
+        'selected_roles': roles,
+
+        'selected_educations': educations,
+
+        'selected_posted': posted_by,
+
+        'salary_counts': salary_counts,
+
+        'category_counts': category_counts,
+
+        'location_counts': location_counts,
+
+        'company_type_counts': company_type_counts,
+
+        'role_counts': role_counts,
+
+        'education_counts': education_counts,
+
+        'posted_by_counts': posted_by_counts,
+    })
+
 
 @login_required
 def company_unicorn(request):
