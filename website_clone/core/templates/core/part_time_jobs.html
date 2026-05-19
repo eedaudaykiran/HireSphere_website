@@ -1,11 +1,12 @@
 {% load static %}
 {% load humanize %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Part Time Jobs — Naukri Clone</title>
+    <title>Part-time Jobs — Naukri Clone</title>
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/remote.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -198,20 +199,20 @@
 <div class="rj-cat-strip">
     <div class="rj-cat-track-wrap">
         <div class="rj-cat-track" id="catTrack">
-            <a href="?category=IT" class="rj-cat-pill">IT Jobs</a>
-            <a href="?work_mode=Remote" class="rj-cat-pill">Remote IT</a>
-            <a href="?work_mode=Hybrid" class="rj-cat-pill">Hybrid IT</a>
-            <a href="?work_mode=On-site" class="rj-cat-pill">On-site IT</a>
-            <a href="?company_type=MNC" class="rj-cat-pill">MNC IT Jobs</a>
-            <a href="?company_type=Startup" class="rj-cat-pill">Startup IT</a>
-            <a href="?salary=0-3" class="rj-cat-pill">0-3L IT Jobs</a>
-            <a href="?salary=6-10" class="rj-cat-pill">6-10L IT Jobs</a>
-            <a href="?salary=10-15" class="rj-cat-pill">10-15L IT Jobs</a>
-            <a href="?location=Bangalore" class="rj-cat-pill">Bangalore IT</a>
-            <a href="?location=Hyderabad" class="rj-cat-pill">Hyderabad IT</a>
-            <a href="?location=Delhi" class="rj-cat-pill">Delhi IT</a>
-            <a href="?location=Mumbai" class="rj-cat-pill">Mumbai IT</a>
-            <a href="?location=Pune" class="rj-cat-pill">Pune IT</a>
+            <a href="?category=Part-time" class="rj-cat-pill">Part-time Jobs</a>
+            <a href="?work_mode=Remote" class="rj-cat-pill">Remote Part-time</a>
+            <a href="?work_mode=Hybrid" class="rj-cat-pill">Hybrid Part-time</a>
+            <a href="?work_mode=On-site" class="rj-cat-pill">On-site Part-time</a>
+            <a href="?company_type=MNC" class="rj-cat-pill">MNC Part-time Jobs</a>
+            <a href="?company_type=Startup" class="rj-cat-pill">Startup Part-time Jobs</a>
+            <a href="?salary=0-3" class="rj-cat-pill">0-3L Part-time Jobs</a>
+            <a href="?salary=6-10" class="rj-cat-pill">6-10L Part-time Jobs</a>
+            <a href="?salary=10-15" class="rj-cat-pill">10-15L Part-time Jobs</a>
+            <a href="?location=Bangalore" class="rj-cat-pill">Bangalore Part-time</a>
+            <a href="?location=Hyderabad" class="rj-cat-pill">Hyderabad Part-time</a>
+            <a href="?location=Delhi" class="rj-cat-pill">Delhi Part-time</a>
+            <a href="?location=Mumbai" class="rj-cat-pill">Mumbai Part-time</a>
+            <a href="?location=Pune" class="rj-cat-pill">Pune Part-time</a>
         </div>
     </div>
     <button class="rj-cat-arrow rj-cat-next" id="catNext"><i class="fa fa-chevron-right"></i></button>
@@ -223,7 +224,7 @@
 ═══════════════════════════════════════ -->
 <div class="rj-result-bar">
     <span class="rj-result-count">
-        Showing <strong>{{ jobs|length }} IT Jobs</strong>
+        Showing <strong>{{ jobs|length }} Part-time Jobs</strong>
     </span>
     <button class="rj-sort-btn">Sort by: Relevance <i class="fa fa-chevron-down"></i></button>
 </div>
@@ -398,25 +399,28 @@
                             {% if '0-3' in selected_salaries %}checked{% endif %}
                             onchange="this.form.submit()">
                         <span>0-3 Lakhs</span>
-                        <span class="rj-count">({{ salary_count}})</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"0-3"|default:0 }})</span>
                     </label>
                     <label class="rj-cb-row">
                         <input type="checkbox" name="salary" value="3-6"
                             {% if '3-6' in selected_salaries %}checked{% endif %}
                             onchange="this.form.submit()">
                         <span>3-6 Lakhs</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"3-6"|default:0 }})</span>
                     </label>
                     <label class="rj-cb-row">
                         <input type="checkbox" name="salary" value="6-10"
                             {% if '6-10' in selected_salaries %}checked{% endif %}
                             onchange="this.form.submit()">
                         <span>6-10 Lakhs</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"6-10"|default:0 }})</span>
                     </label>
                     <label class="rj-cb-row">
                         <input type="checkbox" name="salary" value="10-15"
                             {% if '10-15' in selected_salaries %}checked{% endif %}
                             onchange="this.form.submit()">
                         <span>10-15 Lakhs</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"10-15"|default:0 }})</span>
                     </label>
                     <div class="rj-more-items" id="more-sal" style="display:none;">
                         <label class="rj-cb-row">
@@ -424,24 +428,28 @@
                                 {% if '15-20' in selected_salaries %}checked{% endif %}
                                 onchange="this.form.submit()">
                             <span>15-20 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"15-20"|default:0 }})</span>
                         </label>
                         <label class="rj-cb-row">
                             <input type="checkbox" name="salary" value="20-25"
                                 {% if '20-25' in selected_salaries %}checked{% endif %}
                                 onchange="this.form.submit()">
                             <span>20-25 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"20-25"|default:0 }})</span>
                         </label>
                         <label class="rj-cb-row">
                             <input type="checkbox" name="salary" value="25-30"
                                 {% if '25-30' in selected_salaries %}checked{% endif %}
                                 onchange="this.form.submit()">
                             <span>25-30 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"25-30"|default:0 }})</span>
                         </label>
                         <label class="rj-cb-row">
                             <input type="checkbox" name="salary" value="30-35"
                                 {% if '30-35' in selected_salaries %}checked{% endif %}
                                 onchange="this.form.submit()">
                             <span>30-35 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"30-35"|default:0 }})</span>
                         </label>
                     </div>
                     <span class="rj-view-more" id="toggle-sal" onclick="toggleMore('sal')">View more</span>
@@ -493,15 +501,58 @@
                     <i class="fa fa-chevron-up" id="icon-role"></i>
                 </div>
                 <div class="rj-sec-body" id="body-role">
-                    {% for role, count in role_counts.items %}
                     <label class="rj-cb-row">
-                        <input type="checkbox" name="role_category" value="{{ role }}"
-                            {% if role in selected_roles %}checked{% endif %}
+                        <input type="checkbox" name="role_category" value="Software Developer"
+                            {% if "Software Developer" in selected_roles %}checked{% endif %}
                             onchange="this.form.submit()">
-                        <span>{{ role }}</span>
-                        <span class="rj-count">({{ count }})</span>
+                        <span>Software Developer</span>
+                        <span class="rj-count">({{ role_counts|get_item:"Software Developer"|default:0 }})</span>
                     </label>
-                    {% endfor %}
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="role_category" value="Retail & B2C Sales"
+                            {% if "Retail & B2C Sales" in selected_roles %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Retail &amp; B2C Sales</span>
+                        <span class="rj-count">({{ role_counts|get_item:"Retail & B2C Sales"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="role_category" value="BD / Pre Sales"
+                            {% if "BD / Pre Sales" in selected_roles %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>BD / Pre Sales</span>
+                        <span class="rj-count">({{ role_counts|get_item:"BD / Pre Sales"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="role_category" value="Quality Assurance"
+                            {% if "Quality Assurance" in selected_roles %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Quality Assurance</span>
+                        <span class="rj-count">({{ role_counts|get_item:"Quality Assurance"|default:0 }})</span>
+                    </label>
+                    <div class="rj-more-items" id="more-role" style="display:none;">
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="role_category" value="IT Networking"
+                                {% if "IT Networking" in selected_roles %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>IT Networking</span>
+                            <span class="rj-count">({{ role_counts|get_item:"IT Networking"|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="role_category" value="HR / Admin"
+                                {% if "HR / Admin" in selected_roles %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>HR / Admin</span>
+                            <span class="rj-count">({{ role_counts|get_item:"HR / Admin"|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="role_category" value="Finance"
+                                {% if "Finance" in selected_roles %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>Finance</span>
+                            <span class="rj-count">({{ role_counts|get_item:"Finance"|default:0 }})</span>
+                        </label>
+                    </div>
+                    <span class="rj-view-more" id="toggle-role" onclick="toggleMore('role')">View more</span>
                 </div>
             </div>
  

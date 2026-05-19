@@ -1,1213 +1,1190 @@
 {% load static %}
 {% load humanize %}
 {% load custom_filters %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HR Jobs</title>
+    <title>HR Jobs — Naukri Clone</title>
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/remote.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ── ALERT BOX ── */
+        .alert-box {
+            padding: 12px 20px;
+            margin: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .alert-box.success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+        .alert-box.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .alert-box.warning { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+ 
+        /* ── EMPLOYER BLOCK BADGE ── */
+        .rj-employer-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+ 
+        /* ── APPLY BTN STATES ── */
+        .rj-apply-btn.applied {
+            background: #6ee7b7 !important;
+            color: #065f46 !important;
+            cursor: default;
+        }
+        .rj-apply-btn.login-required {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+ 
+        /* ── SAVE BTN STATES ── */
+        .rj-save-btn.rj-saved i { color: #275df5; }
+        .rj-save-btn.rj-saved .rj-save-text { color: #275df5; }
+ 
+        /* ── EMPTY STATE ── */
+        .rj-empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .rj-empty-state i { font-size: 48px; color: #d1d5db; margin-bottom: 16px; display: block; }
+        .rj-empty-state h3 { color: #374151; font-size: 20px; margin-bottom: 8px; }
+        .rj-empty-state p  { color: #6b7280; font-size: 14px; }
+ 
+        /* ── NO RESULTS ── */
+        .rj-no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            font-size: 15px;
+        }
+    </style>
 </head>
-
 <body>
-{% csrf_token %}
-
-    <!-- ═══════════════════════════════════════
-         NAVBAR
-    ═══════════════════════════════════════ -->
-    <header class="rj-navbar">
-        <a href="{% url 'index' %}" class="rj-nav-logo">
-            <div class="rj-nav-logo-icon">
-                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
-                    <circle cx="18" cy="18" r="18" fill="#275df5"/>
-                    <path d="M11 26V14l10 8V14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="24" cy="12" r="2.5" fill="#fff"/>
-                </svg>
-            </div>
-            <span class="rj-nav-logo-text">naukri</span>
-        </a>
-
-        <nav class="rj-nav-links">
-            <!-- Jobs dropdown -->
-            <div class="rj-nav-dropdown">
-                <a href="#" class="rj-nav-link rj-has-drop">Jobs <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
-                <div class="rj-drop-menu rj-drop-wide">
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Popular categories</p>
-                        <a href="{% url 'it_jobs' %}">IT jobs</a>
-                        <a href="{% url 'sales_jobs' %}">Sales Jobs</a>
-                        <a href="#">Marketing Jobs</a>
-                        <a href="#">Data Science Jobs</a>
-                        <a href="#">HR Jobs</a>
-                        <a href="#">Engineering Jobs</a>
-                        <a href="#">Finance Jobs</a>
-                        <a href="#">Operations Jobs</a>
-                    </div>
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Jobs in demand</p>
-                        <a href="#">Fresher Jobs</a>
-                        <a href="#">MNC Jobs</a>
-                        <a href="{% url 'remote_jobs' %}">Remote Jobs</a>
-                        <a href="#">Work from Home Jobs</a>
-                        <a href="#">Walk-in Jobs</a>
-                        <a href="#">Part-time Jobs</a>
-                        <a href="#">Internship Jobs</a>
-                        <a href="#">Startup Jobs</a>
-                    </div>
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Jobs by location</p>
-                        <a href="#">Jobs in Delhi</a>
-                        <a href="#">Jobs in Mumbai</a>
-                        <a href="#">Jobs in Bangalore</a>
-                        <a href="#">Jobs in Hyderabad</a>
-                        <a href="#">Jobs in Chennai</a>
-                        <a href="#">Jobs in Pune</a>
-                        <a href="#">Jobs in Kolkata</a>
-                        <a href="#">Jobs in Ahmedabad</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Companies dropdown -->
-            <div class="rj-nav-dropdown">
-                <a href="#" class="rj-nav-link rj-has-drop">Companies <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
-                <div class="rj-drop-menu rj-drop-wide">
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Explore categories</p>
-                        <a href="#">Unicorn</a>
-                        <a href="#">MNC</a>
-                        <a href="#">Startup</a>
-                        <a href="#">Product based</a>
-                        <a href="#">Internet</a>
-                        <a href="#">Fortune 500</a>
-                    </div>
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Explore collections</p>
-                        <a href="#">Top companies</a>
-                        <a href="#">IT companies</a>
-                        <a href="#">Fintech companies</a>
-                        <a href="#">Sponsored companies</a>
-                        <a href="#">Featured companies</a>
-                        <a href="#">Actively hiring</a>
-                    </div>
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Research companies</p>
-                        <a href="#">Interview questions</a>
-                        <a href="#">Company salaries</a>
-                        <a href="#">Company reviews</a>
-                        <a href="#">Salary Calculator</a>
-                        <a href="#">Work culture ratings</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Services dropdown -->
-            <div class="rj-nav-dropdown">
-                <a href="#" class="rj-nav-link rj-has-drop">Services <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
-                <div class="rj-drop-menu rj-drop-wide">
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Resume writing</p>
-                        <a href="#">Text resume</a>
-                        <a href="#">Visual resume</a>
-                        <a href="#">Resume critique</a>
-                        <p class="rj-drop-heading rj-drop-heading--mt">Find Jobs</p>
-                        <a href="#">Jobs4u</a>
-                        <a href="#">Priority applicant</a>
-                        <a href="#">Contact us</a>
-                    </div>
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Get recruiter's attention</p>
-                        <a href="#">Resume display</a>
-                        <p class="rj-drop-heading rj-drop-heading--mt">Monthly subscriptions</p>
-                        <a href="#">Basic &amp; premium plans</a>
-                    </div>
-                    <div class="rj-drop-col">
-                        <p class="rj-drop-heading">Free resume resources</p>
-                        <a href="#">Resume maker</a>
-                        <a href="#">Resume quality score</a>
-                        <a href="#">Resume samples</a>
-                        <a href="#">Job letter samples</a>
-                        <a href="#">Cover letter builder</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <div class="rj-nav-search">
-            <input type="text" class="rj-nav-search-input" placeholder="Search jobs, skills, companies...">
-            <button class="rj-nav-search-btn"><i class="fa fa-search"></i></button>
+ 
+<!-- ═══════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════ -->
+<header class="rj-navbar">
+    <a href="{% url 'index' %}" class="rj-nav-logo">
+        <div class="rj-nav-logo-icon">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                <circle cx="18" cy="18" r="18" fill="#275df5"/>
+                <path d="M11 26V14l10 8V14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="24" cy="12" r="2.5" fill="#fff"/>
+            </svg>
         </div>
-
-        <div class="rj-nav-right">
+        <span class="rj-nav-logo-text">naukri</span>
+    </a>
+ 
+    <nav class="rj-nav-links">
+        <div class="rj-nav-dropdown">
+            <a href="#" class="rj-nav-link rj-has-drop">Jobs <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
+            <div class="rj-drop-menu rj-drop-wide">
+                <div class="rj-drop-col">
+                    <p class="rj-drop-heading">Popular categories</p>
+                    <a href="{% url 'it_jobs' %}">IT Jobs</a>
+                    <a href="{% url 'sales_jobs' %}">Sales Jobs</a>
+                    <a href="{% url 'marketing_jobs' %}">Marketing Jobs</a>
+                    <a href="{% url 'engineering_jobs' %}">Engineering Jobs</a>
+                    <a href="{% url 'human_resources_jobs' %}">HR Jobs</a>
+                    <a href="{% url 'banking_finance_jobs' %}">Finance Jobs</a>
+                </div>
+                <div class="rj-drop-col">
+                    <p class="rj-drop-heading">Jobs in demand</p>
+                    <a href="{% url 'fresher_jobs' %}">Fresher Jobs</a>
+                    <a href="{% url 'mnc_jobs' %}">MNC Jobs</a>
+                    <a href="{% url 'remote_jobs' %}">Remote Jobs</a>
+                    <a href="{% url 'walk_in_jobs' %}">Walk-in Jobs</a>
+                    <a href="{% url 'part_time_jobs' %}">Part-time Jobs</a>
+                    <a href="{% url 'internship_jobs' %}">Internship Jobs</a>
+                    <a href="{% url 'startup_jobs' %}">Startup Jobs</a>
+                </div>
+                <div class="rj-drop-col">
+                    <p class="rj-drop-heading">Jobs by location</p>
+                    <a href="{% url 'delhi_jobs' %}">Jobs in Delhi</a>
+                    <a href="{% url 'mumbai_jobs' %}">Jobs in Mumbai</a>
+                    <a href="{% url 'bangalore_jobs' %}">Jobs in Bangalore</a>
+                    <a href="{% url 'hyderabad_jobs' %}">Jobs in Hyderabad</a>
+                    <a href="{% url 'chennai_jobs' %}">Jobs in Chennai</a>
+                    <a href="{% url 'pune_jobs' %}">Jobs in Pune</a>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="rj-nav-dropdown">
+            <a href="#" class="rj-nav-link rj-has-drop">Companies <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
+            <div class="rj-drop-menu rj-drop-wide">
+                <div class="rj-drop-col">
+                    <p class="rj-drop-heading">Explore categories</p>
+                    <a href="{% url 'company_unicorn' %}">Unicorn</a>
+                    <a href="{% url 'company_mnc' %}">MNC</a>
+                    <a href="{% url 'company_startups' %}">Startup</a>
+                    <a href="{% url 'company_product_based' %}">Product based</a>
+                    <a href="{% url 'company_internet' %}">Internet</a>
+                    <a href="{% url 'fortune_jobs' %}">Fortune 500</a>
+                </div>
+                <div class="rj-drop-col">
+                    <p class="rj-drop-heading">Explore collections</p>
+                    <a href="{% url 'top_companies_jobs' %}">Top companies</a>
+                    <a href="{% url 'company_it_companies_jobs' %}">IT companies</a>
+                    <a href="{% url 'company_fintech_companies_jobs' %}">Fintech companies</a>
+                    <a href="{% url 'company_sponsored_companies_jobs' %}">Sponsored companies</a>
+                    <a href="{% url 'company_featured_companies_jobs' %}">Featured companies</a>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="rj-nav-dropdown">
+            <a href="#" class="rj-nav-link rj-has-drop">Services <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
+            <div class="rj-drop-menu rj-drop-wide">
+                <div class="rj-drop-col">
+                    <p class="rj-drop-heading">Resume writing</p>
+                    <a href="#">Text resume</a>
+                    <a href="#">Visual resume</a>
+                    <a href="#">Resume critique</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+ 
+    <div class="rj-nav-search">
+        <input type="text" class="rj-nav-search-input" id="navSearch" placeholder="Search jobs, skills, companies...">
+        <button class="rj-nav-search-btn" onclick="applyNavSearch()"><i class="fa fa-search"></i></button>
+    </div>
+ 
+    <div class="rj-nav-right">
+        {% if request.user.is_authenticated %}
+            <span class="rj-nav-login" style="color:#275df5;font-weight:700;">
+                Hi, {{ request.user.first_name|default:request.user.username }}
+            </span>
+            <a href="{% url 'logout' %}" class="rj-nav-register">Logout</a>
+        {% else %}
             <a href="{% url 'login' %}" class="rj-nav-login">Login</a>
             <a href="{% url 'register' %}" class="rj-nav-register">Register</a>
-            <div class="rj-nav-dropdown rj-employers-drop">
-                <div class="rj-nav-employers">
-                    For employers <i class="fa fa-chevron-down rj-drop-arrow"></i>
-                </div>
-                <div class="rj-drop-menu rj-drop-narrow">
-                    <a href="#">Buy Online</a>
-                    <a href="#">Naukri Talent Cloud</a>
-                    <a href="{% url 'employer_login' %}">Employer Login</a>
-                    <a href="#">Post a Job</a>
-                    <a href="#">View Plans</a>
-                    <a href="#">Recruitment Solutions</a>
-                </div>
+        {% endif %}
+        <div class="rj-nav-dropdown rj-employers-drop">
+            <div class="rj-nav-employers">For employers <i class="fa fa-chevron-down rj-drop-arrow"></i></div>
+            <div class="rj-drop-menu rj-drop-narrow">
+                <a href="{% url 'employer_login' %}">Employer Login</a>
+                <a href="{% url 'post_job' %}">Post a Job</a>
+                <a href="{% url 'employer_dashboard' %}">Dashboard</a>
             </div>
         </div>
-
-        <!-- Hamburger for mobile -->
-        <button class="rj-hamburger" id="rjHamburger" aria-label="Toggle menu">
-            <i class="fa fa-bars"></i>
-        </button>
-    </header>
-    <!-- SUCCESS MESSAGE -->
-{% if messages %}
-
-    {% for message in messages %}
-
-        <div class="alert-box {{ message.tags }}">
-            {{ message }}
-        </div>
-
-    {% endfor %}
-
-{% endif %}
-
-
-    <!-- ═══════════════════════════════════════
-         RESULT BAR
-    ═══════════════════════════════════════ -->
-    <div class="rj-result-bar">
-        <span class="rj-result-count">1 – 20 of <strong>15,651 Remote Jobs</strong></span>
-        <button class="rj-sort-btn">Sort by: Relevance <i class="fa fa-chevron-down"></i></button>
     </div>
-
-    <!-- ═══════════════════════════════════════
-         THREE-COLUMN LAYOUT
-    ═══════════════════════════════════════ -->
-    <div class="rj-page-wrap">
-
-        <!-- ══════════════════════
-             COLUMN 1 — FILTER PANEL
-        ══════════════════════ -->
-        <aside class="rj-col rj-col--filter">
-
-           
-            <form method="GET" id="filterForm" class="rj-filter-form">
-
-                <div class="rj-filter-head">
-                    <span class="rj-filter-title">All Filters</span>
-                    <span class="rj-filter-applied" id="rjAppliedCount">Applied (0)</span>
+</header>
+ 
+<!-- ── DJANGO MESSAGES ── -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-box {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+ 
+<!-- ═══════════════════════════════════════
+     CATEGORY CAROUSEL
+═══════════════════════════════════════ -->
+<div class="rj-cat-strip">
+    <div class="rj-cat-track-wrap">
+        <div class="rj-cat-track" id="catTrack">
+            <a href="?category=HR" class="rj-cat-pill">HR Jobs</a>
+            <a href="?work_mode=Remote" class="rj-cat-pill">Remote HR</a>
+            <a href="?work_mode=Hybrid" class="rj-cat-pill">Hybrid HR</a>
+            <a href="?work_mode=On-site" class="rj-cat-pill">On-site HR</a>
+            <a href="?company_type=MNC" class="rj-cat-pill">MNC HR Jobs</a>
+            <a href="?company_type=Startup" class="rj-cat-pill">Startup HR Jobs</a>
+            <a href="?salary=0-3" class="rj-cat-pill">0-3L HR Jobs</a>
+            <a href="?salary=6-10" class="rj-cat-pill">6-10L HR Jobs</a>
+            <a href="?salary=10-15" class="rj-cat-pill">10-15L HR Jobs</a>
+            <a href="?location=Bangalore" class="rj-cat-pill">Bangalore HR Jobs</a>
+            <a href="?location=Hyderabad" class="rj-cat-pill">Hyderabad HR</a>
+            <a href="?location=Delhi" class="rj-cat-pill">Delhi HR</a>
+            <a href="?location=Mumbai" class="rj-cat-pill">Mumbai HR</a>
+            <a href="?location=Pune" class="rj-cat-pill">Pune HR</a>
+        </div>
+    </div>
+    <button class="rj-cat-arrow rj-cat-next" id="catNext"><i class="fa fa-chevron-right"></i></button>
+    <button class="rj-cat-arrow rj-cat-prev" id="catPrev" style="display:none;"><i class="fa fa-chevron-left"></i></button>
+</div>
+ 
+<!-- ═══════════════════════════════════════
+     RESULT BAR
+═══════════════════════════════════════ -->
+<div class="rj-result-bar">
+    <span class="rj-result-count">
+        Showing <strong>{{ jobs|length }} HR Jobs</strong>
+    </span>
+    <button class="rj-sort-btn">Sort by: Relevance <i class="fa fa-chevron-down"></i></button>
+</div>
+ 
+<!-- ═══════════════════════════════════════
+     THREE-COLUMN LAYOUT
+═══════════════════════════════════════ -->
+<div class="rj-page-wrap">
+ 
+    <!-- ══════════════════════
+         COLUMN 1 — FILTER PANEL (REAL DJANGO FORM)
+    ══════════════════════ -->
+    <aside class="rj-col rj-col--filter">
+        <form method="GET" id="filterForm" class="rj-filter-form">
+ 
+            <div class="rj-filter-head">
+                <span class="rj-filter-title">All Filters</span>
+                <span class="rj-filter-applied" id="rjAppliedCount" style="display:none;">Applied (0)</span>
+            </div>
+ 
+            <!-- ── WORK MODE ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('workmode')">
+                    <span>Work mode</span>
+                    <i class="fa fa-chevron-up" id="icon-workmode"></i>
                 </div>
-
-                <!-- Work Mode -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('workmode')">
-                        <span>Work mode</span>
-                        <i class="fa fa-chevron-up" id="icon-workmode"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-workmode">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="work_mode" value="On-site" {% if "On-site" in selected_work_modes %}checked{% endif %} onchange="this.form.submit()">
-                            <span>On-site</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="work_mode" value="Hybrid" {% if "Hybrid" in selected_work_modes %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Hybrid</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="work_mode" value="Remote" {% if "Remote" in selected_work_modes %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Remote</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Experience -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('exp')">
-                        <span>Experience</span>
-                        <i class="fa fa-chevron-up" id="icon-exp"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-exp">
-                        <div class="rj-slider-wrap">
-                            <div class="rj-slider-bubble" id="sliderBubble">{{ selected_experience|default:"Any" }}</div>
-                            <input type="range" name="experience" min="0" max="30"
-                                value="{{ selected_experience|default:30 }}"
-                                class="rj-slider" id="expSlider" onchange="this.form.submit()">
-                            <div class="rj-slider-labels">
-                                <span>0 Yrs</span>
-                                <span>Any</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Department -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('dept')">
-                        <span>Department</span>
-                        <i class="fa fa-chevron-up" id="icon-dept"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-dept">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="category" value="IT" {% if "IT" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Engineering - Software</span>
-                            <span class="rj-count">({{ category_counts.IT|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="category" value="Sales" {% if "Sales" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Sales &amp; Business</span>
-                            <span class="rj-count">({{ category_counts.Sales|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="category" value="HR" {% if "HR" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Human Resources</span>
-                            <span class="rj-count">({{ category_counts.HR|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="category" value="General" {% if "General" in selected_categories %}checked{% endif %} onchange="this.form.submit()">
-                            <span>General</span>
-                            <span class="rj-count">({{ category_counts.General|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-dept" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" 
-                                name="category" 
-                                value="Finance" 
-                                    {% if 'Finance' in selected_categories %}checked{% endif %}
-                                onchange="this.form.submit()">
-                            <span>Finance &amp; Accounting</span>
-                            <span class="rj-count">({{ category_counts.Finance|default:0 }})</span>
-                            </label>
-
-                            <label class="rj-cb-row">
-                                <input type="checkbox" 
-                                    name="category" 
-                                    value="Marketing" 
-                                {% if 'Marketing' in selected_categories %}checked{% endif %}
+                <div class="rj-sec-body" id="body-workmode">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="work_mode" value="On-site"
+                            {% if 'On-site' in selected_work_modes %}checked{% endif %}
                             onchange="this.form.submit()">
-                        <span>Marketing</span>
-                        <span class="rj-count">({{ category_counts.Marketing|default:0 }})</span>
-                        </label>
+                        <span>On-site</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="work_mode" value="Hybrid"
+                            {% if 'Hybrid' in selected_work_modes %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Hybrid</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="work_mode" value="Remote"
+                            {% if 'Remote' in selected_work_modes %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Remote</span>
+                    </label>
+                </div>
+            </div>
+ 
+            <!-- ── EXPERIENCE ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('exp')">
+                    <span>Experience</span>
+                    <i class="fa fa-chevron-up" id="icon-exp"></i>
+                </div>
+                <div class="rj-sec-body" id="body-exp">
+                    <div class="rj-slider-wrap">
+                        <div class="rj-slider-bubble" id="sliderBubble">{{ selected_experience|default:"Any" }}</div>
+                        <input type="range" name="experience" min="0" max="30"
+                            value="{{ selected_experience|default:30 }}"
+                            class="rj-slider" id="expSlider"
+                            oninput="updateSlider(this.value)"
+                            onchange="this.form.submit()">
+                        <div class="rj-slider-labels">
+                            <span>0 Yrs</span><span>Any</span>
                         </div>
-                        <span class="rj-view-more" id="toggle-dept" onclick="toggleMore('dept')">View more</span>
                     </div>
                 </div>
-
-                <!-- Location -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('loc')">
-                        <span>Location</span>
-                        <i class="fa fa-chevron-up" id="icon-loc"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-loc">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="location" value="Bangalore" {% if "Bangalore" in selected_locations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Bengaluru</span>
-                            <span class="rj-count">({{ location_counts.Bangalore|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="location" value="Delhi" {% if "Delhi" in selected_locations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Delhi / NCR</span>
-                            <span class="rj-count">({{ location_counts.Delhi|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="location" value="Mumbai" {% if "Mumbai" in selected_locations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Mumbai</span>
-                            <span class="rj-count">({{ location_counts.Mumbai|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-loc" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="location" value="Hyderabad" {% if "Hyderabad" in selected_locations %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Hyderabad</span>
-                                <span class="rj-count">({{ location_counts.Hyderabad|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="location" value="Pune" {% if "Pune" in selected_locations %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Pune</span>
-                                <span class="rj-count">({{ location_counts.Pune|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="location" value="Chennai" {% if "Chennai" in selected_locations %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Chennai</span>
-                                <span class="rj-count">({{ location_counts.Chennai|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" id="toggle-loc" onclick="toggleMore('loc')">View more</span>
-                    </div>
+            </div>
+ 
+            <!-- ── DEPARTMENT ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('dept')">
+                    <span>Department</span>
+                    <i class="fa fa-chevron-up" id="icon-dept"></i>
                 </div>
-
-                <!-- Salary -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('sal')">
-                        <span>Salary</span>
-                        <i class="fa fa-chevron-up" id="icon-sal"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-sal">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="salary" value="0-3" {% if "0-3" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                            <span>0-3 Lakhs</span>
-                            <span class="rj-count">({{ salary_counts|get_item:"0-3"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="salary" value="3-6" {% if "3-6" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                            <span>3-6 Lakhs</span>
-                            <span class="rj-count">({{ salary_counts|get_item:"3-6"|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-sal" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="salary" value="6-10" {% if "6-10" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>6-10 Lakhs</span>
-                                <span class="rj-count">({{ salary_counts|get_item:"6-10"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="salary" value="10-15" {% if "10-15" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>10-15 Lakhs</span>
-                                <span class="rj-count">({{ salary_counts|get_item:"10-15"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="salary" value="15-20" {% if "15-20" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>15-20 Lakhs</span>
-                                <span class="rj-count">({{ salary_counts|get_item:"15-20"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="salary" value="20-25" {% if "20-25" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>20-25 Lakhs</span>
-                                <span class="rj-count">({{ salary_counts|get_item:"20-25"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="salary" value="25-30" {% if "25-30" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>25-30 Lakhs</span>
-                                <span class="rj-count">({{ salary_counts|get_item:"25-30"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="salary" value="30-35" {% if "30-35" in selected_salaries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>30-35 Lakhs</span>
-                                <span class="rj-count">({{ salary_counts|get_item:"30-35"|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" id="toggle-sal" onclick="toggleMore('sal')">View more</span>
-                    </div>
+                <div class="rj-sec-body" id="body-dept">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="category" value="IT"
+                            {% if 'IT' in selected_categories %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Engineering - Software</span>
+                        <span class="rj-count">({{ category_counts.IT|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="category" value="Sales"
+                            {% if 'Sales' in selected_categories %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Sales &amp; Business</span>
+                        <span class="rj-count">({{ category_counts.Sales|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="category" value="HR"
+                            {% if 'HR' in selected_categories %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Human Resources</span>
+                        <span class="rj-count">({{ category_counts.HR|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="category" value="General"
+                            {% if 'General' in selected_categories %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>General</span>
+                        <span class="rj-count">({{ category_counts.General|default:0 }})</span>
+                    </label>
                 </div>
-
-                <!-- Company Type -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('ctype')">
-                        <span>Company type</span>
-                        <i class="fa fa-chevron-up" id="icon-ctype"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-ctype">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company_type" value="Foreign MNC" {% if "Foreign MNC" in selected_company_types %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Foreign MNC</span>
-                            <span class="rj-count">({{ company_type_counts|get_item:"Foreign MNC"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company_type" value="Corporate" {% if "Corporate" in selected_company_types %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Corporate</span>
-                            <span class="rj-count">({{ company_type_counts|get_item:"Corporate"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company_type" value="Indian MNC" {% if "Indian MNC" in selected_company_types %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Indian MNC</span>
-                            <span class="rj-count">({{ company_type_counts|get_item:"Indian MNC"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company_type" value="Startup" {% if "Startup" in selected_company_types %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Startup</span>
-                            <span class="rj-count">({{ company_type_counts|get_item:"Startup"|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-ctype" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="company_type" value="SME" {% if "SME" in selected_company_types %}checked{% endif %} onchange="this.form.submit()">
-                                <span>SME</span>
-                                <span class="rj-count">({{ company_type_counts|get_item:"SME"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="company_type" value="Public Sector" {% if "Public Sector" in selected_company_types %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Public Sector</span>
-                                <span class="rj-count">({{ company_type_counts|get_item:"Public Sector"|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" id="toggle-ctype" onclick="toggleMore('ctype')">View more</span>
-                    </div>
+            </div>
+ 
+            <!-- ── LOCATION ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('loc')">
+                    <span>Location</span>
+                    <i class="fa fa-chevron-up" id="icon-loc"></i>
                 </div>
-
-                <!-- Role Category -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('role')">
-                        <span>Role category</span>
-                        <i class="fa fa-chevron-up" id="icon-role"></i>
+                <div class="rj-sec-body" id="body-loc">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="location" value="Bangalore"
+                            {% if 'Bangalore' in selected_locations %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Bengaluru</span>
+                        <span class="rj-count">({{ location_counts.Bangalore|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="location" value="Delhi"
+                            {% if 'Delhi' in selected_locations %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Delhi / NCR</span>
+                        <span class="rj-count">({{ location_counts.Delhi|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="location" value="Mumbai"
+                            {% if 'Mumbai' in selected_locations %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Mumbai</span>
+                        <span class="rj-count">({{ location_counts.Mumbai|default:0 }})</span>
+                    </label>
+                    <div class="rj-more-items" id="more-loc" style="display:none;">
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="location" value="Hyderabad"
+                                {% if 'Hyderabad' in selected_locations %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>Hyderabad</span>
+                            <span class="rj-count">({{ location_counts.Hyderabad|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="location" value="Pune"
+                                {% if 'Pune' in selected_locations %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>Pune</span>
+                            <span class="rj-count">({{ location_counts.Pune|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="location" value="Chennai"
+                                {% if 'Chennai' in selected_locations %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>Chennai</span>
+                            <span class="rj-count">({{ location_counts.Chennai|default:0 }})</span>
+                        </label>
                     </div>
-                    <div class="rj-sec-body" id="body-role">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="role_category" value="Software Developer" {% if "Software Developer" in selected_roles %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Software Develop...</span>
-                            <span class="rj-count">({{ role_counts|get_item:"Software Developer"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="role_category" value="Retail & B2C Sales" {% if "Retail & B2C Sales" in selected_roles %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Retail &amp; B2C Sales</span>
-                            <span class="rj-count">({{ role_counts|get_item:"Retail & B2C Sales"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="role_category" value="BD / Pre Sales" {% if "BD / Pre Sales" in selected_roles %}checked{% endif %} onchange="this.form.submit()">
-                            <span>BD / Pre Sales</span>
-                            <span class="rj-count">({{ role_counts|get_item:"BD / Pre Sales"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="role_category" value="Quality Assurance" {% if "Quality Assurance" in selected_roles %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Quality Assurance...</span>
-                            <span class="rj-count">({{ role_counts|get_item:"Quality Assurance"|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-role" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="role_category" value="IT Networking" {% if "IT Networking" in selected_roles %}checked{% endif %} onchange="this.form.submit()">
-                                <span>IT Networking</span>
-                                <span class="rj-count">({{ role_counts|get_item:"IT Networking"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="role_category" value="HR / Admin" {% if "HR / Admin" in selected_roles %}checked{% endif %} onchange="this.form.submit()">
-                                <span>HR / Admin</span>
-                                <span class="rj-count">({{ role_counts|get_item:"HR / Admin"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="role_category" value="Finance" {% if "Finance" in selected_roles %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Finance</span>
-                                <span class="rj-count">({{ role_counts|get_item:"Finance"|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" id="toggle-role" onclick="toggleMore('role')">View more</span>
-                    </div>
+                    <span class="rj-view-more" id="toggle-loc" onclick="toggleMore('loc')">View more</span>
                 </div>
-
-                <!-- Stipend -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('stip')">
-                        <span>Stipend</span>
-                        <i class="fa fa-chevron-up" id="icon-stip"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-stip">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="stipend" value="unpaid" {% if "unpaid" in selected_stipends %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Unpaid</span>
-                            <span class="rj-count">({{ stipend_counts|get_item:"unpaid"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="stipend" value="0-10" {% if "0-10" in selected_stipends %}checked{% endif %} onchange="this.form.submit()">
-                            <span>0-10k</span>
-                            <span class="rj-count">({{ stipend_counts|get_item:"0-10"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="stipend" value="10-20" {% if "10-20" in selected_stipends %}checked{% endif %} onchange="this.form.submit()">
-                            <span>10k-20k</span>
-                            <span class="rj-count">({{ stipend_counts|get_item:"10-20"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="stipend" value="20-30" {% if "20-30" in selected_stipends %}checked{% endif %} onchange="this.form.submit()">
-                            <span>20k-30k</span>
-                            <span class="rj-count">({{ stipend_counts|get_item:"20-30"|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-stip" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="stipend" value="30-50" {% if "30-50" in selected_stipends %}checked{% endif %} onchange="this.form.submit()">
-                                <span>30k-50k</span>
-                                <span class="rj-count">({{ stipend_counts|get_item:"30-50"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="stipend" value="50+" {% if "50+" in selected_stipends %}checked{% endif %} onchange="this.form.submit()">
-                                <span>50k+</span>
-                                <span class="rj-count">({{ stipend_counts|get_item:"50+"|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" onclick="toggleMore('stip')">View More</span>
-                    </div>
+            </div>
+ 
+            <!-- ── SALARY ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('sal')">
+                    <span>Salary</span>
+                    <i class="fa fa-chevron-up" id="icon-sal"></i>
                 </div>
-
-                <!-- Duration -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('dur')">
-                        <span>Duration</span>
-                        <i class="fa fa-chevron-up" id="icon-dur"></i>
+                <div class="rj-sec-body" id="body-sal">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="salary" value="0-3"
+                            {% if '0-3' in selected_salaries %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>0-3 Lakhs</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"0-3"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="salary" value="3-6"
+                            {% if '3-6' in selected_salaries %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>3-6 Lakhs</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"3-6"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="salary" value="6-10"
+                            {% if '6-10' in selected_salaries %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>6-10 Lakhs</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"6-10"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="salary" value="10-15"
+                            {% if '10-15' in selected_salaries %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>10-15 Lakhs</span>
+                        <span class="rj-count">({{ salary_counts|get_item:"10-15"|default:0 }})</span>
+                    </label>
+                    <div class="rj-more-items" id="more-sal" style="display:none;">
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="15-20"
+                                {% if '15-20' in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>15-20 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"15-20"|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="20-25"
+                                {% if '20-25' in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>20-25 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"20-25"|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="25-30"
+                                {% if '25-30' in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>25-30 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"25-30"|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="salary" value="30-35"
+                                {% if '30-35' in selected_salaries %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>30-35 Lakhs</span>
+                            <span class="rj-count">({{ salary_counts|get_item:"30-35"|default:0 }})</span>
+                        </label>
                     </div>
-                    <div class="rj-sec-body" id="body-dur">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="duration" value="1" {% if "1" in selected_durations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>1 Month</span>
-                            <span class="rj-count">({{ duration_counts|get_item:"1"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="duration" value="2" {% if "2" in selected_durations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>2 Months</span>
-                            <span class="rj-count">({{ duration_counts|get_item:"2"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="duration" value="3" {% if "3" in selected_durations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>3 Months</span>
-                            <span class="rj-count">({{ duration_counts|get_item:"3"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="duration" value="4" {% if "4" in selected_durations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>4 Months</span>
-                            <span class="rj-count">({{ duration_counts|get_item:"4"|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-dur" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="duration" value="5" {% if "5" in selected_durations %}checked{% endif %} onchange="this.form.submit()">
-                                <span>5 Months</span>
-                                <span class="rj-count">({{ duration_counts|get_item:"5"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="duration" value="6" {% if "6" in selected_durations %}checked{% endif %} onchange="this.form.submit()">
-                                <span>6 Months</span>
-                                <span class="rj-count">({{ duration_counts|get_item:"6"|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" onclick="toggleMore('dur')">View More</span>
-                    </div>
+                    <span class="rj-view-more" id="toggle-sal" onclick="toggleMore('sal')">View more</span>
                 </div>
-
-                <!-- Education -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('edu')">
-                        <span>Education</span>
-                        <i class="fa fa-chevron-up" id="icon-edu"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-edu">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="education" value="PG" {% if "PG" in selected_educations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Any Postgraduate</span>
-                            <span class="rj-count">({{ education_counts|get_item:"PG"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="education" value="MBA" {% if "MBA" in selected_educations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>MBA/PGDM</span>
-                            <span class="rj-count">({{ education_counts|get_item:"MBA"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="education" value="GRAD" {% if "GRAD" in selected_educations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Any Graduate</span>
-                            <span class="rj-count">({{ education_counts|get_item:"GRAD"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="education" value="BTECH" {% if "BTECH" in selected_educations %}checked{% endif %} onchange="this.form.submit()">
-                            <span>B.Tech/B.E.</span>
-                            <span class="rj-count">({{ education_counts|get_item:"BTECH"|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-edu" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="education" value="DIP" {% if "DIP" in selected_educations %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Diploma</span>
-                                <span class="rj-count">({{ education_counts|get_item:"DIP"|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="education" value="12TH" {% if "12TH" in selected_educations %}checked{% endif %} onchange="this.form.submit()">
-                                <span>12th Pass</span>
-                                <span class="rj-count">({{ education_counts|get_item:"12TH"|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" onclick="toggleMore('edu')">View More</span>
-                    </div>
+            </div>
+ 
+            <!-- ── COMPANY TYPE ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('ctype')">
+                    <span>Company type</span>
+                    <i class="fa fa-chevron-up" id="icon-ctype"></i>
                 </div>
-
-                <!-- Posted By -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('posted')">
-                        <span>Posted by</span>
-                        <i class="fa fa-chevron-up" id="icon-posted"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-posted">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="posted_by" value="COMPANY" {% if "COMPANY" in selected_posted %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Company Jobs</span>
-                            <span class="rj-count">({{ posted_by_counts.Company|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="posted_by" value="CONSULTANT" {% if "CONSULTANT" in selected_posted %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Consultant Jobs</span>
-                            <span class="rj-count">({{ posted_by_counts.Consultant|default:0 }})</span>
-                        </label>
-                    </div>
+                <div class="rj-sec-body" id="body-ctype">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="company_type" value="MNC"
+                            {% if 'MNC' in selected_company_types %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>MNC</span>
+                        <span class="rj-count">({{ company_type_counts.MNC|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="company_type" value="Startup"
+                            {% if 'Startup' in selected_company_types %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Startup</span>
+                        <span class="rj-count">({{ company_type_counts.Startup|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="company_type" value="Product"
+                            {% if 'Product' in selected_company_types %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Product Based</span>
+                        <span class="rj-count">({{ company_type_counts.Product|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="company_type" value="Unicorn"
+                            {% if 'Unicorn' in selected_company_types %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Unicorn</span>
+                        <span class="rj-count">({{ company_type_counts.Unicorn|default:0 }})</span>
+                    </label>
                 </div>
-
-                <!-- Industry -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('ind')">
-                        <span>Industry</span>
-                        <i class="fa fa-chevron-up" id="icon-ind"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-ind">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="industry" value="IT" {% if "IT" in selected_industries %}checked{% endif %} onchange="this.form.submit()">
-                            <span>IT Services &amp; Consulting</span>
-                            <span class="rj-count">({{ industry_counts.IT|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="industry" value="RECRUIT" {% if "RECRUIT" in selected_industries %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Recruitment / Staffing</span>
-                            <span class="rj-count">({{ industry_counts.RECRUIT|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="industry" value="EDU" {% if "EDU" in selected_industries %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Education / Training</span>
-                            <span class="rj-count">({{ industry_counts.EDU|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="industry" value="BPO" {% if "BPO" in selected_industries %}checked{% endif %} onchange="this.form.submit()">
-                            <span>BPM / BPO</span>
-                            <span class="rj-count">({{ industry_counts.BPO|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-ind" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="industry" value="HEALTH" {% if "HEALTH" in selected_industries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Healthcare</span>
-                                <span class="rj-count">({{ industry_counts.HEALTH|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="industry" value="BFSI" {% if "BFSI" in selected_industries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>BFSI</span>
-                                <span class="rj-count">({{ industry_counts.BFSI|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="industry" value="RETAIL" {% if "RETAIL" in selected_industries %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Retail</span>
-                                <span class="rj-count">({{ industry_counts.RETAIL|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" onclick="toggleMore('ind')">View More</span>
-                    </div>
+            </div>
+ 
+            <!-- ── ROLE CATEGORY ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('role')">
+                    <span>Role category</span>
+                    <i class="fa fa-chevron-up" id="icon-role"></i>
                 </div>
-
-                <!-- Top Companies -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('topc')">
-                        <span>Top companies</span>
-                        <i class="fa fa-chevron-up" id="icon-topc"></i>
+                <div class="rj-sec-body" id="body-role">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="role_category" value="Software Developer"
+                            {% if "Software Developer" in selected_roles %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Software Developer</span>
+                        <span class="rj-count">({{ role_counts|get_item:"Software Developer"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="role_category" value="Retail & B2C Sales"
+                            {% if "Retail & B2C Sales" in selected_roles %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Retail &amp; B2C Sales</span>
+                        <span class="rj-count">({{ role_counts|get_item:"Retail & B2C Sales"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="role_category" value="BD / Pre Sales"
+                            {% if "BD / Pre Sales" in selected_roles %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>BD / Pre Sales</span>
+                        <span class="rj-count">({{ role_counts|get_item:"BD / Pre Sales"|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="role_category" value="Quality Assurance"
+                            {% if "Quality Assurance" in selected_roles %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Quality Assurance</span>
+                        <span class="rj-count">({{ role_counts|get_item:"Quality Assurance"|default:0 }})</span>
+                    </label>
+                    <div class="rj-more-items" id="more-role" style="display:none;">
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="role_category" value="IT Networking"
+                                {% if "IT Networking" in selected_roles %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>IT Networking</span>
+                            <span class="rj-count">({{ role_counts|get_item:"IT Networking"|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="role_category" value="HR / Admin"
+                                {% if "HR / Admin" in selected_roles %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>HR / Admin</span>
+                            <span class="rj-count">({{ role_counts|get_item:"HR / Admin"|default:0 }})</span>
+                        </label>
+                        <label class="rj-cb-row">
+                            <input type="checkbox" name="role_category" value="Finance"
+                                {% if "Finance" in selected_roles %}checked{% endif %}
+                                onchange="this.form.submit()">
+                            <span>Finance</span>
+                            <span class="rj-count">({{ role_counts|get_item:"Finance"|default:0 }})</span>
+                        </label>
                     </div>
-                    <div class="rj-sec-body" id="body-topc">
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company" value="Accenture" {% if "Accenture" in selected_companies %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Accenture</span>
-                            <span class="rj-count">({{ company_counts.Accenture|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company" value="Bajaj Finance" {% if "Bajaj Finance" in selected_companies %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Bajaj Finance</span>
-                            <span class="rj-count">({{ company_counts|get_item:"Bajaj Finance"|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company" value="EY" {% if "EY" in selected_companies %}checked{% endif %} onchange="this.form.submit()">
-                            <span>EY</span>
-                            <span class="rj-count">({{ company_counts.EY|default:0 }})</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="checkbox" name="company" value="TCS" {% if "TCS" in selected_companies %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Tata Consultancy S...</span>
-                            <span class="rj-count">({{ company_counts.TCS|default:0 }})</span>
-                        </label>
-                        <div class="rj-more-items" id="more-topc" style="display:none;">
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="company" value="Infosys" {% if "Infosys" in selected_companies %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Infosys</span>
-                                <span class="rj-count">({{ company_counts.Infosys|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="company" value="Wipro" {% if "Wipro" in selected_companies %}checked{% endif %} onchange="this.form.submit()">
-                                <span>Wipro</span>
-                                <span class="rj-count">({{ company_counts.Wipro|default:0 }})</span>
-                            </label>
-                            <label class="rj-cb-row">
-                                <input type="checkbox" name="company" value="HCL" {% if "HCL" in selected_companies %}checked{% endif %} onchange="this.form.submit()">
-                                <span>HCL</span>
-                                <span class="rj-count">({{ company_counts.HCL|default:0 }})</span>
-                            </label>
-                        </div>
-                        <span class="rj-view-more" onclick="toggleMore('topc')">View More</span>
-                    </div>
+                    <span class="rj-view-more" id="toggle-role" onclick="toggleMore('role')">View more</span>
                 </div>
-
-                <!-- Freshness -->
-                <div class="rj-filter-section">
-                    <div class="rj-sec-header" onclick="toggleSection('fresh')">
-                        <span>Freshness</span>
-                        <i class="fa fa-chevron-up" id="icon-fresh"></i>
-                    </div>
-                    <div class="rj-sec-body" id="body-fresh">
-                        <label class="rj-cb-row">
-                            <input type="radio" name="freshness" value="1" {% if selected_freshness == "1" %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Last 1 day</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="radio" name="freshness" value="3" {% if selected_freshness == "3" %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Last 3 days</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="radio" name="freshness" value="7" {% if selected_freshness == "7" %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Last 7 days</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="radio" name="freshness" value="15" {% if selected_freshness == "15" %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Last 15 days</span>
-                        </label>
-                        <label class="rj-cb-row">
-                            <input type="radio" name="freshness" value="30" {% if selected_freshness == "30" %}checked{% endif %} onchange="this.form.submit()">
-                            <span>Last 30 days</span>
-                        </label>
-                    </div>
+            </div>
+ 
+            <!-- ── EDUCATION ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('edu')">
+                    <span>Education</span>
+                    <i class="fa fa-chevron-up" id="icon-edu"></i>
                 </div>
-
-            </form>
-        </aside>
-        
-
-        <!-- ══════════════════════
-             COLUMN 2 — JOB CARDS + PAGINATION
-        ══════════════════════ -->
-        <main class="rj-col rj-col--jobs">
-
+                <div class="rj-sec-body" id="body-edu">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="education" value="BTECH"
+                            {% if 'BTECH' in selected_educations %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>B.Tech / B.E.</span>
+                        <span class="rj-count">({{ education_counts.BTECH|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="education" value="GRAD"
+                            {% if 'GRAD' in selected_educations %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Any Graduate</span>
+                        <span class="rj-count">({{ education_counts.GRAD|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="education" value="PG"
+                            {% if 'PG' in selected_educations %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Any Postgraduate</span>
+                        <span class="rj-count">({{ education_counts.PG|default:0 }})</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="education" value="MBA"
+                            {% if 'MBA' in selected_educations %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>MBA / PGDM</span>
+                        <span class="rj-count">({{ education_counts.MBA|default:0 }})</span>
+                    </label>
+                </div>
+            </div>
+ 
+            <!-- ── POSTED BY ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('posted')">
+                    <span>Posted by</span>
+                    <i class="fa fa-chevron-up" id="icon-posted"></i>
+                </div>
+                <div class="rj-sec-body" id="body-posted">
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="posted_by" value="COMPANY"
+                            {% if 'COMPANY' in selected_posted %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Company Jobs</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="checkbox" name="posted_by" value="CONSULTANT"
+                            {% if 'CONSULTANT' in selected_posted %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Consultant Jobs</span>
+                    </label>
+                </div>
+            </div>
+ 
+            <!-- ── FRESHNESS ── -->
+            <div class="rj-filter-section">
+                <div class="rj-sec-header" onclick="toggleSection('fresh')">
+                    <span>Freshness</span>
+                    <i class="fa fa-chevron-up" id="icon-fresh"></i>
+                </div>
+                <div class="rj-sec-body" id="body-fresh">
+                    <label class="rj-cb-row">
+                        <input type="radio" name="freshness" value="1"
+                            {% if selected_freshness == '1' %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Last 1 day</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="radio" name="freshness" value="3"
+                            {% if selected_freshness == '3' %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Last 3 days</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="radio" name="freshness" value="7"
+                            {% if selected_freshness == '7' %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Last 7 days</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="radio" name="freshness" value="15"
+                            {% if selected_freshness == '15' %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Last 15 days</span>
+                    </label>
+                    <label class="rj-cb-row">
+                        <input type="radio" name="freshness" value="30"
+                            {% if selected_freshness == '30' %}checked{% endif %}
+                            onchange="this.form.submit()">
+                        <span>Last 30 days</span>
+                    </label>
+                </div>
+            </div>
+ 
+            <!-- ── CLEAR ALL BUTTON ── -->
+            {% if selected_work_modes or selected_categories or selected_locations or selected_salaries or selected_company_types or selected_roles or selected_educations or selected_freshness %}
+            <div style="padding: 12px 16px;">
+                <a href="{% url 'it_jobs' %}" class="rj-clear-all-btn"
+                   style="display:block;text-align:center;padding:10px;background:#fee2e2;color:#dc2626;
+                          border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">
+                    <i class="fa fa-times"></i> Clear All Filters
+                </a>
+            </div>
+            {% endif %}
+ 
+        </form>
+    </aside>
+ 
+    <!-- ══════════════════════
+         COLUMN 2 — JOB CARDS (REAL DB DATA)
+    ══════════════════════ -->
+    <main class="rj-col rj-col--jobs" id="jobList">
+ 
+        {% if jobs %}
             {% for job in jobs %}
-            <div class="rj-job-card"
-                data-workmode="{{ job.work_mode|default:'' }}"
-                data-category="{{ job.category|default:'' }}"
-                data-salary="{{ job.salary|default:'' }}">
-
-                <!-- Logo -->
+            <div class="rj-job-card">
+ 
+                <!-- LOGO -->
                 <div class="rj-card-logo">
                     {% if job.logo %}
-                    <img src="{{ job.logo.url }}" class="rj-logo-img" alt="{{ job.company }}">
+                        <img src="{{ job.logo.url }}" class="rj-logo-img" alt="{{ job.company }}">
                     {% else %}
-                    <div class="rj-logo-placeholder">{{ job.company|default:"NA"|slice:":2"|upper }}</div>
+                        <div class="rj-logo-placeholder">
+                            {{ job.company|slice:":2"|upper }}
+                        </div>
                     {% endif %}
                 </div>
-
-                <!-- Body -->
+ 
+                <!-- BODY -->
                 <div class="rj-card-body">
-                    <a href="#" class="rj-job-title-link">
-                        <div class="rj-job-title">{{ job.title|default:"No Title" }}</div>
+ 
+                    <a href="{% url 'job_detail' job.id %}" class="rj-job-title-link">
+                        <div class="rj-job-title">{{ job.title }}</div>
                     </a>
-                    <a href="#" class="rj-company-link">
-                        <div class="rj-company-name">
-                            {{ job.company|default:"Unknown Company" }}
-                            <span class="rj-star-rating">
-                                <i class="fa-solid fa-star rj-star-icon"></i>
-                                <span class="rj-star-value">{{ job.rating }}</span>
-                                <span class="rj-review-count">{{ job.review_count }} Reviews</span>
-                            </span>
-                        </div>
-                    </a>
-                    <div class="rj-meta-row">
-                        <span><i class="fa-solid fa-briefcase"></i>
-                            <a href="#" class="rj-meta-link">{{ job.experience|default:"Not specified" }}</a>
+ 
+                    <div class="rj-company-name">
+                        {{ job.company }}
+                        {% if job.rating %}
+                        <span class="rj-star-rating">
+                            <i class="fa-solid fa-star rj-star-icon"></i>
+                            <span class="rj-star-value">{{ job.rating }}</span>
+                            <span class="rj-review-count">{{ job.review_count }} Reviews</span>
                         </span>
-                        <span><i class="fa-solid fa-indian-rupee-sign"></i>
-                            <a href="#" class="rj-meta-link">{{ job.salary|default:"Not disclosed" }}</a>
-                        </span>
-                        <span><i class="fa-solid fa-location-dot"></i>
-                            <a href="#" class="rj-meta-link">{{ job.work_mode }} - {{ job.location }}</a>
-                        </span>
-                        
+                        {% endif %}
                     </div>
+ 
+                    <div class="rj-meta-row">
+                        <span>
+                            <i class="fa-solid fa-briefcase"></i>
+                            {{ job.experience|default:"Not specified" }}
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            {% if job.min_salary and job.max_salary %}
+                                {{ job.min_salary }}–{{ job.max_salary }} LPA
+                            {% elif job.min_salary %}
+                                {{ job.min_salary }}+ LPA
+                            {% elif job.max_salary %}
+                                Upto {{ job.max_salary }} LPA
+                            {% else %}
+                                Not disclosed
+                            {% endif %}
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ job.work_mode }} — {{ job.location }}
+                        </span>
+                    </div>
+ 
                     {% if job.conditions %}
                     <div class="rj-condition-row">
-                        <a href="#" class="rj-condition-link">
-                            <span><i class="fa-solid fa-hands"></i> {{ job.conditions }}</span>
-                        </a>
+                        <span><i class="fa-solid fa-hands"></i> {{ job.conditions }}</span>
                     </div>
                     {% endif %}
+ 
                     <div class="rj-skills-row">
                         {% if job.skills %}
                             {% for skill in job.skills_list %}
-                            <a href="#" class="rj-skill">{{ skill }}</a>
+                                <span class="rj-skill">{{ skill }}</span>
                             {% endfor %}
                         {% else %}
-                        <span class="rj-skill">No skills listed</span>
+                            <span class="rj-skill">No skills listed</span>
                         {% endif %}
                     </div>
+ 
                 </div>
-
-                <!-- Footer -->
+ 
+                <!-- FOOTER -->
                 <div class="rj-card-footer">
-                    <span class="rj-posted">posted {{ job.created_at|naturaltime }}</span>
-                    <!-- REPLACED BUTTON WITH ANCHOR -->
-                     <div class="rj-card-actions">
-                    <a href="{% url 'apply_job' job.id %}" class="apply-btn">Apply Now</a>
-                    <button class="rj-save-btn" 
-                        data-job-id="{{ job.id }}"
-                        data-saved="false"
-                        onclick="toggleSave(this)">
-                        <i class="fa-regular fa-bookmark"></i>
-                    <span class="rj-save-text">Save</span>
-                    </button>
-                  </div>  
-                </div>
-            </div>
-            {% empty %}
-            <p class="rj-empty-msg">No remote jobs available at the moment.</p>
-            {% endfor %}
-
-            <!-- No Results -->
-            <div class="rj-no-results" id="rjNoResults">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                No jobs match your selected filters. Try removing some filters.
-            </div>
-
-            <!-- PAGINATION — lives inside column 2 only -->
-            <div class="rj-pagination" id="rjPagination"></div>
-
-        </main>
-
-        <!-- ══════════════════════
-             COLUMN 3 — PROMO BOX
-        ══════════════════════ -->
-        <aside class="rj-col rj-col--promo">
-            <div class="rj-promo-box">
-                <div class="rj-promo-logo-wrap">
-                    <div class="rj-promo-logo">
-                        <span class="rj-logo-naukri">naukri</span>
-                        <span class="rj-logo-ff">FAST<span class="rj-ff-accent">FORWARD</span></span>
-                        <span class="rj-logo-tagline">Speed Up Your Career</span>
+                    <span class="rj-posted">
+                        Posted {{ job.created_at|naturaltime }}
+                    </span>
+ 
+                    <div class="rj-card-actions">
+ 
+                        <!-- ══ APPLY BUTTON ══
+                             Logic:
+                             - Not logged in → redirect to login
+                             - Employer → disabled (can't apply)
+                             - Candidate → apply link
+                        -->
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.userprofile.role == 'candidate' %}
+                                <a href="{% url 'apply_job' job.id %}" class="rj-apply-btn">
+                                    <i class="fa fa-paper-plane"></i> Apply Now
+                                </a>
+                            {% else %}
+                                <span class="rj-apply-btn" style="opacity:0.5;cursor:not-allowed;"
+                                      title="Employers cannot apply for jobs">
+                                    <i class="fa fa-ban"></i> Employers can't apply
+                                </span>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}?next={% url 'it_jobs' %}" class="rj-apply-btn login-required">
+                                <i class="fa fa-sign-in-alt"></i> Login to Apply
+                            </a>
+                        {% endif %}
+ 
+                        <!-- ══ SAVE BUTTON ══
+                             Logic:
+                             - Not logged in → redirect to login
+                             - Employer → disabled
+                             - Candidate → AJAX save to DB
+                        -->
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.userprofile.role == 'candidate' %}
+                                <button class="rj-save-btn"
+                                    data-job-id="{{ job.id }}"
+                                    data-save-url="{% url 'save_job' job.id %}"
+                                    onclick="toggleSave(this)">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                    <span class="rj-save-text">Save</span>
+                                </button>
+                            {% else %}
+                                <button class="rj-save-btn" disabled style="opacity:0.5;cursor:not-allowed;">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                    <span class="rj-save-text">Save</span>
+                                </button>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}" class="rj-save-btn" style="text-decoration:none;">
+                                <i class="fa-regular fa-bookmark"></i>
+                                <span class="rj-save-text">Save</span>
+                            </a>
+                        {% endif %}
+ 
                     </div>
                 </div>
-                <div class="rj-promo-body">
-                    <h3 class="rj-promo-heading">Get 3X more profile views from recruiters</h3>
-                    <p class="rj-promo-text">Increase your chances of callback with Naukri FastForward</p>
-                    <a href="#" class="rj-promo-link">Know More</a>
+ 
+            </div>
+            {% endfor %}
+ 
+        {% else %}
+            <!-- EMPTY STATE — No IT Jobs in DB matching filters -->
+            <div class="rj-empty-state">
+                <i class="fa fa-magnifying-glass"></i>
+                <h3>No IT Jobs Found</h3>
+                <p>
+                    {% if selected_work_modes or selected_categories or selected_locations %}
+                        No jobs match your current filters. Try removing some filters.
+                        <br><a href="{% url 'it_jobs' %}" style="color:#275df5;font-weight:700;">Clear all filters</a>
+                    {% else %}
+                        No IT jobs have been posted yet. Check back soon!
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
+ 
+        <!-- PAGINATION -->
+        <div class="rj-pagination" id="rjPagination"></div>
+ 
+    </main>
+ 
+    <!-- ══════════════════════
+         COLUMN 3 — PROMO BOX
+    ══════════════════════ -->
+    <aside class="rj-col rj-col--promo">
+        <div class="rj-promo-box">
+            <div class="rj-promo-logo-wrap">
+                <div class="rj-promo-logo">
+                    <span class="rj-logo-naukri">naukri</span>
+                    <span class="rj-logo-ff">FAST<span class="rj-ff-accent">FORWARD</span></span>
+                    <span class="rj-logo-tagline">Speed Up Your Career</span>
                 </div>
             </div>
-        </aside>
-
-    </div><!-- end rj-page-wrap -->
-
-    
-
-    <!-- TOAST -->
-    <div class="rj-toast" id="rjToast">
-        <i class="fa-solid fa-bookmark" id="rjToastIcon"></i>
-        <span id="rjToastMsg">Saved successfully!</span>
+            <div class="rj-promo-body">
+                <h3 class="rj-promo-heading">Get 3X more profile views from recruiters</h3>
+                <p class="rj-promo-text">Increase your chances of callback with Naukri FastForward</p>
+                <a href="#" class="rj-promo-link">Know More</a>
+            </div>
+        </div>
+ 
+        {% if request.user.is_authenticated and request.user.userprofile.role == 'candidate' %}
+        <div class="rj-promo-box" style="margin-top:16px;">
+            <div class="rj-promo-body">
+                <h3 class="rj-promo-heading" style="font-size:15px;">
+                    <i class="fa fa-bookmark" style="color:#275df5;"></i> Saved Jobs
+                </h3>
+                <p class="rj-promo-text">View all your bookmarked IT jobs.</p>
+                <a href="{% url 'saved_jobs' %}" class="rj-promo-link">View Saved Jobs →</a>
+            </div>
+        </div>
+ 
+        <div class="rj-promo-box" style="margin-top:16px;">
+            <div class="rj-promo-body">
+                <h3 class="rj-promo-heading" style="font-size:15px;">
+                    <i class="fa fa-paper-plane" style="color:#10b981;"></i> Applied Jobs
+                </h3>
+                <p class="rj-promo-text">Track your IT job applications.</p>
+                <a href="{% url 'applied_jobs' %}" class="rj-promo-link">View Applications →</a>
+            </div>
+        </div>
+        {% endif %}
+ 
+    </aside>
+ 
+</div><!-- end rj-page-wrap -->
+ 
+<!-- ── TOAST ── -->
+<div class="rj-toast" id="rjToast">
+    <i class="fa-solid fa-bookmark" id="rjToastIcon"></i>
+    <span id="rjToastMsg">Saved successfully!</span>
+</div>
+ 
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer class="rj-footer">
+    <div class="rj-footer-container">
+        <div class="rj-footer-left">
+            <div class="rj-footer-logo-text">
+                <span class="rj-footer-logo-i">i</span>naukri
+            </div>
+            <p class="rj-footer-social-label">Connect with us</p>
+            <div class="rj-social-icons">
+                <a href="#" class="rj-social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="rj-social-btn"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="rj-social-btn"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="rj-social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="#" class="rj-social-btn"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="rj-footer-links">
+            <div class="rj-footer-col">
+                <p class="rj-footer-col-head">Company</p>
+                <a href="#">About us</a><a href="#">Careers</a>
+                <a href="#">Employer home</a><a href="#">Sitemap</a>
+            </div>
+            <div class="rj-footer-col">
+                <p class="rj-footer-col-head">Support</p>
+                <a href="#">Help center</a><a href="#">Grievances</a>
+                <a href="#">Report issue</a>
+            </div>
+            <div class="rj-footer-col">
+                <p class="rj-footer-col-head">Legal</p>
+                <a href="#">Privacy policy</a><a href="#">Terms &amp; conditions</a>
+                <a href="#">Fraud alert</a>
+            </div>
+            <div class="rj-footer-col">
+                <p class="rj-footer-col-head">For Job Seekers</p>
+                <a href="{% url 'all_jobs' %}">Search jobs</a>
+                <a href="{% url 'saved_jobs' %}">Saved jobs</a>
+                <a href="{% url 'applied_jobs' %}">Applied jobs</a>
+            </div>
+            <div class="rj-footer-col">
+                <p class="rj-footer-col-head">For Employers</p>
+                <a href="{% url 'post_job' %}">Post a job</a>
+                <a href="{% url 'employer_login' %}">Employer login</a>
+                <a href="{% url 'employer_dashboard' %}">Dashboard</a>
+            </div>
+        </div>
     </div>
-
-    <!-- ═══════════════════════════════════════
-         FOOTER
-    ═══════════════════════════════════════ -->
-    <footer class="rj-footer">
-        <div class="rj-footer-container">
-            <div class="rj-footer-left">
-                <div class="rj-footer-logo-text">
-                    <span class="rj-footer-logo-i">i</span>naukri
-                </div>
-                <p class="rj-footer-social-label">Connect with us</p>
-                <div class="rj-social-icons">
-                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="#" class="rj-social-btn"><i class="fa-brands fa-youtube"></i></a>
-                </div>
-            </div>
-            <div class="rj-footer-links">
-                <div class="rj-footer-col">
-                    <p class="rj-footer-col-head">Company</p>
-                    <a href="#">About us</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Employer home</a>
-                    <a href="#">Sitemap</a>
-                    <a href="#">Credits</a>
-                </div>
-                <div class="rj-footer-col">
-                    <p class="rj-footer-col-head">Support</p>
-                    <a href="#">Help center</a>
-                    <a href="#">Summons/Notices</a>
-                    <a href="#">Grievances</a>
-                    <a href="#">Report issue</a>
-                </div>
-                <div class="rj-footer-col">
-                    <p class="rj-footer-col-head">Legal</p>
-                    <a href="#">Privacy policy</a>
-                    <a href="#">Terms &amp; conditions</a>
-                    <a href="#">Fraud alert</a>
-                    <a href="#">Trust &amp; safety</a>
-                </div>
-                <div class="rj-footer-col">
-                    <p class="rj-footer-col-head">For Job Seekers</p>
-                    <a href="#">Search jobs</a>
-                    <a href="#">Browse companies</a>
-                    <a href="#">Resume builder</a>
-                    <a href="#">Career advice</a>
-                    <a href="#">Salary calculator</a>
-                </div>
-                <div class="rj-footer-col">
-                    <p class="rj-footer-col-head">For Employers</p>
-                    <a href="#">Post a job</a>
-                    <a href="#">Employer login</a>
-                    <a href="#">Hiring solutions</a>
-                    <a href="#">View plans</a>
-                </div>
-            </div>
-        </div>
-        <div class="rj-footer-bottom">
-            <span>© 2025 Naukri Clone. All rights reserved.</span>
-            <span>Made with ❤️ in India</span>
-        </div>
-    </footer>
-
-    <script>
-    /* Get CSRF token from the hidden input generated by {% csrf_token %} */
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
-
-    /* ── TOAST ── */
-    function showToast(message, type) {
-        const toast = document.getElementById('rjToast');
-        const msg   = document.getElementById('rjToastMsg');
-        const icon  = document.getElementById('rjToastIcon');
-        msg.textContent = message;
-        toast.classList.remove('rj-toast--saved','rj-toast--removed');
-        if (type === 'saved') {
-            toast.classList.add('rj-toast--saved');
-            icon.className = 'fa-solid fa-bookmark';
-        } else {
-            toast.classList.add('rj-toast--removed');
-            icon.className = 'fa-solid fa-bookmark-slash';
-        }
-        toast.classList.add('rj-toast--show');
-        clearTimeout(window._toastTimer);
-        window._toastTimer = setTimeout(() => toast.classList.remove('rj-toast--show'), 2500);
-    }
-
-    /* ── SAVE / UNSAVE (Backend API version) ── */
-    function toggleSave(btn) {
-        const jobId = btn.dataset.jobId;
-
-        fetch(`/save-job/${jobId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => {
-            // If user is not logged in, Django redirects to login page
-            if (response.redirected) {
-                window.location.href = response.url;
-                return;
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (!data) return;
-
-            const icon = btn.querySelector('i');
-            const text = btn.querySelector('.rj-save-text');
-
-            if (data.status === 'saved') {
-                btn.classList.add('rj-saved');
-                icon.className = 'fa-solid fa-bookmark';
-                text.textContent = 'Saved';
-                showToast(data.message, 'saved');
-            } else if (data.status === 'removed') {
-                btn.classList.remove('rj-saved');
-                icon.className = 'fa-regular fa-bookmark';
-                text.textContent = 'Save';
-                showToast(data.message, 'removed');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('Something went wrong!', 'removed');
-        });
-    }
-
-    /* ── PAGINATION ── */
-    const ITEMS_PER_PAGE = 7;
-    let currentPage = 1;
-
-    function getAllCards()    { return Array.from(document.querySelectorAll('.rj-job-card')); }
-    function getVisibleCards(){ return getAllCards().filter(c => !c.classList.contains('rj-filter-hidden')); }
-
-    function renderPage() {
-        const cards      = getVisibleCards();
-        const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        const end   = start + ITEMS_PER_PAGE;
-
-        cards.forEach((card, i) => { card.style.display = (i >= start && i < end) ? '' : 'none'; });
-        getAllCards().filter(c => c.classList.contains('rj-filter-hidden')).forEach(c => c.style.display = 'none');
-
-        const countEl = document.querySelector('.rj-result-count');
-        if (countEl) {
-            const total = cards.length;
-            countEl.innerHTML = total === 0
-                ? `0 of <strong>0 Remote Jobs</strong>`
-                : `${start+1} – ${Math.min(end, total)} of <strong>${total} Remote Jobs</strong>`;
-        }
-
-        const noResults = document.getElementById('rjNoResults');
-        if (noResults) noResults.style.display = cards.length === 0 ? 'block' : 'none';
-
-        buildPageButtons(totalPages);
-    }
-
-    function buildPageButtons(totalPages) {
-        const pg = document.getElementById('rjPagination');
-        if (!pg) return;
-        pg.innerHTML = '';
-
-        const prev = document.createElement('button');
-        prev.className = 'rj-page-btn rj-page-prev';
-        prev.disabled  = currentPage === 1;
-        prev.innerHTML = '<i class="fa fa-chevron-left"></i> Previous';
-        prev.onclick   = () => goPage('prev');
-        pg.appendChild(prev);
-
-        for (let i = 1; i <= totalPages; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'rj-page-btn rj-page-num' + (i === currentPage ? ' active' : '');
-            btn.textContent = i;
-            btn.onclick = () => { currentPage = i; renderPage(); };
-            pg.appendChild(btn);
-        }
-
-        const next = document.createElement('button');
-        next.className = 'rj-page-btn rj-page-next';
-        next.disabled  = currentPage === totalPages;
-        next.innerHTML = 'Next <i class="fa fa-chevron-right"></i>';
-        next.onclick   = () => goPage('next');
-        pg.appendChild(next);
-    }
-
-    function goPage(dir) {
-        const cards      = getVisibleCards();
-        const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
-        if (dir === 'prev' && currentPage > 1) currentPage--;
-        else if (dir === 'next' && currentPage < totalPages) currentPage++;
-        renderPage();
-    }
-
-    /* ── CATEGORY CAROUSEL ── */
-    (function () {
-        const track = document.getElementById('catTrack');
-        const next  = document.getElementById('catNext');
-        const prev  = document.getElementById('catPrev');
-        if (!track || !next || !prev) return;
-        next.addEventListener('click', () => track.scrollBy({ left: 320, behavior: 'smooth' }));
-        prev.addEventListener('click', () => track.scrollBy({ left: -320, behavior: 'smooth' }));
-        track.addEventListener('scroll', () => {
-            prev.style.display = track.scrollLeft <= 4 ? 'none' : 'flex';
-            next.style.display = (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) ? 'none' : 'flex';
-        });
-    })();
-
-    /* ── COLLAPSE FILTER SECTIONS ── */
-    function toggleSection(id) {
-        const body = document.getElementById('body-' + id);
-        const icon = document.getElementById('icon-' + id);
-        if (!body || !icon) return;
-        const isOpen = body.style.display !== 'none';
-        body.style.display = isOpen ? 'none' : 'block';
-        icon.className = isOpen ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
-    }
-
-    /* ── VIEW MORE / LESS ── */
-    function toggleMore(section) {
-        const moreDiv    = document.getElementById('more-' + section);
-        const toggleText = document.getElementById('toggle-' + section);
-        if (!moreDiv) return;
-        const showing = moreDiv.style.display === 'block';
-        moreDiv.style.display = showing ? 'none' : 'block';
-        if (toggleText) toggleText.textContent = showing ? 'View more' : 'View less';
-    }
-
-    /* ── EXPERIENCE SLIDER ── */
-    function updateSlider(val) {
-        const bubble = document.getElementById('sliderBubble');
-        if (!bubble) return;
-        bubble.textContent = val >= 30 ? 'Any' : val + ' Yr' + (val == 1 ? '' : 's');
-        const pct = (val / 30) * 100;
-        const off = 20 - (pct * 0.4);
-        bubble.style.left = `calc(${pct}% + ${off}px)`;
-    }
-
-    /* ── MOBILE FILTER TOGGLE ── */
-    document.addEventListener('DOMContentLoaded', function () {
-        const filterToggle = document.getElementById('rjFilterToggle');
-        const filterForm   = document.querySelector('.rj-filter-form');
-        const filterIcon   = document.getElementById('rjFilterToggleIcon');
-
-        if (filterToggle && filterForm) {
-            filterToggle.addEventListener('click', function () {
-                const isOpen = filterForm.classList.toggle('rj-filter-open');
-                filterIcon.className = isOpen ? 'fa fa-chevron-up' : 'fa fa-chevron-down';
-                
-                
-            });
-        }
-
-        /* Mobile hamburger nav */
-        const hamburger = document.getElementById('rjHamburger');
-        const mobileNav = document.getElementById('rjMobileNav');
-        const overlay   = document.getElementById('rjMobileOverlay');
-        const closeBtn  = document.getElementById('rjMobileClose');
-
-        function openMobileNav() {
-            mobileNav.classList.add('rj-mobile-nav--open');
-            overlay.classList.add('rj-mobile-overlay--show');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeMobileNav() {
-            mobileNav.classList.remove('rj-mobile-nav--open');
-            overlay.classList.remove('rj-mobile-overlay--show');
-            document.body.style.overflow = '';
-        }
-        if (hamburger) hamburger.addEventListener('click', openMobileNav);
-        if (closeBtn)  closeBtn.addEventListener('click',  closeMobileNav);
-        if (overlay)   overlay.addEventListener('click',   closeMobileNav);
-
-        /* Experience slider */
-        const slider = document.getElementById('expSlider');
-        if (slider) {
-            slider.addEventListener('input', e => updateSlider(e.target.value));
-            updateSlider(slider.value);
-        }
-
-        renderPage();
-        updateAppliedCount();
+    <div class="rj-footer-bottom">
+        <span>© 2025 Naukri Clone. All rights reserved.</span>
+        <span>Made with ❤️ in India</span>
+    </div>
+</footer>
+ 
+<script>
+/* ══════════════════════════════════════════
+   CSRF COOKIE HELPER
+══════════════════════════════════════════ */
+function getCookie(name) {
+    let v = null;
+    document.cookie.split(';').forEach(c => {
+        const [k, val] = c.trim().split('=');
+        if (k === name) v = decodeURIComponent(val);
     });
-    /* ── FILTER APPLIED COUNT ── */
+    return v;
+}
+const csrfToken = getCookie('csrftoken');
+ 
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+function showToast(message, type) {
+    const toast = document.getElementById('rjToast');
+    const msg   = document.getElementById('rjToastMsg');
+    const icon  = document.getElementById('rjToastIcon');
+    msg.textContent = message;
+    toast.classList.remove('rj-toast--saved', 'rj-toast--removed');
+    if (type === 'saved') {
+        toast.classList.add('rj-toast--saved');
+        icon.className = 'fa-solid fa-bookmark';
+    } else if (type === 'removed') {
+        toast.classList.add('rj-toast--removed');
+        icon.className = 'fa-solid fa-bookmark-slash';
+    } else {
+        icon.className = 'fa-solid fa-circle-check';
+    }
+    toast.classList.add('rj-toast--show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => toast.classList.remove('rj-toast--show'), 2800);
+}
+ 
+/* ══════════════════════════════════════════
+   SAVE JOB — SAVES TO DATABASE via AJAX
+   Uses: /save-job/<job_id>/ POST
+   View: save_job in views.py
+   Model: SavedJob in models.py
+══════════════════════════════════════════ */
+function toggleSave(btn) {
+    const saveUrl = btn.dataset.saveUrl;
+ 
+    fetch(saveUrl, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.redirected) {
+            // User not logged in — Django redirected to login
+            window.location.href = response.url;
+            return null;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data) return;
+ 
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('.rj-save-text');
+ 
+        if (data.status === 'saved') {
+            btn.classList.add('rj-saved');
+            icon.className = 'fa-solid fa-bookmark';
+            text.textContent = 'Saved';
+            showToast(data.message, 'saved');
+        } else if (data.status === 'removed') {
+            btn.classList.remove('rj-saved');
+            icon.className = 'fa-regular fa-bookmark';
+            text.textContent = 'Save';
+            showToast(data.message, 'removed');
+        }
+    })
+    .catch(error => {
+        console.error('Save error:', error);
+        showToast('Something went wrong. Please try again.', 'error');
+    });
+}
+ 
+/* ══════════════════════════════════════════
+   PAGINATION — 7 cards per page
+══════════════════════════════════════════ */
+const ITEMS_PER_PAGE = 7;
+let currentPage = 1;
+ 
+function getAllCards()    { return Array.from(document.querySelectorAll('.rj-job-card')); }
+function getVisibleCards(){ return getAllCards(); }
+ 
+function renderPage() {
+    const cards      = getVisibleCards();
+    const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+ 
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end   = start + ITEMS_PER_PAGE;
+ 
+    cards.forEach((card, i) => {
+        card.style.display = (i >= start && i < end) ? '' : 'none';
+    });
+ 
+    buildPageButtons(totalPages);
+}
+ 
+function buildPageButtons(totalPages) {
+    const pg = document.getElementById('rjPagination');
+    if (!pg) return;
+    pg.innerHTML = '';
+ 
+    if (totalPages <= 1) return;
+ 
+    const prev = document.createElement('button');
+    prev.className = 'rj-page-btn rj-page-prev';
+    prev.disabled  = currentPage === 1;
+    prev.innerHTML = '<i class="fa fa-chevron-left"></i> Previous';
+    prev.onclick   = () => { if (currentPage > 1) { currentPage--; renderPage(); window.scrollTo({top:0,behavior:'smooth'}); }};
+    pg.appendChild(prev);
+ 
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className  = 'rj-page-btn rj-page-num' + (i === currentPage ? ' active' : '');
+        btn.textContent = i;
+        const pageNum  = i;
+        btn.onclick    = () => { currentPage = pageNum; renderPage(); window.scrollTo({top:0,behavior:'smooth'}); };
+        pg.appendChild(btn);
+    }
+ 
+    const next = document.createElement('button');
+    next.className = 'rj-page-btn rj-page-next';
+    next.disabled  = currentPage === totalPages;
+    next.innerHTML = 'Next <i class="fa fa-chevron-right"></i>';
+    next.onclick   = () => { if (currentPage < totalPages) { currentPage++; renderPage(); window.scrollTo({top:0,behavior:'smooth'}); }};
+    pg.appendChild(next);
+}
+ 
+/* ══════════════════════════════════════════
+   CATEGORY CAROUSEL
+══════════════════════════════════════════ */
+(function() {
+    const track = document.getElementById('catTrack');
+    const next  = document.getElementById('catNext');
+    const prev  = document.getElementById('catPrev');
+    if (!track || !next || !prev) return;
+    next.addEventListener('click', () => track.scrollBy({ left: 320, behavior: 'smooth' }));
+    prev.addEventListener('click', () => track.scrollBy({ left: -320, behavior: 'smooth' }));
+    track.addEventListener('scroll', () => {
+        prev.style.display = track.scrollLeft <= 4 ? 'none' : 'flex';
+        next.style.display = (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) ? 'none' : 'flex';
+    });
+})();
+ 
+/* ══════════════════════════════════════════
+   FILTER SECTION TOGGLES
+══════════════════════════════════════════ */
+function toggleSection(id) {
+    const body = document.getElementById('body-' + id);
+    const icon = document.getElementById('icon-' + id);
+    if (!body || !icon) return;
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    icon.className = isOpen ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
+}
+ 
+function toggleMore(id) {
+    const moreDiv  = document.getElementById('more-' + id);
+    const toggleEl = document.getElementById('toggle-' + id);
+    if (!moreDiv) return;
+    const showing = moreDiv.style.display === 'block';
+    moreDiv.style.display = showing ? 'none' : 'block';
+    if (toggleEl) toggleEl.textContent = showing ? 'View more' : 'View less';
+}
+ 
+/* ══════════════════════════════════════════
+   EXPERIENCE SLIDER
+══════════════════════════════════════════ */
+function updateSlider(val) {
+    const bubble = document.getElementById('sliderBubble');
+    if (!bubble) return;
+    bubble.textContent = parseInt(val) >= 30 ? 'Any' : val + ' Yr' + (val == 1 ? '' : 's');
+    const pct = (val / 30) * 100;
+    const off  = 20 - (pct * 0.4);
+    bubble.style.left = `calc(${pct}% + ${off}px)`;
+}
+ 
+/* ══════════════════════════════════════════
+   FILTER APPLIED BADGE COUNT
+══════════════════════════════════════════ */
 function updateAppliedCount() {
-    // Count all checked checkboxes in the filter form
     const form = document.getElementById('filterForm');
     if (!form) return;
-
-    // Count checked checkboxes
-    const checkedBoxes = form.querySelectorAll('input[type="checkbox"]:checked').length;
-    
-    // Count selected radio buttons (freshness)
-    const checkedRadios = form.querySelectorAll('input[type="radio"]:checked').length;
-
-    // Check if experience slider is not at default (30 = Any)
-    const slider = document.getElementById('expSlider');
+    const checked = form.querySelectorAll('input[type="checkbox"]:checked').length;
+    const radios  = form.querySelectorAll('input[type="radio"]:checked').length;
+    const slider  = document.getElementById('expSlider');
     const sliderActive = slider && parseInt(slider.value) < 30 ? 1 : 0;
-
-    const total = checkedBoxes + checkedRadios + sliderActive;
-
+    const total = checked + radios + sliderActive;
     const countEl = document.getElementById('rjAppliedCount');
     if (!countEl) return;
-
     if (total === 0) {
-        countEl.style.display = 'none';  // hide when nothing selected
+        countEl.style.display = 'none';
     } else {
-        countEl.style.display = 'inline'; // show when something selected
+        countEl.style.display = 'inline';
         countEl.textContent = `Applied (${total})`;
     }
 }
-    </script>
+ 
+/* ══════════════════════════════════════════
+   NAV SEARCH
+══════════════════════════════════════════ */
+function applyNavSearch() {
+    const kw = document.getElementById('navSearch').value.trim();
+    if (!kw) return;
+    window.location.href = "{% url 'search_jobs' %}?keyword=" + encodeURIComponent(kw);
+}
+ 
+document.addEventListener('DOMContentLoaded', function() {
+    // Init slider
+    const slider = document.getElementById('expSlider');
+    if (slider) {
+        slider.addEventListener('input', e => updateSlider(e.target.value));
+        updateSlider(slider.value);
+    }
+ 
+    // Init filter count
+    updateAppliedCount();
+    document.querySelectorAll('#filterForm input').forEach(function(input) {
+        input.addEventListener('change', updateAppliedCount);
+    });
+ 
+    // Nav search enter key
+    const navSearch = document.getElementById('navSearch');
+    if (navSearch) {
+        navSearch.addEventListener('keydown', e => {
+            if (e.key === 'Enter') applyNavSearch();
+        });
+    }
+ 
+    // Init pagination
+    renderPage();
+});
+</script>
+ 
 </body>
 </html>
