@@ -659,7 +659,7 @@
             <!-- ── CLEAR ALL BUTTON ── -->
             {% if selected_work_modes or selected_categories or selected_locations or selected_salaries or selected_company_types or selected_roles or selected_educations or selected_freshness %}
             <div style="padding: 12px 16px;">
-                <a href="{% url 'it_jobs' %}" class="rj-clear-all-btn"
+                <a href="{% url 'delhi_jobs' %}" class="rj-clear-all-btn"
                    style="display:block;text-align:center;padding:10px;background:#fee2e2;color:#dc2626;
                           border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">
                     <i class="fa fa-times"></i> Clear All Filters
@@ -775,7 +775,7 @@
                                 </span>
                             {% endif %}
                         {% else %}
-                            <a href="{% url 'login' %}?next={% url 'it_jobs' %}" class="rj-apply-btn login-required">
+                            <a href="{% url 'login' %}?next={% url 'delhi_jobs' %}" class="rj-apply-btn login-required">
                                 <i class="fa fa-sign-in-alt"></i> Login to Apply
                             </a>
                         {% endif %}
@@ -815,16 +815,16 @@
             {% endfor %}
  
         {% else %}
-            <!-- EMPTY STATE — No IT Jobs in DB matching filters -->
+            <!-- EMPTY STATE — No Delhi Jobs in DB matching filters -->
             <div class="rj-empty-state">
                 <i class="fa fa-magnifying-glass"></i>
-                <h3>No IT Jobs Found</h3>
+                <h3>No Delhi Jobs Found</h3>
                 <p>
                     {% if selected_work_modes or selected_categories or selected_locations %}
                         No jobs match your current filters. Try removing some filters.
-                        <br><a href="{% url 'it_jobs' %}" style="color:#275df5;font-weight:700;">Clear all filters</a>
+                        <br><a href="{% url 'delhi_jobs' %}" style="color:#275df5;font-weight:700;">Clear all filters</a>
                     {% else %}
-                        No IT jobs have been posted yet. Check back soon!
+                        No Delhi jobs have been posted yet. Check back soon!
                     {% endif %}
                 </p>
             </div>
@@ -860,7 +860,7 @@
                 <h3 class="rj-promo-heading" style="font-size:15px;">
                     <i class="fa fa-bookmark" style="color:#275df5;"></i> Saved Jobs
                 </h3>
-                <p class="rj-promo-text">View all your bookmarked IT jobs.</p>
+                <p class="rj-promo-text">View all your bookmarked Delhi jobs.</p>
                 <a href="{% url 'saved_jobs' %}" class="rj-promo-link">View Saved Jobs →</a>
             </div>
         </div>
@@ -870,7 +870,7 @@
                 <h3 class="rj-promo-heading" style="font-size:15px;">
                     <i class="fa fa-paper-plane" style="color:#10b981;"></i> Applied Jobs
                 </h3>
-                <p class="rj-promo-text">Track your IT job applications.</p>
+                <p class="rj-promo-text">Track your Delhi job applications.</p>
                 <a href="{% url 'applied_jobs' %}" class="rj-promo-link">View Applications →</a>
             </div>
         </div>

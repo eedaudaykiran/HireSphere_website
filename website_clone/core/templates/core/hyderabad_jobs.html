@@ -199,7 +199,7 @@
 <div class="rj-cat-strip">
     <div class="rj-cat-track-wrap">
         <div class="rj-cat-track" id="catTrack">
-            <a href="?category=Hyderabad" class="rj-cat-pill">IT Jobs</a>
+            <a href="?category=IT" class="rj-cat-pill">IT Jobs</a>
             <a href="?work_mode=Remote" class="rj-cat-pill">Remote IT</a>
             <a href="?work_mode=Hybrid" class="rj-cat-pill">Hybrid IT</a>
             <a href="?work_mode=On-site" class="rj-cat-pill">On-site IT</a>
@@ -659,7 +659,7 @@
             <!-- ── CLEAR ALL BUTTON ── -->
             {% if selected_work_modes or selected_categories or selected_locations or selected_salaries or selected_company_types or selected_roles or selected_educations or selected_freshness %}
             <div style="padding: 12px 16px;">
-                <a href="{% url 'it_jobs' %}" class="rj-clear-all-btn"
+                <a href="{% url 'hyderabad_jobs' %}" class="rj-clear-all-btn"
                    style="display:block;text-align:center;padding:10px;background:#fee2e2;color:#dc2626;
                           border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">
                     <i class="fa fa-times"></i> Clear All Filters
@@ -775,7 +775,7 @@
                                 </span>
                             {% endif %}
                         {% else %}
-                            <a href="{% url 'login' %}?next={% url 'it_jobs' %}" class="rj-apply-btn login-required">
+                            <a href="{% url 'login' %}?next={% url 'hyderabad_jobs' %}" class="rj-apply-btn login-required">
                                 <i class="fa fa-sign-in-alt"></i> Login to Apply
                             </a>
                         {% endif %}
@@ -818,13 +818,13 @@
             <!-- EMPTY STATE — No IT Jobs in DB matching filters -->
             <div class="rj-empty-state">
                 <i class="fa fa-magnifying-glass"></i>
-                <h3>No IT Jobs Found</h3>
+                <h3>No Hyderabad Jobs Found</h3>
                 <p>
                     {% if selected_work_modes or selected_categories or selected_locations %}
                         No jobs match your current filters. Try removing some filters.
-                        <br><a href="{% url 'it_jobs' %}" style="color:#275df5;font-weight:700;">Clear all filters</a>
+                        <br><a href="{% url 'hyderabad_jobs' %}" style="color:#275df5;font-weight:700;">Clear all filters</a>
                     {% else %}
-                        No IT jobs have been posted yet. Check back soon!
+                        No Hyderabad jobs have been posted yet. Check back soon!
                     {% endif %}
                 </p>
             </div>

@@ -205,14 +205,14 @@
             <a href="?work_mode=On-site" class="rj-cat-pill">On-site Data Science</a>
             <a href="?company_type=MNC" class="rj-cat-pill">MNC Data Science Jobs</a>
             <a href="?company_type=Startup" class="rj-cat-pill">Startup Data Science</a>
-            <a href="?salary=0-3" class="rj-cat-pill">0-3L IT Jobs</a>
-            <a href="?salary=6-10" class="rj-cat-pill">6-10L IT Jobs</a>
-            <a href="?salary=10-15" class="rj-cat-pill">10-15L IT Jobs</a>
-            <a href="?location=Bangalore" class="rj-cat-pill">Bangalore IT</a>
-            <a href="?location=Hyderabad" class="rj-cat-pill">Hyderabad IT</a>
-            <a href="?location=Delhi" class="rj-cat-pill">Delhi IT</a>
-            <a href="?location=Mumbai" class="rj-cat-pill">Mumbai IT</a>
-            <a href="?location=Pune" class="rj-cat-pill">Pune IT</a>
+            <a href="?salary=0-3" class="rj-cat-pill">0-3L Data Science Jobs</a>
+            <a href="?salary=6-10" class="rj-cat-pill">6-10L Data Science Jobs</a>
+            <a href="?salary=10-15" class="rj-cat-pill">10-15L Data Science Jobs</a>
+            <a href="?location=Bangalore" class="rj-cat-pill">Bangalore Data Science</a>
+            <a href="?location=Hyderabad" class="rj-cat-pill">Hyderabad Data Science</a>
+            <a href="?location=Delhi" class="rj-cat-pill">Delhi Data Science</a>
+            <a href="?location=Mumbai" class="rj-cat-pill">Mumbai Data Science</a>
+            <a href="?location=Pune" class="rj-cat-pill">Pune Data Science</a>
         </div>
     </div>
     <button class="rj-cat-arrow rj-cat-next" id="catNext"><i class="fa fa-chevron-right"></i></button>
@@ -659,7 +659,7 @@
             <!-- ── CLEAR ALL BUTTON ── -->
             {% if selected_work_modes or selected_categories or selected_locations or selected_salaries or selected_company_types or selected_roles or selected_educations or selected_freshness %}
             <div style="padding: 12px 16px;">
-                <a href="{% url 'it_jobs' %}" class="rj-clear-all-btn"
+                <a href="{% url 'data_science_jobs' %}" class="rj-clear-all-btn"
                    style="display:block;text-align:center;padding:10px;background:#fee2e2;color:#dc2626;
                           border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">
                     <i class="fa fa-times"></i> Clear All Filters
@@ -775,7 +775,7 @@
                                 </span>
                             {% endif %}
                         {% else %}
-                            <a href="{% url 'login' %}?next={% url 'it_jobs' %}" class="rj-apply-btn login-required">
+                            <a href="{% url 'login' %}?next={% url 'data_science_jobs' %}" class="rj-apply-btn login-required">
                                 <i class="fa fa-sign-in-alt"></i> Login to Apply
                             </a>
                         {% endif %}
@@ -815,16 +815,16 @@
             {% endfor %}
  
         {% else %}
-            <!-- EMPTY STATE — No IT Jobs in DB matching filters -->
+            <!-- EMPTY STATE — No Data Science Jobs in DB matching filters -->
             <div class="rj-empty-state">
                 <i class="fa fa-magnifying-glass"></i>
-                <h3>No IT Jobs Found</h3>
+                <h3>No Data Science Jobs Found</h3>
                 <p>
                     {% if selected_work_modes or selected_categories or selected_locations %}
                         No jobs match your current filters. Try removing some filters.
-                        <br><a href="{% url 'it_jobs' %}" style="color:#275df5;font-weight:700;">Clear all filters</a>
+                        <br><a href="{% url 'data_science_jobs' %}" style="color:#275df5;font-weight:700;">Clear all filters</a>
                     {% else %}
-                        No IT jobs have been posted yet. Check back soon!
+                        No Data Science jobs have been posted yet. Check back soon!
                     {% endif %}
                 </p>
             </div>
@@ -860,7 +860,7 @@
                 <h3 class="rj-promo-heading" style="font-size:15px;">
                     <i class="fa fa-bookmark" style="color:#275df5;"></i> Saved Jobs
                 </h3>
-                <p class="rj-promo-text">View all your bookmarked IT jobs.</p>
+                <p class="rj-promo-text">View all your bookmarked Data Science jobs.</p>
                 <a href="{% url 'saved_jobs' %}" class="rj-promo-link">View Saved Jobs →</a>
             </div>
         </div>
@@ -870,7 +870,7 @@
                 <h3 class="rj-promo-heading" style="font-size:15px;">
                     <i class="fa fa-paper-plane" style="color:#10b981;"></i> Applied Jobs
                 </h3>
-                <p class="rj-promo-text">Track your IT job applications.</p>
+                <p class="rj-promo-text">Track your Data Science job applications.</p>
                 <a href="{% url 'applied_jobs' %}" class="rj-promo-link">View Applications →</a>
             </div>
         </div>
