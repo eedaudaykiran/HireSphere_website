@@ -11739,79 +11739,374 @@ def pune_jobs_page(request):
     })
 
 
+
+# ── SHARED HELPER — builds all filter context for company pages ──
+def _build_company_filter_context(request, base_qs):
+    """
+    Takes a base queryset (already filtered by company_type),
+    applies all GET filters, returns (filtered_qs, context_dict).
+    """
+    from django.db.models import Count, Min, Max
+    import datetime
+ 
+    jobs = base_qs
+ 
+    # ── Work mode ──
+    work_modes = request.GET.getlist('work_mode')
+    if work_modes:
+        jobs = jobs.filter(work_mode__in=work_modes)
+ 
+    # ── Location ──
+    locations = request.GET.getlist('location')
+    if locations:
+        q = Q()
+        for loc in locations:
+            q |= Q(location__icontains=loc)
+        jobs = jobs.filter(q)
+ 
+    # ── Industry ──
+    industries = request.GET.getlist('industry')
+    if industries:
+        q = Q()
+        for ind in industries:
+            q |= Q(industry__icontains=ind)
+        jobs = jobs.filter(q)
+ 
+    # ── Department ──
+    departments = request.GET.getlist('department')
+    if departments:
+        jobs = jobs.filter(department__in=departments)
+ 
+    # ── Experience ──
+    experience = request.GET.get('experience')
+    if experience and experience != '30':
+        jobs = jobs.filter(experience__icontains=experience)
+ 
+    # ── Nature of business ──
+    nob = request.GET.getlist('nature_of_business')
+    if nob:
+        jobs = jobs.filter(nature_of_business__in=nob)
+ 
+    # ── Job posting date (freshness) ──
+    freshness = request.GET.get('freshness')
+    if freshness:
+        try:
+            days   = int(freshness)
+            cutoff = timezone.now() - datetime.timedelta(days=days)
+            jobs   = jobs.filter(created_at__gte=cutoff)
+        except (ValueError, TypeError):
+            pass
+ 
+    # ── Company type filter (additional) ──
+    company_types = request.GET.getlist('company_type')
+    if company_types:
+        jobs = jobs.filter(company_type__in=company_types)
+ 
+    # ── Salary ──
+    salaries = request.GET.getlist('salary')
+    if salaries:
+        sq = Q()
+        for s in salaries:
+            try:
+                lo, hi = s.split('-')
+                sq |= Q(min_salary__gte=int(lo), max_salary__lte=int(hi))
+            except Exception:
+                pass
+        jobs = jobs.filter(sq)
+ 
+    # ── GROUP companies from filtered jobs ──
+    # Each unique company name becomes one card
+    companies = (
+        jobs
+        .values('company', 'company_type', 'location', 'industry', 'nature_of_business')
+        .annotate(
+            job_count   = Count('id'),
+            avg_rating  = Count('rating'),   # placeholder — use real avg if needed
+            min_sal     = Min('min_salary'),
+            max_sal     = Max('max_salary'),
+        )
+        .order_by('-job_count')
+    )
+ 
+    # ── Also pull CompanyProfile rows for logo / description ──
+    from .models import CompanyProfile
+    profile_map = {
+        cp.company_name.lower(): cp
+        for cp in CompanyProfile.objects.all()
+        if cp.company_name
+    }
+ 
+    # Attach profile data to each company dict
+    enriched = []
+    for c in companies:
+        name    = c['company']
+        profile = profile_map.get((name or '').lower())
+        enriched.append({
+            'name':               name,
+            'company_type':       c['company_type'],
+            'location':           c['location'],
+            'industry':           c['industry'],
+            'nature_of_business': c['nature_of_business'],
+            'job_count':          c['job_count'],
+            'logo':               profile.logo if profile else None,
+            'description':        profile.description if profile else '',
+            'rating':             profile.founded_year if profile else None,  # reuse slot
+        })
+ 
+    # ── Sidebar filter counts (from UNFILTERED base_qs) ──
+    all_q = base_qs
+ 
+    location_list   = ['Bangalore','Delhi','Mumbai','Hyderabad','Pune','Chennai']
+    location_counts = {
+        loc: all_q.filter(location__icontains=loc).count()
+        for loc in location_list
+    }
+ 
+    company_type_counts = {
+        item['company_type']: item['total']
+        for item in all_q.values('company_type').annotate(total=Count('id'))
+    }
+ 
+    industry_counts = {
+        item['industry']: item['total']
+        for item in all_q.exclude(industry='').values('industry').annotate(total=Count('id'))
+    }
+ 
+    department_counts = {
+        item['department']: item['total']
+        for item in all_q.exclude(department__isnull=True).exclude(department='').values('department').annotate(total=Count('id'))
+    }
+ 
+    nob_counts = {
+        item['nature_of_business']: item['total']
+        for item in all_q.exclude(nature_of_business__isnull=True).values('nature_of_business').annotate(total=Count('id'))
+    }
+ 
+    salary_ranges = ['0-3','3-6','6-10','10-15','15-20','20-25','25-30','30-35']
+    salary_counts = {}
+    for r in salary_ranges:
+        try:
+            lo, hi = r.split('-')
+            salary_counts[r] = all_q.filter(min_salary__gte=int(lo), max_salary__lte=int(hi)).count()
+        except Exception:
+            salary_counts[r] = 0
+ 
+    context = {
+        'companies':          enriched,
+        'total_companies':    len(enriched),
+        # selected filters (to keep checkboxes checked)
+        'selected_work_modes':       work_modes,
+        'selected_locations':        locations,
+        'selected_industries':       industries,
+        'selected_departments':      departments,
+        'selected_nob':              nob,
+        'selected_freshness':        freshness,
+        'selected_company_types':    company_types,
+        'selected_salaries':         salaries,
+        'selected_experience':       experience,
+        # counts
+        'location_counts':           location_counts,
+        'company_type_counts':       company_type_counts,
+        'industry_counts':           industry_counts,
+        'department_counts':         department_counts,
+        'nob_counts':                nob_counts,
+        'salary_counts':             salary_counts,
+    }
+    return jobs, context
+ 
+ 
+# ══════════════════════════════════════════════════════════════
+# UNICORN COMPANIES
+# ══════════════════════════════════════════════════════════════
 @login_required
 def company_unicorn(request):
-    jobs = Job.objects.filter(company_type__icontains='unicorn').order_by('-id')
-    return render(request, 'core/company_unicorn.html', {'jobs': jobs})
-
+    base_qs = Job.objects.filter(
+        company_type__icontains='unicorn'
+    ).order_by('-id')
+ 
+    _, context = _build_company_filter_context(request, base_qs)
+    context['page_title']    = 'Unicorn Companies Actively Hiring'
+    context['page_category'] = 'Unicorns'
+    context['clear_url']     = 'company_unicorn'
+ 
+    return render(request, 'core/company_unicorn.html', context)
+ 
+ 
+# ══════════════════════════════════════════════════════════════
+# MNC COMPANIES
+# ══════════════════════════════════════════════════════════════
 @login_required
 def company_mnc_jobs_page(request):
-    jobs = Job.objects.filter(
-        Q(company_type__icontains='mnc') | Q(company_type__icontains='multinational')
+    base_qs = Job.objects.filter(
+        Q(company_type__icontains='mnc') |
+        Q(company_type__icontains='multinational')
     ).order_by('-id')
-    return render(request, 'core/company_mnc_jobs.html', {'jobs': jobs})
-
+ 
+    _, context = _build_company_filter_context(request, base_qs)
+    context['page_title']    = 'MNC Companies Actively Hiring'
+    context['page_category'] = 'MNCs'
+    context['clear_url']     = 'company_mnc'
+ 
+    return render(request, 'core/company_mnc_jobs.html', context)
+ 
+ 
+# ══════════════════════════════════════════════════════════════
+# STARTUP COMPANIES
+# ══════════════════════════════════════════════════════════════
 @login_required
 def company_startups_jobs_page(request):
-    jobs = Job.objects.filter(
-        Q(company_type__icontains='startup') | Q(company_type__icontains='start-up')
+    base_qs = Job.objects.filter(
+        Q(company_type__icontains='startup') |
+        Q(company_type__icontains='start-up')
     ).order_by('-id')
-    return render(request, 'core/company_startups_jobs.html', {'jobs': jobs})
+ 
+    _, context = _build_company_filter_context(request, base_qs)
+    context['page_title']    = 'Startup Companies Actively Hiring'
+    context['page_category'] = 'Startups'
+    context['clear_url']     = 'company_startups'
+ 
+    return render(request, 'core/company_startups_jobs.html', context)
+
 
 @login_required
 def company_product_based_jobs_page(request):
-    jobs = Job.objects.filter(
-        Q(category__icontains='product') | Q(category__icontains='product based')
+    base_qs = Job.objects.filter(
+        Q(category__icontains='product') |
+        Q(category__icontains='product based')
     ).order_by('-id')
-    return render(request, 'core/company_product_based_jobs.html', {'jobs': jobs})
+
+    _, context = _build_company_filter_context(request, base_qs)
+
+    context['page_title'] = 'Product Based Companies Hiring'
+    context['page_category'] = 'Product Based'
+    context['clear_url'] = 'company_product_based'
+
+    return render(
+        request,
+        'core/company_product_based_jobs.html',
+        context
+    )
+
 
 @login_required
 def company_internet_jobs_page(request):
-    jobs = Job.objects.filter(
-        Q(company_type__icontains='internet') | Q(company_type__icontains='online') | Q(company_type__icontains='web')
+    base_qs = Job.objects.filter(
+        Q(category__icontains='internet') |
+        Q(industry__icontains='internet')
     ).order_by('-id')
-    return render(request, 'core/company_internet_jobs.html', {'jobs': jobs})
+
+    _, context = _build_company_filter_context(request, base_qs)
+
+    context['page_title'] = 'Internet Companies Hiring'
+    context['page_category'] = 'Internet'
+    context['clear_url'] = 'company_internet'
+
+    return render(
+        request,
+        'core/company_internet_jobs.html',
+        context
+    )
+
 
 @login_required
 def company_top_companies_jobs_page(request):
-    company_keywords = ['unicorn', 'mnc', 'multinational', 'startup', 'start-up', 'internet', 'online', 'web']
-    category_keywords = ['product']
-    query = Q()
-    for word in company_keywords:
-        query |= Q(company_type__icontains=word)
-    for word in category_keywords:
-        query |= Q(category__icontains=word)
-    jobs = Job.objects.filter(query).order_by('-id').distinct()
-    return render(request, 'core/company_top_companies_jobs.html', {'jobs': jobs})
+    base_qs = Job.objects.filter(
+        Q(category__icontains='top company') |
+        Q(category__icontains='top companies') |
+        Q(company_type__icontains='mnc')
+    ).order_by('-id')
+
+    _, context = _build_company_filter_context(request, base_qs)
+
+    context['page_title'] = 'Top Companies Hiring'
+    context['page_category'] = 'Top Companies'
+    context['clear_url'] = 'company_top_companies'
+
+    return render(
+        request,
+        'core/company_top_companies_jobs.html',
+        context
+    )
+
 
 @login_required
 def company_it_companies_jobs_page(request):
-    keywords = ['information technology', 'technology', 'tech', 'software']
-    query = Q()
-    for word in keywords:
-        query |= Q(company_type__icontains=word)
-    jobs = Job.objects.filter(query).order_by('-id').distinct()
-    return render(request, 'core/company_it_companies_jobs.html', {'jobs': jobs})
+    base_qs = Job.objects.filter(
+        Q(industry__icontains='it') |
+        Q(category__icontains='it') |
+        Q(company_type__icontains='it services')
+    ).order_by('-id')
+
+    _, context = _build_company_filter_context(request, base_qs)
+
+    context['page_title'] = 'IT Companies Hiring'
+    context['page_category'] = 'IT Companies'
+    context['clear_url'] = 'company_it_companies'
+
+    return render(
+        request,
+        'core/company_it_companies_jobs.html',
+        context
+    )
+
 
 @login_required
-def company_fintech_jobs_page(request):
-    keywords = ['fintech', 'financial technology', 'finance technology', 'payments', 'digital payments', 'banking', 'nbfc']
-    query = Q()
-    for word in keywords:
-        query |= Q(company_type__icontains=word)
-    jobs = Job.objects.filter(query).order_by('-id').distinct()
-    return render(request, 'core/company_fintech_companies_jobs.html', {'jobs': jobs})
+def company_fintech_companies_jobs_page(request):
+    base_qs = Job.objects.filter(
+        Q(industry__icontains='fintech') |
+        Q(category__icontains='fintech') |
+        Q(company_type__icontains='financial technology')
+    ).order_by('-id')
+
+    _, context = _build_company_filter_context(request, base_qs)
+
+    context['page_title'] = 'Fintech Companies Hiring'
+    context['page_category'] = 'Fintech'
+    context['clear_url'] = 'company_fintech_companies'
+
+    return render(
+        request,
+        'core/company_fintech_companies_jobs.html',
+        context
+    )
+
 
 @login_required
 def company_sponsored_companies_jobs_page(request):
-    jobs = Job.objects.filter(is_sponsored=True).order_by('-id')
-    return render(request, 'core/company_sponsored_companies_jobs.html', {'jobs': jobs})
+    base_qs = Job.objects.filter(
+        is_sponsored=True
+    ).order_by('-id')
+
+    _, context = _build_company_filter_context(request, base_qs)
+
+    context['page_title'] = 'Sponsored Companies Hiring'
+    context['page_category'] = 'Sponsored Companies'
+    context['clear_url'] = 'company_sponsored_companies'
+
+    return render(
+        request,
+        'core/company_sponsored_companies_jobs.html',
+        context
+    )
+
 
 @login_required
 def company_featured_companies_jobs_page(request):
-    jobs = Job.objects.filter(is_featured=True).order_by('-id')
-    return render(request, 'core/company_featured_companies_jobs.html', {'jobs': jobs})
+    base_qs = Job.objects.filter(
+        is_featured=True
+    ).order_by('-id')
 
+    _, context = _build_company_filter_context(request, base_qs)
+
+    context['page_title'] = 'Featured Companies Hiring'
+    context['page_category'] = 'Featured Companies'
+    context['clear_url'] = 'company_featured_companies'
+
+    return render(
+        request,
+        'core/company_featured_companies_jobs.html',
+        context
+    )
 
 # ===================== SAVE JOB =====================
 @candidate_required
@@ -13044,7 +13339,6 @@ def view_applications(request, job_id):
         'applications': applications,
     }
     return render(request, 'core/view_applications.html', context)
-
 
 
 

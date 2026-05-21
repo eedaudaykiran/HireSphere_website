@@ -48,7 +48,11 @@ urlpatterns = [
     path('company-internet/', views.company_internet_jobs_page, name='company_internet'),
     path('top-companies-jobs/', views.company_top_companies_jobs_page, name='top_companies_jobs'),
     path('company-it-companies-jobs/', views.company_it_companies_jobs_page, name='company_it_companies_jobs'),
-    path('company-fintech-companies-jobs/', views.company_fintech_jobs_page, name='company_fintech_companies_jobs'),
+    path(
+    'company-fintech-companies-jobs/',
+    views.company_fintech_companies_jobs_page,
+    name='company_fintech_companies_jobs'
+    ),
     path('company-sponsored-jobs/', views.company_sponsored_companies_jobs_page, name='company_sponsored_companies_jobs'),
     path('company-featured-jobs/', views.company_featured_companies_jobs_page, name='company_featured_companies_jobs'),
  
@@ -191,5 +195,5 @@ urlpatterns = [
     'fresherjobs-page/',
     views.fresherjobs_page,
     name='fresherjobs_page'
-),
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

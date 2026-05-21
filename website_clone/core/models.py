@@ -136,6 +136,38 @@ class Job(models.Model):
         choices=STATUS_CHOICES,
         default='active'
     )
+
+    NATURE_OF_BUSINESS_CHOICES = (
+    ('B2B',  'B2B'),
+    ('B2C',  'B2C'),
+    ('SaaS', 'SaaS'),
+    ('D2C',  'D2C'),
+    ('PaaS', 'PaaS'),
+    )
+ 
+    DEPARTMENT_CHOICES = (
+    ('Sales & Business Development', 'Sales & Business Development'),
+    ('Engineering - Software & QA',  'Engineering - Software & QA'),
+    ('Marketing & Communication',    'Marketing & Communication'),
+    ('Human Resources',              'Human Resources'),
+    ('Finance & Accounting',         'Finance & Accounting'),
+    ('Operations',                   'Operations'),
+    )
+ 
+# Add inside the Job model class:
+    nature_of_business = models.CharField(
+    max_length=10,
+    choices=NATURE_OF_BUSINESS_CHOICES,
+    blank=True,
+    null=True,
+    )
+ 
+    department = models.CharField(
+    max_length=100,
+    choices=DEPARTMENT_CHOICES,
+    blank=True,
+    null=True,
+    )
  
     def __str__(self):
         return self.title
@@ -345,3 +377,4 @@ class EmployerSettings(models.Model):
  
     def __str__(self):
         return self.employer.username
+    
