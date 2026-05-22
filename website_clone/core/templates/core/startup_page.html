@@ -42,34 +42,34 @@
                         <p class="rj-drop-heading">Popular categories</p>
                         <a href="{% url 'it_jobs' %}">IT jobs</a>
                         <a href="{% url 'sales_jobs' %}">Sales Jobs</a>
-                        <a href="#">Marketing Jobs</a>
-                        <a href="#">Data Science Jobs</a>
-                        <a href="#">HR Jobs</a>
-                        <a href="#">Engineering Jobs</a>
-                        <a href="#">Finance Jobs</a>
-                        <a href="#">Operations Jobs</a>
+                        <a href="{% url 'marketing_jobs' %}">Marketing Jobs</a>
+                        <a href="{% url 'data_science_jobs' %}">Data Science Jobs</a>
+                        <a href="{% url 'human_resources_jobs' %}">HR Jobs</a>
+                        <a href="{% url 'engineering_jobs' %}">Engineering Jobs</a>
+                        <a href="{% url 'finance_jobs_page' %}">Finance Jobs</a>
+                        <a href="{% url 'operations_jobs_page' %}">Operations Jobs</a>
                     </div>
                     <div class="rj-drop-col">
                         <p class="rj-drop-heading">Jobs in demand</p>
-                        <a href="#">Fresher Jobs</a>
-                        <a href="#">MNC Jobs</a>
+                        <a href="{% url 'fresher_jobs' %}">Fresher Jobs</a>
+                        <a href="{% url 'mnc_jobs' %}">MNC Jobs</a>
                         <a href="{% url 'remote_jobs' %}">Remote Jobs</a>
-                        <a href="#">Work from Home Jobs</a>
-                        <a href="#">Walk-in Jobs</a>
-                        <a href="#">Part-time Jobs</a>
-                        <a href="#">Internship Jobs</a>
-                        <a href="#">Startup Jobs</a>
+                        <a href="{% url 'work_from_home_jobs' %}">Work from Home Jobs</a>
+                        <a href="{% url 'walk_in_jobs' %}">Walk-in Jobs</a>
+                        <a href="{% url 'part_time_jobs' %}">Part-time Jobs</a>
+                        <a href="{% url 'internship_jobs' %}">Internship Jobs</a>
+                        <a href="{% url 'startup_jobs' %}">Startup Jobs</a>
                     </div>
                     <div class="rj-drop-col">
                         <p class="rj-drop-heading">Jobs by location</p>
-                        <a href="#">Jobs in Delhi</a>
-                        <a href="#">Jobs in Mumbai</a>
-                        <a href="#">Jobs in Bangalore</a>
-                        <a href="#">Jobs in Hyderabad</a>
-                        <a href="#">Jobs in Chennai</a>
-                        <a href="#">Jobs in Pune</a>
-                        <a href="#">Jobs in Kolkata</a>
-                        <a href="#">Jobs in Ahmedabad</a>
+                        <a href="{% url 'delhi_jobs' %}">Jobs in Delhi</a>
+                        <a href="{% url 'mumbai_jobs' %}">Jobs in Mumbai</a>
+                        <a href="{% url 'bangalore_jobs' %}">Jobs in Bangalore</a>
+                        <a href="{% url 'hyderabad_jobs' %}">Jobs in Hyderabad</a>
+                        <a href="{% url 'chennai_jobs' %}">Jobs in Chennai</a>
+                        <a href="{% url 'pune_jobs' %}">Jobs in Pune</a>
+                        <a href="{% url 'kolkata_jobs_page' %}">Jobs in Kolkata</a>
+                        <a href="{% url 'ahmedabad_jobs_page' %}">Jobs in Ahmedabad</a>
                     </div>
                 </div>
             </div>
@@ -180,6 +180,30 @@
 
 {% endif %}
 
+<!-- ═══════════════════════════════════════
+         CATEGORY CAROUSEL STRIP
+    ═══════════════════════════════════════ -->
+    <div class="rj-cat-strip">
+        <div class="rj-cat-track-wrap">
+            <div class="rj-cat-track" id="catTrack">
+                <a href="{% url 'supply_chain_jobs' %}" class="rj-cat-pill">Supply Chain Jobs</a>
+                <a href="{% url 'foreign_mnc_jobs' %}" class="rj-cat-pill">Foreign MNC Jobs</a>
+                <a href="{% url 'work_from_home_jobs' %}" class="rj-cat-pill">Work from Home Jobs</a>
+                <a href="{% url 'startup_jobs' %}" class="rj-cat-pill">Startup Jobs</a>
+                <a href="{% url 'salesjobs_page' %}" class="rj-cat-pill">Sales Jobs</a>
+                <a href="{% url 'analytics_bi_jobs' %}" class="rj-cat-pill">Analytics &amp; BI Jobs</a>
+                <a href="{% url 'marketingjobs_page' %}" class="rj-cat-pill">Marketing Jobs</a>
+                <a href="{% url 'datascience_jobs' %}" class="rj-cat-pill">Data Science Jobs</a>
+                <a href="{% url 'banking_financejobs_page' %}" class="rj-cat-pill">Banking &amp; Finance Jobs</a>
+                <a href="{% url 'engineeringjobs_page' %}" class="rj-cat-pill">Engineering Jobs</a>
+                <a href="{% url 'hr_jobs_page' %}" class="rj-cat-pill">HR Jobs</a>
+                <a href="{% url 'it_jobs' %}" class="rj-cat-pill">IT Jobs</a>
+                <a href="{% url 'fresherjobs_page' %}" class="rj-cat-pill">Fresher Jobs</a>
+            </div>
+        </div>
+        <button class="rj-cat-arrow rj-cat-next" id="catNext"><i class="fa fa-chevron-right"></i></button>
+        <button class="rj-cat-arrow rj-cat-prev" id="catPrev" style="display:none;"><i class="fa fa-chevron-left"></i></button>
+    </div>
 
     <!-- ═══════════════════════════════════════
          RESULT BAR

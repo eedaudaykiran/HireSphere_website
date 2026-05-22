@@ -31,6 +31,16 @@ urlpatterns = [
     path('walk-in-jobs/', views.walk_in_jobs_page, name='walk_in_jobs'),
     path('part-time-jobs/', views.part_time_jobs_page, name='part_time_jobs'),
     path('jobs/', views.all_jobs, name='all_jobs'),
+    path(
+    'finance-jobs/',
+    views.finance_jobs_page,
+    name='finance_jobs_page'
+    ),
+    path(
+    'operations-jobs/',
+    views.operations_jobs_page,
+    name='operations_jobs_page'
+    ),
  
     # ===================== CITY JOBS =====================
     path('delhi-jobs/', views.delhi_jobs_page, name='delhi_jobs'),
