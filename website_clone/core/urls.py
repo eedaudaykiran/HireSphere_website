@@ -39,7 +39,18 @@ urlpatterns = [
     path('hyderabad-jobs/', views.hyderabad_jobs_page, name='hyderabad_jobs'),
     path('chennai-jobs/', views.chennai_jobs_page, name='chennai_jobs'),
     path('pune-jobs/', views.pune_jobs_page, name='pune_jobs'),
- 
+    path(
+    'ahmedabad-jobs/',
+    views.ahmedabad_jobs_page,
+    name='ahmedabad_jobs_page'
+    ),
+
+    path(
+    'kolkata-jobs/',
+    views.kolkata_jobs_page,
+    name='kolkata_jobs_page'
+    ),
+
     # ===================== COMPANY TYPE PAGES =====================
     path('company-unicorn/', views.company_unicorn, name='company_unicorn'),
     path('company-mnc/', views.company_mnc_jobs_page, name='company_mnc'),
@@ -55,7 +66,7 @@ urlpatterns = [
     ),
     path('company-sponsored-jobs/', views.company_sponsored_companies_jobs_page, name='company_sponsored_companies_jobs'),
     path('company-featured-jobs/', views.company_featured_companies_jobs_page, name='company_featured_companies_jobs'),
- 
+    
     # ===================== CANDIDATE ACTIONS =====================
     path('saved-jobs/', views.saved_jobs_page, name='saved_jobs'),
     path(

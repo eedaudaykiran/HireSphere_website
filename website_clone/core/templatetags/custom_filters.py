@@ -16,3 +16,4 @@ def get_item(dictionary, key):
     if not isinstance(dictionary, dict):
         return 0
     return dictionary.get(key, 0)
+

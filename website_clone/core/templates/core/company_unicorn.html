@@ -26,23 +26,32 @@
             padding: 0 32px 32px;
         }
  
+        /* ── COMPANY CARD ── */
         .company-card-db {
             display: flex;
-            align-items: center;
-            gap: 14px;
+            flex-direction: column;
+            gap: 0;
             background: #fff;
             border: 1px solid #e5e7eb;
             border-radius: 12px;
-            padding: 18px 20px;
+            overflow: hidden;
             text-decoration: none;
             color: inherit;
             transition: box-shadow 0.2s, border-color 0.2s;
-            cursor: pointer;
+            cursor: default;
         }
  
         .company-card-db:hover {
             box-shadow: 0 4px 20px rgba(0,0,0,0.10);
             border-color: #275df5;
+        }
+ 
+        /* Top row: logo + info + job count */
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px 12px;
         }
  
         .company-logo-db {
@@ -109,6 +118,304 @@
             font-weight: 700;
             color: #275df5;
             white-space: nowrap;
+            align-self: flex-start;
+        }
+ 
+        /* ── CARD DIVIDER ── */
+        .card-divider {
+            height: 1px;
+            background: #f3f4f6;
+            margin: 0 20px;
+        }
+ 
+        /* ── CARD ACTIONS ROW ── */
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+        }
+ 
+        /* "View Jobs" button — opens modal */
+        .btn-view-jobs {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1.5px solid #275df5;
+            background: #eff6ff;
+            color: #275df5;
+            transition: background 0.18s, color 0.18s;
+        }
+        .btn-view-jobs:hover { background: #275df5; color: #fff; }
+ 
+        /* "Apply" button */
+        .btn-apply {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            background: #275df5;
+            color: #fff;
+            transition: background 0.18s;
+            text-decoration: none;
+        }
+        .btn-apply:hover { background: #1a4ad6; color: #fff; }
+ 
+        /* "Save" icon button */
+        .btn-save {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1.5px solid #e5e7eb;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.18s, background 0.18s;
+            flex-shrink: 0;
+            font-size: 15px;
+            color: #9ca3af;
+        }
+        .btn-save:hover        { border-color: #f59e0b; color: #f59e0b; }
+        .btn-save.saved        { background: #fef3c7; border-color: #fcd34d; color: #d97706; }
+ 
+        /* ═══════════════════════════════════════
+           JOB DETAILS MODAL
+        ═══════════════════════════════════════ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(17,24,39,0.55);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-overlay.open { display: flex; }
+ 
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 640px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+            animation: modalIn 0.22s cubic-bezier(.4,0,.2,1);
+        }
+ 
+        @keyframes modalIn {
+            from { opacity:0; transform: translateY(24px) scale(0.97); }
+            to   { opacity:1; transform: translateY(0) scale(1); }
+        }
+ 
+        .modal-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 1;
+        }
+ 
+        .modal-logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #275df5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            color: white;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .modal-logo img { width:100%; height:100%; object-fit:cover; border-radius:12px; }
+ 
+        .modal-header-info { flex: 1; min-width: 0; }
+        .modal-company-name { font-size: 18px; font-weight: 800; color: #111827; margin-bottom: 4px; }
+        .modal-company-meta { font-size: 13px; color: #6b7280; }
+ 
+        .modal-close {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: 1.5px solid #e5e7eb;
+            background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 16px; color: #6b7280;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .modal-close:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+ 
+        .modal-body { padding: 20px 24px 24px; }
+ 
+        /* Job listings inside modal */
+        .modal-jobs-list { display: flex; flex-direction: column; gap: 12px; }
+ 
+        .modal-job-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px 18px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .modal-job-item:hover { border-color: #275df5; box-shadow: 0 2px 10px rgba(39,93,245,0.08); }
+ 
+        .modal-job-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+ 
+        .modal-job-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+ 
+        .jpill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 6px;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+        .jpill i { font-size: 11px; color: #9ca3af; }
+        .jpill.salary { background:#f0fdf4; color:#15803d; border-color:#bbf7d0; }
+        .jpill.salary i { color:#16a34a; }
+        .jpill.exp    { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+        .jpill.exp i  { color:#3b82f6; }
+        .jpill.mode   { background:#faf5ff; color:#7c3aed; border-color:#e9d5ff; }
+        .jpill.mode i { color:#8b5cf6; }
+ 
+        .modal-job-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+ 
+        .modal-job-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+ 
+        .modal-job-date {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+ 
+        .modal-job-actions {
+            display: flex;
+            gap: 8px;
+        }
+ 
+        .btn-modal-apply {
+            padding: 7px 18px;
+            border-radius: 7px;
+            background: #275df5;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s;
+            display: inline-flex; align-items:center; gap:5px;
+        }
+        .btn-modal-apply:hover { background: #1a4ad6; color:#fff; }
+ 
+        .btn-modal-save {
+            padding: 7px 14px;
+            border-radius: 7px;
+            background: #fff;
+            color: #374151;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1.5px solid #e5e7eb;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+            display: inline-flex; align-items:center; gap:5px;
+        }
+        .btn-modal-save:hover { border-color: #f59e0b; color: #d97706; }
+        .btn-modal-save.saved { background:#fef3c7; border-color:#fcd34d; color:#d97706; }
+ 
+        /* No jobs state inside modal */
+        .modal-no-jobs {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca3af;
+        }
+        .modal-no-jobs i { font-size: 36px; margin-bottom: 12px; display:block; color: #d1d5db; }
+ 
+        /* ── TOAST NOTIFICATION ── */
+        .toast-wrap {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+ 
+        .toast {
+            background: #111827;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 11px 18px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: toastIn 0.25s ease;
+            pointer-events: all;
+        }
+        .toast i { font-size: 14px; }
+        .toast.save-toast  i { color: #fbbf24; }
+        .toast.apply-toast i { color: #34d399; }
+ 
+        @keyframes toastIn {
+            from { opacity:0; transform:translateY(12px); }
+            to   { opacity:1; transform:translateY(0); }
         }
  
         /* ── FILTER FORM RESET ── */
@@ -145,7 +452,6 @@
             cursor: pointer;
             transition: all 0.2s;
         }
- 
         .db-page-btn:hover   { border-color: #275df5; color: #275df5; }
         .db-page-btn.active  { background: #275df5; color: white; border-color: #275df5; }
         .db-page-btn:disabled { opacity: 0.4; cursor: default; }
@@ -158,7 +464,6 @@
             padding: 20px 32px 16px;
             border-bottom: 1px solid #f3f4f6;
         }
- 
         .listings-header h1 { font-size: 20px; font-weight: 700; color: #111827; }
  
         .count-badge {
@@ -184,7 +489,6 @@
             font-size: 13px;
             margin: 12px 0 4px;
         }
- 
         .filter-clear-link:hover { background: #fecaca; }
  
         /* ── LAYOUT OVERRIDE for grid ── */
@@ -200,6 +504,7 @@
             .filter-panel { display: none; }
             .companies-grid { padding: 16px; grid-template-columns: 1fr; }
             .listings-header { padding: 16px; }
+            .modal-box { max-height: 95vh; }
         }
     </style>
 </head>
@@ -325,7 +630,7 @@
 {% endif %}
  
 <!-- ═══════════════════════════════════════
-     CATEGORY CAROUSEL (static pills, filter via URL)
+     CATEGORY CAROUSEL
 ═══════════════════════════════════════ -->
 <main style="padding: 40px 32px 20px 32px;">
     <p class="section-title">{{ page_category }} actively hiring</p>
@@ -589,7 +894,6 @@
             </div>
             <hr class="divider"/>
  
-            <!-- Clear All -->
             {% if selected_locations or selected_industries or selected_departments or selected_nob or selected_freshness or selected_company_types %}
             <a href="{% url clear_url %}" class="filter-clear-link">
                 <i class="fa fa-times"></i> Clear All Filters
@@ -608,40 +912,92 @@
                 <div class="company-card-db"
                      data-name="{{ company.name|lower }}"
                      data-type="{{ company.company_type|lower }}"
-                     data-industry="{{ company.industry|lower }}">
+                     data-industry="{{ company.industry|lower }}"
+                     data-company-id="{{ company.id }}">
  
-                    <!-- LOGO -->
-                    <div class="company-logo-db">
-                        {% if company.logo %}
-                            <img src="{{ company.logo.url }}" alt="{{ company.name }}">
-                        {% else %}
-                            {{ company.name|slice:":2"|upper }}
-                        {% endif %}
-                    </div>
- 
-                    <!-- INFO -->
-                    <div class="company-info-db">
-                        <div class="company-name-db">{{ company.name }}</div>
-                        <div class="company-meta-db">
-                            {% if company.location %}📍 {{ company.location }}{% endif %}
-                            {% if company.industry %} · {{ company.industry }}{% endif %}
-                        </div>
-                        <div class="company-tags-db">
-                            {% if company.company_type %}
-                                <span class="ctag {{ company.company_type|lower }}">
-                                    {{ company.company_type }}
-                                </span>
-                            {% endif %}
-                            {% if company.nature_of_business %}
-                                <span class="ctag">{{ company.nature_of_business }}</span>
+                    <!-- TOP ROW: logo + info + job count -->
+                    <div class="card-top">
+                        <div class="company-logo-db">
+                            {% if company.logo %}
+                                <img src="{{ company.logo.url }}" alt="{{ company.name }}">
+                            {% else %}
+                                {{ company.name|slice:":2"|upper }}
                             {% endif %}
                         </div>
+ 
+                        <div class="company-info-db">
+                            <div class="company-name-db">{{ company.name }}</div>
+                            <div class="company-meta-db">
+                                {% if company.location %}📍 {{ company.location }}{% endif %}
+                                {% if company.industry %} · {{ company.industry }}{% endif %}
+                            </div>
+                            <div class="company-tags-db">
+                                {% if company.company_type %}
+                                    <span class="ctag {{ company.company_type|lower }}">
+                                        {{ company.company_type }}
+                                    </span>
+                                {% endif %}
+                                {% if company.nature_of_business %}
+                                    <span class="ctag">{{ company.nature_of_business }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+ 
+                        <div class="job-count-badge">
+                            {{ company.job_count }} Job{% if company.job_count != 1 %}s{% endif %}
+                        </div>
                     </div>
  
-                    <!-- JOB COUNT -->
-                    <div class="job-count-badge">
-                        {{ company.job_count }} Job{% if company.job_count != 1 %}s{% endif %} ›
+                    <!-- DIVIDER -->
+                    <div class="card-divider"></div>
+ 
+                    <!-- ACTION BUTTONS ROW -->
+                    <div class="card-actions">
+                        <!-- View Jobs → opens modal -->
+                        <button class="btn-view-jobs"
+                                onclick="openJobsModal(this)"
+                                data-company-id="{{ company.id }}"
+                                data-company-name="{{ company.name }}"
+                                data-company-logo="{{ company.logo.url|default:'' }}"
+                                data-company-initials="{{ company.name|slice:':2'|upper }}"
+                                data-company-meta="{% if company.location %}{{ company.location }}{% endif %}{% if company.industry %} · {{ company.industry }}{% endif %}">
+                            <i class="fa fa-briefcase"></i> View Jobs
+                        </button>
+ 
+                        <!-- Quick Apply → goes to company jobs page or apply URL -->
+                        <a class="btn-apply"
+                           href="{% url 'all_jobs' %}?company={{ company.id }}"
+                           title="Apply to jobs at {{ company.name }}">
+                            <i class="fa fa-paper-plane"></i> Apply
+                        </a>
+ 
+                        <!-- Save company -->
+                        <button class="btn-save"
+                                onclick="toggleSaveCompany(this, '{{ company.id }}', '{{ company.name }}')"
+                                title="Save company">
+                            <i class="fa fa-bookmark"></i>
+                        </button>
                     </div>
+ 
+                    <!-- Hidden job data for modal (rendered server-side) -->
+                    <script type="application/json" class="company-jobs-data">
+                    [
+                        {% for job in company.recent_jobs %}
+                        {
+                            "id": {{ job.id }},
+                            "title": "{{ job.title|escapejs }}",
+                            "location": "{{ job.location|default:''|escapejs }}",
+                            "salary_min": {{ job.salary_min|default:'null' }},
+                            "salary_max": {{ job.salary_max|default:'null' }},
+                            "experience": "{{ job.experience|default:''|escapejs }}",
+                            "work_mode": "{{ job.work_mode|default:''|escapejs }}",
+                            "description": "{{ job.description|default:''|truncatechars:160|escapejs }}",
+                            "posted_at": "{{ job.created_at|timesince }} ago",
+                            "apply_url": "{% url 'job_detail' job.id %}"
+                        }{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    ]
+                    </script>
  
                 </div>
                 {% endfor %}
@@ -752,6 +1108,35 @@
     </div>
 </footer>
  
+<!-- ═══════════════════════════════════════
+     JOB DETAILS MODAL  (single, reused)
+═══════════════════════════════════════ -->
+<div class="modal-overlay" id="jobsModal" onclick="handleModalOverlayClick(event)">
+    <div class="modal-box" id="modalBox">
+ 
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div class="modal-logo" id="modalLogo">CO</div>
+            <div class="modal-header-info">
+                <div class="modal-company-name" id="modalCompanyName">Company Name</div>
+                <div class="modal-company-meta" id="modalCompanyMeta"></div>
+            </div>
+            <button class="modal-close" onclick="closeJobsModal()" title="Close">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+ 
+        <!-- BODY: job listings -->
+        <div class="modal-body">
+            <div class="modal-jobs-list" id="modalJobsList"></div>
+        </div>
+ 
+    </div>
+</div>
+ 
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-wrap" id="toastWrap"></div>
+ 
 <script>
 /* ══════════════════════════════════════════
    CAROUSEL
@@ -761,7 +1146,6 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     if (!track) return;
- 
     nextBtn.addEventListener('click', () => track.scrollBy({ left: 200, behavior: 'smooth' }));
     prevBtn.addEventListener('click', () => track.scrollBy({ left: -200, behavior: 'smooth' }));
     track.addEventListener('scroll', () => {
@@ -769,8 +1153,7 @@
         nextBtn.disabled = (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4);
     });
 })();
- 
-function slide(dir) {}  // kept for backward compat
+function slide(dir) {}
  
 /* ══════════════════════════════════════════
    FILTER SECTION TOGGLE
@@ -787,13 +1170,209 @@ function toggleSection(el) {
    FILTER APPLIED COUNT
 ══════════════════════════════════════════ */
 function updateAppliedCount() {
-    const form    = document.getElementById('filterForm');
+    const form = document.getElementById('filterForm');
     if (!form) return;
     const checked = form.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked').length;
     const badge   = document.getElementById('applied-count');
     if (!badge) return;
     badge.textContent = `Applied (${checked})`;
     badge.style.display = checked > 0 ? 'inline' : 'none';
+}
+ 
+/* ══════════════════════════════════════════
+   localStorage keys
+══════════════════════════════════════════ */
+const SAVED_COMPANIES_KEY = 'savedCompanies_v1';
+const SAVED_JOBS_KEY      = 'savedJobs_v1';
+ 
+function getSavedCompanies() {
+    try { return JSON.parse(localStorage.getItem(SAVED_COMPANIES_KEY) || '{}'); } catch(e) { return {}; }
+}
+function getSavedJobs() {
+    try { return JSON.parse(localStorage.getItem(SAVED_JOBS_KEY) || '{}'); } catch(e) { return {}; }
+}
+ 
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+function showToast(msg, type) {
+    const wrap = document.getElementById('toastWrap');
+    const t = document.createElement('div');
+    t.className = `toast ${type}-toast`;
+    const icon = type === 'save' ? 'fa-bookmark' : 'fa-check-circle';
+    t.innerHTML = `<i class="fa ${icon}"></i> ${msg}`;
+    wrap.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 320); }, 2600);
+}
+ 
+/* ══════════════════════════════════════════
+   SAVE COMPANY (card button)
+══════════════════════════════════════════ */
+function toggleSaveCompany(btn, companyId, companyName) {
+    const saved = getSavedCompanies();
+    if (saved[companyId]) {
+        delete saved[companyId];
+        btn.classList.remove('saved');
+        showToast(`${companyName} removed from saved`, 'save');
+    } else {
+        saved[companyId] = { name: companyName, savedAt: Date.now() };
+        btn.classList.add('saved');
+        showToast(`${companyName} saved!`, 'save');
+    }
+    localStorage.setItem(SAVED_COMPANIES_KEY, JSON.stringify(saved));
+}
+ 
+/* ══════════════════════════════════════════
+   OPEN JOBS MODAL
+══════════════════════════════════════════ */
+function openJobsModal(triggerBtn) {
+    const companyId   = triggerBtn.dataset.companyId;
+    const companyName = triggerBtn.dataset.companyName;
+    const logoUrl     = triggerBtn.dataset.companyLogo;
+    const initials    = triggerBtn.dataset.companyInitials;
+    const meta        = triggerBtn.dataset.companyMeta;
+ 
+    // Set modal header
+    const modalLogo = document.getElementById('modalLogo');
+    if (logoUrl) {
+        modalLogo.innerHTML = `<img src="${logoUrl}" alt="${companyName}">`;
+    } else {
+        modalLogo.textContent = initials;
+        modalLogo.innerHTML   = initials;
+    }
+    document.getElementById('modalCompanyName').textContent = companyName;
+    document.getElementById('modalCompanyMeta').textContent = meta;
+ 
+    // Read embedded job data from the card
+    const card = triggerBtn.closest('.company-card-db');
+    let jobs = [];
+    try {
+        const raw = card.querySelector('.company-jobs-data');
+        if (raw) jobs = JSON.parse(raw.textContent.trim());
+    } catch(e) { jobs = []; }
+ 
+    // Render jobs
+    renderModalJobs(jobs, companyId, companyName);
+ 
+    // Show modal
+    document.getElementById('jobsModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+ 
+function closeJobsModal() {
+    document.getElementById('jobsModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+ 
+function handleModalOverlayClick(e) {
+    if (e.target === document.getElementById('jobsModal')) closeJobsModal();
+}
+ 
+/* ── Keyboard close ── */
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeJobsModal(); });
+ 
+/* ══════════════════════════════════════════
+   RENDER JOBS INSIDE MODAL
+══════════════════════════════════════════ */
+function renderModalJobs(jobs, companyId, companyName) {
+    const list      = document.getElementById('modalJobsList');
+    const savedJobs = getSavedJobs();
+ 
+    if (!jobs || jobs.length === 0) {
+        list.innerHTML = `
+            <div class="modal-no-jobs">
+                <i class="fa fa-briefcase"></i>
+                <p style="font-size:15px;font-weight:600;color:#374151;margin-bottom:6px;">No open positions</p>
+                <p style="font-size:13px;">This company hasn't posted any jobs yet. Check back later!</p>
+            </div>`;
+        return;
+    }
+ 
+    list.innerHTML = jobs.map(job => {
+        const isSaved = !!savedJobs[job.id];
+ 
+        // Salary display
+        let salaryStr = '';
+        if (job.salary_min && job.salary_max) {
+            salaryStr = `₹${fmtLakh(job.salary_min)}–${fmtLakh(job.salary_max)} LPA`;
+        } else if (job.salary_min) {
+            salaryStr = `₹${fmtLakh(job.salary_min)} LPA+`;
+        }
+ 
+        return `
+        <div class="modal-job-item">
+            <div class="modal-job-title">${escHtml(job.title)}</div>
+            <div class="modal-job-pills">
+                ${job.location ? `<span class="jpill"><i class="fa fa-location-dot"></i>${escHtml(job.location)}</span>` : ''}
+                ${job.experience ? `<span class="jpill exp"><i class="fa fa-clock"></i>${escHtml(job.experience)}</span>` : ''}
+                ${salaryStr ? `<span class="jpill salary"><i class="fa fa-indian-rupee-sign"></i>${salaryStr}</span>` : ''}
+                ${job.work_mode ? `<span class="jpill mode"><i class="fa fa-laptop"></i>${escHtml(job.work_mode)}</span>` : ''}
+            </div>
+            ${job.description ? `<div class="modal-job-desc">${escHtml(job.description)}</div>` : ''}
+            <div class="modal-job-footer">
+                <span class="modal-job-date"><i class="fa fa-calendar-alt" style="margin-right:4px;color:#d1d5db;"></i>Posted ${escHtml(job.posted_at)}</span>
+                <div class="modal-job-actions">
+                    <button class="btn-modal-save ${isSaved ? 'saved' : ''}"
+                            id="modal-save-${job.id}"
+                            onclick="toggleSaveJob(${job.id}, '${escAttr(job.title)}', '${escAttr(companyName)}', this)">
+                        <i class="fa fa-bookmark"></i> ${isSaved ? 'Saved' : 'Save'}
+                    </button>
+                    <a class="btn-modal-apply" href="${job.apply_url}">
+                        <i class="fa fa-paper-plane"></i> Apply Now
+                    </a>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+ 
+/* ══════════════════════════════════════════
+   SAVE JOB (inside modal)
+══════════════════════════════════════════ */
+function toggleSaveJob(jobId, jobTitle, companyName, btn) {
+    const saved = getSavedJobs();
+    if (saved[jobId]) {
+        delete saved[jobId];
+        btn.classList.remove('saved');
+        btn.innerHTML = '<i class="fa fa-bookmark"></i> Save';
+        showToast(`Removed from saved jobs`, 'save');
+    } else {
+        saved[jobId] = { title: jobTitle, company: companyName, savedAt: Date.now() };
+        btn.classList.add('saved');
+        btn.innerHTML = '<i class="fa fa-bookmark"></i> Saved';
+        showToast(`"${jobTitle}" saved!`, 'save');
+    }
+    localStorage.setItem(SAVED_JOBS_KEY, JSON.stringify(saved));
+}
+ 
+/* ══════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════ */
+function fmtLakh(n) {
+    if (!n) return '';
+    const l = n / 100000;
+    return l % 1 === 0 ? l.toFixed(0) : l.toFixed(1);
+}
+function escHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) {
+    if (!s) return '';
+    return String(s).replace(/'/g,"\\'");
+}
+ 
+/* ══════════════════════════════════════════
+   RESTORE SAVED STATE on page load
+══════════════════════════════════════════ */
+function restoreSavedState() {
+    const saved = getSavedCompanies();
+    document.querySelectorAll('.btn-save').forEach(btn => {
+        const card = btn.closest('.company-card-db');
+        if (!card) return;
+        const id = card.dataset.companyId;
+        if (id && saved[id]) btn.classList.add('saved');
+    });
 }
  
 /* ══════════════════════════════════════════
@@ -826,7 +1405,6 @@ function buildPaginationButtons(totalPages, total) {
     const pg = document.getElementById('dbPagination');
     if (!pg) return;
     pg.innerHTML = '';
- 
     if (totalPages <= 1) return;
  
     const info = document.createElement('span');
@@ -844,7 +1422,7 @@ function buildPaginationButtons(totalPages, total) {
     pg.appendChild(prev);
  
     for (let i = 1; i <= totalPages; i++) {
-        const btn      = document.createElement('button');
+        const btn = document.createElement('button');
         btn.className  = 'db-page-btn' + (i === currentPage ? ' active' : '');
         btn.textContent = i;
         const p = i;
@@ -861,12 +1439,11 @@ function buildPaginationButtons(totalPages, total) {
 }
  
 /* ══════════════════════════════════════════
-   NAV SEARCH — filters company cards by name
+   NAV SEARCH
 ══════════════════════════════════════════ */
 function applyNavSearch() {
     const kw = (document.getElementById('navSearch').value || '').toLowerCase().trim();
     if (!kw) { renderPage(); return; }
- 
     const cards = getAllCards();
     cards.forEach(card => {
         const match = (card.dataset.name || '').includes(kw) ||
@@ -876,8 +1453,12 @@ function applyNavSearch() {
     });
 }
  
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
     updateAppliedCount();
+    restoreSavedState();
  
     document.querySelectorAll('#filterForm input').forEach(function(inp) {
         inp.addEventListener('change', updateAppliedCount);
@@ -885,9 +1466,7 @@ document.addEventListener('DOMContentLoaded', function() {
  
     const navSearch = document.getElementById('navSearch');
     if (navSearch) {
-        navSearch.addEventListener('keydown', e => {
-            if (e.key === 'Enter') applyNavSearch();
-        });
+        navSearch.addEventListener('keydown', e => { if (e.key === 'Enter') applyNavSearch(); });
         navSearch.addEventListener('input', applyNavSearch);
     }
  
@@ -896,4 +1475,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
  
 </body>
-</html>
+</html
