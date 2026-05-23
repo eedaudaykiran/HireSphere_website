@@ -124,6 +124,7 @@ class JobForm(forms.ModelForm):
             'experience',
             'min_salary',
             'max_salary',
+            'salary_disclosed',
             'location',
             'work_mode',
             'skills',
@@ -136,13 +137,38 @@ class JobForm(forms.ModelForm):
             'is_featured',
             'is_sponsored',
         ]
+
         widgets = {
             'min_salary':  forms.NumberInput(attrs={'placeholder': 'Min Salary'}),
             'max_salary':  forms.NumberInput(attrs={'placeholder': 'Max Salary'}),
             'description': forms.Textarea(attrs={'placeholder': 'Enter job description'}),
         }
- 
- 
+
+    def clean(self):
+        cleaned_data = super().clean()
+        disclosed = cleaned_data.get('salary_disclosed')
+        min_s = cleaned_data.get('min_salary')
+        max_s = cleaned_data.get('max_salary')
+
+        if disclosed:
+            if min_s is not None and min_s <= 0:
+                self.add_error('min_salary', 'Salary must be a positive number.')
+            if max_s is not None and max_s <= 0:
+                self.add_error('max_salary', 'Salary must be a positive number.')
+
+            if min_s and max_s and max_s < min_s:
+                self.add_error('max_salary', 'Max salary cannot be less than min salary.')
+
+        # ✅ NEW: if disclosed=True but both fields empty → auto-fix silently
+            if not min_s and not max_s:
+                cleaned_data['salary_disclosed'] = False
+
+        else:
+            cleaned_data['min_salary'] = None
+            cleaned_data['max_salary'] = None
+
+            return cleaned_data
+    
 class CompanyProfileForm(forms.ModelForm):
  
     class Meta:

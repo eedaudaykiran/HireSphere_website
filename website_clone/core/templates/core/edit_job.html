@@ -1,181 +1,445 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'core/base.html' %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Job</title>
+<style>
+    :root {
+        --bg: #0b0f1a; --surface: #111827; --card: #151d2e;
+        --border: #1e2d45; --accent: #3b82f6; --accent2: #8b5cf6;
+        --text: #f1f5f9; --muted: #64748b; --soft: #94a3b8; --green: #10b981;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial;
-        }
+    .edit-wrapper {
+        max-width: 860px;
+        margin: 48px auto;
+        padding: 0 24px 80px;
+    }
 
-        body {
-            background: #f4f7fb;
-            padding: 40px;
-        }
+    .page-header {
+        margin-bottom: 32px;
+    }
 
-        .container {
-            max-width: 700px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+    .page-header h1 {
+        font-size: 28px;
+        font-weight: 800;
+        font-family: 'Syne', sans-serif;
+    }
 
-        h1 {
-            margin-bottom: 25px;
-            color: #333;
-        }
+    .page-header p { color: var(--muted); margin-top: 6px; }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .edit-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 36px;
+        margin-bottom: 24px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #444;
-        }
+    .section-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+    }
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-        }
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
 
-        textarea {
-            height: 120px;
-            resize: none;
-        }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group.full { grid-column: 1 / -1; }
 
-        .btn {
-            background: #2563eb;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+    label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
 
-        .btn:hover {
-            background: #1e40af;
-        }
-    </style>
-</head>
+    input, select, textarea {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 14px;
+        color: var(--text);
+        font-size: 14px;
+        font-family: inherit;
+        width: 100%;
+        transition: border-color 0.2s;
+        outline: none;
+    }
 
-<body>
+    input:focus, select:focus, textarea:focus {
+        border-color: var(--accent);
+    }
 
-    <div class="container">
+    textarea { resize: vertical; min-height: 120px; }
 
+    /* ── Salary Section ── */
+    .salary-section {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px;
+        grid-column: 1 / -1;
+    }
+
+    .salary-toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .salary-toggle-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 26px;
+    }
+
+    .toggle-switch input { display: none; }
+
+    .toggle-slider {
+        position: absolute;
+        inset: 0;
+        background: var(--border);
+        border-radius: 100px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .toggle-slider::before {
+        content: '';
+        position: absolute;
+        width: 18px; height: 18px;
+        left: 4px; top: 4px;
+        background: white;
+        border-radius: 50%;
+        transition: 0.3s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+    .salary-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .salary-hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 8px;
+        grid-column: 1 / -1;
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+        display: flex;
+        gap: 14px;
+        margin-top: 8px;
+    }
+
+    .btn-save {
+        flex: 1;
+        padding: 16px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-family: 'Syne', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .btn-save:hover { opacity: 0.9; }
+
+    .btn-cancel {
+        padding: 16px 28px;
+        background: transparent;
+        color: var(--soft);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel:hover { border-color: var(--accent); color: var(--accent); }
+
+    .error-msg { color: #f87171; font-size: 12px; margin-top: 4px; }
+
+    @media (max-width: 640px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .salary-fields { grid-template-columns: 1fr; }
+        .form-group.full { grid-column: 1; }
+    }
+</style>
+
+<div class="edit-wrapper">
+
+    <div class="page-header">
         <h1>✏️ Edit Job</h1>
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            <!-- Job Title -->
-            <div class="form-group">
-
-                <label>Job Title</label>
-
-                <input type="text" name="title" value="{{ job.title }}" required>
-
-            </div>
-
-            <!-- Category -->
-            <div class="form-group">
-
-                <label>Category</label>
-
-                <input type="text" name="category" value="{{ job.category }}" required>
-
-            </div>
-
-            <!-- Job Type -->
-            <div class="form-group">
-
-                <label>Job Type</label>
-
-                <select name="job_type">
-
-                    <option value="Full-Time" {% if job.job_type == 'Full-Time' %} selected {% endif %}>
-                        Full-Time
-                    </option>
-
-                    <option value="Part-Time" {% if job.job_type == 'Part-Time' %} selected {% endif %}>
-                        Part-Time
-                    </option>
-
-                    <option value="Remote" {% if job.job_type == 'Remote' %} selected {% endif %}>
-                        Remote
-                    </option>
-
-                </select>
-
-            </div>
-
-            <!-- Status -->
-            <div class="form-group">
-
-                <label>Status</label>
-
-                <select name="status">
-
-                    <option value="active" {% if job.status == 'active' %} selected {% endif %}>
-                        Active
-                    </option>
-
-                    <option value="closed" {% if job.status == 'closed' %} selected {% endif %}>
-                        Closed
-                    </option>
-
-                    <option value="draft" {% if job.status == 'draft' %} selected {% endif %}>
-                        Draft
-                    </option>
-
-                </select>
-
-            </div>
-
-            <!-- Description -->
-            <div class="form-group">
-
-                <label>Description</label>
-
-                <textarea name="description">{{ job.description }}</textarea>
-
-            </div>
-
-            <!-- Salary -->
-            <div class="form-group">
-
-                <label>Salary</label>
-
-                <input type="number" name="salary" value="{{ job.salary }}">
-
-            </div>
-
-            <!-- Submit -->
-            <button type="submit" class="btn">
-                Update Job
-            </button>
-
-        </form>
-
+        <p>Update details for <strong>{{ job.title }}</strong></p>
     </div>
 
-</body>
+    {% if messages %}
+        {% for msg in messages %}
+            <div style="padding:14px 18px; border-radius:12px; margin-bottom:20px;
+                background:{% if 'successfully' in msg.message %}rgba(16,185,129,0.15){% else %}rgba(239,68,68,0.15){% endif %};
+                border:1px solid {% if 'successfully' in msg.message %}rgba(16,185,129,0.3){% else %}rgba(239,68,68,0.3){% endif %};
+                color:{% if 'successfully' in msg.message %}#10b981{% else %}#f87171{% endif %};">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-</html>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- ── Basic Info ── -->
+        <div class="edit-card">
+            <div class="section-title">📋 Basic Information</div>
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Job Title *</label>
+                    <input type="text" name="title"
+                           value="{{ form.title.value|default:'' }}" required>
+                    {% for e in form.title.errors %}<div class="error-msg">{{ e }}</div>{% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" name="company"
+                           value="{{ form.company.value|default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location"
+                           value="{{ form.location.value|default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Experience Required</label>
+                    <input type="text" name="experience"
+                           value="{{ form.experience.value|default:'' }}"
+                           placeholder="e.g. 2-4 years">
+                </div>
+
+                <div class="form-group">
+                    <label>Work Mode</label>
+                    <select name="work_mode">
+                        {% for val, label in form.fields.work_mode.choices %}
+                            <option value="{{ val }}"
+                                {% if form.work_mode.value == val %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Job Type</label>
+                    <select name="job_type">
+                        {% for val, label in form.fields.job_type.choices %}
+                            <option value="{{ val }}"
+                                {% if form.job_type.value == val %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category">
+                        {% for val, label in form.fields.category.choices %}
+                            <option value="{{ val }}"
+                                {% if form.category.value == val %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── 💰 Salary Section ── -->
+        <div class="edit-card">
+            <div class="section-title">💰 Salary Information</div>
+            <div class="form-grid">
+                <div class="salary-section">
+
+                    <div class="salary-toggle-row">
+                        <span class="salary-toggle-label">
+                            Disclose Salary to Candidates
+                        </span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="salary_disclosed"
+                                   id="salaryToggle"
+                                   {% if form.salary_disclosed.value %}checked{% endif %}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="salary-fields" id="salaryFields"
+                         style="{% if not form.salary_disclosed.value %}display:none{% endif %}">
+
+                        <div class="form-group">
+                            <label>Min Salary (LPA)</label>
+                            <input type="number" name="min_salary"
+                                   id="minSalary"
+                                   value="{{ form.min_salary.value|default:'' }}"
+                                   placeholder="e.g. 5" min="1">
+                            {% for e in form.min_salary.errors %}
+                                <div class="error-msg">{{ e }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Max Salary (LPA)</label>
+                            <input type="number" name="max_salary"
+                                   id="maxSalary"
+                                   value="{{ form.max_salary.value|default:'' }}"
+                                   placeholder="e.g. 10" min="1">
+                            {% for e in form.max_salary.errors %}
+                                <div class="error-msg">{{ e }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <p class="salary-hint">
+                            💡 Enter values in LPA (Lakhs Per Annum). 
+                            Min must be less than Max. Only positive numbers allowed.
+                        </p>
+                    </div>
+
+                    <div id="notDisclosedMsg"
+                         style="{% if form.salary_disclosed.value %}display:none{% endif %}
+                                color:var(--muted); font-size:14px; padding: 8px 0;">
+                        🔒 Salary will show as <strong>"Not Disclosed"</strong> to candidates.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Description & Skills ── -->
+        <div class="edit-card">
+            <div class="section-title">📝 Job Details</div>
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Job Description</label>
+                    <textarea name="description">{{ form.description.value|default:'' }}</textarea>
+                </div>
+
+                <div class="form-group full">
+                    <label>Required Skills (comma separated)</label>
+                    <input type="text" name="skills"
+                           value="{{ form.skills.value|default:'' }}"
+                           placeholder="Python, Django, React">
+                </div>
+
+                <div class="form-group">
+                    <label>Education</label>
+                    <select name="education">
+                        {% for val, label in form.fields.education.choices %}
+                            <option value="{{ val }}"
+                                {% if form.education.value == val %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Role Category</label>
+                    <input type="text" name="role_category"
+                           value="{{ form.role_category.value|default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Company Type</label>
+                    <select name="company_type">
+                        {% for val, label in form.fields.company_type.choices %}
+                            <option value="{{ val }}"
+                                {% if form.company_type.value == val %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Company Logo</label>
+                    <input type="file" name="logo" accept="image/*">
+                    {% if job.logo %}
+                        <small style="color:var(--muted)">
+                            Current: {{ job.logo.name }}
+                        </small>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Save Buttons ── -->
+        <div class="btn-row">
+            <button type="submit" class="btn-save">💾 Save Changes</button>
+            <a href="{% url 'manage_jobs' %}" class="btn-cancel">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const toggle       = document.getElementById('salaryToggle');
+    const salaryFields = document.getElementById('salaryFields');
+    const notMsg       = document.getElementById('notDisclosedMsg');
+    const minInput     = document.getElementById('minSalary');
+    const maxInput     = document.getElementById('maxSalary');
+
+    toggle.addEventListener('change', function () {
+        if (this.checked) {
+            salaryFields.style.display = 'grid';
+            notMsg.style.display       = 'none';
+        } else {
+            salaryFields.style.display = 'none';
+            notMsg.style.display       = 'block';
+            // Clear values when hidden so form.clean() sets disclosed=False
+            minInput.value = '';
+            maxInput.value = '';
+        }
+    });
+
+    // Prevent negative values on input
+    [minInput, maxInput].forEach(input => {
+        input.addEventListener('input', function () {
+            if (this.value < 1) this.value = '';
+        });
+    });
+</script>
+
+{% endblock %}

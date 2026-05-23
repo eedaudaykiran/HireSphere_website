@@ -824,9 +824,13 @@
                         <span><i class="fa-solid fa-briefcase"></i>
                             <a href="#" class="rj-meta-link">{{ job.experience|default:"Not specified" }}</a>
                         </span>
-                        <span><i class="fa-solid fa-indian-rupee-sign"></i>
-                            <a href="#" class="rj-meta-link">{{ job.salary|default:"Not disclosed" }}</a>
-                        </span>
+                        <span>
+    <i class="fa-solid fa-indian-rupee-sign"></i>
+
+    <a href="#" class="rj-meta-link">
+        {{ job.salary_display }}
+    </a>
+</span>
                         <span><i class="fa-solid fa-location-dot"></i>
                             <a href="#" class="rj-meta-link">{{ job.work_mode }} - {{ job.location }}</a>
                         </span>

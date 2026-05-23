@@ -656,23 +656,13 @@
             </div>
             {% endif %}
  
-            {% if job.min_salary or job.max_salary %}
-            <div class="meta-item">
+              <div class="meta-item">
                 <div class="meta-icon">₹</div>
-                <div>
-                    <div class="meta-label">Salary</div>
-                    <div class="meta-value">
-                        {% if job.min_salary and job.max_salary %}
-                            {{ job.min_salary }}–{{ job.max_salary }} LPA
-                        {% elif job.min_salary %}
-                            {{ job.min_salary }}+ LPA
-                        {% else %}
-                            Upto {{ job.max_salary }} LPA
-                        {% endif %}
-                    </div>
+            <div>
+                <div class="meta-label">Salary</div>
+                <div class="meta-value">{{ job.salary_display }}</div>
                 </div>
             </div>
-            {% endif %}
  
             {% if job.experience %}
             <div class="meta-item">
@@ -734,20 +724,10 @@
  
             <div class="detail-grid">
  
-                {% if job.min_salary or job.max_salary %}
                 <div class="detail-item">
                     <div class="detail-label">Salary Range</div>
-                    <div class="detail-value salary">
-                        {% if job.min_salary and job.max_salary %}
-                            ₹{{ job.min_salary }}–{{ job.max_salary }} LPA
-                        {% elif job.min_salary %}
-                            ₹{{ job.min_salary }}+ LPA
-                        {% else %}
-                            Upto ₹{{ job.max_salary }} LPA
-                        {% endif %}
-                    </div>
-                </div>
-                {% endif %}
+                <div class="detail-value salary">{{ job.salary_display }}</div>
+            </div>
  
                 {% if job.location %}
                 <div class="detail-item">

@@ -13144,6 +13144,8 @@ def company_unicorn(request):
     context['clear_url']     = 'company_unicorn'
  
     return render(request, 'core/company_unicorn.html', context)
+
+    
  
  
 # ══════════════════════════════════════════════════════════════
@@ -13459,16 +13461,17 @@ def saved_jobs_page(request):
 # ===================== ALL JOBS =====================
 
 # ===================== JOB DETAIL =====================
+# core/views.py
 def job_detail(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
 
-    job = get_object_or_404(
-        Job,
-        id=job_id
-    )
+    # Safety clamp: fix any bad data that slipped through
+    if job.min_salary is not None and job.min_salary <= 0:
+        job.min_salary = None
+    if job.max_salary is not None and job.max_salary <= 0:
+        job.max_salary = None
 
-    return render(request, 'core/job_detail.html', {
-        'job': job
-    })
+    return render(request, 'core/job_detail.html', {'job': job})
 
 # ===================== REMOVE SAVED JOB =====================
 def remove_saved_job(request, saved_job_id):
@@ -14594,14 +14597,22 @@ def edit_job(request, job_id):
     job = get_object_or_404(Job, id=job_id, employer=request.user)
 
     if request.method == 'POST':
-        job.title    = request.POST.get('title')
-        job.category = request.POST.get('category')
-        job.job_type = request.POST.get('work_mode')
-        job.save()
-        return redirect('employer_dashboard')
+        form = JobForm(request.POST, request.FILES, instance=job)
+        if form.is_valid():
+            updated_job = form.save(commit=False)
+            updated_job.employer = request.user  # keep employer set
+            updated_job.save()
+            messages.success(request, f'✅ "{job.title}" updated successfully!')
+            return redirect('manage_jobs')
+        else:
+            messages.error(request, '❌ Please fix the errors below.')
+    else:
+        form = JobForm(instance=job)  # ← pre-fills ALL fields including salary
 
-    return render(request, 'core/edit_job.html', {'job': job})
-
+    return render(request, 'core/edit_job.html', {
+        'form': form,
+        'job':  job,
+    })
 
 # ===================== VIEW APPLICATIONS =====================
 

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.core.validators import MinValueValidator
+
 
 # FIX: removed "from urllib import request" — that was a wrong import that doesn't belong here
  
@@ -31,30 +33,28 @@ class UserProfile(models.Model):
         return self.full_name
  
  
+from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
+
+
 class Job(models.Model):
- 
+
     JOB_TYPE_CHOICES = (
         ('Remote',  'Remote'),
         ('On-site', 'On-site'),
         ('Hybrid',  'Hybrid'),
     )
- 
+
     CATEGORY_CHOICES = (
+        ('IT', 'IT'),
+        ('Sales', 'Sales'),
+        ('HR', 'HR'),
+        ('General', 'General'),
+        ('Finance & Accounting', 'Finance & Accounting'),
+        ('Marketing', 'Marketing'),
+    )
 
-    ('IT', 'IT'),
-
-    ('Sales', 'Sales'),
-
-    ('HR', 'HR'),
-
-    ('General', 'General'),
-
-    ('Finance & Accounting', 'Finance & Accounting'),
-
-    ('Marketing', 'Marketing'),
-
-)
- 
     EDUCATION_CHOICES = [
         ("PG",    "Any Postgraduate"),
         ("MBA",   "MBA/PGDM"),
@@ -63,12 +63,12 @@ class Job(models.Model):
         ("DIP",   "Diploma"),
         ("12TH",  "12th Pass"),
     ]
- 
+
     POSTED_BY_CHOICES = [
-        ("COMPANY",     "Company Jobs"),
-        ("CONSULTANT",  "Consultant Jobs"),
+        ("COMPANY",    "Company Jobs"),
+        ("CONSULTANT", "Consultant Jobs"),
     ]
- 
+
     INDUSTRY_CHOICES = [
         ("IT",      "IT Services & Consulting"),
         ("RECRUIT", "Recruitment / Staffing"),
@@ -78,7 +78,7 @@ class Job(models.Model):
         ("BFSI",    "BFSI"),
         ("RETAIL",  "Retail"),
     ]
- 
+
     COMPANY_TYPE_CHOICES = (
         ('MNC',     'MNC'),
         ('Startup', 'Startup'),
@@ -89,20 +89,36 @@ class Job(models.Model):
     STATUS_CHOICES = (
         ('active', 'Active'),
         ('closed', 'Closed'),
-        ('draft', 'Draft'),
+        ('draft',  'Draft'),
     )
 
     JOB_TYPES = (
-        ('full_time', 'Full Time'),
-        ('part_time', 'Part Time'),
+        ('full_time',  'Full Time'),
+        ('part_time',  'Part Time'),
         ('internship', 'Internship'),
     )
- 
+
+    NATURE_OF_BUSINESS_CHOICES = (
+        ('B2B',  'B2B'),
+        ('B2C',  'B2C'),
+        ('SaaS', 'SaaS'),
+        ('D2C',  'D2C'),
+        ('PaaS', 'PaaS'),
+    )
+
+    DEPARTMENT_CHOICES = (
+        ('Sales & Business Development', 'Sales & Business Development'),
+        ('Engineering - Software & QA',  'Engineering - Software & QA'),
+        ('Marketing & Communication',    'Marketing & Communication'),
+        ('Human Resources',              'Human Resources'),
+        ('Finance & Accounting',         'Finance & Accounting'),
+        ('Operations',                   'Operations'),
+    )
+
+    # ── Core fields ───────────────────────────────────────────────
     title         = models.CharField(max_length=200)
     company       = models.CharField(max_length=200)
     experience    = models.CharField(max_length=50)
-    min_salary    = models.IntegerField(null=True, blank=True)
-    max_salary    = models.IntegerField(null=True, blank=True)
     location      = models.CharField(max_length=100)
     work_mode     = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES)
     skills        = models.CharField(max_length=300)
@@ -123,62 +139,50 @@ class Job(models.Model):
     description   = models.TextField(blank=True, null=True)
     employer      = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     views         = models.IntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    company_name = models.CharField(max_length=100,null=True, blank=True)
-    
-    job_type = models.CharField(
-        max_length=20,
-        choices=JOB_TYPES
+    is_active     = models.BooleanField(default=True)
+    company_name  = models.CharField(max_length=100, null=True, blank=True)
+    job_type      = models.CharField(max_length=20, choices=JOB_TYPES)
+    status        = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    nature_of_business = models.CharField(max_length=10, choices=NATURE_OF_BUSINESS_CHOICES, blank=True, null=True)
+    department    = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES, blank=True, null=True)
+
+    # ── Salary fields ─────────────────────────────────────────────
+    salary_disclosed = models.BooleanField(default=True)
+    min_salary = models.IntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)]   # ✅ blocks 0 and negatives
     )
-    
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='active'
+    max_salary = models.IntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)]   # ✅ blocks 0 and negatives
     )
 
-    NATURE_OF_BUSINESS_CHOICES = (
-    ('B2B',  'B2B'),
-    ('B2C',  'B2C'),
-    ('SaaS', 'SaaS'),
-    ('D2C',  'D2C'),
-    ('PaaS', 'PaaS'),
-    )
- 
-    DEPARTMENT_CHOICES = (
-    ('Sales & Business Development', 'Sales & Business Development'),
-    ('Engineering - Software & QA',  'Engineering - Software & QA'),
-    ('Marketing & Communication',    'Marketing & Communication'),
-    ('Human Resources',              'Human Resources'),
-    ('Finance & Accounting',         'Finance & Accounting'),
-    ('Operations',                   'Operations'),
-    )
- 
-# Add inside the Job model class:
-    nature_of_business = models.CharField(
-    max_length=10,
-    choices=NATURE_OF_BUSINESS_CHOICES,
-    blank=True,
-    null=True,
-    )
- 
-    department = models.CharField(
-    max_length=100,
-    choices=DEPARTMENT_CHOICES,
-    blank=True,
-    null=True,
-    )
- 
+    # ── Safe salary display property ──────────────────────────────
+    @property
+    def salary_display(self):
+        """Single source of truth — never returns blank, never crashes."""
+        if not self.salary_disclosed:
+            return "Not Disclosed"
+        if self.min_salary and self.max_salary:
+            return f"₹{self.min_salary:,} – ₹{self.max_salary:,} per year"
+        elif self.min_salary:
+            return f"₹{self.min_salary:,}+ per year"
+        elif self.max_salary:
+            return f"Up to ₹{self.max_salary:,} per year"
+        return "Not Disclosed"
+
+    # ── Helper methods ────────────────────────────────────────────
     def __str__(self):
         return self.title
- 
+
     def skills_list(self):
         return [skill.strip() for skill in self.skills.split(',')] if self.skills else []
- 
+
     def conditions_list(self):
         if not self.conditions:
             return []
-    #  by bullet • or by comma
         if '•' in self.conditions:
             return [c.strip() for c in self.conditions.split('•') if c.strip()]
         return [c.strip() for c in self.conditions.split(',') if c.strip()]
