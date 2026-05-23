@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Grievance Portal | Real-time submissions</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f0f5fa 0%, #e9eff5 100%);
+      font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      padding: 2rem 1.5rem;
+      color: #1a2c3e;
+    }
+
+    /* main container */
+    .grievance-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* header */
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e4663, #2c628b);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.01em;
+    }
+    .header p {
+      color: #4c6f8c;
+      margin-top: 0.3rem;
+    }
+
+    /* two column layout: form + list */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2rem;
+    }
+
+    /* form card */
+    .form-card, .list-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(2px);
+      border-radius: 1.75rem;
+      padding: 1.8rem;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: all 0.2s;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #1f4e6e;
+      font-size: 0.9rem;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid #cbdde9;
+      border-radius: 1rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: white;
+      transition: 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2c7cb6;
+      box-shadow: 0 0 0 3px rgba(44,124,182,0.2);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .btn-submit {
+      background: linear-gradient(105deg, #1e5a7d, #2c7cb6);
+      border: none;
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 0.5rem;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -8px rgba(44,124,182,0.4);
+      background: linear-gradient(105deg, #236f94, #3b8bc2);
+    }
+    .success-message {
+      background: #dff2e8;
+      color: #1b6b4c;
+      padding: 0.7rem;
+      border-radius: 1rem;
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: 0.2s;
+    }
+
+    /* grievances list */
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e2edf7;
+      padding-bottom: 0.7rem;
+    }
+    .list-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f5579;
+    }
+    .grievance-count {
+      background: #eef3fc;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1f5a7e;
+    }
+    .grievances-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      max-height: 550px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+    /* custom scroll */
+    .grievances-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .grievances-list::-webkit-scrollbar-track {
+      background: #e2edf7;
+      border-radius: 8px;
+    }
+    .grievances-list::-webkit-scrollbar-thumb {
+      background: #aac7df;
+      border-radius: 8px;
+    }
+
+    /* grievance card */
+    .grievance-item {
+      background: white;
+      border-radius: 1.25rem;
+      padding: 1rem 1.2rem;
+      border-left: 5px solid #e8b13b;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      transition: 0.15s;
+      border: 1px solid #e6edf4;
+    }
+    .grievance-item:hover {
+      transform: translateX(3px);
+      border-left-width: 6px;
+      box-shadow: 0 6px 12px -8px rgba(0,0,0,0.1);
+    }
+    .grievance-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .grievance-name {
+      font-weight: 800;
+      color: #0b3b54;
+    }
+    .grievance-category {
+      background: #eef2fa;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #2c628b;
+    }
+    .grievance-time {
+      color: #7d9bb5;
+      font-size: 0.7rem;
+    }
+    .grievance-desc {
+      margin-top: 0.4rem;
+      color: #2c4b66;
+      line-height: 1.45;
+      font-size: 0.9rem;
+      word-break: break-word;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #8aabc2;
+      background: #f9fbfe;
+      border-radius: 1.2rem;
+      font-style: italic;
+    }
+
+    /* responsive */
+    @media (max-width: 850px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      body {
+        padding: 1rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .form-card, .list-card {
+        padding: 1.2rem;
+      }
+      .header h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="grievance-container">
+  <div class="header">
+    <h1>📢 Real‑time Grievance Portal</h1>
+    <p>Share your feedback | We listen, we act.</p>
+  </div>
+
+  <div class="dashboard">
+    <!-- submission form -->
+    <div class="form-card">
+      <h3 style="margin-bottom: 1rem; color:#1f4e6e;">📝 Submit your grievance</h3>
+      <form id="grievanceForm">
+        <div class="form-group">
+          <label>Full name *</label>
+          <input type="text" id="nameInput" placeholder="e.g. Anjali Sharma" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Email address *</label>
+          <input type="email" id="emailInput" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="categorySelect">
+            <option value="Technical">💻 Technical</option>
+            <option value="Billing">💰 Billing / Payment</option>
+            <option value="Service Quality">⭐ Service Quality</option>
+            <option value="General">📬 General</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Grievance description *</label>
+          <textarea id="descInput" placeholder="Describe the issue in detail..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">✉️ Submit grievance</button>
+        <div id="formFeedback" style="min-height: 50px;"></div>
+      </form>
+    </div>
+
+    <!-- grievances list: real-time -->
+    <div class="list-card">
+      <div class="list-header">
+        <h2>📋 Submitted grievances</h2>
+        <span class="grievance-count" id="grievanceCount">0</span>
+      </div>
+      <div id="grievancesListContainer" class="grievances-list">
+        <div class="empty-state">✨ No grievances yet. Be the first to share feedback.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- In-memory storage (persists during session) ----------
+  let grievancesArray = [];
+
+  // Helper: format timestamp
+  function getCurrentTimestamp() {
+    const now = new Date();
+    return now.toLocaleString(undefined, { 
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true 
+    });
+  }
+
+  // Render all grievances (newest first)
+  function renderGrievances() {
+    const container = document.getElementById('grievancesListContainer');
+    const countSpan = document.getElementById('grievanceCount');
+    if (!container) return;
+
+    if (grievancesArray.length === 0) {
+      container.innerHTML = `<div class="empty-state">📭 No grievances yet. Use the form to submit.</div>`;
+      countSpan.innerText = '0';
+      return;
+    }
+
+    // sort by timestamp descending (newest first)
+    const sorted = [...grievancesArray].sort((a,b) => new Date(b.timestampRaw) - new Date(a.timestampRaw));
+
+    const itemsHTML = sorted.map(g => `
+      <div class="grievance-item">
+        <div class="grievance-meta">
+          <span class="grievance-name">${escapeHtml(g.fullName)}</span>
+          <span class="grievance-category">${escapeHtml(g.category)}</span>
+          <span class="grievance-time">📅 ${g.displayTime}</span>
+        </div>
+        <div class="grievance-desc">
+          <strong>📌</strong> ${escapeHtml(g.description)}
+        </div>
+        <div style="font-size: 0.7rem; margin-top: 6px; color:#8dabc2;">📧 ${escapeHtml(g.email)}</div>
+      </div>
+    `).join('');
+
+    container.innerHTML = itemsHTML;
+    countSpan.innerText = grievancesArray.length;
+  }
+
+  // simple escape to avoid XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // validate form fields
+  function validateForm(name, email, description) {
+    if (!name.trim()) return { valid: false, msg: 'Name is required.' };
+    if (!email.trim()) return { valid: false, msg: 'Email address is required.' };
+    const emailPattern = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    if (!emailPattern.test(email.trim())) return { valid: false, msg: 'Please enter a valid email (e.g., name@domain.com).' };
+    if (!description.trim()) return { valid: false, msg: 'Grievance description cannot be empty.' };
+    if (description.trim().length < 5) return { valid: false, msg: 'Please provide more detail (min. 5 characters).' };
+    return { valid: true, msg: '' };
+  }
+
+  // add new grievance
+  function addGrievance(event) {
+    event.preventDefault();
+
+    const nameInput = document.getElementById('nameInput');
+    const emailInput = document.getElementById('emailInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const descInput = document.getElementById('descInput');
+    const feedbackDiv = document.getElementById('formFeedback');
+
+    const name = nameInput.value;
+    const email = emailInput.value;
+    const category = categorySelect.value;
+    const description = descInput.value;
+
+    const validation = validateForm(name, email, description);
+    if (!validation.valid) {
+      feedbackDiv.innerHTML = `<div class="success-message" style="background:#ffe6e5; color:#b1412a;">⚠️ ${validation.msg}</div>`;
+      setTimeout(() => {
+        if (feedbackDiv) feedbackDiv.innerHTML = '';
+      }, 2800);
+      return;
+    }
+
+    // timestamp for sorting
+    const now = new Date();
+    const timestampRaw = now.toISOString();
+    const displayTime = getCurrentTimestamp();
+
+    const newGrievance = {
+      id: Date.now() + Math.random() * 10000,
+      fullName: name.trim(),
+      email: email.trim(),
+      category: category,
+      description: description.trim(),
+      timestampRaw: timestampRaw,
+      displayTime: displayTime
+    };
+
+    grievancesArray.unshift(newGrievance);   // add to beginning (but render will sort by raw time anyway)
+    // better: keep array and then render sorts by date, so fine.
+    // but to make newest first unshift + sort works, but we re-sort on render.
+    renderGrievances();
+
+    // clear form + show success
+    nameInput.value = '';
+    emailInput.value = '';
+    descInput.value = '';
+    categorySelect.value = 'Technical'; // default reset
+
+    feedbackDiv.innerHTML = `<div class="success-message">✅ Grievance submitted successfully! It appears below instantly.</div>`;
+    setTimeout(() => {
+      if (feedbackDiv) feedbackDiv.innerHTML = '';
+    }, 2800);
+
+    // optional: scroll to list
+    document.querySelector('.list-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // load any persisted data from localStorage (optional, but as spec: session storage / memory)
+  // For better persistence during refresh, we use localStorage to keep grievances.
+  // However requirement: "store grievances in memory or localStorage for persistence during the session"
+  // we implement localStorage to keep submissions after page refresh (but still session persistent)
+  function loadFromLocalStorage() {
+    const stored = localStorage.getItem('grievancesHub');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          grievancesArray = parsed;
+        }
+      } catch(e) { console.warn(e); }
+    }
+    renderGrievances();
+  }
+
+  function saveToLocalStorage() {
+    localStorage.setItem('grievancesHub', JSON.stringify(grievancesArray));
+  }
+
+  // override array modifications to sync localStorage
+  const originalPush = grievancesArray.push;
+  const originalUnshift = grievancesArray.unshift;
+  // we'll proxy after each render, but simplest: after each mutation call save.
+  // we will wrap render function to also save.
+  const origRender = renderGrievances;
+  window.renderGrievances = function() {
+    origRender();
+    saveToLocalStorage();
+  };
+  renderGrievances = function() {
+    origRender();
+    saveToLocalStorage();
+  }.bind(this);
+
+  // redefine add to use new render
+  const originalAdd = addGrievance;
+  window.addGrievance = function(e) {
+    originalAdd(e);
+    saveToLocalStorage();
+  };
+  addGrievance = function(e) {
+    originalAdd(e);
+    saveToLocalStorage();
+  };
+
+  // attach event listener
+  document.getElementById('grievanceForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // call our enhanced add
+    addGrievance(e);
+  });
+
+  // initial load from storage
+  loadFromLocalStorage();
+
+  // Hotfix: ensure that the global functions use the updated references
+  window.addGrievance = addGrievance;
+  window.renderGrievances = renderGrievances;
+
+  // Reattach initial render and ensure that grievancesArray modifications save
+  // Override push/unshift/splice to auto-save
+  const arrMethods = ['push', 'unshift', 'splice', 'pop', 'shift'];
+  arrMethods.forEach(method => {
+    const original = Array.prototype[method];
+    grievancesArray[method] = function(...args) {
+      const result = original.apply(this, args);
+      saveToLocalStorage();
+      renderGrievances();
+      return result;
+    };
+  });
+  // Initialize by binding prototype methods (since we replace methods on current array)
+  // But easier: we manually call save after every render. Already done inside renderGrievances (save).
+  // Also upon load we ensure any future direct modifications (if any) trigger re-render, but our add uses unshift which calls render
+  // Final cleanup: manual render after load.
+  renderGrievances();
+</script>
+</body>
+</html>

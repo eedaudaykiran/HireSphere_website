@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Salary Calculator — Estimate your take-home pay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(145deg, #eef2f9 0%, #e6ecf5 100%);
+      color: #1a2c3e;
+      padding: 2rem 1.5rem;
+    }
+
+    .calc-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1f6282, #3a8fc7);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header p {
+      color: #4a6f8f;
+    }
+
+    /* two column layout */
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    /* input panel */
+    .input-panel {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.08);
+      border: 1px solid #e2edf7;
+    }
+
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+      color: #1f5579;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid #cbdde9;
+      border-radius: 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      background: white;
+      transition: 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #2c7cb6;
+      box-shadow: 0 0 0 3px rgba(44,124,182,0.1);
+    }
+
+    .currency-prefix {
+      position: relative;
+    }
+
+    .input-hint {
+      font-size: 0.7rem;
+      color: #7c9cbb;
+      margin-top: 0.2rem;
+    }
+
+    hr {
+      margin: 1.2rem 0;
+      border: none;
+      height: 1px;
+      background: #e2edf7;
+    }
+
+    .result-panel {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      box-shadow: 0 12px 28px -10px rgba(0,0,0,0.1);
+      border: 1px solid #e2edf7;
+    }
+
+    .net-salary {
+      background: linear-gradient(115deg, #eef3fc, #ffffff);
+      border-radius: 1.2rem;
+      padding: 1.2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .net-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #5f7f9e;
+    }
+
+    .net-amount {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #1f6282;
+      margin: 0.3rem 0;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px dashed #e2edf7;
+    }
+
+    .breakdown-label {
+      font-weight: 500;
+      color: #2c4b66;
+    }
+
+    .breakdown-value {
+      font-weight: 700;
+      color: #1f5579;
+    }
+
+    .highlight {
+      color: #2c7cb6;
+      font-weight: 700;
+    }
+
+    .note {
+      font-size: 0.7rem;
+      color: #8fadc6;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 800px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+      }
+      body {
+        padding: 1rem;
+      }
+      .net-amount {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="calc-container">
+  <div class="header">
+    <h1>💰 Salary Calculator</h1>
+    <p>Estimate your net take-home pay after taxes & deductions</p>
+  </div>
+
+  <div class="calculator-grid">
+    <!-- left: inputs -->
+    <div class="input-panel">
+      <div class="input-group">
+        <label>💰 Annual Gross Salary (₹)</label>
+        <input type="number" id="grossSalary" value="1200000" step="10000">
+        <div class="input-hint">Enter your total CTC (cost to company) per year</div>
+      </div>
+
+      <div class="input-group">
+        <label>🏦 Provident Fund (PF) — employer + employee %</label>
+        <select id="pfPercent">
+          <option value="12">12% (standard)</option>
+          <option value="10">10%</option>
+          <option value="0">0% (no PF)</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>🩺 Health Insurance (annual premium, ₹)</label>
+        <input type="number" id="healthInsurance" value="8000" step="1000">
+      </div>
+
+      <div class="input-group">
+        <label>📊 Professional Tax (per month, ₹)</label>
+        <input type="number" id="profTax" value="200" step="50">
+        <div class="input-hint">Varies by state (e.g., ₹200/month in many states)</div>
+      </div>
+
+      <div class="input-group">
+        <label>🏦 Other deductions (loans, voluntary contributions, ₹ per year)</label>
+        <input type="number" id="otherDeductions" value="0" step="5000">
+      </div>
+
+      <hr>
+
+      <div class="input-group">
+        <label>📄 Tax regime</label>
+        <select id="taxRegime">
+          <option value="new">New tax regime (simplified, lower rates)</option>
+          <option value="old">Old tax regime (with deductions like 80C)</option>
+        </select>
+      </div>
+
+      <div class="input-group" id="section80cGroup">
+        <label>🏦 Section 80C deductions (max ₹1.5L) — only for old regime</label>
+        <input type="number" id="section80c" value="150000" step="10000" placeholder="PPF, ELSS, etc.">
+      </div>
+    </div>
+
+    <!-- right: results -->
+    <div class="result-panel">
+      <div class="net-salary">
+        <div class="net-label">Your estimated net take-home salary (per year)</div>
+        <div class="net-amount" id="netYearly">₹ 0</div>
+        <div class="net-label" style="font-size:0.8rem;">≈ <span id="netMonthly">₹ 0</span> per month</div>
+      </div>
+
+      <div class="breakdown-item">
+        <span class="breakdown-label">Gross Annual Salary</span>
+        <span class="breakdown-value" id="grossDisplay">₹ 0</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Employer PF contribution</span>
+        <span class="breakdown-value" id="employerPf">₹ 0</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Employee PF contribution</span>
+        <span class="breakdown-value" id="employeePf">₹ 0</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Health Insurance (annual)</span>
+        <span class="breakdown-value" id="healthDeduction">₹ 0</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Professional Tax (annual)</span>
+        <span class="breakdown-value" id="profTaxAnnual">₹ 0</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Income Tax (estimated)</span>
+        <span class="breakdown-value" id="incomeTax">₹ 0</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">Other deductions (annual)</span>
+        <span class="breakdown-value" id="otherDeductAnnual">₹ 0</span>
+      </div>
+      <div class="breakdown-item" style="border-bottom: none; margin-top: 0.5rem; border-top: 2px solid #e2edf7; padding-top: 0.8rem;">
+        <span class="breakdown-label" style="font-weight: 800;">Net Annual Take-home</span>
+        <span class="breakdown-value highlight" id="netYearlyHighlight">₹ 0</span>
+      </div>
+      <div class="note">* Tax calculation is an estimate based on Indian tax slabs (FY 2024-25). Actual tax may vary based on rebates, cess, and other factors.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Helper: format INR
+  function formatINR(num) {
+    if (isNaN(num)) return '₹ 0';
+    return '₹ ' + num.toLocaleString('en-IN');
+  }
+
+  // Calculate income tax based on regime and salary after basic deductions
+  function calculateIncomeTax(taxableIncome, regime, sec80c = 0) {
+    if (taxableIncome <= 0) return 0;
+    let tax = 0;
+    if (regime === 'new') {
+      // New tax regime slabs (FY 2024-25)
+      if (taxableIncome <= 300000) tax = 0;
+      else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
+      else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.10;
+      else if (taxableIncome <= 1200000) tax = 50000 + (taxableIncome - 1000000) * 0.15;
+      else if (taxableIncome <= 1500000) tax = 80000 + (taxableIncome - 1200000) * 0.20;
+      else tax = 140000 + (taxableIncome - 1500000) * 0.30;
+    } else {
+      // Old regime with 80C, standard deduction 50k
+      let deductions = Math.min(sec80c, 150000) + 50000; // standard deduction 50k
+      let oldTaxable = Math.max(0, taxableIncome - deductions);
+      if (oldTaxable <= 250000) tax = 0;
+      else if (oldTaxable <= 500000) tax = (oldTaxable - 250000) * 0.05;
+      else if (oldTaxable <= 1000000) tax = 12500 + (oldTaxable - 500000) * 0.20;
+      else tax = 112500 + (oldTaxable - 1000000) * 0.30;
+    }
+    // add 4% health & education cess
+    tax = tax + tax * 0.04;
+    return Math.round(tax);
+  }
+
+  function updateCalculator() {
+    // get values
+    let grossAnnual = parseFloat(document.getElementById('grossSalary').value) || 0;
+    let pfPercent = parseFloat(document.getElementById('pfPercent').value) || 0;
+    let healthInsurance = parseFloat(document.getElementById('healthInsurance').value) || 0;
+    let profTaxMonthly = parseFloat(document.getElementById('profTax').value) || 0;
+    let otherDeductions = parseFloat(document.getElementById('otherDeductions').value) || 0;
+    let taxRegime = document.getElementById('taxRegime').value;
+    let sec80c = parseFloat(document.getElementById('section80c').value) || 0;
+
+    // PF calculations: employer and employee both contribute (shown as deductions from gross)
+    let employerPf = (grossAnnual * pfPercent) / 100;
+    let employeePf = (grossAnnual * pfPercent) / 100;
+    // Professional tax annual
+    let profTaxAnnual = profTaxMonthly * 12;
+
+    // Total deductions (excluding income tax)
+    let totalDeductions = employeePf + healthInsurance + profTaxAnnual + otherDeductions;
+
+    // Income tax is calculated on (grossAnnual - (employerPf? no, income tax on gross minus exemptions)
+    // For tax calculation, standard deduction: under old regime we already apply 50k, but employee PF is part of salary but also deduction under 80C? Simpler approach:
+    // taxable income for tax = grossAnnual - employerPf? Not exactly. Typically tax is on gross salary after exemptions like employer PF is part of CTC but not taxed? Let's do realistic:
+    // Taxable income = grossAnnual - (employee PF) - (health insurance?) only if under 80D.
+    // We'll keep it consistent: taxable = grossAnnual - employeePf (since employee PF is deducted from salary and not taxable) - healthInsurance (upto 25k for self) - profTax. For simplicity we treat as standard:
+    let taxableIncomeForTax = grossAnnual - employeePf - Math.min(healthInsurance, 25000) - profTaxAnnual;
+    let incomeTax = calculateIncomeTax(Math.max(0, taxableIncomeForTax), taxRegime, sec80c);
+
+    // Net annual take-home
+    let netAnnual = grossAnnual - employeePf - healthInsurance - profTaxAnnual - otherDeductions - incomeTax;
+    netAnnual = Math.max(0, netAnnual);
+    let netMonthly = netAnnual / 12;
+
+    // Update DOM
+    document.getElementById('grossDisplay').innerText = formatINR(grossAnnual);
+    document.getElementById('employerPf').innerText = formatINR(employerPf);
+    document.getElementById('employeePf').innerText = formatINR(employeePf);
+    document.getElementById('healthDeduction').innerText = formatINR(healthInsurance);
+    document.getElementById('profTaxAnnual').innerText = formatINR(profTaxAnnual);
+    document.getElementById('otherDeductAnnual').innerText = formatINR(otherDeductions);
+    document.getElementById('incomeTax').innerText = formatINR(incomeTax);
+    document.getElementById('netYearly').innerText = formatINR(netAnnual);
+    document.getElementById('netYearlyHighlight').innerText = formatINR(netAnnual);
+    document.getElementById('netMonthly').innerText = formatINR(netMonthly);
+  }
+
+  // toggle 80C visibility based on regime
+  function toggle80c() {
+    const regime = document.getElementById('taxRegime').value;
+    const group = document.getElementById('section80cGroup');
+    if (regime === 'old') {
+      group.style.display = 'block';
+    } else {
+      group.style.display = 'none';
+      document.getElementById('section80c').value = 0;
+    }
+    updateCalculator();
+  }
+
+  // event listeners
+  const inputs = ['grossSalary', 'pfPercent', 'healthInsurance', 'profTax', 'otherDeductions', 'section80c', 'taxRegime'];
+  inputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => {
+        if (id === 'taxRegime') toggle80c();
+        else updateCalculator();
+      });
+      el.addEventListener('change', () => {
+        if (id === 'taxRegime') toggle80c();
+        else updateCalculator();
+      });
+    }
+  });
+
+  // initial call
+  toggle80c();
+  updateCalculator();
+</script>
+</body>
+</html>

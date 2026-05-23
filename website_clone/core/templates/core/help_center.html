@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Help Center · Reset your password</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f4f7fb;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1a2c3e;
+      line-height: 1.5;
+      padding: 2rem 1.25rem;
+    }
+
+    /* main container */
+    .help-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+
+    /* header */
+    .help-header {
+      background: linear-gradient(135deg, #0b2b3d 0%, #1a4c6e 100%);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      color: white;
+    }
+    .help-header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .help-header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    /* content area */
+    .help-content {
+      padding: 2rem 2rem 2rem 2rem;
+    }
+
+    /* intro section */
+    .intro {
+      background: #eef3fc;
+      padding: 1.5rem;
+      border-radius: 1.25rem;
+      margin-bottom: 2rem;
+      border-left: 5px solid #2c7cb6;
+    }
+    .intro p {
+      font-size: 1rem;
+      color: #1f4e6e;
+    }
+
+    /* step-by-step */
+    .steps-section {
+      margin-bottom: 2.5rem;
+    }
+    .steps-section h2, .faq-section h2, .related-section h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: #0e3b4f;
+      border-bottom: 2px solid #e2edf7;
+      padding-bottom: 0.4rem;
+    }
+    .step-list {
+      list-style: none;
+      counter-reset: step-counter;
+    }
+    .step-list li {
+      counter-increment: step-counter;
+      margin-bottom: 1.6rem;
+      padding-left: 3rem;
+      position: relative;
+      font-size: 1rem;
+      color: #2c4b66;
+    }
+    .step-list li::before {
+      content: counter(step-counter);
+      background: #2c7cb6;
+      color: white;
+      font-weight: bold;
+      width: 28px;
+      height: 28px;
+      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      top: -2px;
+      font-size: 0.9rem;
+    }
+    .step-list strong {
+      color: #0b3b50;
+    }
+
+    /* example box (simulated screenshot description) */
+    .example-box {
+      background: #faf9fe;
+      border: 1px solid #cfdfed;
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .example-box p {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #0f4c6b;
+    }
+    .mock-screenshot {
+      background: #e9f0f5;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #1f6392;
+      border: 1px dashed #bdd4e5;
+    }
+    .mock-screenshot span {
+      display: inline-block;
+      background: #2c7cb6;
+      color: white;
+      padding: 0.1rem 0.5rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      margin-right: 0.5rem;
+    }
+
+    /* FAQ accordion style (pure CSS, no JS) */
+    .faq-item {
+      background: #ffffff;
+      border: 1px solid #e2edf7;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .faq-question {
+      background: #f9fbfe;
+      padding: 1rem 1.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #1a5d7f;
+      border-bottom: 1px solid #e9f0f5;
+    }
+    .faq-answer {
+      padding: 1rem 1.5rem;
+      color: #2c4b66;
+      background: white;
+      line-height: 1.6;
+    }
+
+    /* related links */
+    .related-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .related-card {
+      background: #f2f6fc;
+      padding: 0.8rem 1.2rem;
+      border-radius: 40px;
+      text-decoration: none;
+      color: #1f6392;
+      font-weight: 500;
+      transition: 0.2s;
+      border: 1px solid #cde0ef;
+    }
+    .related-card:hover {
+      background: #e2edf7;
+      transform: translateY(-2px);
+    }
+
+    /* CTA */
+    .cta-box {
+      background: linear-gradient(105deg, #eef6fc 0%, #ffffff 100%);
+      margin-top: 2.5rem;
+      padding: 2rem;
+      text-align: center;
+      border-radius: 1.5rem;
+      border: 1px solid #cde0ef;
+    }
+    .cta-button {
+      display: inline-block;
+      background: #2c7cb6;
+      color: white;
+      font-weight: 600;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: 0.2s;
+      box-shadow: 0 2px 6px rgba(44,124,182,0.2);
+    }
+    .cta-button:hover {
+      background: #1e628f;
+      transform: translateY(-2px);
+    }
+
+    /* footer */
+    .help-footer {
+      background: #f8fafc;
+      border-top: 1px solid #e2edf7;
+      padding: 1.2rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6c8aa3;
+    }
+
+    @media (max-width: 700px) {
+      .help-content {
+        padding: 1.2rem;
+      }
+      .help-header h1 {
+        font-size: 1.8rem;
+      }
+      .step-list li {
+        padding-left: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="help-container">
+  <div class="help-header">
+    <h1>🔐 Reset your password</h1>
+    <p>Get back into your account quickly and securely</p>
+  </div>
+
+  <div class="help-content">
+    <!-- intro: why this matters -->
+    <div class="intro">
+      <p>✨ <strong>Why it matters</strong> — Forgot your password? Locked out? Resetting your password takes less than 2 minutes and keeps your account protected. Follow the steps below to regain access.</p>
+    </div>
+
+    <!-- step-by-step instructions -->
+    <div class="steps-section">
+      <h2>📘 Step‑by‑step guide</h2>
+      <ul class="step-list">
+        <li><strong>Go to the login page</strong> — Click on “Sign in” or visit our login screen at <strong>app.example.com/login</strong>.</li>
+        <li><strong>Select “Forgot password?”</strong> — Below the password field, you’ll see a link that says “Forgot password?”. Click it.</li>
+        <li><strong>Enter your email address</strong> — Type the email you used to create your account. Make sure there are no typos.</li>
+        <li><strong>Check your inbox</strong> — Within 1–2 minutes, you’ll receive a password reset email from us. (If not, check spam/junk folder.)</li>
+        <li><strong>Click the reset link</strong> — The link expires in 60 minutes for security. Click it to open a secure reset page.</li>
+        <li><strong>Create a new password</strong> — Use a strong, unique password (at least 8 characters, mix of letters/numbers). Confirm it, then save.</li>
+        <li><strong>Log in with your new password</strong> — You’re all set! Return to the login screen and use your updated credentials.</li>
+      </ul>
+    </div>
+
+    <!-- example / screenshot description (static) -->
+    <div class="example-box">
+      <p>📸 <strong>What the reset email looks like:</strong> (example preview)</p>
+      <div class="mock-screenshot">
+        <span>📧 example@domain.com</span> <strong>Password reset request</strong><br>
+        “Hello, we received a request to reset your password. Click the button below to continue: <strong style="background:#eef; padding:2px 6px; border-radius:12px;">Reset my password</strong> — If you didn’t request this, you can safely ignore this email.”
+      </div>
+      <p style="margin-top: 0.8rem; font-size:0.85rem;">✅ The reset page will show a form with fields for “New password” and “Confirm password”.</p>
+    </div>
+
+    <!-- FAQ section (common follow-up questions) -->
+    <div class="faq-section">
+      <h2>❓ Frequently asked questions</h2>
+      <div class="faq-item">
+        <div class="faq-question">I didn’t receive the reset email — what should I do?</div>
+        <div class="faq-answer">✔️ First, wait 2–3 minutes and check your spam/junk folder. Also make sure you typed the correct email address. If you still don’t see it, request another reset link or contact support.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">How long is the reset link valid?</div>
+        <div class="faq-answer">✔️ For security, the link expires after 60 minutes. If it expires, simply request a new password reset.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I use a previous password again?</div>
+        <div class="faq-answer">✔️ For safety, our system prevents reuse of your last 3 passwords. Please choose a new password you haven't used recently.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">What if I’m locked out of my email account?</div>
+        <div class="faq-answer">✔️ You’ll need to recover access to your email first, or contact our support team with proof of identity to manually verify your account.</div>
+      </div>
+    </div>
+
+    <!-- related help topics -->
+    <div class="related-section">
+      <h2>🔗 Related help topics</h2>
+      <div class="related-links">
+        <a href="#" class="related-card">🔐 Two‑factor authentication setup</a>
+        <a href="#" class="related-card">📧 Change your email address</a>
+        <a href="#" class="related-card">🛡️ Account security best practices</a>
+        <a href="#" class="related-card">🗑️ Close or delete account</a>
+      </div>
+    </div>
+
+    <!-- call-to-action -->
+    <div class="cta-box">
+      <p><strong>Ready to reset your password?</strong> Head to the login page and use the “Forgot password?” link.</p>
+      <a href="#" class="cta-button">Go to login page →</a>
+      <p style="margin-top: 1rem; font-size:0.8rem; color:#4f7a9e;">📞 Still need help? Contact our support team 24/7</p>
+    </div>
+  </div>
+
+  <div class="help-footer">
+    © 2025 Help Center — Secure account recovery | Privacy & terms apply
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Credits • Production Team & Cast</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f8fafc 0%, #eef2f8 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1a2c3e;
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+    }
+
+    /* modern container */
+    .credits-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(2px);
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    /* header area */
+    .credits-header {
+      background: #0f2b3d;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-bottom: 4px solid #f5b042;
+    }
+    .credits-header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff, #ffdd99);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .credits-header p {
+      color: #cbdde6;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* main credits grid */
+    .credits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.8rem;
+      padding: 2.5rem 2rem;
+    }
+
+    /* credit card */
+    .credit-card {
+      background: white;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e9edf2;
+    }
+    .credit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 28px -12px rgba(0, 0, 0, 0.15);
+      border-color: #f5b04280;
+    }
+
+    .card-header {
+      background: #fef6e8;
+      padding: 1rem 1.5rem;
+      border-bottom: 2px solid #f5b042;
+    }
+    .card-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2c4b66;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-header h2 i {
+      font-weight: 400;
+      font-size: 1.4rem;
+    }
+
+    .credit-list {
+      padding: 1rem 1.5rem 1.5rem;
+    }
+    .credit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.6rem 0;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+    .credit-item:last-child {
+      border-bottom: none;
+    }
+    .role {
+      font-weight: 600;
+      color: #1f4e6e;
+      font-size: 0.9rem;
+    }
+    .name {
+      font-weight: 500;
+      color: #2c3e50;
+      text-align: right;
+      font-size: 0.95rem;
+    }
+
+    /* special full-width sections */
+    .full-width-section {
+      background: #fbf9f5;
+      margin: 0 2rem 2rem 2rem;
+      border-radius: 1.5rem;
+      padding: 1.5rem 2rem;
+      border: 1px solid #f0e9df;
+    }
+    .full-width-section h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2c4b66;
+      margin-bottom: 1rem;
+      border-left: 5px solid #f5b042;
+      padding-left: 1rem;
+    }
+    .two-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .two-columns p {
+      margin: 0.3rem 0;
+      color: #2d4a6e;
+    }
+    .crew-tag {
+      background: #eef3fc;
+      padding: 0.25rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    /* footer / acknowledgment */
+    .acknowledgment {
+      background: #eef2f6;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid #dce3ea;
+      color: #4a627a;
+      font-size: 0.85rem;
+    }
+
+    /* responsive fine-tuning */
+    @media (max-width: 680px) {
+      body {
+        padding: 1rem;
+      }
+      .credits-grid {
+        padding: 1.5rem;
+        gap: 1.2rem;
+      }
+      .full-width-section {
+        margin: 0 1.5rem 1.5rem 1.5rem;
+        padding: 1.2rem;
+      }
+      .credits-header h1 {
+        font-size: 1.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="credits-container">
+  <div class="credits-header">
+    <h1>✨ Official Credits</h1>
+    <p>Production team · Artistic cast · Technical crew</p>
+  </div>
+
+  <!-- main credit cards grid -->
+  <div class="credits-grid">
+    <!-- Direction & Production -->
+    <div class="credit-card">
+      <div class="card-header">
+        <h2>🎬 Direction & Production</h2>
+      </div>
+      <div class="credit-list">
+        <div class="credit-item"><span class="role">Director</span><span class="name">Alicia V. Moreno</span></div>
+        <div class="credit-item"><span class="role">Producer</span><span class="name">Jonathan K. Reeves</span></div>
+        <div class="credit-item"><span class="role">Co‑Producer</span><span class="name">Maya Chen-Williams</span></div>
+        <div class="credit-item"><span class="role">Executive Producer</span><span class="name">Samuel L. Hartwell</span></div>
+        <div class="credit-item"><span class="role">Production Designer</span><span class="name">Lina Rostami</span></div>
+        <div class="credit-item"><span class="role">Line Producer</span><span class="name">David Okonkwo</span></div>
+      </div>
+    </div>
+
+    <!-- Writing & Story -->
+    <div class="credit-card">
+      <div class="card-header">
+        <h2>✍️ Writing & Story</h2>
+      </div>
+      <div class="credit-list">
+        <div class="credit-item"><span class="role">Screenwriter</span><span class="name">Priya Kapoor</span></div>
+        <div class="credit-item"><span class="role">Co‑Writer</span><span class="name">Carlos M. Delgado</span></div>
+        <div class="credit-item"><span class="role">Story Editor</span><span class="name">Emily Foster</span></div>
+        <div class="credit-item"><span class="role">Script Consultant</span><span class="name">Dr. Haruki Tanaka</span></div>
+        <div class="credit-item"><span class="role">Dialogue Coach</span><span class="name">Sofia Laurent</span></div>
+      </div>
+    </div>
+
+    <!-- Main Cast -->
+    <div class="credit-card">
+      <div class="card-header">
+        <h2>🎭 Main Cast</h2>
+      </div>
+      <div class="credit-list">
+        <div class="credit-item"><span class="role">Lead Actor</span><span class="name">Michael O. Adebayo</span></div>
+        <div class="credit-item"><span class="role">Lead Actress</span><span class="name">Zara Vasquez</span></div>
+        <div class="credit-item"><span class="role">Supporting Actor</span><span class="name">James P. Hollis</span></div>
+        <div class="credit-item"><span class="role">Supporting Actress</span><span class="name">Naomi Winters</span></div>
+        <div class="credit-item"><span class="role">Child Artist</span><span class="name">Leo Fernandes</span></div>
+        <div class="credit-item"><span class="role">Cameo Appearance</span><span class="name">Grace Lin</span></div>
+      </div>
+    </div>
+
+    <!-- Cinematography & Lighting -->
+    <div class="credit-card">
+      <div class="card-header">
+        <h2>🎥 Cinematography & Lighting</h2>
+      </div>
+      <div class="credit-list">
+        <div class="credit-item"><span class="role">Director of Photography</span><span class="name">Isabella Rossi</span></div>
+        <div class="credit-item"><span class="role">Camera Operator</span><span class="name">Kenji Yamamoto</span></div>
+        <div class="credit-item"><span class="role">Gaffer</span><span class="name">Marcus T. Velez</span></div>
+        <div class="credit-item"><span class="role">Key Grip</span><span class="name">Sandra Petrovic</span></div>
+        <div class="credit-item"><span class="role">Steadicam Op</span><span class="name">Rahul Iyer</span></div>
+      </div>
+    </div>
+
+    <!-- Music & Sound -->
+    <div class="credit-card">
+      <div class="card-header">
+        <h2>🎵 Music & Sound</h2>
+      </div>
+      <div class="credit-list">
+        <div class="credit-item"><span class="role">Original Score</span><span class="name">Ludovico Bianchi</span></div>
+        <div class="credit-item"><span class="role">Sound Designer</span><span class="name">Amina El-Sayed</span></div>
+        <div class="credit-item"><span class="role">Music Supervisor</span><span class="name">Tracy Newman</span></div>
+        <div class="credit-item"><span class="role">Re‑recording Mixer</span><span class="name">Chris Dalton</span></div>
+        <div class="credit-item"><span class="role">Foley Artist</span><span class="name">Marta Kowalski</span></div>
+      </div>
+    </div>
+
+    <!-- Editing & Post-Production -->
+    <div class="credit-card">
+      <div class="card-header">
+        <h2>✂️ Editing & Post</h2>
+      </div>
+      <div class="credit-list">
+        <div class="credit-item"><span class="role">Lead Editor</span><span class="name">Rachel O. Sullivan</span></div>
+        <div class="credit-item"><span class="role">Assistant Editor</span><span class="name">Daniel Zhang</span></div>
+        <div class="credit-item"><span class="role">Colorist</span><span class="name">Sofia Nunez</span></div>
+        <div class="credit-item"><span class="role">VFX Supervisor</span><span class="name">Erik Johansson</span></div>
+        <div class="credit-item"><span class="role">Post‑Production Coordinator</span><span class="name">Anita Desai</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- special extended crew section (makeup, costume, art) -->
+  <div class="full-width-section">
+    <h3>🎨 Art Direction & Wardrobe</h3>
+    <div class="two-columns">
+      <div>
+        <p><span class="crew-tag">Costume Designer</span> &nbsp; Martine Dubois</p>
+        <p><span class="crew-tag">Makeup & Hair</span> &nbsp; Jasmine Tran</p>
+        <p><span class="crew-tag">Set Decorator</span> &nbsp; Phillip Graham</p>
+        <p><span class="crew-tag">Prop Master</span> &nbsp; Lucia Rinaldi</p>
+      </div>
+      <div>
+        <p><span class="crew-tag">Art Director</span> &nbsp; Hiroshi Nakamura</p>
+        <p><span class="crew-tag">Location Manager</span> &nbsp; Fatima Al-Mansoori</p>
+        <p><span class="crew-tag">Storyboard Artist</span> &nbsp; Emma Voss</p>
+        <p><span class="crew-tag">Graphic Designer</span> &nbsp; Oliver Chen</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="full-width-section">
+    <h3>⚙️ Technical & Support Crew</h3>
+    <div class="two-columns">
+      <div>
+        <p><span class="crew-tag">Production Coordinator</span> — Maria Flores</p>
+        <p><span class="crew-tag">1st Assistant Director</span> — Tomás Rivera</p>
+        <p><span class="crew-tag">2nd Assistant Director</span> — Nora Schmidt</p>
+        <p><span class="crew-tag">Script Supervisor</span> — Helen Zhao</p>
+        <p><span class="crew-tag">Boom Operator</span> — Lars Eriksen</p>
+      </div>
+      <div>
+        <p><span class="crew-tag">Casting Director</span> — Patricia Okonjo</p>
+        <p><span class="crew-tag">Stunt Coordinator</span> — Derek Shaw</p>
+        <p><span class="crew-tag">Transportation Captain</span> — George Kariuki</p>
+        <p><span class="crew-tag">Catering / Craft Services</span> — Leila’s Kitchen Team</p>
+        <p><span class="crew-tag">Unit Publicist</span> — Ryan P. Morrison</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- thanks & acknowledgment -->
+  <div class="acknowledgment">
+    ⭐ Special thanks to all cast, crew, and partners who made this project possible.<br>
+    © 2025 Aurora Films & Creative House — Credits presented for screening purposes.
+  </div>
+</div>
+</body>
+</html>

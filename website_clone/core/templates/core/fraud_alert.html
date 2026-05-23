@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Fraud Alert | Stay Protected</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #fef6e0 0%, #fff3e6 100%);
+      font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      padding: 2rem 1.5rem;
+      color: #2d2a1f;
+    }
+
+    /* main container */
+    .alert-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      border: 1px solid rgba(220, 80, 40, 0.2);
+    }
+
+    /* header with strong alert styling */
+    .alert-header {
+      background: #9b2c1d;
+      background: linear-gradient(105deg, #a03322, #c73f1e);
+      padding: 2rem 2rem 1.5rem 2rem;
+      color: white;
+      text-align: center;
+      border-bottom: 6px solid #ffbc6e;
+    }
+    .alert-icon {
+      font-size: 3.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .alert-header h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .alert-sub {
+      font-size: 1.05rem;
+      opacity: 0.95;
+      margin-top: 0.6rem;
+    }
+
+    /* content sections */
+    .alert-content {
+      padding: 2rem 2rem 2rem 2rem;
+    }
+
+    .warning-banner {
+      background: #fff2e8;
+      border-left: 7px solid #e35f21;
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .warning-text {
+      font-weight: 700;
+      color: #b53a1a;
+      font-size: 1rem;
+    }
+    .emergency-btn {
+      background: #e35f21;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      transition: 0.2s;
+      display: inline-block;
+    }
+    .emergency-btn:hover {
+      background: #bd4a12;
+      transform: translateY(-2px);
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 1.5rem 0 1rem 0;
+      color: #6e2c13;
+      border-left: 5px solid #e35f21;
+      padding-left: 1rem;
+    }
+    h2:first-of-type {
+      margin-top: 0;
+    }
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 1.2rem 0 0.6rem 0;
+      color: #8f3b1b;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .fraud-card {
+      background: #fefaf5;
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.2rem;
+      border: 1px solid #ffdec2;
+      transition: all 0.2s;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.02);
+    }
+    .fraud-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -12px rgba(0,0,0,0.1);
+      border-color: #ffb77c;
+    }
+    .fraud-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .fraud-card h4 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      color: #b6481f;
+    }
+    .steps-list {
+      background: #fef8f0;
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+    }
+    .steps-list li {
+      margin-bottom: 0.5rem;
+    }
+    .contact-box {
+      background: #eef3fc;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .contact-details p {
+      margin: 0.3rem 0;
+      font-weight: 500;
+    }
+    .report-link {
+      background: #1f5e7e;
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+    }
+    footer {
+      background: #fef3e8;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #a25d3c;
+      border-top: 1px solid #ffdec2;
+    }
+    hr {
+      margin: 1.5rem 0;
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, #f0cfb0, transparent);
+    }
+
+    @media (max-width: 700px) {
+      .alert-content {
+        padding: 1.2rem;
+      }
+      .alert-header h1 {
+        font-size: 1.7rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="alert-container">
+  <div class="alert-header">
+    <div class="alert-icon">🚨⚠️🚫</div>
+    <h1>FRAUD ALERT</h1>
+    <div class="alert-sub">Protect yourself from scams & fraudulent activity</div>
+  </div>
+
+  <div class="alert-content">
+    <!-- top warning banner -->
+    <div class="warning-banner">
+      <span class="warning-text">🔔 If you suspect fraud, act immediately. Do not share sensitive information.</span>
+      <a href="#" class="emergency-btn">Report now →</a>
+    </div>
+
+    <h2>🕵️ Common fraud schemes targeting you</h2>
+    <div class="card-grid">
+      <div class="fraud-card">
+        <div class="fraud-icon">📧</div>
+        <h4>Phishing emails / SMS</h4>
+        <p>Fake messages pretending to be from banks, delivery services, or government agencies asking you to click malicious links or share passwords.</p>
+      </div>
+      <div class="fraud-card">
+        <div class="fraud-icon">💳</div>
+        <h4>Payment & Gift card scams</h4>
+        <p>Scammers demand payment via gift cards, wire transfers, or cryptocurrency. Legitimate businesses never ask for these.</p>
+      </div>
+      <div class="fraud-card">
+        <div class="fraud-icon">👤</div>
+        <h4>Impersonation fraud</h4>
+        <p>Fake customer support, tech support, or “family member in trouble” calls designed to steal money or data.</p>
+      </div>
+      <div class="fraud-card">
+        <div class="fraud-icon">🖥️</div>
+        <h4>Job / recruitment scams</h4>
+        <p>Fake job offers asking for upfront fees, training payments, or personal bank details — a red flag.</p>
+      </div>
+    </div>
+
+    <h2>🛡️ How to protect yourself</h2>
+    <div class="steps-list">
+      <ul>
+        <li>✔️ Never share OTP, PIN, or password — even with “official” callers.</li>
+        <li>✔️ Verify website URLs: look for “https://” and check for misspellings.</li>
+        <li>✔️ Enable two‑factor authentication (2FA) on all important accounts.</li>
+        <li>✔️ Do not click on unsolicited links; visit official websites manually.</li>
+        <li>✔️ Regularly monitor bank statements and credit reports.</li>
+        <li>✔️ Keep devices updated and use reputable antivirus software.</li>
+      </ul>
+    </div>
+
+    <h2>⚠️ What to do if you’ve been targeted</h2>
+    <div class="steps-list">
+      <ol>
+        <li><strong>Stop all communication</strong> with the scammer immediately.</li>
+        <li><strong>Change your passwords</strong> for affected accounts (email, banking, social media).</li>
+        <li><strong>Contact your bank</strong> or credit card provider if you shared financial details.</li>
+        <li><strong>Report the fraud</strong> to local authorities and the national cybercrime helpline.</li>
+        <li><strong>Preserve evidence</strong> – screenshots, emails, call logs, transaction IDs.</li>
+      </ol>
+    </div>
+
+    <div class="contact-box">
+      <div class="contact-details">
+        <p><strong>📞 Report fraud (24/7 helpline):</strong> <span style="color:#b53a1a;">+1-888-555-0187</span> (example) – or your local cyber cell.</p>
+        <p><strong>✉️ Email alerts:</strong> <a href="#" style="color:#c73f1e;">fraud@company-alert.com</a> | <strong>National Fraud Reporting Portal:</strong> reportfraud.ftc.gov</p>
+      </div>
+      <a href="#" class="report-link">📢 File a report →</a>
+    </div>
+
+    <hr>
+    <div style="background: #fff5ec; padding: 1rem; border-radius: 1rem; font-size: 0.85rem;">
+      <p>🔒 <strong>Remember:</strong> No legitimate company will ever ask for your password, OTP, or remote access to your device. If something feels suspicious, trust your instinct — verify independently.</p>
+      <p style="margin-top: 0.5rem;">📢 Share this alert with family and colleagues to raise awareness.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Fraud Awareness Center — This is an educational alert. If you are in immediate danger, contact local law enforcement.</p>
+  </footer>
+</div>
+</body>
+</html>

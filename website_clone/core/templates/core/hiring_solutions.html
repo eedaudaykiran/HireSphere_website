@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Hiring Solutions — HireHub for Employers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f5f9fe;
+      color: #1a2c3e;
+      line-height: 1.5;
+    }
+
+    .solutions-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* hero */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .hero-section h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1f6282, #3a8fc7);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.8rem;
+    }
+    .hero-section p {
+      font-size: 1.1rem;
+      color: #4a6f8f;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* solutions grid */
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    .solution-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.06);
+      border: 1px solid #e2edf7;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .solution-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+      border-color: #cde0ef;
+    }
+    .solution-icon {
+      font-size: 2.6rem;
+      margin-bottom: 1rem;
+    }
+    .solution-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #1f5579;
+    }
+    .solution-card p {
+      color: #5f7f9e;
+      margin-bottom: 1rem;
+    }
+    .solution-feature {
+      list-style: none;
+      margin: 1rem 0;
+    }
+    .solution-feature li {
+      padding: 0.3rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .solution-feature li::before {
+      content: "✓";
+      color: #2c7cb6;
+      font-weight: 700;
+    }
+
+    /* process timeline */
+    .process-section {
+      background: white;
+      border-radius: 1.8rem;
+      padding: 2rem;
+      margin: 2.5rem 0;
+      border: 1px solid #e2edf7;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: #1f5579;
+      text-align: center;
+    }
+    .process-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      min-width: 150px;
+    }
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: #2c7cb6;
+      color: white;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    .step h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    .step p {
+      font-size: 0.85rem;
+      color: #6a8eaa;
+    }
+
+    /* pricing / plans */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0;
+    }
+    .plan-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      border: 1px solid #e2edf7;
+      transition: 0.2s;
+      text-align: center;
+    }
+    .plan-card.featured {
+      border: 2px solid #f4b942;
+      box-shadow: 0 15px 25px -12px rgba(244,185,66,0.2);
+    }
+    .plan-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f5579;
+    }
+    .plan-price {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 1rem 0;
+      color: #2c7cb6;
+    }
+    .plan-features {
+      list-style: none;
+      margin: 1rem 0;
+    }
+    .plan-features li {
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+    }
+    .btn-plan {
+      background: #eef3fc;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: 0.2s;
+    }
+    .btn-plan:hover {
+      background: #2c7cb6;
+      color: white;
+    }
+
+    /* cta banner */
+    .cta-banner {
+      background: linear-gradient(115deg, #1f5579, #2c7cb6);
+      border-radius: 1.8rem;
+      padding: 2.5rem;
+      text-align: center;
+      color: white;
+      margin: 2.5rem 0 1rem;
+    }
+    .cta-banner h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .cta-banner button {
+      background: white;
+      color: #1f5579;
+      border: none;
+      padding: 0.7rem 2rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .cta-banner button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2edf7;
+      color: #7c9cbb;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 750px) {
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+      .process-steps {
+        flex-direction: column;
+        align-items: center;
+      }
+      .step {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="solutions-container">
+  <div class="hero-section">
+    <h1>🚀 End-to-End Hiring Solutions</h1>
+    <p>Streamline your recruitment process, attract top talent, and make data-driven hires — all in one platform.</p>
+  </div>
+
+  <!-- solution cards -->
+  <div class="solutions-grid">
+    <div class="solution-card">
+      <div class="solution-icon">🎯</div>
+      <h3>Talent Sourcing</h3>
+      <p>Access 2M+ active candidates, AI-powered matching, and advanced filtering by skills, location, and experience.</p>
+      <ul class="solution-feature">
+        <li>Smart job recommendations</li>
+        <li>Resume database search</li>
+        <li>Employer branding profiles</li>
+      </ul>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">📋</div>
+      <h3>Applicant Tracking</h3>
+      <p>Manage all applications in a centralized pipeline. Move candidates through stages with drag‑and‑drop ease.</p>
+      <ul class="solution-feature">
+        <li>Customizable hiring stages</li>
+        <li>Collaborative feedback</li>
+        <li>Automated email templates</li>
+      </ul>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">🎥</div>
+      <h3>Interview & Assessment</h3>
+      <p>Schedule interviews, take notes, and use skill assessments to evaluate candidates objectively.</p>
+      <ul class="solution-feature">
+        <li>Calendar sync (Zoom, Teams)</li>
+        <li>Pre-recorded video interviews</li>
+        <li>Technical coding tests</li>
+      </ul>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">📊</div>
+      <h3>Analytics & Reporting</h3>
+      <p>Real-time metrics on time-to-hire, source effectiveness, and diversity hiring.</p>
+      <ul class="solution-feature">
+        <li>Custom dashboards</li>
+        <li>Export reports (PDF/Excel)</li>
+        <li>Hiring funnel insights</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- process timeline -->
+  <div class="process-section">
+    <div class="section-title">🔁 How our hiring solution works</div>
+    <div class="process-steps">
+      <div class="step"><div class="step-number">1</div><h4>Post a job</h4><p>Create job description, set criteria, and publish to multiple boards.</p></div>
+      <div class="step"><div class="step-number">2</div><h4>Receive & screen</h4><p>AI ranks applicants, you review shortlists.</p></div>
+      <div class="step"><div class="step-number">3</div><h4>Interview & assess</h4><p>Schedule, take structured feedback.</p></div>
+      <div class="step"><div class="step-number">4</div><h4>Hire & onboard</h4><p>Send offers, e-signature, seamless onboarding.</p></div>
+    </div>
+  </div>
+
+  <!-- pricing plans -->
+  <div class="section-title">💲 Flexible plans for every team size</div>
+  <div class="pricing-grid">
+    <div class="plan-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">₹0 / mo</div>
+      <ul class="plan-features">
+        <li>3 active jobs</li>
+        <li>Basic candidate search</li>
+        <li>Email support</li>
+      </ul>
+      <button class="btn-plan" onclick="alert('Starter plan — free forever. Sign up in seconds.')">Get started →</button>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-name">Professional</div>
+      <div class="plan-price">₹4,999 / mo</div>
+      <ul class="plan-features">
+        <li>20 active jobs</li>
+        <li>AI matching & resume parsing</li>
+        <li>Interview scheduling</li>
+        <li>Analytics dashboard</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="btn-plan" onclick="alert('Professional plan — 14-day free trial available.')">Try for free →</button>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price">Custom</div>
+      <ul class="plan-features">
+        <li>Unlimited jobs</li>
+        <li>Dedicated account manager</li>
+        <li>API access & SSO</li>
+        <li>Custom onboarding</li>
+        <li>SLA guarantee</li>
+      </ul>
+      <button class="btn-plan" onclick="alert('Contact our enterprise sales team for a personalized quote.')">Contact sales →</button>
+    </div>
+  </div>
+
+  <!-- CTA banner -->
+  <div class="cta-banner">
+    <h2>Ready to transform your hiring?</h2>
+    <p>Join 1,500+ companies that use HireHub to find and hire faster.</p>
+    <button onclick="alert('Schedule a demo with our hiring specialists — we’ll reach out within 24h.')">📅 Book a free demo</button>
+  </div>
+
+  <footer>
+    <p>© 2025 HireHub Hiring Solutions — Smart recruitment for modern teams. | <a href="#" style="color:#2c7cb6;">Privacy</a> | <a href="#" style="color:#2c7cb6;">Terms</a></p>
+  </footer>
+</div>
+</body>
+</html>

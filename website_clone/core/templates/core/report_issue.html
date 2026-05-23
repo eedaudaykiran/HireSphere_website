@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Issue Report Template | One-Page Problem Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Base styles: screen + print-friendly */
+    body {
+      background: #eef2f5;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      line-height: 1.45;
+    }
+
+    /* A4 / letter sized container - ensures single page when printed */
+    .report-container {
+      max-width: 1100px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    /* header */
+    .report-header {
+      background: #1c3f5c;
+      padding: 1.6rem 2rem;
+      color: white;
+      border-bottom: 4px solid #f4b942;
+    }
+    .report-header h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .report-header p {
+      opacity: 0.85;
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+    }
+
+    /* form / template sections */
+    .report-body {
+      padding: 2rem 2rem 1.8rem 2rem;
+    }
+
+    /* two column layout for compact fields */
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-bottom: 1.4rem;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+    .full-width {
+      flex: 1 1 100%;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #1f5579;
+      margin-bottom: 0.3rem;
+    }
+    .field-box {
+      background: #f9fbfd;
+      border: 1px solid #d8e3ef;
+      border-radius: 12px;
+      padding: 0.7rem 1rem;
+      min-height: 42px;
+      font-size: 0.9rem;
+      color: #1f3f57;
+      transition: 0.1s;
+      word-break: break-word;
+    }
+    /* for editable form simulation – but this is a static template, 
+       field-box represents content area; user can fill manually when printed or used as digital form.
+       We'll style similarly to input/textarea look for clarity. */
+    .field-box[contenteditable="true"] {
+      background: white;
+      cursor: text;
+      border-color: #bdd4e5;
+    }
+    .field-box[contenteditable="true"]:focus {
+      outline: none;
+      border-color: #f4b942;
+      box-shadow: 0 0 0 2px rgba(244,185,66,0.2);
+    }
+    textarea.field-box {
+      resize: vertical;
+      min-height: 90px;
+      font-family: inherit;
+    }
+    /* guidance text */
+    .guidance {
+      font-size: 0.7rem;
+      color: #7d9bb5;
+      margin-top: 0.2rem;
+    }
+
+    hr {
+      margin: 1rem 0;
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, #e2edf7, transparent);
+    }
+
+    /* priority indicator */
+    .priority-tag {
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #fef1e0;
+      color: #b1621a;
+    }
+    .subnote {
+      font-size: 0.75rem;
+      color: #6e8faa;
+      margin-top: 1rem;
+      text-align: right;
+      border-top: 1px dashed #d8e3ef;
+      padding-top: 1rem;
+    }
+
+    /* print styles: ensure one page, remove backgrounds */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+      .report-container {
+        box-shadow: none;
+        border-radius: 0;
+        max-width: 100%;
+      }
+      .report-header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        background: #1c3f5c;
+      }
+      .field-box {
+        border: 1px solid #aaa;
+        background: #fff;
+      }
+      .btn-print {
+        display: none;
+      }
+      .report-body {
+        padding: 1.2rem;
+      }
+    }
+
+    /* optional print button */
+    .btn-print {
+      display: inline-block;
+      background: #f4b942;
+      color: #1c3f5c;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-print:hover {
+      background: #e5a72e;
+    }
+    .print-area {
+      text-align: right;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+<div class="report-container">
+  <div class="report-header">
+    <h1>📋 Issue Report Template</h1>
+    <p>Systematic problem documentation | One-page summary</p>
+  </div>
+  <div class="print-area">
+    <button class="btn-print" onclick="window.print();return false;">🖨️ Print / Save as PDF</button>
+  </div>
+  <div class="report-body">
+    <!-- issue title & severity row -->
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label>🔖 Issue Title *</label>
+        <div class="field-box" contenteditable="true" data-placeholder="e.g., Login timeout after password reset">[Click to edit] Provide a concise, descriptive title</div>
+        <div class="guidance">Short but clear (e.g., “Dashboard chart fails to load on Safari”)</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>⚠️ Severity / Priority</label>
+        <div class="field-box" contenteditable="true">🔴 Critical / High / Medium / Low</div>
+        <div class="guidance">Indicate impact on business or users</div>
+      </div>
+      <div class="form-group">
+        <label>📂 Affected Area / Component</label>
+        <div class="field-box" contenteditable="true">e.g., Authentication module, Payment gateway, Mobile app (iOS)</div>
+      </div>
+    </div>
+
+    <!-- Environment & reporter -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>💻 Environment details</label>
+        <div class="field-box" contenteditable="true">OS: _____________ | Browser: _____________ | App version: ___________</div>
+        <div class="guidance">Include device, OS version, browser, backend version, etc.</div>
+      </div>
+      <div class="form-group">
+        <label>📅 Date Reported</label>
+        <div class="field-box" contenteditable="true">YYYY-MM-DD</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>👤 Reporter name / Contact</label>
+        <div class="field-box" contenteditable="true">Name: _______________ | Email: _______________ | Slack/ID: ________</div>
+      </div>
+      <div class="form-group">
+        <label>🔗 Reference / Ticket ID</label>
+        <div class="field-box" contenteditable="true">e.g., Jira INC-123, Zendesk #, or internal tracking code</div>
+      </div>
+    </div>
+
+    <!-- issue description -->
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label>📝 Issue description (high-level summary)</label>
+        <div class="field-box" contenteditable="true" style="min-height: 70px;">Describe what the problem is, who is affected, and any business impact.</div>
+      </div>
+    </div>
+
+    <!-- steps to reproduce -->
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label>🔁 Steps to reproduce</label>
+        <div class="field-box" contenteditable="true" style="min-height: 90px;">1. <br>2. <br>3. <br>4.</div>
+        <div class="guidance">Numbered steps, starting from a known state (e.g., logged in user on homepage).</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>✨ Expected behavior</label>
+        <div class="field-box" contenteditable="true">What should happen when following the steps above?</div>
+      </div>
+      <div class="form-group">
+        <label>⚠️ Actual behavior</label>
+        <div class="field-box" contenteditable="true">What actually happens (error message, misbehavior, crash)?</div>
+      </div>
+    </div>
+
+    <!-- attachments / references -->
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label>📎 Attachments / Reference info</label>
+        <div class="field-box" contenteditable="true">Screenshots, logs, HAR files, video links, or related discussions. (e.g., screenshot link: ...)</div>
+        <div class="guidance">Include error stack traces, console output, or design specs if relevant.</div>
+      </div>
+    </div>
+
+    <!-- additional optional severity icon (visual cue) -->
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label>🏷️ Additional context / Workaround</label>
+        <div class="field-box" contenteditable="true">Is there a temporary fix? Does the issue only occur under certain conditions?</div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="subnote">
+      ✔️ Template version 1.0 — Fill all editable fields (gray boxes). Use print or export as PDF for permanent records.
+    </div>
+  </div>
+</div>
+
+<script>
+  // simple helper to make contenteditable fields more user-friendly,
+  // but not required for static template. Ensures empty placeholders are cleared on focus.
+  document.querySelectorAll('.field-box[contenteditable="true"]').forEach(field => {
+    field.addEventListener('focus', function(e) {
+      if (this.innerText.trim() === '' || this.innerText === '[Click to edit] Provide a concise, descriptive title' || this.innerText.includes('Click to edit')) {
+        if (this.innerText.includes('Click to edit')) this.innerText = '';
+      }
+    });
+    field.addEventListener('blur', function(e) {
+      if (this.innerText.trim() === '') {
+        // optional reset placeholder, but not needed for printing
+      }
+    });
+  });
+</script>
+</body>
+</html>

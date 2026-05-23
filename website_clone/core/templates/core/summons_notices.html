@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Official Notice | Office Relocation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* base reset for print and screen */
+    body {
+      background: #e6eef5;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+      line-height: 1.45;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    /* A4 / letter size container */
+    .notice {
+      max-width: 1100px;
+      width: 100%;
+      background: white;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    /* for actual print: remove shadows, set exact size */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+      .notice {
+        box-shadow: none;
+        max-width: 100%;
+        border-radius: 0;
+      }
+      .notice-footer {
+        background: #f8fafc;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .header-banner {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    /* header with ribbon style */
+    .header-banner {
+      background: #0b2f4c;
+      padding: 1.8rem 2.5rem;
+      color: white;
+      border-bottom: 6px solid #e8b13b;
+    }
+    .notice-tag {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      background: rgba(255,255,240,0.15);
+      display: inline-block;
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      margin-bottom: 1rem;
+    }
+    .header-banner h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .header-banner .date-line {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      font-weight: 400;
+    }
+
+    /* content layout */
+    .notice-content {
+      padding: 2rem 2.5rem;
+    }
+
+    /* key info in two columns */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      background: #f9fbfd;
+      border-left: 5px solid #e8b13b;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    .info-item h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0b2f4c;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .info-item p {
+      font-size: 1rem;
+      color: #1f3f57;
+      font-weight: 500;
+    }
+
+    /* main body sections */
+    .section {
+      margin-bottom: 1.8rem;
+    }
+    .section h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0f3e5c;
+      border-left: 4px solid #e8b13b;
+      padding-left: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section p {
+      color: #2c4a6e;
+      margin-bottom: 0.6rem;
+      font-size: 1rem;
+    }
+    .highlight-box {
+      background: #fef8e7;
+      border: 1px solid #f3d9a4;
+      padding: 1.2rem 1.5rem;
+      border-radius: 14px;
+      margin: 1.5rem 0;
+    }
+    .highlight-box p {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .highlight-box strong {
+      color: #c26e2e;
+    }
+
+    .callout-deadline {
+      background: #eef2f7;
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0 1.8rem;
+    }
+    .deadline-text {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #b34e1a;
+    }
+    .action-btn {
+      background: #0b2f4c;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.2s;
+      display: inline-block;
+    }
+    .action-btn:hover {
+      background: #1f5a7e;
+    }
+
+    /* contact & footer */
+    .contact-block {
+      background: #f2f6fa;
+      padding: 1.2rem 1.5rem;
+      border-radius: 14px;
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .contact-details p {
+      margin: 0.2rem 0;
+      color: #1e4a6e;
+    }
+    .notice-footer {
+      background: #f2f6fa;
+      border-top: 1px solid #dce5ec;
+      padding: 1rem 2.5rem;
+      font-size: 0.75rem;
+      color: #5f7f9e;
+      text-align: center;
+    }
+
+    @media (max-width: 680px) {
+      .notice-content {
+        padding: 1.2rem;
+      }
+      .header-banner {
+        padding: 1.2rem 1.5rem;
+      }
+      .header-banner h1 {
+        font-size: 1.8rem;
+      }
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .callout-deadline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .contact-block {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="notice">
+    <!-- header: prominent headline -->
+    <div class="header-banner">
+      <div class="notice-tag">OFFICIAL NOTICE</div>
+      <h1>Relocation of Corporate Office</h1>
+      <div class="date-line">Effective from April 15, 2025</div>
+    </div>
+
+    <div class="notice-content">
+      <!-- Key information in scannable sections -->
+      <div class="info-grid">
+        <div class="info-item">
+          <h3>📅 Effective Date</h3>
+          <p>April 15, 2025</p>
+        </div>
+        <div class="info-item">
+          <h3>📍 New Address</h3>
+          <p>1120 Financial District, Tower B, 8th Floor, Hyderabad - 500032</p>
+        </div>
+        <div class="info-item">
+          <h3>⏰ Business Hours</h3>
+          <p>Monday–Friday: 9:00 AM – 6:00 PM (unchanged)</p>
+        </div>
+        <div class="info-item">
+          <h3>📞 Contact Center</h3>
+          <p>+91 40 6810 2200 | support@company.com</p>
+        </div>
+      </div>
+
+      <!-- main description: why and action items -->
+      <div class="section">
+        <h2>Why we are relocating</h2>
+        <p>To support our growing team and enhance service delivery, our headquarters will move to a larger, more accessible facility. The new office features improved collaboration spaces and modern infrastructure, ensuring seamless operations for our partners and clients.</p>
+      </div>
+
+      <div class="section">
+        <h2>Impact & next steps</h2>
+        <p>From April 10 to April 14, our phone systems and mail routing will experience brief transitions. Emails and digital services remain fully operational. Please update your records with the new address after April 15.</p>
+        <div class="highlight-box">
+          <p>🔔 <strong>For urgent deliveries between April 8–15:</strong> Please use our temporary mail handling address (available upon request via support). All regular correspondence will be forwarded automatically.</p>
+        </div>
+      </div>
+
+      <!-- important deadline / call-to-action highlighted -->
+      <div class="callout-deadline">
+        <span class="deadline-text">⚠️ Deadline for vendor records update: <strong>April 25, 2025</strong></span>
+        <a href="#" class="action-btn">Download address change form →</a>
+      </div>
+
+      <!-- additional faq style / simple note -->
+      <div class="section">
+        <h2>What remains unchanged</h2>
+        <p>All phone numbers, email addresses, and existing contracts remain valid. Our main reception will be fully functional from April 15 onward. We will not change banking or payment details.</p>
+      </div>
+
+      <!-- contact information and next steps -->
+      <div class="contact-block">
+        <div class="contact-details">
+          <p><strong>📧 For inquiries:</strong> relocation@company.com  |  📞 +91 40 6810 2200 (ask for facilities team)</p>
+          <p><strong>📎 Need a formal letter?</strong> Request a signed relocation notice via the help desk.</p>
+        </div>
+        <div>
+          <a href="#" style="background:#e8b13b; color:#0b2f4c; text-decoration:none; padding:0.5rem 1.2rem; border-radius:40px; font-weight:600;">Request confirmation →</a>
+        </div>
+      </div>
+
+      <p style="margin-top: 1.2rem; font-size:0.85rem; color:#5f7f9e; border-top: 1px solid #e2edf7; padding-top: 1rem;">This notice applies to all departments, vendors, and partners. Please circulate internally.</p>
+    </div>
+
+    <div class="notice-footer">
+      <p>Issued by: Corporate Administration · Authorized signature: M. Krishnamurthy, Head of Operations</p>
+      <p style="margin-top: 0.2rem;">© 2025 — This is an official notice. Retain for your records.</p>
+    </div>
+  </div>
+</body>
+</html>

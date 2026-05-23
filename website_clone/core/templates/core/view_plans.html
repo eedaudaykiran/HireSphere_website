@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Pricing Plans — HireHub for Employers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(145deg, #f5f9ff 0%, #edf3fa 100%);
+      color: #1a2c3e;
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+    }
+
+    .plans-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* header */
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .pricing-header h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1f6282, #3a8fc7);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-header p {
+      font-size: 1.1rem;
+      color: #4a6f8f;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* toggle switch */
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .toggle-label {
+      font-weight: 500;
+      color: #2c4b66;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbdde9;
+      transition: 0.3s;
+      border-radius: 30px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 24px;
+      width: 24px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2c7cb6;
+    }
+    input:checked + .slider:before {
+      transform: translateX(30px);
+    }
+    .save-badge {
+      background: #e8f0e7;
+      color: #2c7c3e;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    /* pricing cards grid */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .plan-card {
+      background: white;
+      border-radius: 1.8rem;
+      padding: 2rem;
+      box-shadow: 0 12px 28px -12px rgba(0,0,0,0.08);
+      border: 1px solid #e2edf7;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .plan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 35px -14px rgba(0,0,0,0.12);
+    }
+    .plan-card.popular {
+      border: 2px solid #f4b942;
+      background: linear-gradient(145deg, #ffffff, #fffaf2);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: #f4b942;
+      color: #1f5579;
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .plan-name {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #1f5579;
+      margin-bottom: 0.5rem;
+    }
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #2c7cb6;
+      margin: 0.8rem 0;
+    }
+    .plan-price span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #6a8eaa;
+    }
+    .plan-description {
+      color: #5f7f9e;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+    .feature-list {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+    .feature-list li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+    }
+    .feature-list li::before {
+      content: "✓";
+      color: #2c7cb6;
+      font-weight: 700;
+    }
+    .btn-select {
+      background: #eef3fc;
+      border: none;
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 1rem;
+    }
+    .btn-select:hover {
+      background: #2c7cb6;
+      color: white;
+    }
+    .plan-card.popular .btn-select {
+      background: #2c7cb6;
+      color: white;
+    }
+    .plan-card.popular .btn-select:hover {
+      background: #1f6282;
+    }
+
+    /* feature comparison table */
+    .comparison-section {
+      background: white;
+      border-radius: 1.8rem;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid #e2edf7;
+    }
+    .comparison-section h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1f5579;
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .comparison-table th, .comparison-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e2edf7;
+    }
+    .comparison-table th {
+      background: #f8fafd;
+      font-weight: 700;
+      color: #1f5579;
+    }
+    .comparison-table td:first-child {
+      font-weight: 600;
+    }
+    .check-mark {
+      color: #2c7cb6;
+      font-weight: 700;
+    }
+
+    /* FAQ */
+    .faq-section {
+      background: white;
+      border-radius: 1.8rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e2edf7;
+    }
+    .faq-section h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #1f5579;
+    }
+    .faq-item {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #edf2f7;
+      padding-bottom: 1rem;
+    }
+    .faq-question {
+      font-weight: 700;
+      color: #2c628b;
+      margin-bottom: 0.3rem;
+    }
+    .faq-answer {
+      color: #5f7f9e;
+      font-size: 0.9rem;
+    }
+
+    .cta-footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 1rem;
+    }
+    .cta-footer p {
+      color: #4a6f8f;
+    }
+    .btn-contact {
+      background: transparent;
+      border: 1px solid #2c7cb6;
+      padding: 0.5rem 1.5rem;
+      border-radius: 3rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-contact:hover {
+      background: #2c7cb6;
+      color: white;
+    }
+
+    @media (max-width: 800px) {
+      .pricing-header h1 {
+        font-size: 1.8rem;
+      }
+      .comparison-table th, .comparison-table td {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="plans-container">
+  <div class="pricing-header">
+    <h1>Choose the right plan for your team</h1>
+    <p>Flexible subscription options for startups to enterprises. No hidden fees.</p>
+  </div>
+
+  <!-- Billing toggle (annual / monthly) -->
+  <div class="toggle-container">
+    <span class="toggle-label">Monthly</span>
+    <label class="switch">
+      <input type="checkbox" id="billingToggle">
+      <span class="slider"></span>
+    </label>
+    <span class="toggle-label">Annual <span class="save-badge">Save 20%</span></span>
+  </div>
+
+  <!-- Pricing cards -->
+  <div class="pricing-grid" id="pricingCards">
+    <!-- Starter -->
+    <div class="plan-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price" id="starterPrice">₹0 <span>/ month</span></div>
+      <div class="plan-description">Perfect for small teams and first-time posters.</div>
+      <ul class="feature-list">
+        <li>3 active job posts</li>
+        <li>Basic candidate search</li>
+        <li>Email support</li>
+        <li>Job analytics (basic)</li>
+      </ul>
+      <button class="btn-select" onclick="alert('Starter plan is free — sign up now to start hiring.')">Get started →</button>
+    </div>
+
+    <!-- Professional (popular) -->
+    <div class="plan-card popular">
+      <div class="popular-badge">🔥 Most popular</div>
+      <div class="plan-name">Professional</div>
+      <div class="plan-price" id="proPrice">₹4,999 <span>/ month</span></div>
+      <div class="plan-description">Best for growing teams and active recruiters.</div>
+      <ul class="feature-list">
+        <li>20 active job posts</li>
+        <li>AI-powered candidate matching</li>
+        <li>Resume parsing & smart filters</li>
+        <li>Interview scheduling tools</li>
+        <li>Advanced analytics + reports</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="btn-select" onclick="alert('14-day free trial of Professional plan. No credit card required.')">Start free trial →</button>
+    </div>
+
+    <!-- Enterprise -->
+    <div class="plan-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price" id="enterprisePrice">Custom</div>
+      <div class="plan-description">Tailored solutions for large organizations.</div>
+      <ul class="feature-list">
+        <li>Unlimited job posts</li>
+        <li>Dedicated account manager</li>
+        <li>API access & SSO integration</li>
+        <li>Custom onboarding & training</li>
+        <li>SLA uptime guarantee</li>
+        <li>Advanced compliance & security</li>
+      </ul>
+      <button class="btn-select" onclick="alert('Contact our enterprise sales team for a personalized demo and quote.')">Contact sales →</button>
+    </div>
+  </div>
+
+  <!-- Feature comparison table -->
+  <div class="comparison-section">
+    <h2>📊 Compare features side by side</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>Feature</th><th>Starter</th><th>Professional</th><th>Enterprise</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Active job listings</td><td>3</td><td>20</td><td>Unlimited</td></tr>
+        <tr><td>AI candidate matching</td><td>—</td><td class="check-mark">✓</td><td class="check-mark">✓</td></tr>
+        <tr><td>Resume database access</td><td>Basic</td><td>Full</td><td>Full + API</td></tr>
+        <tr><td>Interview scheduling</td><td>—</td><td class="check-mark">✓</td><td class="check-mark">✓</td></tr>
+        <tr><td>Custom hiring pipelines</td><td>—</td><td class="check-mark">✓</td><td class="check-mark">✓</td></tr>
+        <tr><td>Analytics & reports</td><td>Basic</td><td>Advanced</td><td>Custom dashboards</td></tr>
+        <tr><td>Priority support</td><td>Email</td><td>24/7 chat + email</td><td>Dedicated manager</td></tr>
+        <tr><td>SSO / API access</td><td>—</td><td>—</td><td class="check-mark">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <h2>❓ Frequently asked questions</h2>
+    <div class="faq-item"><div class="faq-question">Can I switch plans later?</div><div class="faq-answer">Yes, you can upgrade or downgrade anytime. Changes apply to your next billing cycle.</div></div>
+    <div class="faq-item"><div class="faq-question">Is there a free trial?</div><div class="faq-answer">Professional plan includes a 14‑day free trial, no credit card required.</div></div>
+    <div class="faq-item"><div class="faq-question">What payment methods are accepted?</div><div class="faq-answer">All major credit cards, net banking, and annual invoicing for Enterprise.</div></div>
+    <div class="faq-item"><div class="faq-question">Do you offer discounts for non-profits?</div><div class="faq-answer">Yes, contact our support team for a special non‑profit pricing.</div></div>
+  </div>
+
+  <div class="cta-footer">
+    <p>Need help choosing? Talk to our team.</p>
+    <button class="btn-contact" onclick="alert('Our sales team will get back to you within 24 hours.')">📞 Contact sales</button>
+  </div>
+</div>
+
+<script>
+  // Dynamic pricing toggle for annual/monthly
+  const toggle = document.getElementById('billingToggle');
+  const starterPriceSpan = document.getElementById('starterPrice');
+  const proPriceSpan = document.getElementById('proPrice');
+
+  function updatePrices() {
+    if (toggle.checked) {
+      // annual pricing (20% off)
+      // Starter remains free
+      starterPriceSpan.innerHTML = '₹0 <span>/ year</span>';
+      proPriceSpan.innerHTML = '₹47,990 <span>/ year</span>';  // 4999 * 12 * 0.8 = 47990.4
+    } else {
+      starterPriceSpan.innerHTML = '₹0 <span>/ month</span>';
+      proPriceSpan.innerHTML = '₹4,999 <span>/ month</span>';
+    }
+  }
+
+  toggle.addEventListener('change', updatePrices);
+  updatePrices();
+</script>
+</body>
+</html>

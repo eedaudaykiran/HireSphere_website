@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Resume Builder — Create your professional CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f0f4fa;
+      color: #1a2c3e;
+      padding: 2rem 1.5rem;
+    }
+
+    .builder-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1f5579;
+      margin-bottom: 0.25rem;
+    }
+
+    .sub {
+      color: #5f7f9e;
+      margin-bottom: 2rem;
+    }
+
+    /* two column layout */
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2rem;
+    }
+
+    /* form panel */
+    .form-panel {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.08);
+      border: 1px solid #e2edf7;
+      height: fit-content;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .form-section {
+      margin-bottom: 1.8rem;
+      border-bottom: 1px solid #edf2f7;
+      padding-bottom: 1rem;
+    }
+
+    .form-section h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #2c628b;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #2c4b66;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid #cbdde9;
+      border-radius: 0.8rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: white;
+      transition: 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #2c7cb6;
+      box-shadow: 0 0 0 3px rgba(44,124,182,0.1);
+    }
+
+    .inline-group {
+      display: flex;
+      gap: 1rem;
+    }
+    .inline-group .form-group {
+      flex: 1;
+    }
+
+    .btn-add {
+      background: #eef2f8;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: 0.2s;
+    }
+
+    .btn-add:hover {
+      background: #e0e8f0;
+    }
+
+    .experience-item, .education-item {
+      background: #f9fbfe;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      margin-bottom: 0.8rem;
+      border: 1px solid #e2edf7;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      background: #eef3fc;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      margin: 0.2rem 0.3rem;
+    }
+
+    /* resume preview panel */
+    .preview-panel {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      box-shadow: 0 12px 28px -10px rgba(0,0,0,0.1);
+      border: 1px solid #e2edf7;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #eef3fc;
+    }
+
+    .preview-header h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1f5579;
+    }
+
+    .btn-download {
+      background: #2c7cb6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .resume-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+    }
+
+    .resume-name {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #1f5579;
+      margin-bottom: 0.2rem;
+    }
+
+    .resume-title {
+      color: #2c7cb6;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .resume-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: #5f7f9e;
+      margin-bottom: 1.2rem;
+    }
+
+    .resume-section {
+      margin-top: 1rem;
+    }
+
+    .resume-section h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2c628b;
+      border-left: 4px solid #f4b942;
+      padding-left: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .resume-item {
+      margin-bottom: 0.8rem;
+    }
+
+    .resume-item strong {
+      font-weight: 600;
+      color: #1f5579;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    hr {
+      margin: 1rem 0;
+      border: none;
+      height: 1px;
+      background: #e2edf7;
+    }
+
+    @media (max-width: 900px) {
+      .builder-grid {
+        grid-template-columns: 1fr;
+      }
+      body {
+        padding: 1rem;
+      }
+      .form-panel {
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="builder-container">
+  <h1>📄 Resume Builder</h1>
+  <div class="sub">Fill in your details — see live preview. Download as PDF or copy.</div>
+
+  <div class="builder-grid">
+    <!-- left: form inputs -->
+    <div class="form-panel">
+      <div class="form-section">
+        <h3>👤 Personal Info</h3>
+        <div class="form-group">
+          <label>Full name</label>
+          <input type="text" id="fullName" placeholder="e.g. Priya Sharma" value="Priya Sharma">
+        </div>
+        <div class="form-group">
+          <label>Professional title / headline</label>
+          <input type="text" id="jobTitle" placeholder="e.g. Frontend Developer" value="Frontend Developer">
+        </div>
+        <div class="inline-group">
+          <div class="form-group"><label>Email</label><input type="email" id="email" value="priya.s@example.com"></div>
+          <div class="form-group"><label>Phone</label><input type="text" id="phone" value="+91 98765 43210"></div>
+        </div>
+        <div class="form-group"><label>Location</label><input type="text" id="location" value="Bangalore, India"></div>
+        <div class="form-group"><label>LinkedIn / Portfolio (optional)</label><input type="text" id="portfolio" value="linkedin.com/in/priya"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>💼 Work Experience</h3>
+        <div id="experiencesContainer">
+          <div class="experience-item" data-exp-idx="0">
+            <div class="inline-group"><div class="form-group"><label>Job title</label><input type="text" class="exp-title" value="Frontend Developer"></div>
+            <div class="form-group"><label>Company</label><input type="text" class="exp-company" value="TechNova"></div></div>
+            <div class="inline-group"><div class="form-group"><label>Start date</label><input type="text" class="exp-start" placeholder="MM/YYYY" value="Jan 2022"></div>
+            <div class="form-group"><label>End date</label><input type="text" class="exp-end" placeholder="Present" value="Present"></div></div>
+            <div class="form-group"><label>Description</label><textarea class="exp-desc" rows="2">Built responsive UI components using React, improved performance by 30%.</textarea></div>
+            <button class="btn-add remove-exp" style="background:#fdecea; color:#b33;">Remove</button>
+          </div>
+        </div>
+        <button id="addExperienceBtn" class="btn-add">+ Add experience</button>
+      </div>
+
+      <div class="form-section">
+        <h3>🎓 Education</h3>
+        <div id="educationContainer">
+          <div class="education-item" data-edu-idx="0">
+            <div class="inline-group"><div class="form-group"><label>Degree</label><input type="text" class="edu-degree" value="B.Tech Computer Science"></div>
+            <div class="form-group"><label>Institution</label><input type="text" class="edu-institution" value="IIT Hyderabad"></div></div>
+            <div class="inline-group"><div class="form-group"><label>Year</label><input type="text" class="edu-year" value="2021"></div>
+            <div class="form-group"><label>Grade/CGPA</label><input type="text" class="edu-grade" value="8.9"></div></div>
+            <button class="btn-add remove-edu" style="background:#fdecea; color:#b33;">Remove</button>
+          </div>
+        </div>
+        <button id="addEducationBtn" class="btn-add">+ Add education</button>
+      </div>
+
+      <div class="form-section">
+        <h3>🛠️ Skills</h3>
+        <div class="form-group"><label>Skills (comma separated)</label><textarea id="skillsInput" rows="2" placeholder="React, Python, Django, SQL, Figma">React, Python, Django, SQL, Figma</textarea></div>
+      </div>
+    </div>
+
+    <!-- right: live preview -->
+    <div class="preview-panel">
+      <div class="preview-header">
+        <h2>📄 Live Resume Preview</h2>
+        <button class="btn-download" id="downloadPdfBtn">⬇️ Download as PDF</button>
+      </div>
+      <div id="resumePreview" class="resume-card"></div>
+      <p style="font-size:0.7rem; text-align:center; margin-top:1rem; color:#8fadc6;">Changes update instantly — PDF download uses browser print.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // helper: collect all data from dynamic forms
+  function getExperiences() {
+    const exps = [];
+    document.querySelectorAll('.experience-item').forEach((item, idx) => {
+      exps.push({
+        title: item.querySelector('.exp-title')?.value || '',
+        company: item.querySelector('.exp-company')?.value || '',
+        startDate: item.querySelector('.exp-start')?.value || '',
+        endDate: item.querySelector('.exp-end')?.value || '',
+        description: item.querySelector('.exp-desc')?.value || ''
+      });
+    });
+    return exps;
+  }
+
+  function getEducations() {
+    const eduList = [];
+    document.querySelectorAll('.education-item').forEach((item) => {
+      eduList.push({
+        degree: item.querySelector('.edu-degree')?.value || '',
+        institution: item.querySelector('.edu-institution')?.value || '',
+        year: item.querySelector('.edu-year')?.value || '',
+        grade: item.querySelector('.edu-grade')?.value || ''
+      });
+    });
+    return eduList;
+  }
+
+  function getSkills() {
+    const raw = document.getElementById('skillsInput')?.value || '';
+    return raw.split(',').map(s => s.trim()).filter(s => s);
+  }
+
+  function getPersonalInfo() {
+    return {
+      name: document.getElementById('fullName')?.value || 'Your Name',
+      title: document.getElementById('jobTitle')?.value || '',
+      email: document.getElementById('email')?.value || '',
+      phone: document.getElementById('phone')?.value || '',
+      location: document.getElementById('location')?.value || '',
+      portfolio: document.getElementById('portfolio')?.value || ''
+    };
+  }
+
+  // render resume preview
+  function updatePreview() {
+    const personal = getPersonalInfo();
+    const experiences = getExperiences();
+    const educations = getEducations();
+    const skills = getSkills();
+
+    const previewDiv = document.getElementById('resumePreview');
+    if (!previewDiv) return;
+
+    const expHtml = experiences.map(exp => `
+      <div class="resume-item">
+        <strong>${escapeHtml(exp.title)}</strong> at ${escapeHtml(exp.company)}<br>
+        <span style="font-size:0.75rem; color:#5f7f9e;">${escapeHtml(exp.startDate)} — ${escapeHtml(exp.endDate)}</span>
+        <p style="font-size:0.85rem; margin-top:4px;">${escapeHtml(exp.description)}</p>
+      </div>
+    `).join('') || '<p>— No experience added —</p>';
+
+    const eduHtml = educations.map(edu => `
+      <div class="resume-item">
+        <strong>${escapeHtml(edu.degree)}</strong> from ${escapeHtml(edu.institution)}<br>
+        <span style="font-size:0.75rem;">${escapeHtml(edu.year)} | ${escapeHtml(edu.grade)}</span>
+      </div>
+    `).join('') || '<p>— No education added —</p>';
+
+    const skillsHtml = skills.length ? skills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('') : '<p>— No skills listed —</p>';
+
+    const contactHtml = `
+      <span>✉️ ${escapeHtml(personal.email)}</span>
+      <span>📞 ${escapeHtml(personal.phone)}</span>
+      <span>📍 ${escapeHtml(personal.location)}</span>
+      ${personal.portfolio ? `<span>🔗 ${escapeHtml(personal.portfolio)}</span>` : ''}
+    `;
+
+    previewDiv.innerHTML = `
+      <div class="resume-name">${escapeHtml(personal.name)}</div>
+      <div class="resume-title">${escapeHtml(personal.title)}</div>
+      <div class="resume-contact">${contactHtml}</div>
+      <hr>
+      <div class="resume-section">
+        <h4>💼 Work Experience</h4>
+        ${expHtml}
+      </div>
+      <div class="resume-section">
+        <h4>🎓 Education</h4>
+        ${eduHtml}
+      </div>
+      <div class="resume-section">
+        <h4>🛠️ Skills</h4>
+        <div class="skills-list">${skillsHtml}</div>
+      </div>
+    `;
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // dynamic field management: add/remove experience
+  function addExperienceField() {
+    const container = document.getElementById('experiencesContainer');
+    const idx = container.children.length;
+    const newItem = document.createElement('div');
+    newItem.className = 'experience-item';
+    newItem.setAttribute('data-exp-idx', idx);
+    newItem.innerHTML = `
+      <div class="inline-group"><div class="form-group"><label>Job title</label><input type="text" class="exp-title" placeholder="e.g. Senior Developer"></div>
+      <div class="form-group"><label>Company</label><input type="text" class="exp-company" placeholder="e.g. Google"></div></div>
+      <div class="inline-group"><div class="form-group"><label>Start date</label><input type="text" class="exp-start" placeholder="MM/YYYY"></div>
+      <div class="form-group"><label>End date</label><input type="text" class="exp-end" placeholder="Present"></div></div>
+      <div class="form-group"><label>Description</label><textarea class="exp-desc" rows="2" placeholder="Key achievements..."></textarea></div>
+      <button class="btn-add remove-exp" style="background:#fdecea; color:#b33;">Remove</button>
+    `;
+    container.appendChild(newItem);
+    attachRemoveEvent(newItem.querySelector('.remove-exp'));
+    attachInputListeners();
+  }
+
+  function addEducationField() {
+    const container = document.getElementById('educationContainer');
+    const newItem = document.createElement('div');
+    newItem.className = 'education-item';
+    newItem.innerHTML = `
+      <div class="inline-group"><div class="form-group"><label>Degree</label><input type="text" class="edu-degree" placeholder="B.Sc. Computer Science"></div>
+      <div class="form-group"><label>Institution</label><input type="text" class="edu-institution" placeholder="University name"></div></div>
+      <div class="inline-group"><div class="form-group"><label>Year</label><input type="text" class="edu-year" placeholder="2023"></div>
+      <div class="form-group"><label>Grade/CGPA</label><input type="text" class="edu-grade" placeholder="8.5"></div></div>
+      <button class="btn-add remove-edu" style="background:#fdecea; color:#b33;">Remove</button>
+    `;
+    container.appendChild(newItem);
+    attachRemoveEventEdu(newItem.querySelector('.remove-edu'));
+    attachInputListeners();
+  }
+
+  function attachRemoveEvent(btn) {
+    if (btn) btn.addEventListener('click', function(e) {
+      const item = this.closest('.experience-item');
+      if (item && document.querySelectorAll('.experience-item').length > 1) item.remove();
+      else alert('Keep at least one experience entry.');
+      updatePreview();
+    });
+  }
+
+  function attachRemoveEventEdu(btn) {
+    if (btn) btn.addEventListener('click', function(e) {
+      const item = this.closest('.education-item');
+      if (item && document.querySelectorAll('.education-item').length > 1) item.remove();
+      else alert('Keep at least one education entry.');
+      updatePreview();
+    });
+  }
+
+  function attachInputListeners() {
+    const allInputs = document.querySelectorAll('input, textarea');
+    allInputs.forEach(input => {
+      input.removeEventListener('input', updatePreview);
+      input.addEventListener('input', updatePreview);
+    });
+  }
+
+  // download as PDF via browser print
+  function downloadPDF() {
+    const originalTitle = document.title;
+    const previewContent = document.getElementById('resumePreview').cloneNode(true);
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('Please allow pop-ups to generate PDF.');
+      return;
+    }
+    const styles = document.querySelector('style').innerHTML;
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head><title>Resume - ${getPersonalInfo().name}</title>
+      <style>${styles} body { padding: 2rem; background: white; } .builder-grid { display: block; } .form-panel, .btn-download, .preview-header button, .preview-header h2 { display: none; } .preview-panel { box-shadow: none; padding: 0; } .resume-card { max-width: 800px; margin: 0 auto; } </style>
+      </head>
+      <body>${previewContent.outerHTML}</body></html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  }
+
+  // initial event binding and dynamic remove existing buttons
+  function init() {
+    updatePreview();
+
+    document.getElementById('addExperienceBtn')?.addEventListener('click', () => { addExperienceField(); updatePreview(); });
+    document.getElementById('addEducationBtn')?.addEventListener('click', () => { addEducationField(); updatePreview(); });
+    document.getElementById('downloadPdfBtn')?.addEventListener('click', downloadPDF);
+
+    // attach remove events to existing remove buttons
+    document.querySelectorAll('.remove-exp').forEach(btn => attachRemoveEvent(btn));
+    document.querySelectorAll('.remove-edu').forEach(btn => attachRemoveEventEdu(btn));
+    attachInputListeners();
+
+    // global listener for any dynamic added field
+    const observer = new MutationObserver(() => {
+      attachInputListeners();
+      updatePreview();
+    });
+    observer.observe(document.getElementById('experiencesContainer'), { childList: true, subtree: true });
+    observer.observe(document.getElementById('educationContainer'), { childList: true, subtree: true });
+  }
+
+  init();
+</script>
+</body>
+</html>

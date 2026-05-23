@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Trust & Safety | Building a Secure Community</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #eef2f9 0%, #e6ecf5 100%);
+      font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      padding: 2rem 1.5rem;
+      color: #1a2c3e;
+    }
+
+    /* main container */
+    .trust-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(42, 85, 119, 0.15);
+    }
+
+    /* header with trust badge style */
+    .trust-header {
+      background: linear-gradient(115deg, #1a4d6b, #2c6e8f);
+      padding: 2rem 2rem 1.8rem 2rem;
+      color: white;
+      text-align: center;
+    }
+    .shield-icon {
+      font-size: 3rem;
+      margin-bottom: 0.4rem;
+    }
+    .trust-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .trust-sub {
+      font-size: 1rem;
+      opacity: 0.92;
+      margin-top: 0.5rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* content sections */
+    .trust-content {
+      padding: 2rem 2rem 2rem 2rem;
+    }
+
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0 1.5rem;
+    }
+    .pillar-card {
+      background: #fafcff;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      border: 1px solid #dce8f2;
+      transition: all 0.25s;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+    }
+    .pillar-card:hover {
+      transform: translateY(-5px);
+      border-color: #6aa7c2;
+      box-shadow: 0 15px 25px -12px rgba(44,110,143,0.2);
+    }
+    .pillar-icon {
+      font-size: 2.3rem;
+      margin-bottom: 0.8rem;
+    }
+    .pillar-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1f6282;
+    }
+    .pillar-card p {
+      color: #3c5a73;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 1.8rem 0 0.8rem 0;
+      color: #1f5a7a;
+      border-left: 5px solid #f4b942;
+      padding-left: 1rem;
+    }
+    h2:first-of-type {
+      margin-top: 0;
+    }
+    .safety-list {
+      background: #f8fbfe;
+      padding: 1.2rem 1.8rem;
+      border-radius: 1.2rem;
+      margin: 1rem 0;
+    }
+    .safety-list li {
+      margin-bottom: 0.7rem;
+      line-height: 1.45;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .badge {
+      background: #eef3fc;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2a5f7a;
+    }
+
+    .report-panel {
+      background: linear-gradient(105deg, #f0f6fe 0%, #ffffff 100%);
+      border-radius: 1.5rem;
+      padding: 1.5rem 2rem;
+      margin: 1.8rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.2rem;
+      border: 1px solid #cde0ef;
+    }
+    .btn-report {
+      background: #1f6282;
+      color: white;
+      padding: 0.65rem 1.5rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .btn-report:hover {
+      background: #0f4b66;
+      transform: translateY(-2px);
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin: 1rem 0;
+    }
+    .contact-card {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #e2edf7;
+    }
+    hr {
+      margin: 1.8rem 0;
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, #cde0ef, transparent);
+    }
+
+    footer {
+      background: #f2f6fb;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #5982a0;
+      border-top: 1px solid #dce8f2;
+    }
+
+    @media (max-width: 700px) {
+      .trust-content {
+        padding: 1.3rem;
+      }
+      .trust-header h1 {
+        font-size: 1.7rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="trust-container">
+  <div class="trust-header">
+    <div class="shield-icon">🛡️🔒</div>
+    <h1>Trust & Safety Center</h1>
+    <div class="trust-sub">Our commitment to a secure, respectful, and transparent environment for every user.</div>
+  </div>
+
+  <div class="trust-content">
+    <!-- key pillars of trust -->
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon">🔐</div>
+        <h3>Data Protection</h3>
+        <p>We use industry‑standard encryption, strict access controls, and regular audits to safeguard your personal information.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🤝</div>
+        <h3>Community Guidelines</h3>
+        <p>Clear rules against harassment, hate speech, fraud, and misinformation — enforced consistently.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">📢</div>
+        <h3>Content Moderation</h3>
+        <p>AI + human review teams remove harmful content and proactively flag suspicious activity.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">⚖️</div>
+        <h3>Accountability</h3>
+        <p>Every user is verified where possible. Violations lead to warnings, suspensions, or permanent bans.</p>
+      </div>
+    </div>
+
+    <h2>🛡️ Our safety principles</h2>
+    <div class="safety-list">
+      <ul>
+        <li>✅ <strong>Transparency:</strong> You will always know how your data is used and why content is removed.</li>
+        <li>✅ <strong>User control:</strong> Block, report, and mute tools are available on every profile and interaction.</li>
+        <li>✅ <strong>Proactive defense:</strong> Real‑time monitoring for unusual login attempts, payment fraud, and phishing.</li>
+        <li>✅ <strong>Privacy by design:</strong> We minimize data collection, anonymize analytics, and never sell personal information.</li>
+      </ul>
+    </div>
+
+    <h2>⚠️ Reporting & enforcement</h2>
+    <p>If you encounter suspicious behavior, abuse, or content that violates our policies, please report it immediately. Our safety team reviews every report within 24 hours.</p>
+    <div class="report-panel">
+      <span><strong>✋ See something wrong?</strong> Your report helps keep the community safe.</span>
+      <a href="#" class="btn-report">📢 Report an issue →</a>
+    </div>
+
+    <h2>🔍 How we verify trust</h2>
+    <div class="badge-row">
+      <span class="badge">✅ Identity verification (select services)</span>
+      <span class="badge">📞 Phone / email confirmation</span>
+      <span class="badge">🏢 Business verification badges</span>
+      <span class="badge">⭐ Community reputation scores</span>
+    </div>
+    <p>Trust badges and verification tiers help you identify legitimate users and businesses. We partner with third‑party identity providers to prevent impersonation.</p>
+
+    <h2>📋 User safety checklist</h2>
+    <div class="safety-list">
+      <ul>
+        <li>🔒 Use strong, unique passwords and enable two‑factor authentication.</li>
+        <li>🚫 Never share verification codes or account recovery links.</li>
+        <li>📧 Beware of unsolicited messages asking for payment or personal data.</li>
+        <li>🌐 Verify official website URLs — look for HTTPS and our domain.</li>
+        <li>📞 Contact support directly through official channels if something feels off.</li>
+      </ul>
+    </div>
+
+    <h2>📞 Contact Trust & Safety team</h2>
+    <div class="contact-row">
+      <div class="contact-card">
+        <strong>📧 Email support</strong><br>
+        safety@hirehub.com (24h response)<br>
+        abuse@hirehub.com (urgent reports)
+      </div>
+      <div class="contact-card">
+        <strong>🕒 Emergency / law enforcement</strong><br>
+        +1 (888) 555-0199 (Mon–Fri, 9am–6pm ET)<br>
+        For immediate threats, contact local police.
+      </div>
+      <div class="contact-card">
+        <strong>📝 Submit a formal appeal</strong><br>
+        If your content was removed or account suspended, you can appeal via our <a href="#" style="color:#1f6282;">appeals center</a>.
+      </div>
+    </div>
+
+    <hr>
+    <div style="background: #eef3fa; padding: 1rem; border-radius: 1rem; font-size: 0.85rem;">
+      <p>🔒 <strong>Our promise:</strong> We continuously improve our safety tools and policies. This page is updated whenever we enhance protections. Last reviewed: March 2025.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 HireHub Trust & Safety — Building a platform you can rely on. <a href="#" style="color:#2c6e8f;">Privacy Policy</a> | <a href="#" style="color:#2c6e8f;">Terms of Service</a></p>
+  </footer>
+</div>
+</body>
+</html>

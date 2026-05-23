@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 import datetime
 from django.http import HttpResponse, JsonResponse
+import re
 
 from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm
 from .models import UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, EmployerSettings
@@ -14628,6 +14629,62 @@ def view_applications(request, job_id):
     }
     return render(request, 'core/view_applications.html', context)
 
+def about(request):
+    return render(request, 'about.html')
 
+def careers(request):
+    return render(request, 'careers.html')
 
+def employer_home(request):
+    return render(request, 'employer_home.html')
 
+def sitemap(request):
+    return render(request, 'sitemap.html')
+
+def credits(request):
+    return render(request, 'credits.html')
+
+def help_center(request):
+    return render(request, 'help_center.html')
+
+def summons_notices(request):
+    return render(request, 'summons_notices.html')
+
+def grievances(request):
+    return render(request, 'grievances.html')
+
+def report_issue(request):
+    return render(request, 'report_issue.html')
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+def terms_conditions(request):
+    return render(request, 'terms_conditions.html')
+
+def fraud_alert(request):
+    return render(request, 'fraud_alert.html')
+
+def trust_safety(request):
+    return render(request, 'trust_safety.html')
+
+def search_jobs(request):
+    return render(request, 'search_jobs.html')
+
+def browser_companies(request):
+    return render(request, 'browser_companies.html')
+
+def resume_builder(request):
+    return render(request, 'resume_builder.html')
+
+def career_advice(request):
+    return render(request, 'career_advice.html')
+
+def salary_calculator(request):
+    return render(request, 'salary_calculator.html')
+
+def hiring_solutions(request):
+    return render(request, 'hiring_solutions.html')
+
+def view_plans(request):
+    return render(request, 'view_plans.html')

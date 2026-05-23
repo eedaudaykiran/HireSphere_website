@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HireHub Employer Portal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --bg:#060816;
+    --surface:#0c1222;
+    --card:rgba(17,27,46,0.65);
+
+    --border:rgba(255,255,255,0.08);
+
+    --accent:#3b82f6;
+    --accent2:#8b5cf6;
+    --accent3:#06b6d4;
+    --accent4:#ec4899;
+
+    --text:#f5f7ff;
+    --soft:#9caecf;
+    --muted:#60708d;
+
+    --green:#10b981;
+    --amber:#f59e0b;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+}
+
+/* =========================================================
+   NOISE OVERLAY
+========================================================= */
+
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    opacity:0.05;
+    pointer-events:none;
+    z-index:0;
+
+    background-image:
+    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.15) 1px, transparent 1px);
+
+    background-size:28px 28px;
+}
+
+/* =========================================================
+   ORBS
+========================================================= */
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(90px);
+    pointer-events:none;
+}
+
+.orb-1{
+    width:500px;
+    height:500px;
+    background:rgba(59,130,246,0.18);
+    top:-120px;
+    left:-150px;
+}
+
+.orb-2{
+    width:420px;
+    height:420px;
+    background:rgba(139,92,246,0.15);
+    right:-100px;
+    top:400px;
+}
+
+.orb-3{
+    width:350px;
+    height:350px;
+    background:rgba(236,72,153,0.12);
+    left:50%;
+    bottom:200px;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+nav{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:1000;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 50px;
+
+    backdrop-filter:blur(18px);
+
+    background:rgba(6,8,22,0.78);
+
+    border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.logo{
+    font-family:'Syne',sans-serif;
+    font-size:28px;
+    font-weight:800;
+
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:30px;
+    list-style:none;
+}
+
+.nav-links a{
+    color:var(--soft);
+    text-decoration:none;
+    transition:0.3s;
+    font-size:15px;
+}
+
+.nav-links a:hover{
+    color:white;
+}
+
+.nav-btn{
+    padding:12px 22px;
+    border-radius:12px;
+
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+
+    color:white !important;
+
+    font-weight:700;
+}
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+.container{
+    width:92%;
+    max-width:1240px;
+    margin:auto;
+}
+
+.section{
+    position:relative;
+    z-index:1;
+    padding:120px 0;
+}
+
+.section-label{
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.section-title{
+    font-family:'Syne',sans-serif;
+    font-size:clamp(38px,5vw,64px);
+    line-height:1.08;
+    margin-bottom:24px;
+}
+
+.section-text{
+    color:var(--soft);
+    font-size:18px;
+    line-height:1.9;
+    max-width:700px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding-top:120px;
+    position:relative;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:70px;
+    align-items:center;
+}
+
+.hero-title{
+    font-family:'Syne',sans-serif;
+    font-size:clamp(50px,7vw,92px);
+    line-height:1;
+    letter-spacing:-0.04em;
+    margin-bottom:28px;
+}
+
+.gradient{
+    background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero-sub{
+    color:var(--soft);
+    line-height:1.9;
+    font-size:19px;
+    margin-bottom:40px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.btn-primary,
+.btn-secondary{
+    padding:16px 34px;
+    border-radius:14px;
+    text-decoration:none;
+    transition:0.35s;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:white;
+    font-weight:700;
+    box-shadow:0 12px 40px rgba(59,130,246,0.35);
+}
+
+.btn-primary:hover{
+    transform:translateY(-4px);
+}
+
+.btn-secondary{
+    border:1px solid rgba(255,255,255,0.08);
+    color:var(--soft);
+    background:rgba(255,255,255,0.03);
+    backdrop-filter:blur(18px);
+}
+
+.btn-secondary:hover{
+    transform:translateY(-4px);
+    border-color:var(--accent);
+    color:white;
+}
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
+.glass{
+    background:var(--card);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+    0 8px 40px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+
+    border-radius:24px;
+}
+
+/* =========================================================
+   HERO DASHBOARD
+========================================================= */
+
+.dashboard-preview{
+    padding:26px;
+    position:relative;
+    overflow:hidden;
+    animation:float 5s ease-in-out infinite alternate;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(0px);
+    }
+    to{
+        transform:translateY(-14px);
+    }
+}
+
+.dashboard-preview::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg, rgba(59,130,246,0.12), transparent);
+}
+
+.db-header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:25px;
+}
+
+.db-pill{
+    padding:8px 14px;
+    border-radius:100px;
+    background:rgba(59,130,246,0.12);
+    color:#60a5fa;
+    font-size:12px;
+}
+
+.db-cards{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+}
+
+.mini-card{
+    padding:22px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.mini-card h4{
+    font-size:14px;
+    color:var(--soft);
+    margin-bottom:10px;
+}
+
+.mini-card span{
+    font-size:30px;
+    font-weight:800;
+    font-family:'Syne',sans-serif;
+}
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.features-grid{
+    margin-top:70px;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:24px;
+}
+
+.feature-card{
+    padding:34px;
+    transition:0.35s;
+    position:relative;
+    overflow:hidden;
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(59,130,246,0.25);
+    box-shadow:0 18px 60px rgba(59,130,246,0.12);
+}
+
+.feature-icon{
+    width:64px;
+    height:64px;
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+
+    margin-bottom:22px;
+}
+
+.ic-blue{
+    background:rgba(59,130,246,0.15);
+}
+
+.ic-purple{
+    background:rgba(139,92,246,0.15);
+}
+
+.ic-cyan{
+    background:rgba(6,182,212,0.15);
+}
+
+.ic-pink{
+    background:rgba(236,72,153,0.15);
+}
+
+.feature-card h3{
+    font-family:'Syne',sans-serif;
+    margin-bottom:16px;
+    font-size:24px;
+}
+
+.feature-card p{
+    color:var(--soft);
+    line-height:1.8;
+    font-size:15px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+    margin-top:70px;
+}
+
+.stat-box{
+    text-align:center;
+    padding:50px 30px;
+}
+
+.stat-number{
+    font-family:'Syne',sans-serif;
+    font-size:clamp(50px,5vw,80px);
+
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    margin-bottom:12px;
+}
+
+.stat-label{
+    color:var(--soft);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    font-size:13px;
+}
+
+/* =========================================================
+   DASHBOARD SECTION
+========================================================= */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+    margin-top:70px;
+}
+
+.dashboard-card{
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+}
+
+.dashboard-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg, rgba(59,130,246,0.08), transparent);
+}
+
+.dashboard-card h3{
+    font-family:'Syne',sans-serif;
+    margin-bottom:18px;
+}
+
+.dashboard-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.dashboard-item{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 18px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.04);
+}
+
+.dashboard-item span{
+    color:var(--soft);
+}
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline{
+    margin-top:80px;
+    position:relative;
+}
+
+.timeline::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:2px;
+    height:100%;
+    background:linear-gradient(var(--accent),var(--accent2));
+}
+
+.timeline-step{
+    width:50%;
+    padding:30px;
+    position:relative;
+}
+
+.timeline-step:nth-child(odd){
+    left:0;
+    text-align:right;
+}
+
+.timeline-step:nth-child(even){
+    left:50%;
+}
+
+.timeline-content{
+    padding:28px;
+    transition:0.35s;
+}
+
+.timeline-content:hover{
+    transform:translateY(-5px);
+}
+
+.timeline-dot{
+    position:absolute;
+    top:45px;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 6px rgba(59,130,246,0.12);
+}
+
+.timeline-step:nth-child(odd) .timeline-dot{
+    right:-10px;
+}
+
+.timeline-step:nth-child(even) .timeline-dot{
+    left:-10px;
+}
+
+/* =========================================================
+   PRICING
+========================================================= */
+
+.pricing-grid{
+    margin-top:70px;
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+}
+
+.price-card{
+    padding:40px;
+    position:relative;
+    overflow:hidden;
+    transition:0.35s;
+}
+
+.price-card:hover{
+    transform:translateY(-10px);
+}
+
+.price-card.featured{
+    border:1px solid rgba(59,130,246,0.4);
+
+    box-shadow:0 20px 80px rgba(59,130,246,0.15);
+}
+
+.price-card h3{
+    font-family:'Syne',sans-serif;
+    margin-bottom:12px;
+    font-size:28px;
+}
+
+.price{
+    font-size:54px;
+    font-family:'Syne',sans-serif;
+    margin:20px 0;
+}
+
+.price small{
+    font-size:16px;
+    color:var(--soft);
+}
+
+.price-features{
+    list-style:none;
+    margin:28px 0;
+}
+
+.price-features li{
+    margin-bottom:14px;
+    color:var(--soft);
+}
+
+/* =========================================================
+   TESTIMONIALS
+========================================================= */
+
+.testimonials-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+    margin-top:70px;
+}
+
+.testimonial{
+    padding:34px;
+    transition:0.35s;
+}
+
+.testimonial:hover{
+    transform:translateY(-8px);
+}
+
+.testimonial p{
+    color:var(--soft);
+    line-height:1.9;
+    margin-bottom:24px;
+}
+
+.testimonial-user{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.avatar{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:800;
+    font-family:'Syne',sans-serif;
+}
+
+.user-info h4{
+    margin-bottom:4px;
+}
+
+.user-info span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* =========================================================
+   FINAL CTA
+========================================================= */
+
+.final-cta{
+    text-align:center;
+    padding:140px 0;
+}
+
+.final-cta h2{
+    font-family:'Syne',sans-serif;
+    font-size:clamp(42px,6vw,74px);
+    margin-bottom:26px;
+}
+
+.final-cta p{
+    color:var(--soft);
+    font-size:20px;
+    max-width:700px;
+    margin:auto;
+    line-height:1.9;
+    margin-bottom:42px;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    padding:40px 50px;
+    border-top:1px solid rgba(255,255,255,0.05);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.footer-logo{
+    font-family:'Syne',sans-serif;
+    font-size:24px;
+    font-weight:800;
+
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.footer-links{
+    display:flex;
+    gap:24px;
+    list-style:none;
+}
+
+.footer-links a{
+    color:var(--muted);
+    text-decoration:none;
+}
+
+.footer-links a:hover{
+    color:var(--accent);
+}
+
+/* =========================================================
+   REVEAL
+========================================================= */
+
+.reveal{
+    opacity:0;
+    transform:translateY(50px);
+    transition:0.9s ease;
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .hero-grid,
+    .features-grid,
+    .dashboard-grid,
+    .pricing-grid,
+    .testimonials-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:768px){
+
+    nav{
+        padding:18px 24px;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .hero-grid,
+    .features-grid,
+    .dashboard-grid,
+    .pricing-grid,
+    .testimonials-grid{
+        grid-template-columns:1fr;
+    }
+
+    .timeline::before{
+        left:20px;
+    }
+
+    .timeline-step{
+        width:100%;
+        left:0 !important;
+        padding-left:60px;
+        text-align:left !important;
+    }
+
+    .timeline-dot{
+        left:10px !important;
+    }
+
+    footer{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .hero{
+        padding-top:160px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav>
+
+    <div class="logo">HireHub</div>
+
+    <ul class="nav-links">
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#" class="nav-btn">Post a Job</a></li>
+    </ul>
+
+</nav>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+        <div class="hero-left reveal">
+
+            <div class="section-label">
+                Employer Portal
+            </div>
+
+            <h1 class="hero-title">
+                Hire Top Talent
+                <span class="gradient">Faster</span>
+            </h1>
+
+            <p class="hero-sub">
+                Streamline recruitment with AI-powered applicant tracking,
+                smart analytics, interview scheduling, and real-time hiring workflows.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#" class="btn-primary">
+                    🚀 Post a Job
+                </a>
+
+                <a href="#" class="btn-secondary">
+                    📊 View Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="dashboard-preview glass reveal">
+
+            <div class="db-header">
+
+                <h3>Employer Dashboard</h3>
+
+                <div class="db-pill">
+                    Live Analytics
+                </div>
+
+            </div>
+
+            <div class="db-cards">
+
+                <div class="mini-card">
+                    <h4>Applications</h4>
+                    <span>1.2K</span>
+                </div>
+
+                <div class="mini-card">
+                    <h4>Interviews</h4>
+                    <span>84</span>
+                </div>
+
+                <div class="mini-card">
+                    <h4>Shortlisted</h4>
+                    <span>214</span>
+                </div>
+
+                <div class="mini-card">
+                    <h4>Hiring Rate</h4>
+                    <span>92%</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            Employer Features
+        </div>
+
+        <h2 class="section-title reveal">
+            Powerful tools for modern recruitment teams
+        </h2>
+
+        <p class="section-text reveal">
+            Manage every stage of the hiring pipeline with a fast,
+            intelligent, and beautifully designed recruitment system.
+        </p>
+
+        <div class="features-grid">
+
+            <div class="feature-card glass reveal">
+
+                <div class="feature-icon ic-blue">💼</div>
+
+                <h3>Post Jobs</h3>
+
+                <p>
+                    Publish opportunities instantly with advanced
+                    job targeting and role visibility controls.
+                </p>
+
+            </div>
+
+            <div class="feature-card glass reveal">
+
+                <div class="feature-icon ic-purple">📋</div>
+
+                <h3>Manage Applicants</h3>
+
+                <p>
+                    Track applications, shortlist candidates,
+                    and collaborate with recruiters efficiently.
+                </p>
+
+            </div>
+
+            <div class="feature-card glass reveal">
+
+                <div class="feature-icon ic-cyan">📅</div>
+
+                <h3>Schedule Interviews</h3>
+
+                <p>
+                    Coordinate interviews seamlessly with automated
+                    scheduling and candidate notifications.
+                </p>
+
+            </div>
+
+            <div class="feature-card glass reveal">
+
+                <div class="feature-icon ic-pink">📊</div>
+
+                <h3>Analytics Dashboard</h3>
+
+                <p>
+                    Gain insights into hiring performance,
+                    engagement, and application trends.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     STATS
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="stats">
+
+            <div class="stat-box glass reveal">
+
+                <div class="stat-number counter" data-target="120">0</div>
+
+                <div class="stat-label">
+                    Active Candidates
+                </div>
+
+            </div>
+
+            <div class="stat-box glass reveal">
+
+                <div class="stat-number counter" data-target="85">0</div>
+
+                <div class="stat-label">
+                    Companies Hiring
+                </div>
+
+            </div>
+
+            <div class="stat-box glass reveal">
+
+                <div class="stat-number counter" data-target="450">0</div>
+
+                <div class="stat-label">
+                    Applications Processed
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     DASHBOARD PREVIEW
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            Dashboard Preview
+        </div>
+
+        <h2 class="section-title reveal">
+            Built for hiring teams
+        </h2>
+
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card glass reveal">
+
+                <h3>Job Listings</h3>
+
+                <div class="dashboard-list">
+
+                    <div class="dashboard-item">
+                        <span>Frontend Developer</span>
+                        <strong>32 Apps</strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>Django Developer</span>
+                        <strong>51 Apps</strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>UI/UX Designer</span>
+                        <strong>18 Apps</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="dashboard-card glass reveal">
+
+                <h3>Applicant Tracking</h3>
+
+                <div class="dashboard-list">
+
+                    <div class="dashboard-item">
+                        <span>Applied</span>
+                        <strong>245</strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>Interview</span>
+                        <strong>84</strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>Offer Sent</span>
+                        <strong>19</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="dashboard-card glass reveal">
+
+                <h3>Interview Calendar</h3>
+
+                <div class="dashboard-list">
+
+                    <div class="dashboard-item">
+                        <span>Mon • 11 AM</span>
+                        <strong>Zoom</strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>Tue • 2 PM</span>
+                        <strong>HR Round</strong>
+                    </div>
+
+                    <div class="dashboard-item">
+                        <span>Wed • 5 PM</span>
+                        <strong>Technical</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     TIMELINE
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            Hiring Workflow
+        </div>
+
+        <h2 class="section-title reveal">
+            Simplified recruitment process
+        </h2>
+
+        <div class="timeline">
+
+            <div class="timeline-step reveal">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content glass">
+
+                    <h3>Create Job Posting</h3>
+
+                    <p class="section-text">
+                        Publish roles with custom requirements and visibility.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-step reveal">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content glass">
+
+                    <h3>Review Applications</h3>
+
+                    <p class="section-text">
+                        Analyze resumes and shortlist top candidates instantly.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-step reveal">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content glass">
+
+                    <h3>Schedule Interviews</h3>
+
+                    <p class="section-text">
+                        Coordinate technical and HR rounds with built-in scheduling.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-step reveal">
+
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content glass">
+
+                    <h3>Hire Successfully</h3>
+
+                    <p class="section-text">
+                        Send offers and onboard candidates faster than ever.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     PRICING
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            Pricing Plans
+        </div>
+
+        <h2 class="section-title reveal">
+            Flexible plans for every company
+        </h2>
+
+        <div class="pricing-grid">
+
+            <div class="price-card glass reveal">
+
+                <h3>Starter</h3>
+
+                <div class="price">
+                    ₹999
+                    <small>/month</small>
+                </div>
+
+                <ul class="price-features">
+
+                    <li>✔ 5 Active Jobs</li>
+                    <li>✔ Basic Analytics</li>
+                    <li>✔ Email Support</li>
+
+                </ul>
+
+                <a href="#" class="btn-secondary">
+                    Choose Plan
+                </a>
+
+            </div>
+
+            <div class="price-card glass featured reveal">
+
+                <h3>Professional</h3>
+
+                <div class="price">
+                    ₹2999
+                    <small>/month</small>
+                </div>
+
+                <ul class="price-features">
+
+                    <li>✔ Unlimited Jobs</li>
+                    <li>✔ Full Dashboard</li>
+                    <li>✔ Team Collaboration</li>
+                    <li>✔ Interview Scheduling</li>
+
+                </ul>
+
+                <a href="#" class="btn-primary">
+                    Most Popular
+                </a>
+
+            </div>
+
+            <div class="price-card glass reveal">
+
+                <h3>Enterprise</h3>
+
+                <div class="price">
+                    Custom
+                </div>
+
+                <ul class="price-features">
+
+                    <li>✔ Dedicated Support</li>
+                    <li>✔ API Access</li>
+                    <li>✔ Advanced Security</li>
+                    <li>✔ AI Hiring Insights</li>
+
+                </ul>
+
+                <a href="#" class="btn-secondary">
+                    Contact Sales
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     TESTIMONIALS
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-label reveal">
+            Recruiter Testimonials
+        </div>
+
+        <h2 class="section-title reveal">
+            Trusted by hiring teams
+        </h2>
+
+        <div class="testimonials-grid">
+
+            <div class="testimonial glass reveal">
+
+                <p>
+                    “HireHub helped us reduce hiring time by 40%.
+                    The applicant tracking workflow is exceptional.”
+                </p>
+
+                <div class="testimonial-user">
+
+                    <div class="avatar">A</div>
+
+                    <div class="user-info">
+
+                        <h4>Ananya Sharma</h4>
+                        <span>HR Lead • TechNova</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="testimonial glass reveal">
+
+                <p>
+                    “The analytics dashboard gives us visibility into every hiring stage.
+                    Smooth, fast, and beautifully designed.”
+                </p>
+
+                <div class="testimonial-user">
+
+                    <div class="avatar">R</div>
+
+                    <div class="user-info">
+
+                        <h4>Rahul Verma</h4>
+                        <span>Talent Manager • ByteLabs</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="testimonial glass reveal">
+
+                <p>
+                    “Scheduling interviews and managing recruiters has never been easier.
+                    HireHub transformed our workflow.”
+                </p>
+
+                <div class="testimonial-user">
+
+                    <div class="avatar">S</div>
+
+                    <div class="user-info">
+
+                        <h4>Sneha Kapoor</h4>
+                        <span>Recruitment Head • CloudEdge</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     FINAL CTA
+===================================================== -->
+
+<section class="final-cta section">
+
+    <div class="container reveal">
+
+        <h2>
+            Start hiring with
+            <span class="gradient">HireHub today</span>
+        </h2>
+
+        <p>
+            Build stronger teams, streamline recruitment,
+            and hire the right talent faster with HireHub Employer Suite.
+        </p>
+
+        <a href="#" class="btn-primary">
+            🚀 Create Employer Account
+        </a>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="footer-logo">
+        HireHub
+    </div>
+
+    <ul class="footer-links">
+
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Support</a></li>
+        <li><a href="#">Contact</a></li>
+
+    </ul>
+
+</footer>
+
+<script>
+
+/* =========================================================
+   REVEAL ANIMATION
+========================================================= */
+
+const reveals = document.querySelectorAll('.reveal');
+
+const revealObserver = new IntersectionObserver((entries)=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            entry.target.classList.add('active');
+
+        }
+
+    });
+
+},{
+    threshold:0.15
+});
+
+reveals.forEach(el=>revealObserver.observe(el));
+
+/* =========================================================
+   COUNTERS
+========================================================= */
+
+const counters = document.querySelectorAll('.counter');
+
+const counterObserver = new IntersectionObserver((entries)=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            const counter = entry.target;
+            const target = +counter.dataset.target;
+
+            let current = 0;
+
+            const increment = target / 100;
+
+            const update = ()=>{
+
+                current += increment;
+
+                if(current < target){
+
+                    counter.innerText = Math.floor(current) + '+';
+
+                    requestAnimationFrame(update);
+
+                }else{
+
+                    counter.innerText = target + '+';
+
+                }
+
+            };
+
+            update();
+
+            counterObserver.unobserve(counter);
+
+        }
+
+    });
+
+},{
+    threshold:0.5
+});
+
+counters.forEach(counter=>counterObserver.observe(counter));
+
+</script>
+
+</body>
+</html>
