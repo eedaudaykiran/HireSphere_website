@@ -10,7 +10,7 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('search/', views.search_jobs, name='search_jobs'),
+    path('jobs/search/', views.search_jobs, name='search_jobs'),
  
     # ===================== JOB PAGES =====================
     path('remote-jobs/', views.remote_jobs_page, name='remote_jobs'),

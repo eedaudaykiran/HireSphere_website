@@ -115,28 +115,32 @@ def index(request):
     return render(request, 'core/index.html', {'jobs': jobs})
 
 
-def search_jobs(request):
-    keyword    = request.GET.get('keyword', '')
-    experience = request.GET.get('experience', '')
-    location   = request.GET.get('location', '')
-    jobs = Job.objects.all()
-    if keyword:
+def search_jobs_page(request):
+    query      = request.GET.get('q', '').strip()
+    location   = request.GET.get('location', '').strip()
+    experience = request.GET.get('experience', '').strip()
+
+    jobs = Job.objects.filter(is_active=True)
+
+    if query:
         jobs = jobs.filter(
-            Q(title__icontains=keyword) |
-            Q(company__icontains=keyword) |
-            Q(skills__icontains=keyword)
+            Q(title__icontains=query) |
+            Q(skills__icontains=query) |
+            Q(company__icontains=query) |
+            Q(description__icontains=query)
         )
-    if experience:
-        jobs = jobs.filter(experience__icontains=experience)
     if location:
         jobs = jobs.filter(location__icontains=location)
-    context = {
-        'jobs':       jobs,
-        'keyword':    keyword,
+    if experience:
+        jobs = jobs.filter(experience__icontains=experience)
+
+    return render(request, 'core/search_results.html', {
+        'jobs': jobs,
+        'query': query,
+        'location': location,
         'experience': experience,
-        'location':   location,
-    }
-    return render(request, 'core/search_results.html', context)
+        'total': jobs.count(),
+    })
 
 
 def register_view(request):

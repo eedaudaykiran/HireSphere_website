@@ -949,35 +949,7 @@
                     </div>
  
                     <!-- DIVIDER -->
-                    <div class="card-divider"></div>
- 
-                    <!-- ACTION BUTTONS ROW -->
-                    <div class="card-actions">
-                        <!-- View Jobs → opens modal -->
-                        <button class="btn-view-jobs"
-                                onclick="openJobsModal(this)"
-                                data-company-id="{{ company.id }}"
-                                data-company-name="{{ company.name }}"
-                                data-company-logo="{{ company.logo.url|default:'' }}"
-                                data-company-initials="{{ company.name|slice:':2'|upper }}"
-                                data-company-meta="{% if company.location %}{{ company.location }}{% endif %}{% if company.industry %} · {{ company.industry }}{% endif %}">
-                            <i class="fa fa-briefcase"></i> View Jobs
-                        </button>
- 
-                        <!-- Quick Apply → goes to company jobs page or apply URL -->
-                        <a class="btn-apply"
-                           href="{% url 'all_jobs' %}?company={{ company.id }}"
-                           title="Apply to jobs at {{ company.name }}">
-                            <i class="fa fa-paper-plane"></i> Apply
-                        </a>
- 
-                        <!-- Save company -->
-                        <button class="btn-save"
-                                onclick="toggleSaveCompany(this, '{{ company.id }}', '{{ company.name }}')"
-                                title="Save company">
-                            <i class="fa fa-bookmark"></i>
-                        </button>
-                    </div>
+                    
  
                     <!-- Hidden job data for modal (rendered server-side) -->
                     <script type="application/json" class="company-jobs-data">
@@ -1075,7 +1047,7 @@
         <div class="rj-footer-links">
             <div class="rj-footer-col">
                 <p class="rj-footer-col-head">Company</p>
-                <a href="{% url 'about_us' %}">About us</a><a href="{% url 'careers' %}">Careers</a>
+                <a href="{% url 'about' %}">About us</a><a href="{% url 'careers' %}">Careers</a>
                 <a href="{% url 'employer_home' %}">Employer home</a><a href="{% url 'sitemap' %}">Sitemap</a>
             </div>
             <div class="rj-footer-col">

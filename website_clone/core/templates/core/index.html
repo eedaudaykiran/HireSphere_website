@@ -146,20 +146,21 @@
         <p>5 lakh+ jobs for you to explore</p>
 
         <div class="search-bar">
-            <div class="search-item">
-                <i class="fa fa-search"></i>
-                <input type="text" placeholder="Enter skills / designations / companies">
-            </div>
-            <div class="search-item">
-                <i class="fa fa-location-dot"></i>
-                <input type="text" placeholder="Location">
-            </div>
-            <div class="search-item">
-                <i class="fa fa-briefcase"></i>
-                <input type="text" placeholder="Experience">
-            </div>
-            <button class="search-btn">Search</button>
-        </div>
+    <div class="search-item">
+        <i class="fa fa-search"></i>
+        <input type="text" id="search-skills" placeholder="Enter skills / designations / companies">
+    </div>
+    <div class="search-item">
+        <i class="fa fa-location-dot"></i>
+        <input type="text" id="search-location" placeholder="Location">
+    </div>
+    <div class="search-item">
+        <i class="fa fa-briefcase"></i>
+        <input type="text" id="search-experience" placeholder="Experience">
+    </div>
+    <button class="search-btn" onclick="doSearch()">Search</button>
+</div>
+
 
         <div class="popular-searches">
             <span>Popular Searches:</span>
@@ -944,6 +945,27 @@
 
     <script src="{% static 'core/js/script.js' %}"></script>
     <script src="{% static 'core/js/main.js' %}"></script>
+    <script>
+function doSearch() {
+    const skills     = document.getElementById('search-skills').value.trim();
+    const location   = document.getElementById('search-location').value.trim();
+    const experience = document.getElementById('search-experience').value.trim();
+
+    const params = new URLSearchParams();
+    if (skills)     params.set('q', skills);
+    if (location)   params.set('location', location);
+    if (experience) params.set('experience', experience);
+
+    window.location.href = '/jobs/search/?' + params.toString();
+}
+
+// Press Enter to search from any input
+document.querySelectorAll('.search-bar input').forEach(input => {
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') doSearch();
+    });
+});
+</script>
 </body>
 
 </html>
