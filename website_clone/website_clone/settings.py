@@ -157,4 +157,9 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+LOGIN_URL = '/candidate/login/'        # default redirect for @login_required
+LOGIN_REDIRECT_URL = '/candidate/dashboard/'  # after successful login
  

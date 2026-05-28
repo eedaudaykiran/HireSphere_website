@@ -1165,7 +1165,8 @@
                 <!-- Status Update Form -->
                 <div class="modal-section">
                     <h4>Update Status</h4>
-                    <form id="statusUpdateForm" method="POST">
+                    <form id="statusUpdateForm" method="POST" action="">
+
                         {% csrf_token %}
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             {% for status_val in status_choices %}
@@ -1353,9 +1354,19 @@
             document.getElementById('profileModal').classList.add('open');
         }
 
+        // ✅ Fixed — submits via the form with status as POST data
         function quickAction(newStatus) {
             if (!currentAppId) return;
-            window.location.href = `/update-status/${currentAppId}/${newStatus}/`;
+            const form = document.getElementById('statusUpdateForm');
+            form.action = `/update-status/${currentAppId}/`;
+    
+            // Create a hidden input with the status value and submit
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'new_status';
+            input.value = newStatus;
+            form.appendChild(input);
+            form.submit();
         }
 
         function closeModal() {

@@ -95,9 +95,13 @@ urlpatterns = [
  
     # ===================== RECRUITER =====================
     path('recruiter-applications/', views.recruiter_applications, name='recruiter_applications'),
-    path('update-status/<int:app_id>/<str:status>/',
-        views.update_status,
-        name='update_status'),
+    # ✅ Remove <str:status> from the URL
+    # path('update-status/<int:app_id>/', views.update_status, name='update_status'),
+    path(
+    'update-status/<int:app_id>/<str:status>/',
+    views.update_status,
+    name='update_status'
+    ),
  
     # ===================== EMPLOYER AUTH =====================
     path('employer/register/', employer_register, name='employer_register'),

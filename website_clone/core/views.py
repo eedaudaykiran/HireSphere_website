@@ -18,36 +18,36 @@ def candidate_required(view_func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, "❌ Please login first.")
-            return redirect('login')
+            return redirect('candidate_login')   # ✅ correct
         try:
             profile = request.user.userprofile
         except:
             messages.error(request, "❌ Profile not found.")
-            return redirect('login')
+            return redirect('candidate_login')   # ✅ was 'login' — now fixed
         if profile.role != 'candidate':
             messages.error(request, "❌ This page is for candidates only.")
-            return redirect('employer_dashboard')
+            return redirect('candidate_login')   # ✅ was 'employer_dashboard' — now fixed
         return view_func(request, *args, **kwargs)
     wrapper.__name__ = view_func.__name__
     return wrapper
+
 
 def employer_required(view_func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, "❌ Please login first.")
-            return redirect('login')
+            return redirect('employer_login')    # ✅ was 'login' — now fixed
         try:
             profile = request.user.userprofile
         except:
             messages.error(request, "❌ Profile not found.")
-            return redirect('login')
+            return redirect('employer_login')    # ✅ was 'login' — now fixed
         if profile.role != 'employer':
             messages.error(request, "❌ This page is for employers only.")
-            return redirect('index')
+            return redirect('index')             # ✅ correct
         return view_func(request, *args, **kwargs)
     wrapper.__name__ = view_func.__name__
     return wrapper
-
 
 # ===================== FILTER FUNCTIONS =====================
 
@@ -13459,22 +13459,26 @@ def update_status(request, app_id, status):
         messages.error(request, "❌ Access denied.")
         return redirect('applicants')
 
-    valid_statuses = [
-        'Applied', 'Screening', 'Shortlisted',
-        'Interview', 'Technical', 'HR', 'Offer', 'Rejected'
-    ]
+    if request.method == 'POST':
+        status = request.POST.get('new_status')  # reads from button click
 
-    if status not in valid_statuses:
-        messages.error(request, f"❌ Invalid status: {status}")
+        valid_statuses = [
+            'Applied', 'Screening', 'Shortlisted',
+            'Interview', 'Technical', 'HR', 'Offer', 'Rejected'
+        ]
+
+        if not status or status not in valid_statuses:
+            messages.error(request, f"❌ Invalid status: {status}")
+            return redirect('applicants')
+
+        application.status = status
+        application.save()
+
+        candidate_name = application.applicant.get_full_name() or application.applicant.username
+        messages.success(request, f"✅ {candidate_name} marked as {status}.")
         return redirect('applicants')
 
-    application.status = status
-    application.save()
-
-    candidate_name = application.applicant.get_full_name() or application.applicant.username
-    messages.success(request, f"✅ {candidate_name} marked as {status}.")
     return redirect('applicants')
-
 
 # ===================== EMPLOYER REGISTER =====================
 

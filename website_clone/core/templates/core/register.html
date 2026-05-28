@@ -194,26 +194,46 @@
                         <li id="h-special" class="fail">At least one special character (!@#$%^&amp;*)</li>
                     </ul>
                 </div>
+<!-- Mobile Number -->
+<label>
+    Mobile Number *
+    <small class="mobile-help-text">
+        Only 10 digits (must start with 6, 7, 8, or 9)
+    </small>
+</label>
 
-                <!-- Mobile Number -->
-                <label>
-                    Mobile Number *
-                    <small class="mobile-help-text">Only 10 digits (91+ added automatically, must be unique)</small>
-                </label>
+<div class="mobile-wrapper {% if form.mobile_number.errors %}input-error-box{% endif %}">
+    
+    <span class="country-prefix">91+</span>
 
-                <div class="mobile-wrapper {% if form.mobile_number.errors %}input-error-box{% endif %}">
-                    <span class="country-prefix">91+</span>
+    <input 
+        type="text"
+        id="mobile_number"
+        name="mobile_number"
+        placeholder="Enter 10-digit mobile number"
+        value="{% if form.mobile_number.value %}{{ form.mobile_number.value|cut:'91+' }}{% endif %}"
+        maxlength="10"
+        inputmode="numeric"
+        pattern="[6-9][0-9]{9}"
+        required
+    >
+</div>
 
-                    <input type="text" name="mobile_number" placeholder="Enter 10-digit mobile number"
-                        value="{% if form.mobile_number.value %}{{ form.mobile_number.value|cut:'91+' }}{% endif %}"
-                        maxlength="10" inputmode="numeric" pattern="\d{10}" required>
-                </div>
+<!-- Live Mobile Validation -->
+<div class="password-hint" id="phoneHint">
+    <strong>📱 Valid mobile number must have:</strong>
+    <ul>
+        <li id="h-num" class="fail">Only numbers (0–9)</li>
+        <li id="h-start" class="fail">Must start with 6, 7, 8, or 9</li>
+        <li id="h-length" class="fail">Exactly 10 digits</li>
+    </ul>
+</div>
 
-                {% for error in form.mobile_number.errors %}
-                <p class="field-error">
-                    <i class="fa fa-triangle-exclamation"></i> {{ error }}
-                </p>
-                {% endfor %}
+{% for error in form.mobile_number.errors %}
+<p class="field-error">
+    <i class="fa fa-triangle-exclamation"></i> {{ error }}
+</p>
+{% endfor %}
 
                 <!-- Work Status -->
                 <label>Work status *</label>
@@ -279,6 +299,41 @@
             const el = document.getElementById(id);
             el.className = pass ? 'ok' : 'fail';
         }
+        // ── Mobile number live validation ──
+const phoneInput = document.getElementById("mobile_number");
+const phoneHint = document.getElementById("phoneHint");
+
+phoneInput.addEventListener("input", function () {
+
+    // Allow only numbers
+    this.value = this.value.replace(/\D/g, '').slice(0, 10);
+
+    const value = this.value;
+
+    // Show hint box
+    phoneHint.style.display = value.length > 0 ? 'block' : 'none';
+
+    // Validation checks
+    const onlyNumbers = /^[0-9]*$/.test(value);
+    const startsValid = /^[6-9]/.test(value);
+    const validLength = value.length === 10;
+
+    updatePhoneStatus("h-num", onlyNumbers);
+    updatePhoneStatus("h-start", startsValid);
+    updatePhoneStatus("h-length", validLength);
+});
+
+function updatePhoneStatus(id, valid) {
+    const element = document.getElementById(id);
+
+    if (valid) {
+        element.classList.remove("fail");
+        element.classList.add("ok");
+    } else {
+        element.classList.remove("ok");
+        element.classList.add("fail");
+    }
+}
     </script>
 
 </body>
