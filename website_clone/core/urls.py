@@ -13,7 +13,7 @@ urlpatterns = [
     path('jobs/search/', views.search_jobs, name='search_jobs'),
  
     # ===================== JOB PAGES =====================
-    path('remote-jobs/', views.remote_jobs_page, name='remote_jobs'),
+    path('remote-jobs/', views.remote_jobs_page, name='remote_jobs_page'),
     path('mnc-jobs/', views.mnc_jobs_page, name='mnc_jobs'),
     path('banking-finance-jobs/', views.banking_finance_jobs_page, name='banking_finance_jobs'),
     path('startup-jobs/', views.startup_jobs_page, name='startup_jobs'),

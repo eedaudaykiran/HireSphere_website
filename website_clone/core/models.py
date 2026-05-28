@@ -33,11 +33,6 @@ class UserProfile(models.Model):
         return self.full_name
  
  
-from django.db import models
-from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
-
-
 class Job(models.Model):
 
     JOB_TYPE_CHOICES = (

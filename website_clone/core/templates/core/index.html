@@ -43,8 +43,8 @@
                         <h4>Jobs in demand</h4>
                         <a href="{% url 'fresher_jobs' %}">Fresher jobs</a>
                         <a href="{% url 'mnc_jobs' %}">MNC jobs</a>
-                        <a href="{% url 'remote_jobs' %}">Remote jobs</a>
-                        <a href="{% url 'remote_jobs' %}">Work from home jobs</a>
+                        <a href="{% url 'remote_jobs_page' %}">Remote jobs</a>
+                        <a href="{% url 'work_from_home_jobs' %}">Work from home jobs</a>
                         <a href="{% url 'walk_in_jobs' %}">Walk-in jobs</a>
                         <a href="{% url 'part_time_jobs' %}">Part-time jobs</a>
                     </div>
@@ -177,7 +177,7 @@
     ========================== -->
     <section class="category-section">
         <div class="category-container">
-            <a href="{% url 'remote_jobs' %}" , target="_blank" class="category-card">
+            <a href="{% url 'remote_jobs_page' %}" , target="_blank" class="category-card">
                 <div class="category-icon">🏠</div>
                 <span>Remote</span>
                 <span class="arrow-icon">›</span>

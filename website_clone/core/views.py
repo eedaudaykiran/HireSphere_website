@@ -396,17 +396,11 @@ def mnc_jobs_page(request):
     # ===================== COMMON FILTERS =====================
 
     jobs, selected_work_modes = filter_by_work_mode(jobs, request)
-
     jobs, selected_categories = filter_by_category(jobs, request)
-
     jobs, selected_locations = filter_by_location(jobs, request)
-
     jobs, selected_salaries = filter_by_salary(jobs, request)
-
     jobs, selected_experience = filter_by_experience(jobs, request)
-
     jobs, selected_freshness = filter_by_freshness(jobs, request)
-
     # ===================== COMPANY TYPE =====================
 
     company_types = request.GET.getlist('company_type')
@@ -737,53 +731,29 @@ def mnc_jobs_page(request):
         'jobs': jobs,
 
         'selected_work_modes': selected_work_modes,
-
         'selected_categories': selected_categories,
-
         'selected_company_types': company_types,
-
         'selected_locations': selected_locations,
-
         'selected_salaries': selected_salaries,
-
         'selected_experience': selected_experience,
-
         'selected_freshness': selected_freshness,
-
         'selected_roles': roles,
-
         'selected_stipends': stipends,
-
         'selected_durations': durations,
-
         'selected_educations': educations,
-
         'selected_posted': posted_by,
-
         'selected_industries': industries,
-
         'selected_companies': companies,
-
         'salary_counts': salary_counts,
-
         'category_counts': category_counts,
-
         'location_counts': location_counts,
-
         'company_type_counts': company_type_counts,
-
         'role_counts': role_counts,
-
         'stipend_counts': stipend_counts,
-
         'duration_counts': duration_counts,
-
         'education_counts': education_counts,
-
         'posted_by_counts': posted_by_counts,
-
         'industry_counts': industry_counts,
-
         'company_counts': company_counts,
     }
 
@@ -805,17 +775,11 @@ def banking_finance_jobs_page(request):
     # ===================== COMMON FILTERS =====================
 
     jobs, selected_work_modes = filter_by_work_mode(jobs, request)
-
     jobs, selected_categories = filter_by_category(jobs, request)
-
     jobs, selected_locations = filter_by_location(jobs, request)
-
     jobs, selected_salaries = filter_by_salary(jobs, request)
-
     jobs, selected_experience = filter_by_experience(jobs, request)
-
     jobs, selected_freshness = filter_by_freshness(jobs, request)
-
     # ===================== COMPANY TYPE =====================
 
     company_types = request.GET.getlist('company_type')
@@ -1147,55 +1111,30 @@ def banking_finance_jobs_page(request):
     context = {
 
         'jobs': jobs,
-
         'selected_work_modes': selected_work_modes,
-
         'selected_categories': selected_categories,
-
         'selected_company_types': company_types,
-
         'selected_locations': selected_locations,
-
         'selected_salaries': selected_salaries,
-
         'selected_experience': selected_experience,
-
         'selected_freshness': selected_freshness,
-
         'selected_roles': roles,
-
         'selected_stipends': stipends,
-
         'selected_durations': durations,
-
         'selected_educations': educations,
-
         'selected_posted': posted_by,
-
         'selected_industries': industries,
-
         'selected_companies': companies,
-
         'salary_counts': salary_counts,
-
         'category_counts': category_counts,
-
         'location_counts': location_counts,
-
         'company_type_counts': company_type_counts,
-
         'role_counts': role_counts,
-
         'stipend_counts': stipend_counts,
-
         'duration_counts': duration_counts,
-
         'education_counts': education_counts,
-
         'posted_by_counts': posted_by_counts,
-
         'industry_counts': industry_counts,
-
         'company_counts': company_counts,
     }
 
