@@ -13,42 +13,41 @@ import re
 from .forms import RegisterForm, LoginForm, EmployerRegisterForm, JobForm, CompanyProfileForm, EmployerSettingsForm
 from .models import UserProfile, Job, SavedJob, ApplyJob, Application, Interview, Message, CompanyProfile, EmployerSettings
 
-
+from functools import wraps
 def candidate_required(view_func):
+    @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, "❌ Please login first.")
-            return redirect('candidate_login')   # ✅ correct
+            messages.error(request, "Please login first.")
+            return redirect('login')
         try:
             profile = request.user.userprofile
-        except:
-            messages.error(request, "❌ Profile not found.")
-            return redirect('candidate_login')   # ✅ was 'login' — now fixed
+        except UserProfile.DoesNotExist:
+            messages.error(request, "Profile not found.")
+            return redirect('login')
         if profile.role != 'candidate':
-            messages.error(request, "❌ This page is for candidates only.")
-            return redirect('candidate_login')   # ✅ was 'employer_dashboard' — now fixed
+            messages.error(request, "This page is for candidates only.")
+            return redirect('employer_dashboard')
         return view_func(request, *args, **kwargs)
-    wrapper.__name__ = view_func.__name__
     return wrapper
 
 
 def employer_required(view_func):
+    @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, "❌ Please login first.")
-            return redirect('employer_login')    # ✅ was 'login' — now fixed
+            messages.error(request, "Please login first.")
+            return redirect('login')
         try:
             profile = request.user.userprofile
-        except:
-            messages.error(request, "❌ Profile not found.")
-            return redirect('employer_login')    # ✅ was 'login' — now fixed
+        except UserProfile.DoesNotExist:
+            messages.error(request, "Profile not found.")
+            return redirect('login')
         if profile.role != 'employer':
-            messages.error(request, "❌ This page is for employers only.")
-            return redirect('index')             # ✅ correct
+            messages.error(request, "This page is for employers only.")
+            return redirect('index')
         return view_func(request, *args, **kwargs)
-    wrapper.__name__ = view_func.__name__
     return wrapper
-
 # ===================== FILTER FUNCTIONS =====================
 
 def filter_by_work_mode(qs, request):
@@ -210,7 +209,7 @@ def login_view(request):
                         return redirect('employer_dashboard')
                     else:
                         return redirect('index')
-                except:
+                except UserProfile.DoesNotExist:
                     # If userprofile doesn't exist for some reason
                     return redirect('index')
 
@@ -284,7 +283,7 @@ def remote_jobs_page(request):
         try:
             low, high = r.split('-')
             cnt = all_jobs.filter(min_salary__gte=int(low), max_salary__lte=int(high)).count()
-        except:
+        except (ValueError, AttributeError):
             cnt = 0
         salary_counts[r] = cnt
 
@@ -7041,418 +7040,6 @@ def datascience_jobs_page(request):
         context
     )
 
-# ===================== STARTUP JOBS =====================
-@login_required
-def startup_jobs_page(request):
-
-    # ===================== BASE QUERY =====================
-
-    jobs = Job.objects.filter(
-        company_type__icontains='Startup'
-    ).order_by('-id')
-
-    # ===================== COMMON FILTERS =====================
-
-    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
-
-    jobs, selected_categories = filter_by_category(jobs, request)
-
-    jobs, selected_locations = filter_by_location(jobs, request)
-
-    jobs, selected_salaries = filter_by_salary(jobs, request)
-
-    jobs, selected_experience = filter_by_experience(jobs, request)
-
-    jobs, selected_freshness = filter_by_freshness(jobs, request)
-
-    # ===================== COMPANY TYPE =====================
-
-    company_types = request.GET.getlist('company_type')
-
-    if company_types:
-        jobs = jobs.filter(company_type__in=company_types)
-
-    # ===================== DURATION =====================
-
-    durations = request.GET.getlist('duration')
-
-    if durations:
-        jobs = jobs.filter(duration__in=durations)
-
-    # ===================== EDUCATION =====================
-
-    educations = request.GET.getlist('education')
-
-    if educations:
-        jobs = jobs.filter(education__in=educations)
-
-    # ===================== POSTED BY =====================
-
-    posted_by = request.GET.getlist('posted_by')
-
-    if posted_by:
-        jobs = jobs.filter(posted_by__in=posted_by)
-
-    # ===================== INDUSTRY =====================
-
-    industries = request.GET.getlist('industry')
-
-    if industries:
-        jobs = jobs.filter(industry__in=industries)
-
-    # ===================== COMPANY =====================
-
-    companies = request.GET.getlist('company')
-
-    if companies:
-        jobs = jobs.filter(company__in=companies)
-
-    # ===================== ROLE CATEGORY =====================
-
-    roles = request.GET.getlist('role_category')
-
-    if roles:
-        jobs = jobs.filter(role_category__in=roles)
-
-    # ===================== ALL STARTUP JOBS =====================
-
-    all_jobs = Job.objects.filter(
-        company_type__icontains='Startup'
-    )
-
-    # ===================== SALARY COUNTS =====================
-
-    salary_ranges = [
-        '0-3',
-        '3-6',
-        '6-10',
-        '10-15',
-        '15-20',
-        '20-25',
-        '25-30',
-        '30-35'
-    ]
-
-    salary_counts = {}
-
-    for r in salary_ranges:
-
-        try:
-
-            low, high = r.split('-')
-
-            cnt = all_jobs.filter(
-                min_salary__gte=int(low),
-                max_salary__lte=int(high)
-            ).count()
-
-        except:
-
-            cnt = 0
-
-        salary_counts[r] = cnt
-
-    # ===================== CATEGORY COUNTS =====================
-
-    category_counts = {
-
-        item['category']: item['total']
-
-        for item in all_jobs.values(
-            'category'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== LOCATION COUNTS =====================
-
-    location_list = [
-        'Bangalore',
-        'Delhi',
-        'Mumbai',
-        'Hyderabad',
-        'Pune',
-        'Chennai'
-    ]
-
-    location_counts = {
-
-        loc: all_jobs.filter(
-            location__icontains=loc
-        ).count()
-
-        for loc in location_list
-    }
-
-    # ===================== COMPANY TYPE COUNTS =====================
-
-    company_type_counts = {
-
-        item['company_type']: item['total']
-
-        for item in all_jobs.values(
-            'company_type'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== ROLE COUNTS =====================
-
-    role_counts = {
-
-        item['role_category']: item['total']
-
-        for item in all_jobs.values(
-            'role_category'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== DURATION COUNTS =====================
-
-    all_durations = all_jobs.exclude(
-        duration__isnull=True
-    ).exclude(
-        duration=''
-    ).values_list(
-        'duration',
-        flat=True
-    ).distinct()
-
-    duration_counts = {
-
-        d: all_jobs.filter(
-            duration=d
-        ).count()
-
-        for d in all_durations
-    }
-
-    # ===================== EDUCATION COUNTS =====================
-
-    all_educations = all_jobs.exclude(
-        education__isnull=True
-    ).exclude(
-        education=''
-    ).values_list(
-        'education',
-        flat=True
-    ).distinct()
-
-    education_counts = {
-
-        e: all_jobs.filter(
-            education=e
-        ).count()
-
-        for e in all_educations
-    }
-
-    # ===================== POSTED BY COUNTS =====================
-
-    all_posted_by = all_jobs.exclude(
-        posted_by__isnull=True
-    ).exclude(
-        posted_by=''
-    ).values_list(
-        'posted_by',
-        flat=True
-    ).distinct()
-
-    posted_by_counts = {
-
-        p: all_jobs.filter(
-            posted_by=p
-        ).count()
-
-        for p in all_posted_by
-    }
-
-    # ===================== INDUSTRY COUNTS =====================
-
-    all_industries = all_jobs.exclude(
-        industry__isnull=True
-    ).exclude(
-        industry=''
-    ).values_list(
-        'industry',
-        flat=True
-    ).distinct()
-
-    industry_counts = {
-
-        i: all_jobs.filter(
-            industry=i
-        ).count()
-
-        for i in all_industries
-    }
-
-    # ===================== COMPANY COUNTS =====================
-
-    company_counts = {
-
-        item['company']: item['total']
-
-        for item in all_jobs.values(
-            'company'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== STIPEND FILTER =====================
-
-    stipends = request.GET.getlist('stipend')
-
-    if stipends:
-
-        stipend_query = Q()
-
-        for s in stipends:
-
-            if s == 'unpaid':
-
-                stipend_query |= Q(
-                    min_salary=0,
-                    max_salary=0
-                )
-
-            elif s == '0-10':
-
-                stipend_query |= Q(
-                    min_salary__gte=0,
-                    max_salary__lte=10
-                )
-
-            elif s == '10-20':
-
-                stipend_query |= Q(
-                    min_salary__gte=10,
-                    max_salary__lte=20
-                )
-
-            elif s == '20-30':
-
-                stipend_query |= Q(
-                    min_salary__gte=20,
-                    max_salary__lte=30
-                )
-
-            elif s == '30-50':
-
-                stipend_query |= Q(
-                    min_salary__gte=30,
-                    max_salary__lte=50
-                )
-
-            elif s == '50+':
-
-                stipend_query |= Q(
-                    min_salary__gte=50
-                )
-
-        jobs = jobs.filter(stipend_query)
-
-    # ===================== STIPEND COUNTS =====================
-
-    stipend_counts = {
-
-        'unpaid': all_jobs.filter(
-            min_salary=0,
-            max_salary=0
-        ).count(),
-
-        '0-10': all_jobs.filter(
-            min_salary__gte=0,
-            max_salary__lte=10
-        ).count(),
-
-        '10-20': all_jobs.filter(
-            min_salary__gte=10,
-            max_salary__lte=20
-        ).count(),
-
-        '20-30': all_jobs.filter(
-            min_salary__gte=20,
-            max_salary__lte=30
-        ).count(),
-
-        '30-50': all_jobs.filter(
-            min_salary__gte=30,
-            max_salary__lte=50
-        ).count(),
-
-        '50+': all_jobs.filter(
-            min_salary__gte=50
-        ).count(),
-    }
-
-    # ===================== FINAL CONTEXT =====================
-
-    context = {
-
-        'jobs': jobs,
-
-        'selected_work_modes': selected_work_modes,
-
-        'selected_categories': selected_categories,
-
-        'selected_company_types': company_types,
-
-        'selected_locations': selected_locations,
-
-        'selected_salaries': selected_salaries,
-
-        'selected_experience': selected_experience,
-
-        'selected_freshness': selected_freshness,
-
-        'selected_roles': roles,
-
-        'selected_stipends': stipends,
-
-        'selected_durations': durations,
-
-        'selected_educations': educations,
-
-        'selected_posted': posted_by,
-
-        'selected_industries': industries,
-
-        'selected_companies': companies,
-
-        'salary_counts': salary_counts,
-
-        'category_counts': category_counts,
-
-        'location_counts': location_counts,
-
-        'company_type_counts': company_type_counts,
-
-        'role_counts': role_counts,
-
-        'stipend_counts': stipend_counts,
-
-        'duration_counts': duration_counts,
-
-        'education_counts': education_counts,
-
-        'posted_by_counts': posted_by_counts,
-
-        'industry_counts': industry_counts,
-
-        'company_counts': company_counts,
-    }
-
-    return render(
-        request,
-        'core/startup_page.html',
-        context
-    )
 
 # ===================== SALES JOBS =====================
 @login_required
@@ -7943,7 +7530,7 @@ def marketingjobs_page(request):
     # ===================== ALL SALES JOBS =====================
 
     all_jobs = Job.objects.filter(
-        category__icontains='Sales'
+        category__icontains='Marketing'
     )
 
     # ===================== SALARY COUNTS =====================
@@ -8280,419 +7867,7 @@ def marketingjobs_page(request):
         context
     )
 
-# 
-@login_required
-def sales_jobs_page(request):
-
-    # ===================== BASE QUERY =====================
-
-    jobs = Job.objects.filter(
-        category__icontains='Sales'
-    ).order_by('-id')
-
-    # ===================== COMMON FILTERS =====================
-
-    jobs, selected_work_modes = filter_by_work_mode(jobs, request)
-
-    jobs, selected_categories = filter_by_category(jobs, request)
-
-    jobs, selected_locations = filter_by_location(jobs, request)
-
-    jobs, selected_salaries = filter_by_salary(jobs, request)
-
-    jobs, selected_experience = filter_by_experience(jobs, request)
-
-    jobs, selected_freshness = filter_by_freshness(jobs, request)
-
-    # ===================== COMPANY TYPE =====================
-
-    company_types = request.GET.getlist('company_type')
-
-    if company_types:
-        jobs = jobs.filter(company_type__in=company_types)
-
-    # ===================== DURATION =====================
-
-    durations = request.GET.getlist('duration')
-
-    if durations:
-        jobs = jobs.filter(duration__in=durations)
-
-    # ===================== EDUCATION =====================
-
-    educations = request.GET.getlist('education')
-
-    if educations:
-        jobs = jobs.filter(education__in=educations)
-
-    # ===================== POSTED BY =====================
-
-    posted_by = request.GET.getlist('posted_by')
-
-    if posted_by:
-        jobs = jobs.filter(posted_by__in=posted_by)
-
-    # ===================== INDUSTRY =====================
-
-    industries = request.GET.getlist('industry')
-
-    if industries:
-        jobs = jobs.filter(industry__in=industries)
-
-    # ===================== COMPANY =====================
-
-    companies = request.GET.getlist('company')
-
-    if companies:
-        jobs = jobs.filter(company__in=companies)
-
-    # ===================== ROLE CATEGORY =====================
-
-    roles = request.GET.getlist('role_category')
-
-    if roles:
-        jobs = jobs.filter(role_category__in=roles)
-
-    # ===================== ALL SALES JOBS =====================
-
-    all_jobs = Job.objects.filter(
-        category__icontains='Sales'
-    )
-
-    # ===================== SALARY COUNTS =====================
-
-    salary_ranges = [
-        '0-3',
-        '3-6',
-        '6-10',
-        '10-15',
-        '15-20',
-        '20-25',
-        '25-30',
-        '30-35'
-    ]
-
-    salary_counts = {}
-
-    for r in salary_ranges:
-
-        try:
-
-            low, high = r.split('-')
-
-            cnt = all_jobs.filter(
-                min_salary__gte=int(low),
-                max_salary__lte=int(high)
-            ).count()
-
-        except:
-
-            cnt = 0
-
-        salary_counts[r] = cnt
-
-    # ===================== CATEGORY COUNTS =====================
-
-    category_counts = {
-
-        item['category']: item['total']
-
-        for item in all_jobs.values(
-            'category'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== LOCATION COUNTS =====================
-
-    location_list = [
-        'Bangalore',
-        'Delhi',
-        'Mumbai',
-        'Hyderabad',
-        'Pune',
-        'Chennai'
-    ]
-
-    location_counts = {
-
-        loc: all_jobs.filter(
-            location__icontains=loc
-        ).count()
-
-        for loc in location_list
-    }
-
-    # ===================== COMPANY TYPE COUNTS =====================
-
-    company_type_counts = {
-
-        item['company_type']: item['total']
-
-        for item in all_jobs.values(
-            'company_type'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== ROLE COUNTS =====================
-
-    role_counts = {
-
-        item['role_category']: item['total']
-
-        for item in all_jobs.values(
-            'role_category'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== DURATION COUNTS =====================
-
-    all_durations = all_jobs.exclude(
-        duration__isnull=True
-    ).exclude(
-        duration=''
-    ).values_list(
-        'duration',
-        flat=True
-    ).distinct()
-
-    duration_counts = {
-
-        d: all_jobs.filter(
-            duration=d
-        ).count()
-
-        for d in all_durations
-    }
-
-    # ===================== EDUCATION COUNTS =====================
-
-    all_educations = all_jobs.exclude(
-        education__isnull=True
-    ).exclude(
-        education=''
-    ).values_list(
-        'education',
-        flat=True
-    ).distinct()
-
-    education_counts = {
-
-        e: all_jobs.filter(
-            education=e
-        ).count()
-
-        for e in all_educations
-    }
-
-    # ===================== POSTED BY COUNTS =====================
-
-    all_posted_by = all_jobs.exclude(
-        posted_by__isnull=True
-    ).exclude(
-        posted_by=''
-    ).values_list(
-        'posted_by',
-        flat=True
-    ).distinct()
-
-    posted_by_counts = {
-
-        p: all_jobs.filter(
-            posted_by=p
-        ).count()
-
-        for p in all_posted_by
-    }
-
-    # ===================== INDUSTRY COUNTS =====================
-
-    all_industries = all_jobs.exclude(
-        industry__isnull=True
-    ).exclude(
-        industry=''
-    ).values_list(
-        'industry',
-        flat=True
-    ).distinct()
-
-    industry_counts = {
-
-        i: all_jobs.filter(
-            industry=i
-        ).count()
-
-        for i in all_industries
-    }
-
-    # ===================== COMPANY COUNTS =====================
-
-    company_counts = {
-
-        item['company']: item['total']
-
-        for item in all_jobs.values(
-            'company'
-        ).annotate(
-            total=Count('id')
-        )
-    }
-
-    # ===================== STIPEND FILTER =====================
-
-    stipends = request.GET.getlist('stipend')
-
-    if stipends:
-
-        stipend_query = Q()
-
-        for s in stipends:
-
-            if s == 'unpaid':
-
-                stipend_query |= Q(
-                    min_salary=0,
-                    max_salary=0
-                )
-
-            elif s == '0-10':
-
-                stipend_query |= Q(
-                    min_salary__gte=0,
-                    max_salary__lte=10
-                )
-
-            elif s == '10-20':
-
-                stipend_query |= Q(
-                    min_salary__gte=10,
-                    max_salary__lte=20
-                )
-
-            elif s == '20-30':
-
-                stipend_query |= Q(
-                    min_salary__gte=20,
-                    max_salary__lte=30
-                )
-
-            elif s == '30-50':
-
-                stipend_query |= Q(
-                    min_salary__gte=30,
-                    max_salary__lte=50
-                )
-
-            elif s == '50+':
-
-                stipend_query |= Q(
-                    min_salary__gte=50
-                )
-
-        jobs = jobs.filter(stipend_query)
-
-    # ===================== STIPEND COUNTS =====================
-
-    stipend_counts = {
-
-        'unpaid': all_jobs.filter(
-            min_salary=0,
-            max_salary=0
-        ).count(),
-
-        '0-10': all_jobs.filter(
-            min_salary__gte=0,
-            max_salary__lte=10
-        ).count(),
-
-        '10-20': all_jobs.filter(
-            min_salary__gte=10,
-            max_salary__lte=20
-        ).count(),
-
-        '20-30': all_jobs.filter(
-            min_salary__gte=20,
-            max_salary__lte=30
-        ).count(),
-
-        '30-50': all_jobs.filter(
-            min_salary__gte=30,
-            max_salary__lte=50
-        ).count(),
-
-        '50+': all_jobs.filter(
-            min_salary__gte=50
-        ).count(),
-    }
-
-    # ===================== FINAL CONTEXT =====================
-
-    context = {
-
-        'jobs': jobs,
-
-        'selected_work_modes': selected_work_modes,
-
-        'selected_categories': selected_categories,
-
-        'selected_company_types': company_types,
-
-        'selected_locations': selected_locations,
-
-        'selected_salaries': selected_salaries,
-
-        'selected_experience': selected_experience,
-
-        'selected_freshness': selected_freshness,
-
-        'selected_roles': roles,
-
-        'selected_stipends': stipends,
-
-        'selected_durations': durations,
-
-        'selected_educations': educations,
-
-        'selected_posted': posted_by,
-
-        'selected_industries': industries,
-
-        'selected_companies': companies,
-
-        'salary_counts': salary_counts,
-
-        'category_counts': category_counts,
-
-        'location_counts': location_counts,
-
-        'company_type_counts': company_type_counts,
-
-        'role_counts': role_counts,
-
-        'stipend_counts': stipend_counts,
-
-        'duration_counts': duration_counts,
-
-        'education_counts': education_counts,
-
-        'posted_by_counts': posted_by_counts,
-
-        'industry_counts': industry_counts,
-
-        'company_counts': company_counts,
-    }
-
-    return render(
-        request,
-        'core/sales_jobs_page.html',
-        context
-    )
-
+ 
 # ===================== BANKING FINANCE JOBS =====================
 @login_required
 def banking_financejobs_page(request):
@@ -12989,9 +12164,9 @@ def _build_company_filter_context(request, base_qs):
     # ── Also pull CompanyProfile rows for logo / description ──
     from .models import CompanyProfile
     profile_map = {
-        cp.company_name.lower(): cp
+        cp.company.lower(): cp
         for cp in CompanyProfile.objects.all()
-        if cp.company_name
+        if cp.company
     }
  
     # Attach profile data to each company dict
@@ -13128,12 +12303,12 @@ def company_startups_jobs_page(request):
     return render(request, 'core/company_startups_jobs.html', context)
 
 
-def company_jobs_page(request, company_name):
+def company_jobs_page(request, company):
     from django.db.models import Count
  
     # ── All jobs for this company from DB ──────────────────────
     jobs = Job.objects.filter(
-        company__iexact=company_name
+        company__iexact=company
     ).order_by('-created_at')
  
     # ── Apply filters ──────────────────────────────────────────
@@ -13147,16 +12322,16 @@ def company_jobs_page(request, company_name):
     from .models import CompanyProfile
     try:
         company_profile = CompanyProfile.objects.get(
-            company_name__iexact=company_name
+            company__iexact=company
         )
     except CompanyProfile.DoesNotExist:
         company_profile = None
  
     # ── Get first job for company meta ─────────────────────────
-    first_job = Job.objects.filter(company__iexact=company_name).first()
+    first_job = Job.objects.filter(company__iexact=company).first()
  
     # ── Counts for filter sidebar ──────────────────────────────
-    all_company_jobs = Job.objects.filter(company__iexact=company_name)
+    all_company_jobs = Job.objects.filter(company__iexact=company)
  
     location_list = ['Bangalore','Delhi','Mumbai','Hyderabad','Pune','Chennai']
     location_counts = {
@@ -13177,7 +12352,7 @@ def company_jobs_page(request, company_name):
  
     return render(request, 'core/company_jobs.html', {
         'jobs':                 jobs,
-        'company_name':         company_name,
+        'company':         company,
         'company_profile':      company_profile,
         'first_job':            first_job,
         'total_jobs':           jobs.count(),
@@ -14377,7 +13552,7 @@ def company_profile(request):
 
     if request.method == 'POST':
         # ── Basic Info ──────────────────────────────────────
-        profile.company_name   = request.POST.get('company_name', '').strip()
+        profile.company   = request.POST.get('company', '').strip()
         profile.industry       = request.POST.get('industry', '').strip()
         profile.description    = request.POST.get('description', '').strip()
         profile.founded_year   = request.POST.get('founded_year') or None
@@ -14444,7 +13619,7 @@ def settings(request):
         full_name    = request.POST.get('full_name', '').strip()
         email        = request.POST.get('email', '').strip()
         phone        = request.POST.get('phone', '').strip()
-        company_name = request.POST.get('company', '').strip()
+        company = request.POST.get('company', '').strip()
         language     = request.POST.get('language', 'English')
 
         # Save to auth_user
@@ -14459,8 +13634,8 @@ def settings(request):
         # Save to UserProfile
         try:
             profile = request.user.userprofile
-            if company_name:
-                profile.company_name = company_name
+            if company:
+                profile.company = company
             profile.save()
         except:
             pass

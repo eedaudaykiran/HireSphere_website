@@ -111,7 +111,7 @@ class EmployerRegisterForm(forms.ModelForm):
  
     class Meta:
         model  = UserProfile
-        fields = ['full_name', 'mobile_number', 'company_name']
+        fields = ['full_name', 'mobile_number']
  
  
 class JobForm(forms.ModelForm):

@@ -23,7 +23,7 @@ class UserProfile(models.Model):
     mobile_number = models.CharField(max_length=15, unique=True)
     role          = models.CharField(max_length=20, choices=ROLE_CHOICES, default='candidate')
     work_status   = models.CharField(max_length=20, choices=WORK_STATUS_CHOICES, blank=True, null=True)
-    company_name  = models.CharField(max_length=200, blank=True, null=True)
+    company      = models.CharField(max_length=200, blank=True, null=True)
     email_verified = models.BooleanField(default=False)
     created_at    = models.DateTimeField(auto_now_add=True)
     skills   = models.CharField(max_length=300, blank=True, null=True)
@@ -114,7 +114,7 @@ class Job(models.Model):
     title         = models.CharField(max_length=200)
     company       = models.CharField(max_length=200)
     experience    = models.CharField(max_length=50)
-    location      = models.CharField(max_length=100)
+    location      = models.CharField(max_length=100, db_index=True)
     work_mode     = models.CharField(max_length=50, choices=JOB_TYPE_CHOICES)
     skills        = models.CharField(max_length=300)
     conditions    = models.CharField(max_length=300, default="Hands-on projects • Paper writing • Coding explanation")
@@ -134,8 +134,7 @@ class Job(models.Model):
     description   = models.TextField(blank=True, null=True)
     employer      = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     views         = models.IntegerField(default=0)
-    is_active     = models.BooleanField(default=True)
-    company_name  = models.CharField(max_length=100, null=True, blank=True)
+    is_active     = models.BooleanField(default=True)  # Added company field for easier filtering and display
     job_type      = models.CharField(max_length=20, choices=JOB_TYPES)
     status        = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     nature_of_business = models.CharField(max_length=10, choices=NATURE_OF_BUSINESS_CHOICES, blank=True, null=True)
@@ -219,6 +218,9 @@ class EmailVerification(models.Model):
     user           = models.ForeignKey(User, on_delete=models.CASCADE)
     token          = models.UUIDField(default=uuid.uuid4, editable=False)
     email_verified = models.BooleanField(default=False)
+
+    def __str__(self):       # ADD THIS
+        return f"{self.user.username} - verified: {self.email_verified}"
  
 class Application(models.Model):
 
@@ -295,7 +297,9 @@ class Application(models.Model):
     def __str__(self):
         # Human-readable label shown in Django admin and shell
         return f"{self.applicant.username} applied for {self.job.title}" 
- 
+    
+    class Meta:
+        unique_together = ('job', 'applicant')
  
 class Interview(models.Model):
  
@@ -329,7 +333,7 @@ class CompanyProfile(models.Model):
     employer       = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # ── Basic Info ─────────────────────────────────────────
-    company_name   = models.CharField(max_length=200, blank=True)
+    
     logo           = models.ImageField(upload_to='company_logos/', blank=True, null=True)
     description    = models.TextField(blank=True)
     industry       = models.CharField(max_length=100, blank=True)
@@ -360,7 +364,7 @@ class CompanyProfile(models.Model):
     technologies   = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
-        return self.company_name or self.employer.username
+        return self.employer.username
   
  
 class EmployerSettings(models.Model):
