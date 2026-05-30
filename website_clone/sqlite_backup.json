@@ -1,0 +1,4022 @@
+{
+  "auth_group": [],
+  "auth_group_permissions": [],
+  "auth_permission": [
+    {
+      "id": 1,
+      "content_type_id": 1,
+      "codename": "add_logentry",
+      "name": "Can add log entry"
+    },
+    {
+      "id": 2,
+      "content_type_id": 1,
+      "codename": "change_logentry",
+      "name": "Can change log entry"
+    },
+    {
+      "id": 3,
+      "content_type_id": 1,
+      "codename": "delete_logentry",
+      "name": "Can delete log entry"
+    },
+    {
+      "id": 4,
+      "content_type_id": 1,
+      "codename": "view_logentry",
+      "name": "Can view log entry"
+    },
+    {
+      "id": 5,
+      "content_type_id": 2,
+      "codename": "add_permission",
+      "name": "Can add permission"
+    },
+    {
+      "id": 6,
+      "content_type_id": 2,
+      "codename": "change_permission",
+      "name": "Can change permission"
+    },
+    {
+      "id": 7,
+      "content_type_id": 2,
+      "codename": "delete_permission",
+      "name": "Can delete permission"
+    },
+    {
+      "id": 8,
+      "content_type_id": 2,
+      "codename": "view_permission",
+      "name": "Can view permission"
+    },
+    {
+      "id": 9,
+      "content_type_id": 3,
+      "codename": "add_group",
+      "name": "Can add group"
+    },
+    {
+      "id": 10,
+      "content_type_id": 3,
+      "codename": "change_group",
+      "name": "Can change group"
+    },
+    {
+      "id": 11,
+      "content_type_id": 3,
+      "codename": "delete_group",
+      "name": "Can delete group"
+    },
+    {
+      "id": 12,
+      "content_type_id": 3,
+      "codename": "view_group",
+      "name": "Can view group"
+    },
+    {
+      "id": 13,
+      "content_type_id": 4,
+      "codename": "add_user",
+      "name": "Can add user"
+    },
+    {
+      "id": 14,
+      "content_type_id": 4,
+      "codename": "change_user",
+      "name": "Can change user"
+    },
+    {
+      "id": 15,
+      "content_type_id": 4,
+      "codename": "delete_user",
+      "name": "Can delete user"
+    },
+    {
+      "id": 16,
+      "content_type_id": 4,
+      "codename": "view_user",
+      "name": "Can view user"
+    },
+    {
+      "id": 17,
+      "content_type_id": 5,
+      "codename": "add_contenttype",
+      "name": "Can add content type"
+    },
+    {
+      "id": 18,
+      "content_type_id": 5,
+      "codename": "change_contenttype",
+      "name": "Can change content type"
+    },
+    {
+      "id": 19,
+      "content_type_id": 5,
+      "codename": "delete_contenttype",
+      "name": "Can delete content type"
+    },
+    {
+      "id": 20,
+      "content_type_id": 5,
+      "codename": "view_contenttype",
+      "name": "Can view content type"
+    },
+    {
+      "id": 21,
+      "content_type_id": 6,
+      "codename": "add_session",
+      "name": "Can add session"
+    },
+    {
+      "id": 22,
+      "content_type_id": 6,
+      "codename": "change_session",
+      "name": "Can change session"
+    },
+    {
+      "id": 23,
+      "content_type_id": 6,
+      "codename": "delete_session",
+      "name": "Can delete session"
+    },
+    {
+      "id": 24,
+      "content_type_id": 6,
+      "codename": "view_session",
+      "name": "Can view session"
+    },
+    {
+      "id": 25,
+      "content_type_id": 7,
+      "codename": "add_job",
+      "name": "Can add job"
+    },
+    {
+      "id": 26,
+      "content_type_id": 7,
+      "codename": "change_job",
+      "name": "Can change job"
+    },
+    {
+      "id": 27,
+      "content_type_id": 7,
+      "codename": "delete_job",
+      "name": "Can delete job"
+    },
+    {
+      "id": 28,
+      "content_type_id": 7,
+      "codename": "view_job",
+      "name": "Can view job"
+    },
+    {
+      "id": 29,
+      "content_type_id": 8,
+      "codename": "add_userprofile",
+      "name": "Can add user profile"
+    },
+    {
+      "id": 30,
+      "content_type_id": 8,
+      "codename": "change_userprofile",
+      "name": "Can change user profile"
+    },
+    {
+      "id": 31,
+      "content_type_id": 8,
+      "codename": "delete_userprofile",
+      "name": "Can delete user profile"
+    },
+    {
+      "id": 32,
+      "content_type_id": 8,
+      "codename": "view_userprofile",
+      "name": "Can view user profile"
+    },
+    {
+      "id": 33,
+      "content_type_id": 9,
+      "codename": "add_companyrating",
+      "name": "Can add company rating"
+    },
+    {
+      "id": 34,
+      "content_type_id": 9,
+      "codename": "change_companyrating",
+      "name": "Can change company rating"
+    },
+    {
+      "id": 35,
+      "content_type_id": 9,
+      "codename": "delete_companyrating",
+      "name": "Can delete company rating"
+    },
+    {
+      "id": 36,
+      "content_type_id": 9,
+      "codename": "view_companyrating",
+      "name": "Can view company rating"
+    },
+    {
+      "id": 37,
+      "content_type_id": 10,
+      "codename": "add_savedjob",
+      "name": "Can add saved job"
+    },
+    {
+      "id": 38,
+      "content_type_id": 10,
+      "codename": "change_savedjob",
+      "name": "Can change saved job"
+    },
+    {
+      "id": 39,
+      "content_type_id": 10,
+      "codename": "delete_savedjob",
+      "name": "Can delete saved job"
+    },
+    {
+      "id": 40,
+      "content_type_id": 10,
+      "codename": "view_savedjob",
+      "name": "Can view saved job"
+    },
+    {
+      "id": 41,
+      "content_type_id": 11,
+      "codename": "add_applyjob",
+      "name": "Can add apply job"
+    },
+    {
+      "id": 42,
+      "content_type_id": 11,
+      "codename": "change_applyjob",
+      "name": "Can change apply job"
+    },
+    {
+      "id": 43,
+      "content_type_id": 11,
+      "codename": "delete_applyjob",
+      "name": "Can delete apply job"
+    },
+    {
+      "id": 44,
+      "content_type_id": 11,
+      "codename": "view_applyjob",
+      "name": "Can view apply job"
+    },
+    {
+      "id": 45,
+      "content_type_id": 12,
+      "codename": "add_emailverification",
+      "name": "Can add email verification"
+    },
+    {
+      "id": 46,
+      "content_type_id": 12,
+      "codename": "change_emailverification",
+      "name": "Can change email verification"
+    },
+    {
+      "id": 47,
+      "content_type_id": 12,
+      "codename": "delete_emailverification",
+      "name": "Can delete email verification"
+    },
+    {
+      "id": 48,
+      "content_type_id": 12,
+      "codename": "view_emailverification",
+      "name": "Can view email verification"
+    },
+    {
+      "id": 49,
+      "content_type_id": 13,
+      "codename": "add_application",
+      "name": "Can add application"
+    },
+    {
+      "id": 50,
+      "content_type_id": 13,
+      "codename": "change_application",
+      "name": "Can change application"
+    },
+    {
+      "id": 51,
+      "content_type_id": 13,
+      "codename": "delete_application",
+      "name": "Can delete application"
+    },
+    {
+      "id": 52,
+      "content_type_id": 13,
+      "codename": "view_application",
+      "name": "Can view application"
+    },
+    {
+      "id": 53,
+      "content_type_id": 14,
+      "codename": "add_jobapplication",
+      "name": "Can add job application"
+    },
+    {
+      "id": 54,
+      "content_type_id": 14,
+      "codename": "change_jobapplication",
+      "name": "Can change job application"
+    },
+    {
+      "id": 55,
+      "content_type_id": 14,
+      "codename": "delete_jobapplication",
+      "name": "Can delete job application"
+    },
+    {
+      "id": 56,
+      "content_type_id": 14,
+      "codename": "view_jobapplication",
+      "name": "Can view job application"
+    },
+    {
+      "id": 57,
+      "content_type_id": 15,
+      "codename": "add_interview",
+      "name": "Can add interview"
+    },
+    {
+      "id": 58,
+      "content_type_id": 15,
+      "codename": "change_interview",
+      "name": "Can change interview"
+    },
+    {
+      "id": 59,
+      "content_type_id": 15,
+      "codename": "delete_interview",
+      "name": "Can delete interview"
+    },
+    {
+      "id": 60,
+      "content_type_id": 15,
+      "codename": "view_interview",
+      "name": "Can view interview"
+    },
+    {
+      "id": 61,
+      "content_type_id": 16,
+      "codename": "add_message",
+      "name": "Can add message"
+    },
+    {
+      "id": 62,
+      "content_type_id": 16,
+      "codename": "change_message",
+      "name": "Can change message"
+    },
+    {
+      "id": 63,
+      "content_type_id": 16,
+      "codename": "delete_message",
+      "name": "Can delete message"
+    },
+    {
+      "id": 64,
+      "content_type_id": 16,
+      "codename": "view_message",
+      "name": "Can view message"
+    },
+    {
+      "id": 65,
+      "content_type_id": 17,
+      "codename": "add_companyprofile",
+      "name": "Can add company profile"
+    },
+    {
+      "id": 66,
+      "content_type_id": 17,
+      "codename": "change_companyprofile",
+      "name": "Can change company profile"
+    },
+    {
+      "id": 67,
+      "content_type_id": 17,
+      "codename": "delete_companyprofile",
+      "name": "Can delete company profile"
+    },
+    {
+      "id": 68,
+      "content_type_id": 17,
+      "codename": "view_companyprofile",
+      "name": "Can view company profile"
+    },
+    {
+      "id": 69,
+      "content_type_id": 18,
+      "codename": "add_subscription",
+      "name": "Can add subscription"
+    },
+    {
+      "id": 70,
+      "content_type_id": 18,
+      "codename": "change_subscription",
+      "name": "Can change subscription"
+    },
+    {
+      "id": 71,
+      "content_type_id": 18,
+      "codename": "delete_subscription",
+      "name": "Can delete subscription"
+    },
+    {
+      "id": 72,
+      "content_type_id": 18,
+      "codename": "view_subscription",
+      "name": "Can view subscription"
+    },
+    {
+      "id": 73,
+      "content_type_id": 19,
+      "codename": "add_employersettings",
+      "name": "Can add employer settings"
+    },
+    {
+      "id": 74,
+      "content_type_id": 19,
+      "codename": "change_employersettings",
+      "name": "Can change employer settings"
+    },
+    {
+      "id": 75,
+      "content_type_id": 19,
+      "codename": "delete_employersettings",
+      "name": "Can delete employer settings"
+    },
+    {
+      "id": 76,
+      "content_type_id": 19,
+      "codename": "view_employersettings",
+      "name": "Can view employer settings"
+    },
+    {
+      "id": 77,
+      "content_type_id": 20,
+      "codename": "add_interviewquestion",
+      "name": "Can add interview question"
+    },
+    {
+      "id": 78,
+      "content_type_id": 20,
+      "codename": "change_interviewquestion",
+      "name": "Can change interview question"
+    },
+    {
+      "id": 79,
+      "content_type_id": 20,
+      "codename": "delete_interviewquestion",
+      "name": "Can delete interview question"
+    },
+    {
+      "id": 80,
+      "content_type_id": 20,
+      "codename": "view_interviewquestion",
+      "name": "Can view interview question"
+    }
+  ],
+  "auth_user": [
+    {
+      "id": 1,
+      "password": "pbkdf2_sha256$1200000$XEGi84GPxX8DzCWRqvUWBG$czKWpWY7vDDeL2ZQ90gXOPYBtZjxGOgnW1CMT9SciQc=",
+      "last_login": "2026-05-29 11:33:06.584893",
+      "is_superuser": 1,
+      "username": "udaykiraneeda",
+      "last_name": "",
+      "email": "udaykiraneeda9100@gmail.com",
+      "is_staff": 1,
+      "is_active": 1,
+      "date_joined": "2026-04-01 04:04:40.609334",
+      "first_name": ""
+    },
+    {
+      "id": 2,
+      "password": "pbkdf2_sha256$1000000$5dRX9EVtMeN9Dnc900ZgPU$9ELW+nkdlFS3RjY3Wo2P6/fm+25IMINQDt87Ze7AWbg=",
+      "last_login": "2026-04-08 11:07:15.230079",
+      "is_superuser": 0,
+      "username": "uday",
+      "last_name": "",
+      "email": "uday@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-07 03:45:47.310200",
+      "first_name": "uday"
+    },
+    {
+      "id": 3,
+      "password": "pbkdf2_sha256$1000000$Ajg8ppgYsCtPhZAnfTsBrC$NguTBxyNdl84Zx8JC0PcdJcZKRgNkcJkrf8OSo3wumo=",
+      "last_login": "2026-04-07 11:52:30.549380",
+      "is_superuser": 0,
+      "username": "sai",
+      "last_name": "",
+      "email": "sai@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-07 04:01:59.221972",
+      "first_name": "sai"
+    },
+    {
+      "id": 4,
+      "password": "pbkdf2_sha256$1000000$2vbur23yMJ4YVK4jtFAtvY$t9gg+JHRswXEg+2ePIjj9mgdw9GPyWgbOvbmpzGDAbM=",
+      "last_login": "2026-04-07 11:51:52.124465",
+      "is_superuser": 0,
+      "username": "uday1",
+      "last_name": "",
+      "email": "uday1@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-07 11:51:35.035906",
+      "first_name": "uday"
+    },
+    {
+      "id": 5,
+      "password": "pbkdf2_sha256$1000000$umGrLL4sgddSPHYOP7x9Am$OxH7femmtPU3Iwt0Y0yO3WvrSCrx7ux83k0MQENn0yc=",
+      "last_login": null,
+      "is_superuser": 0,
+      "username": "kiran1",
+      "last_name": "",
+      "email": "kiran1@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-07 12:15:08.801002",
+      "first_name": "kiran"
+    },
+    {
+      "id": 6,
+      "password": "pbkdf2_sha256$1000000$3zGuZT6sk1nyoLGWArsbFw$my+dqhvdjzyHuoBwiSoHgztO7X8Pd5c3rAIdBPOJRp0=",
+      "last_login": "2026-04-07 12:18:19.321014",
+      "is_superuser": 0,
+      "username": "kiran12",
+      "last_name": "",
+      "email": "kiran12@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-07 12:17:58.620794",
+      "first_name": "kiran12"
+    },
+    {
+      "id": 7,
+      "password": "pbkdf2_sha256$1000000$CM1O42TwzDmxHIgCbkaITt$k23mWB5CWONx1DSe6pcE0sbvD4EEVx1t8+YtlTJKL4I=",
+      "last_login": "2026-04-07 12:20:48.878149",
+      "is_superuser": 0,
+      "username": "lion",
+      "last_name": "",
+      "email": "lion@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-07 12:20:06.467193",
+      "first_name": "lion"
+    },
+    {
+      "id": 8,
+      "password": "pbkdf2_sha256$1000000$xp6WrXFNb4SuNPAGhY990A$BoEqFG36M7BZk8EPAGAmn0STohMdAaMWLpxAbiqDsEk=",
+      "last_login": "2026-04-08 11:15:23.948858",
+      "is_superuser": 0,
+      "username": "uday12",
+      "last_name": "",
+      "email": "uday12@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-08 11:14:58.429090",
+      "first_name": "uday"
+    },
+    {
+      "id": 9,
+      "password": "pbkdf2_sha256$1000000$zTvvT4vwHSP5vKVNWXw8aN$5pLXv4hfFQJzRYvZWCTy/j6MDMeJK80EyyvXCvoQl5s=",
+      "last_login": "2026-04-08 11:16:53.336237",
+      "is_superuser": 0,
+      "username": "kiran123",
+      "last_name": "",
+      "email": "kiran123@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-08 11:16:31.395593",
+      "first_name": "kiran"
+    },
+    {
+      "id": 10,
+      "password": "pbkdf2_sha256$1000000$r6DuETmChqvPMpJZytNH8U$5lPNfcjhPz80bo/KImOfs6/TnzbzDrYkqNxjSTCga1Q=",
+      "last_login": "2026-04-08 11:18:21.544737",
+      "is_superuser": 0,
+      "username": "kiran45",
+      "last_name": "",
+      "email": "kiran45@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-04-08 11:17:50.228630",
+      "first_name": "uday"
+    },
+    {
+      "id": 11,
+      "password": "pbkdf2_sha256$1000000$XyDJenBYz2lPYcemTaVX2S$RQ6GaA6fm5DlvpQiAf0YVRfX39ckLE1cpLL4ceHWfEA=",
+      "last_login": null,
+      "is_superuser": 0,
+      "username": "uday_new",
+      "last_name": "",
+      "email": "",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-07 07:30:04.232003",
+      "first_name": ""
+    },
+    {
+      "id": 12,
+      "password": "pbkdf2_sha256$1200000$eWiztJVhvrgRd6GBYwukL3$ZT9fs1oVRGqKXwaoH7dEK5ubvAKiYo3bEZP8fU8cVDs=",
+      "last_login": "2026-05-30 02:21:41.557480",
+      "is_superuser": 0,
+      "username": "karthikeya",
+      "last_name": "",
+      "email": "kiran1@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-07 12:21:38.300399",
+      "first_name": "karthikeya"
+    },
+    {
+      "id": 13,
+      "password": "pbkdf2_sha256$1000000$ZeF92yO2gpMqm5eZ0Dh9sJ$x43WW4JWOvI4Ht4bA+OUx1SQ5wdj9UrjMJBorXJSy2I=",
+      "last_login": null,
+      "is_superuser": 0,
+      "username": "sahithi",
+      "last_name": "",
+      "email": "sahithi@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-07 12:58:40.358694",
+      "first_name": ""
+    },
+    {
+      "id": 14,
+      "password": "pbkdf2_sha256$1000000$s6e5yIMhJhEvDMbyHJHDR0$KkTq/QOuXi1Mliyw35WL0gZYY5qerpT2OZptdkx7O9k=",
+      "last_login": "2026-05-07 13:03:08.484912",
+      "is_superuser": 0,
+      "username": "kumar",
+      "last_name": "",
+      "email": "kumar@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-07 13:02:56.577099",
+      "first_name": ""
+    },
+    {
+      "id": 15,
+      "password": "pbkdf2_sha256$1000000$5wZyW6Ev7ZXreih2PQ4SiX$2lnJ6CoEfWAkDvO4Rd91ZgnvIak4UCQ2QMDOB05QI5Y=",
+      "last_login": "2026-05-07 13:07:26.565214",
+      "is_superuser": 0,
+      "username": "akhil",
+      "last_name": "",
+      "email": "akhil@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-07 13:07:12.112631",
+      "first_name": ""
+    },
+    {
+      "id": 16,
+      "password": "pbkdf2_sha256$1000000$dlXTfkocihh5XVmAKt5Qi6$ileMoSUOl0wcFmTLqoC7zGjGQcb65x/xjYoaW03z4F8=",
+      "last_login": null,
+      "is_superuser": 0,
+      "username": "laxman",
+      "last_name": "",
+      "email": "",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-07 13:19:48.371714",
+      "first_name": ""
+    },
+    {
+      "id": 17,
+      "password": "pbkdf2_sha256$1000000$Z8XOYFTSYNSpWtQyzxEDTV$erqzcGDQTLnfxIAzQt4U6GUCgLCe4CORQyREbQ/9kL8=",
+      "last_login": "2026-05-07 13:31:12.646481",
+      "is_superuser": 0,
+      "username": "Tharun",
+      "last_name": "",
+      "email": "tharun@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-07 13:30:59.482904",
+      "first_name": ""
+    },
+    {
+      "id": 18,
+      "password": "pbkdf2_sha256$1200000$LNPCFRKPKzHLSlgcB9SZBz$SJ55mgSr+ExVeKSCKpiYRSTd9iwevbtRpVDJPDY9QHI=",
+      "last_login": "2026-05-14 05:01:40.805341",
+      "is_superuser": 0,
+      "username": "ram",
+      "last_name": "",
+      "email": "ram@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-14 05:01:21.573307",
+      "first_name": "ram"
+    },
+    {
+      "id": 19,
+      "password": "pbkdf2_sha256$1200000$YtBs0DpTDf8G13tNYNdG50$bTqzCDeMxxw2IzsfMkyJ0wCOcpcSfmJ+TsvKyScvp3s=",
+      "last_login": "2026-05-30 08:14:32.596327",
+      "is_superuser": 0,
+      "username": "sitha",
+      "last_name": "",
+      "email": "sitha@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-14 09:02:00.738013",
+      "first_name": "sitha"
+    },
+    {
+      "id": 20,
+      "password": "pbkdf2_sha256$1200000$iFAJ0XSl04VDJkdU7Pj8BC$Vdp+vElihBc3kfC9jZjRSCqv4TDvxRKEn4254XiQt68=",
+      "last_login": "2026-05-16 10:43:27.785304",
+      "is_superuser": 0,
+      "username": "sam",
+      "last_name": "",
+      "email": "sam@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-16 10:43:09.242032",
+      "first_name": "sam"
+    },
+    {
+      "id": 21,
+      "password": "pbkdf2_sha256$1200000$gjoa1ZaVJsH7DZhH2R6d3A$Y0GKZZhSmrJ+klOHOdAuIaKgNhhqXF0lBOKW35VZcsE=",
+      "last_login": null,
+      "is_superuser": 0,
+      "username": "muraligoud973",
+      "last_name": "",
+      "email": "muraligoud973@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-19 16:37:44.255283",
+      "first_name": "murali"
+    },
+    {
+      "id": 22,
+      "password": "pbkdf2_sha256$1200000$retAbX6rYMp8BuEFfdugFR$dlRU4YPjxD6BFIHabUUnVpndRLlymj8r1XassD9Z5SE=",
+      "last_login": "2026-05-19 16:43:02.239149",
+      "is_superuser": 0,
+      "username": "murali",
+      "last_name": "",
+      "email": "murali@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-19 16:40:20.402904",
+      "first_name": "murali"
+    },
+    {
+      "id": 23,
+      "password": "pbkdf2_sha256$1200000$vnOaXdqq3W3U25AaX690oo$VT/wjQyJsysJavSKBSl/dhD3pwSZI7x0DWWw2dxLKM4=",
+      "last_login": "2026-05-28 06:18:53.517373",
+      "is_superuser": 0,
+      "username": "tiger",
+      "last_name": "",
+      "email": "tiger@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-28 05:38:44.314604",
+      "first_name": "tiger"
+    },
+    {
+      "id": 24,
+      "password": "pbkdf2_sha256$1200000$IKGrlo2qCGyHLCVp7g5dlf$rtlI3nnsSVKgVRs19c1ecZtLjFIe9Ci+Or0/fuKG7II=",
+      "last_login": "2026-05-28 09:34:05.377928",
+      "is_superuser": 0,
+      "username": "sai1",
+      "last_name": "",
+      "email": "sai1@gmail.com",
+      "is_staff": 0,
+      "is_active": 1,
+      "date_joined": "2026-05-28 09:33:48.184596",
+      "first_name": "sai"
+    }
+  ],
+  "auth_user_groups": [],
+  "auth_user_user_permissions": [],
+  "core_application": [
+    {
+      "id": 1,
+      "status": "Rejected",
+      "applicant_id": 12,
+      "job_id": 20,
+      "resume": "resumes/UDAYKIRAN_EEDA_1.docx",
+      "experience": "3 Years",
+      "location": "Hyderabad",
+      "skills": "Python, Django, JavaScript",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9786549310",
+      "applied_at": "2026-05-12 12:04:17.534495"
+    },
+    {
+      "id": 2,
+      "status": "Offer",
+      "applicant_id": 12,
+      "job_id": 22,
+      "resume": "resumes/UDAYKIRAN_EEDA_1_2.pdf",
+      "experience": "3 Years",
+      "location": "Hyderabad",
+      "skills": "Python, Django, JavaScript",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9786549310",
+      "applied_at": "2026-05-12 13:15:59.273342"
+    },
+    {
+      "id": 3,
+      "status": "Shortlisted",
+      "applicant_id": 18,
+      "job_id": 18,
+      "resume": "resumes/uday_kiran_eeda_resume.pdf",
+      "experience": "Fresher",
+      "location": "Hyderabad",
+      "skills": "Python, Django",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9392418841",
+      "applied_at": "2026-05-14 05:02:25.977015"
+    },
+    {
+      "id": 4,
+      "status": "HR",
+      "applicant_id": 12,
+      "job_id": 23,
+      "resume": "resumes/uday_kiran_eeda_resume_9kHGb8x.pdf",
+      "experience": "3 Years",
+      "location": "Hyderabad",
+      "skills": "Python, Django, JavaScript",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9786549310",
+      "applied_at": "2026-05-14 05:04:38.241179"
+    },
+    {
+      "id": 7,
+      "status": "Interview",
+      "applicant_id": 19,
+      "job_id": 17,
+      "resume": "resumes/uday_kiran_eeda_resume_ZsBOEvm.pdf",
+      "experience": "Fresher",
+      "location": "Hyderabad",
+      "skills": "HTML, CSS, JavaScript",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "7997934952",
+      "applied_at": "2026-05-14 11:05:42.292106"
+    },
+    {
+      "id": 8,
+      "status": "Interview",
+      "applicant_id": 19,
+      "job_id": 1,
+      "resume": "resumes/uday_kiran_eeda_resume_IbXRBzH.pdf",
+      "experience": "fresher",
+      "location": "bangalore",
+      "skills": "python,sql.powerBI",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9292923854",
+      "applied_at": "2026-05-15 11:50:39.677562"
+    },
+    {
+      "id": 9,
+      "status": "Interview Scheduled",
+      "applicant_id": 19,
+      "job_id": 16,
+      "resume": "resumes/uday_kiran_eeda_resume_Oc8OMZa.pdf",
+      "experience": "fresher",
+      "location": "hydrabad",
+      "skills": "java,react,sql",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "6301585543",
+      "applied_at": "2026-05-16 08:52:45.755458"
+    },
+    {
+      "id": 10,
+      "status": "HR",
+      "applicant_id": 20,
+      "job_id": 12,
+      "resume": "resumes/uday_kiran_eeda_resume_2OAjksK.pdf",
+      "experience": "fresher",
+      "location": "Mumbai",
+      "skills": "mongoDB,expressJS,ReactJS,NodeJS",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "7671839808",
+      "applied_at": "2026-05-16 10:45:13.634482"
+    },
+    {
+      "id": 11,
+      "status": "Applied",
+      "applicant_id": 19,
+      "job_id": 22,
+      "resume": "resumes/uday_kiran_eeda_resume_Sbdg3a1.pdf",
+      "experience": "fresher",
+      "location": "miyapur",
+      "skills": "java, spring boot",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "6655774483",
+      "applied_at": "2026-05-18 04:13:39.824299"
+    },
+    {
+      "id": 12,
+      "status": "Applied",
+      "applicant_id": 19,
+      "job_id": 3,
+      "resume": "resumes/uday_kiran_eeda_resume_UV2YmJd.pdf",
+      "experience": "fresher",
+      "location": "chennai",
+      "skills": "java,springboot,sql",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9966778855",
+      "applied_at": "2026-05-18 04:39:18.834162"
+    },
+    {
+      "id": 13,
+      "status": "Shortlisted",
+      "applicant_id": 19,
+      "job_id": 25,
+      "resume": "resumes/uday_kiran_eeda_resume_TFcc29B.pdf",
+      "experience": "fresher",
+      "location": "hydrabad",
+      "skills": "html,css",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9292923854",
+      "applied_at": "2026-05-18 12:41:15.925046"
+    },
+    {
+      "id": 14,
+      "status": "Applied",
+      "applicant_id": 24,
+      "job_id": 28,
+      "resume": "resumes/udaykiran_eeda_resume_4.pdf",
+      "experience": "fresher",
+      "location": "hyderabad",
+      "skills": "html, css,js",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "6655774483",
+      "applied_at": "2026-05-28 09:36:17.521617"
+    },
+    {
+      "id": 15,
+      "status": "Applied",
+      "applicant_id": 19,
+      "job_id": 30,
+      "resume": "resumes/udaykiran_eeda_resume_4_EUgHUAC.pdf",
+      "experience": "fresher",
+      "location": "hydrabad",
+      "skills": "react, javascript, python",
+      "interview_date": null,
+      "interview_link": null,
+      "interview_notes": null,
+      "interview_time": null,
+      "phone_number": "9292923854",
+      "applied_at": "2026-05-29 09:25:04.225302"
+    }
+  ],
+  "core_applyjob": [],
+  "core_companyprofile": [
+    {
+      "id": 1,
+      "logo": "company_logos/it.png",
+      "description": "HCLTech is a leading global technology company specializing in IT services, software development, digital transformation, cloud computing, cybersecurity, and engineering solutions. Established in 1976, the company has grown into one of the top IT service providers in the world. HCLTech serves clients across multiple industries including banking, healthcare, retail, manufacturing, and telecommunications. With operations in many countries and a highly skilled workforce, the company focuses on inno",
+      "website": "https://www.hcltech.com/?utm_source=chatgpt.com",
+      "location": "Hyderabad, Telangana, India",
+      "industry": "Software / IT",
+      "employee_count": "201–500 Employees",
+      "founded_year": 2019,
+      "employer_id": 12,
+      "benefits": "wfh,health,bonus,flex,cab,food,leave",
+      "city": "Hyderabad",
+      "company_type": "Public Ltd",
+      "country": "India",
+      "hr_contact": "0120-3667180",
+      "hr_email": "careers@hcltech.com",
+      "instagram": "https://www.instagram.com/hcltech/?utm_source=chatgpt.com",
+      "linkedin": "https://www.linkedin.com/company/hcltech/?utm_source=chatgpt.com",
+      "other_link": "https://www.facebook.com/HCLTechOfficial/?utm_source=chatgpt.com",
+      "phone": "+91 120 4306000",
+      "state": "Telangana",
+      "technologies": "These technologies help HCLTech build scalable web applications, enterprise software, cloud systems, and digital transformation solutions for global companies.",
+      "twitter": "https://www.facebook.com/HCLTechOfficial/?utm_source=chatgpt.com"
+    }
+  ],
+  "core_emailverification": [],
+  "core_employersettings": [
+    {
+      "id": 1,
+      "profile_image": "profile_images/comapny.jpg",
+      "phone_number": "9502643306",
+      "email_notifications": 0,
+      "dark_mode": 0,
+      "language": "English",
+      "two_factor_auth": 0,
+      "created_at": "2026-05-08 17:13:07.092006",
+      "employer_id": 12
+    }
+  ],
+  "core_interview": [
+    {
+      "id": 1,
+      "round_type": "HR",
+      "interview_date": "2026-05-20",
+      "interview_time": "09:00:00",
+      "meeting_link": "",
+      "status": "Scheduled",
+      "feedback": null,
+      "created_at": "2026-05-16 09:08:29.650883",
+      "candidate_id": 19,
+      "job_id": 16
+    },
+    {
+      "id": 2,
+      "round_type": "Technical",
+      "interview_date": "2026-05-25",
+      "interview_time": "10:00:00",
+      "meeting_link": "https://meet.google.com/abc-xyz",
+      "status": "Scheduled",
+      "feedback": null,
+      "created_at": "2026-05-17 11:28:05.802728",
+      "candidate_id": 19,
+      "job_id": 1
+    },
+    {
+      "id": 3,
+      "round_type": "Technical",
+      "interview_date": "2026-05-20",
+      "interview_time": "10:00:00",
+      "meeting_link": "https://meet.google.com/abc-xyz",
+      "status": "Scheduled",
+      "feedback": null,
+      "created_at": "2026-05-17 11:36:45.421908",
+      "candidate_id": 2,
+      "job_id": 1
+    },
+    {
+      "id": 4,
+      "round_type": "Technical",
+      "interview_date": "2026-05-25",
+      "interview_time": "10:00:00",
+      "meeting_link": "https://meet.google.com/abc-xyz",
+      "status": "Scheduled",
+      "feedback": null,
+      "created_at": "2026-05-17 11:36:46.069362",
+      "candidate_id": 2,
+      "job_id": 1
+    },
+    {
+      "id": 5,
+      "round_type": "Technical",
+      "interview_date": "2026-05-20",
+      "interview_time": "10:00:00",
+      "meeting_link": "https://meet.google.com/abc-xyz",
+      "status": "Scheduled",
+      "feedback": null,
+      "created_at": "2026-05-17 11:40:01.832818",
+      "candidate_id": 20,
+      "job_id": 1
+    }
+  ],
+  "core_job": [
+    {
+      "id": 1,
+      "title": "python developer",
+      "company": "accenture",
+      "skills": "python,sql,django",
+      "experience": "3",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "Remote",
+      "category": "General",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 0,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "It networking",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 7,
+      "min_salary": 5,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hyderabad"
+    },
+    {
+      "id": 2,
+      "title": "react developer",
+      "company": "HCL Tech",
+      "skills": "react, javascript, mongodb",
+      "experience": "5",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "Remote",
+      "category": "General",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 0,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 9,
+      "min_salary": 7,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "bangalore"
+    },
+    {
+      "id": 3,
+      "title": "java developer",
+      "company": "tcs",
+      "skills": "java, springboot, javascript",
+      "experience": "7",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 0,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 18,
+      "min_salary": 15,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hitech city"
+    },
+    {
+      "id": 4,
+      "title": "php developer",
+      "company": "capgemini",
+      "skills": "php, html,css, javascripy",
+      "experience": "4 years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/Acer-Logo.png",
+      "work_mode": "On-site",
+      "category": "Sales",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 6,
+      "min_salary": 4,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "secunderabad"
+    },
+    {
+      "id": 5,
+      "title": "Data analyst developer",
+      "company": "sandlbenz",
+      "skills": "powerbi,pandas,numpy",
+      "experience": "6",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "Hybrid",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 0,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 12,
+      "min_salary": 8,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "JNTUH"
+    },
+    {
+      "id": 6,
+      "title": "Python developer",
+      "company": "sandlbenz",
+      "skills": "python,django",
+      "experience": "2 years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_zggYsNa.jpg",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 8,
+      "min_salary": 6,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 7,
+      "title": "java developer",
+      "company": "accenture",
+      "skills": "java, spring boot",
+      "experience": "3Years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "Remote",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 0,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 7,
+      "min_salary": 5,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 8,
+      "title": "react developer",
+      "company": "capgemini",
+      "skills": "react, javascript, python",
+      "experience": "4Years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 0,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 7,
+      "min_salary": 4,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 0,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 10,
+      "title": "Mobile app developer",
+      "company": "tcs",
+      "skills": "react native, mongodb, node js",
+      "experience": "1-3 years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "company_logos/Acer-Logo_Ouc4INc.png",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 0,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "Reatil",
+      "max_salary": 4,
+      "min_salary": 2,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hitech city"
+    },
+    {
+      "id": 11,
+      "title": "junior node developer",
+      "company": "accenture",
+      "skills": "Node, js, react",
+      "experience": "1-3 years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "Remote",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 4,
+      "min_salary": 3,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 12,
+      "title": "junior mern stack developer",
+      "company": "capgemini",
+      "skills": "mongoDB,node,react,express js",
+      "experience": "5",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "company_logos/unitech.jpg",
+      "work_mode": "Remote",
+      "category": "General",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 03:40:36.015648",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "education",
+      "max_salary": 5,
+      "min_salary": 4,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 13,
+      "title": "game app developer",
+      "company": "carreer x",
+      "skills": "java, spring boot",
+      "experience": "1",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "Remote",
+      "category": "General",
+      "company_type": "MNC",
+      "is_sponsored": 1,
+      "is_featured": 0,
+      "created_at": "2026-04-20 04:09:37.496512",
+      "role_category": "hr",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 2,
+      "min_salary": 1,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "internship",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "bangalore"
+    },
+    {
+      "id": 14,
+      "title": "junior react developer",
+      "company": "accenture",
+      "skills": "react, javascript, python",
+      "experience": "2",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "company_logos/Acer-Logo_t7UFYHu.png",
+      "work_mode": "Hybrid",
+      "category": "General",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 05:06:33.013564",
+      "role_category": "finance",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 3,
+      "min_salary": 2,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "internship",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "bangalore"
+    },
+    {
+      "id": 15,
+      "title": "senior node js developer",
+      "company": "tricuruiter",
+      "skills": "mongoDB,node,react,express js",
+      "experience": "7 years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_uaOXsXz.jpg",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 09:08:31.260929",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 15,
+      "min_salary": 12,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 16,
+      "title": "app developer",
+      "company": "sandlbenz",
+      "skills": "java, spring boot",
+      "experience": "2",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech.jpg",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 10:06:40.272667",
+      "role_category": "temp",
+      "duration": null,
+      "education": "DIP",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 5,
+      "min_salary": 4,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "part_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "bangalore"
+    },
+    {
+      "id": 17,
+      "title": "Senior web developer",
+      "company": "genpac",
+      "skills": "mongoDB,node,react,python, django",
+      "experience": "6",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_mCF9nYd.jpg",
+      "work_mode": "On-site",
+      "category": "General",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-20 10:27:56.750477",
+      "role_category": "temp",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 10,
+      "min_salary": 8,
+      "rating": 3.7,
+      "review_count": 4,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 18,
+      "title": "Specialist Software Engineer - JAVA FSD",
+      "company": "Société Générale",
+      "skills": "java, spring boot, sql",
+      "experience": "4–6years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "Hybrid",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-21 04:12:10.390098",
+      "role_category": "temp",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 6,
+      "min_salary": 4,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "mumbai"
+    },
+    {
+      "id": 19,
+      "title": "Data Analyst",
+      "company": "Wipro",
+      "skills": "SQL, Excel",
+      "experience": "3 yrs",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_ekEIWBf.jpg",
+      "work_mode": "Remote",
+      "category": "Sales",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-04-21 06:36:59.369176",
+      "role_category": "temp",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 7,
+      "min_salary": 5,
+      "rating": 2.7,
+      "review_count": 2,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "Pune"
+    },
+    {
+      "id": 20,
+      "title": "junior PHP developer",
+      "company": "tcs",
+      "skills": "php, react,java",
+      "experience": "1year",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "Startup",
+      "is_sponsored": 1,
+      "is_featured": 0,
+      "created_at": "2026-05-12 07:14:19.824752",
+      "role_category": "temp",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "CONSULTANT",
+      "industry": "",
+      "max_salary": 4,
+      "min_salary": 2,
+      "rating": 3.5,
+      "review_count": 4,
+      "employer_id": 12,
+      "views": 1,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "Full Time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 22,
+      "title": "senior full stack developer",
+      "company": "tricuruiter",
+      "skills": "mongoDB,node,react,express js",
+      "experience": "8years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_dQF37sR.jpg",
+      "work_mode": "Hybrid",
+      "category": "IT",
+      "company_type": "Startup",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-05-12 13:15:13.556185",
+      "role_category": "temp",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 18,
+      "min_salary": 13,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "senior any full stack developer freshers to learns so i want to senior python full stack devloper and experiance must be more than 6 years.",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "Full Time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 23,
+      "title": "junior full stack developer",
+      "company": "Wipro",
+      "skills": "python,django",
+      "experience": "2years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_atiX8rP.jpg",
+      "work_mode": "Hybrid",
+      "category": "IT",
+      "company_type": "Startup",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-05-13 04:56:51.640893",
+      "role_category": "temp",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 5,
+      "min_salary": 3,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "i want to any junior pyhton full satck devloper boss",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "Full Time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hitech city"
+    },
+    {
+      "id": 25,
+      "title": "three js",
+      "company": "campo",
+      "skills": "html,css,js, threejs",
+      "experience": "2 years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/claude.png",
+      "work_mode": "Remote",
+      "category": "Finance & Accounting",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-05-18 12:11:56.825122",
+      "role_category": "frontend devloper",
+      "duration": "6 months",
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "Finance",
+      "max_salary": 5,
+      "min_salary": 3,
+      "rating": 3.5,
+      "review_count": 5,
+      "employer_id": 12,
+      "views": 5,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "Full Time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "Delhi"
+    },
+    {
+      "id": 26,
+      "title": "AI Powered Job Portal System",
+      "company": "NextHire —",
+      "skills": "pythonAI,Reactjs,NodeJS",
+      "experience": "10Years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_mw9zePw.jpg",
+      "work_mode": "Hybrid",
+      "category": "Sales",
+      "company_type": "Unicorn",
+      "is_sponsored": 1,
+      "is_featured": 0,
+      "created_at": "2026-05-20 10:19:01.217926",
+      "role_category": "frontend devloper",
+      "duration": "6 months",
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "Sales",
+      "max_salary": 20,
+      "min_salary": 10,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 7,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "Full Time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hyderabad"
+    },
+    {
+      "id": 27,
+      "title": "senior senior java developer",
+      "company": "JOHO",
+      "skills": "java, spring boot",
+      "experience": "10Years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_ds3QaW6.jpg",
+      "work_mode": "Hybrid",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 1,
+      "is_featured": 0,
+      "created_at": "2026-05-23 05:16:33.430790",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "BTECH",
+      "posted_by": "COMPANY",
+      "industry": "IT services & consultency",
+      "max_salary": 14,
+      "min_salary": 10,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 2,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": "Engineering - Software & QA",
+      "job_type": "full_time",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "hydrabad"
+    },
+    {
+      "id": 28,
+      "title": "junior frontend developer",
+      "company": "rvkx",
+      "skills": "html,css,javascript",
+      "experience": "3",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_rVyMjVL.jpg",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "Startup",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-05-28 06:56:19.268257",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 6,
+      "min_salary": 4,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "mumbai"
+    },
+    {
+      "id": 29,
+      "title": "senior frontend developer",
+      "company": "wipro",
+      "skills": "three js,javascript",
+      "experience": "7Years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_TmggtUI.jpg",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-05-28 09:40:49.243126",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 7,
+      "min_salary": 4,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 1,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "",
+      "nature_of_business": null,
+      "status": "active",
+      "location": "Pune"
+    },
+    {
+      "id": 30,
+      "title": "junior backend developer",
+      "company": "ccisies",
+      "skills": "python,django,sql",
+      "experience": "5Years",
+      "conditions": "Hands-on projects • Paper writing • Coding explanation",
+      "logo": "logos/unitech_KsOCjzi.jpg",
+      "work_mode": "On-site",
+      "category": "IT",
+      "company_type": "MNC",
+      "is_sponsored": 0,
+      "is_featured": 1,
+      "created_at": "2026-05-29 09:22:26.941217",
+      "role_category": "software developer",
+      "duration": null,
+      "education": "GRAD",
+      "posted_by": "COMPANY",
+      "industry": "",
+      "max_salary": 5,
+      "min_salary": 2,
+      "rating": 3.5,
+      "review_count": 0,
+      "employer_id": 12,
+      "views": 0,
+      "description": "",
+      "is_active": 0,
+      "salary_disclosed": 1,
+      "department": null,
+      "job_type": "",
+      "nature_of_business": null,
+      "status": "closed",
+      "location": "hydrabad"
+    }
+  ],
+  "core_message": [
+    {
+      "id": 1,
+      "message": "Hi Uday! We reviewed your application for Python Developer. Can you come for interview tomorrow at 10 AM?",
+      "is_read": 0,
+      "created_at": "2026-05-17 11:26:12.155873",
+      "receiver_id": 19,
+      "sender_id": 12
+    },
+    {
+      "id": 2,
+      "message": "Yes sir! I will be there at 10 AM tomorrow. Thank you!",
+      "is_read": 1,
+      "created_at": "2026-05-17 11:26:26.941447",
+      "receiver_id": 12,
+      "sender_id": 19
+    },
+    {
+      "id": 3,
+      "message": "Great! Interview link is meet.google.com/abc-xyz. Please be on time.",
+      "is_read": 0,
+      "created_at": "2026-05-17 11:26:41.076430",
+      "receiver_id": 19,
+      "sender_id": 12
+    },
+    {
+      "id": 4,
+      "message": "ok sir, i will be join",
+      "is_read": 0,
+      "created_at": "2026-05-17 11:30:06.143670",
+      "receiver_id": 19,
+      "sender_id": 12
+    },
+    {
+      "id": 5,
+      "message": "Hello! Can you come for interview tomorrow?",
+      "is_read": 0,
+      "created_at": "2026-05-17 11:33:13.092819",
+      "receiver_id": 20,
+      "sender_id": 12
+    },
+    {
+      "id": 6,
+      "message": "Yes sir, I will be there at 10 AM!",
+      "is_read": 1,
+      "created_at": "2026-05-17 11:34:28.244720",
+      "receiver_id": 12,
+      "sender_id": 20
+    },
+    {
+      "id": 7,
+      "message": "ok thanks",
+      "is_read": 0,
+      "created_at": "2026-05-17 14:14:31.844701",
+      "receiver_id": 20,
+      "sender_id": 12
+    }
+  ],
+  "core_savedjob": [
+    {
+      "id": 1,
+      "saved_at": "2026-05-05 06:40:50.458007",
+      "job_id": 17,
+      "user_id": 1
+    },
+    {
+      "id": 8,
+      "saved_at": "2026-05-06 05:28:31.177184",
+      "job_id": 16,
+      "user_id": 1
+    },
+    {
+      "id": 11,
+      "saved_at": "2026-05-06 07:32:24.329981",
+      "job_id": 19,
+      "user_id": 1
+    },
+    {
+      "id": 12,
+      "saved_at": "2026-05-06 07:32:26.856788",
+      "job_id": 18,
+      "user_id": 1
+    },
+    {
+      "id": 29,
+      "saved_at": "2026-05-18 12:03:41.909109",
+      "job_id": 20,
+      "user_id": 19
+    },
+    {
+      "id": 31,
+      "saved_at": "2026-05-18 12:39:43.439464",
+      "job_id": 15,
+      "user_id": 19
+    },
+    {
+      "id": 33,
+      "saved_at": "2026-05-19 05:27:53.964186",
+      "job_id": 25,
+      "user_id": 19
+    },
+    {
+      "id": 34,
+      "saved_at": "2026-05-19 05:50:28.463731",
+      "job_id": 19,
+      "user_id": 19
+    },
+    {
+      "id": 38,
+      "saved_at": "2026-05-26 05:31:35.890963",
+      "job_id": 27,
+      "user_id": 19
+    },
+    {
+      "id": 48,
+      "saved_at": "2026-05-28 09:34:47.351873",
+      "job_id": 28,
+      "user_id": 24
+    }
+  ],
+  "core_userprofile": [
+    {
+      "id": 1,
+      "full_name": "uday",
+      "mobile_number": "91+9100756310",
+      "work_status": "experienced",
+      "user_id": 2,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-07 03:45:49.629617"
+    },
+    {
+      "id": 2,
+      "full_name": "sai",
+      "mobile_number": "91+9988776655",
+      "work_status": "fresher",
+      "user_id": 3,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-07 04:02:01.638133"
+    },
+    {
+      "id": 3,
+      "full_name": "uday",
+      "mobile_number": "91+8899776655",
+      "work_status": "experienced",
+      "user_id": 4,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-07 11:51:36.823133"
+    },
+    {
+      "id": 4,
+      "full_name": "kiran",
+      "mobile_number": "8877996644",
+      "work_status": "fresher",
+      "user_id": 5,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-07 12:15:10.451695"
+    },
+    {
+      "id": 5,
+      "full_name": "kiran12",
+      "mobile_number": "7766554489",
+      "work_status": "fresher",
+      "user_id": 6,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-07 12:18:00.225853"
+    },
+    {
+      "id": 6,
+      "full_name": "lion",
+      "mobile_number": "9955887766",
+      "work_status": "fresher",
+      "user_id": 7,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-07 12:20:08.212188"
+    },
+    {
+      "id": 7,
+      "full_name": "uday",
+      "mobile_number": "9100756310",
+      "work_status": "fresher",
+      "user_id": 8,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-08 11:15:00.227660"
+    },
+    {
+      "id": 8,
+      "full_name": "kiran",
+      "mobile_number": "9944558877",
+      "work_status": "fresher",
+      "user_id": 9,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-08 11:16:33.097691"
+    },
+    {
+      "id": 9,
+      "full_name": "uday",
+      "mobile_number": "8899442124",
+      "work_status": "fresher",
+      "user_id": 10,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-04-08 11:17:51.985892"
+    },
+    {
+      "id": 10,
+      "full_name": "Tiger",
+      "mobile_number": "9876543210",
+      "work_status": null,
+      "user_id": 1,
+      "company": "HCL Tech",
+      "role": "employer",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 04:17:00.195083"
+    },
+    {
+      "id": 11,
+      "full_name": "rayudu",
+      "mobile_number": "9988776655",
+      "work_status": null,
+      "user_id": 11,
+      "company": "capgemini",
+      "role": "employer",
+      "email_verified": 1,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 09:30:49.807568"
+    },
+    {
+      "id": 12,
+      "full_name": "liger",
+      "mobile_number": "9786549310",
+      "work_status": null,
+      "user_id": 12,
+      "company": "HCL Tech",
+      "role": "employer",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 12:21:39.910684"
+    },
+    {
+      "id": 13,
+      "full_name": "sahithi",
+      "mobile_number": "9874567869",
+      "work_status": null,
+      "user_id": 13,
+      "company": "career-x",
+      "role": "employer",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 12:58:42.063969"
+    },
+    {
+      "id": 14,
+      "full_name": "kumar",
+      "mobile_number": "9889776879",
+      "work_status": null,
+      "user_id": 14,
+      "company": "NextWave",
+      "role": "employer",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 13:02:58.344089"
+    },
+    {
+      "id": 15,
+      "full_name": "akhil",
+      "mobile_number": "7997934953",
+      "work_status": null,
+      "user_id": 15,
+      "company": "carreer x",
+      "role": "employer",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 13:07:14.750471"
+    },
+    {
+      "id": 16,
+      "full_name": "Tharun",
+      "mobile_number": "9392447266",
+      "work_status": null,
+      "user_id": 17,
+      "company": "sandblez",
+      "role": "employer",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 13:31:01.506437"
+    },
+    {
+      "id": 17,
+      "full_name": "laxmansai",
+      "mobile_number": "9392418842",
+      "work_status": null,
+      "user_id": 16,
+      "company": "series",
+      "role": "employer",
+      "email_verified": 1,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-07 13:33:06.653512"
+    },
+    {
+      "id": 18,
+      "full_name": "ram",
+      "mobile_number": "9392418841",
+      "work_status": "fresher",
+      "user_id": 18,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-14 05:01:23.391154"
+    },
+    {
+      "id": 19,
+      "full_name": "sitha",
+      "mobile_number": "7997934952",
+      "work_status": "fresher",
+      "user_id": 19,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-14 09:02:03.499945"
+    },
+    {
+      "id": 20,
+      "full_name": "sam",
+      "mobile_number": "7671839809",
+      "work_status": "fresher",
+      "user_id": 20,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-16 10:43:11.064911"
+    },
+    {
+      "id": 21,
+      "full_name": "murali",
+      "mobile_number": "7671839819",
+      "work_status": "fresher",
+      "user_id": 21,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-19 16:37:46.284982"
+    },
+    {
+      "id": 22,
+      "full_name": "murali",
+      "mobile_number": "8833778866",
+      "work_status": "fresher",
+      "user_id": 22,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-19 16:40:22.221166"
+    },
+    {
+      "id": 23,
+      "full_name": "tiger",
+      "mobile_number": "6677889955",
+      "work_status": "fresher",
+      "user_id": 23,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-28 05:38:46.564536"
+    },
+    {
+      "id": 24,
+      "full_name": "sai",
+      "mobile_number": "7788665577",
+      "work_status": "fresher",
+      "user_id": 24,
+      "company": null,
+      "role": "candidate",
+      "email_verified": 0,
+      "location": null,
+      "skills": null,
+      "created_at": "2026-05-28 09:33:50.290314"
+    }
+  ],
+  "django_admin_log": [
+    {
+      "id": 1,
+      "object_id": "1",
+      "object_repr": "python developer - accenture",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-01 04:06:49.754212"
+    },
+    {
+      "id": 2,
+      "object_id": "2",
+      "object_repr": "react developer - HCL Tech",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-01 04:07:47.631329"
+    },
+    {
+      "id": 3,
+      "object_id": "3",
+      "object_repr": "java developer - tcs",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-01 04:08:41.873070"
+    },
+    {
+      "id": 4,
+      "object_id": "4",
+      "object_repr": "php developer - capgemini",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-01 04:09:46.132670"
+    },
+    {
+      "id": 5,
+      "object_id": "5",
+      "object_repr": "Data analyst developer - sandlbenz",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-01 04:10:59.153589"
+    },
+    {
+      "id": 6,
+      "object_id": "6",
+      "object_repr": "Job object (6)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-02 12:14:15.489704"
+    },
+    {
+      "id": 7,
+      "object_id": "7",
+      "object_repr": "Job object (7)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-02 12:14:47.300362"
+    },
+    {
+      "id": 8,
+      "object_id": "8",
+      "object_repr": "Job object (8)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-02 12:15:23.685040"
+    },
+    {
+      "id": 9,
+      "object_id": "9",
+      "object_repr": "React developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-08 04:44:15.272008"
+    },
+    {
+      "id": 10,
+      "object_id": "10",
+      "object_repr": "Mobile app developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-08 04:45:58.737929"
+    },
+    {
+      "id": 11,
+      "object_id": "11",
+      "object_repr": "junior node developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-17 04:56:21.799485"
+    },
+    {
+      "id": 12,
+      "object_id": "12",
+      "object_repr": "junior mern stack developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-17 13:09:25.504009"
+    },
+    {
+      "id": 13,
+      "object_id": "13",
+      "object_repr": "game app developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 04:09:37.514329"
+    },
+    {
+      "id": 14,
+      "object_id": "13",
+      "object_repr": "game app developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Company type\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 04:13:18.387885"
+    },
+    {
+      "id": 15,
+      "object_id": "12",
+      "object_repr": "junior mern stack developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Logo\", \"Company type\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 04:41:20.461233"
+    },
+    {
+      "id": 16,
+      "object_id": "14",
+      "object_repr": "junior react developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 05:06:33.064037"
+    },
+    {
+      "id": 17,
+      "object_id": "15",
+      "object_repr": "senior node js developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 09:08:31.289534"
+    },
+    {
+      "id": 18,
+      "object_id": "16",
+      "object_repr": "app developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 10:06:40.309473"
+    },
+    {
+      "id": 19,
+      "object_id": "17",
+      "object_repr": "Senior web developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 10:27:56.754527"
+    },
+    {
+      "id": 20,
+      "object_id": "6",
+      "object_repr": "python developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Salary\", \"Logo\", \"Company type\", \"Is featured\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 11:49:19.955270"
+    },
+    {
+      "id": 21,
+      "object_id": "6",
+      "object_repr": "Python developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Title\", \"Category\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 12:05:41.933480"
+    },
+    {
+      "id": 22,
+      "object_id": "4",
+      "object_repr": "php developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Salary\", \"Work mode\", \"Logo\", \"Category\", \"Company type\", \"Is featured\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 12:07:40.666393"
+    },
+    {
+      "id": 23,
+      "object_id": "15",
+      "object_repr": "senior node js developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Salary\", \"Category\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 12:41:40.016112"
+    },
+    {
+      "id": 24,
+      "object_id": "15",
+      "object_repr": "senior node js developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Logo\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-20 12:43:23.086220"
+    },
+    {
+      "id": 25,
+      "object_id": "18",
+      "object_repr": "Specialist Software Engineer - JAVA FSD",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-21 04:12:10.505361"
+    },
+    {
+      "id": 26,
+      "object_id": "1",
+      "object_repr": "kiran1 - 2",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 9,
+      "user_id": 1,
+      "action_time": "2026-04-21 04:38:19.505141"
+    },
+    {
+      "id": 27,
+      "object_id": "19",
+      "object_repr": "Data Analyst",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-04-21 06:36:59.410076"
+    },
+    {
+      "id": 28,
+      "object_id": "19",
+      "object_repr": "Data Analyst",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Education\", \"Rating\", \"Review count\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-06 05:56:38.873291"
+    },
+    {
+      "id": 29,
+      "object_id": "17",
+      "object_repr": "Senior web developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Education\", \"Company type\", \"Rating\", \"Review count\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-06 07:33:51.345768"
+    },
+    {
+      "id": 30,
+      "object_id": "10",
+      "object_repr": "Tiger",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 8,
+      "user_id": 1,
+      "action_time": "2026-05-07 04:17:00.419984"
+    },
+    {
+      "id": 31,
+      "object_id": "11",
+      "object_repr": "rayudu",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 8,
+      "user_id": 1,
+      "action_time": "2026-05-07 09:30:49.918580"
+    },
+    {
+      "id": 32,
+      "object_id": "16",
+      "object_repr": "laxman",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 4,
+      "user_id": 1,
+      "action_time": "2026-05-07 13:19:50.002593"
+    },
+    {
+      "id": 33,
+      "object_id": "17",
+      "object_repr": "laxmansai",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 8,
+      "user_id": 1,
+      "action_time": "2026-05-07 13:33:06.691604"
+    },
+    {
+      "id": 34,
+      "object_id": "20",
+      "object_repr": "junior PHP developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-12 07:14:19.914400"
+    },
+    {
+      "id": 35,
+      "object_id": "24",
+      "object_repr": "mongoDB developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-13 05:32:21.352985"
+    },
+    {
+      "id": 36,
+      "object_id": "25",
+      "object_repr": "three js",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-18 12:11:56.854987"
+    },
+    {
+      "id": 37,
+      "object_id": "26",
+      "object_repr": "AI Powered Job Portal System",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-20 10:19:01.225901"
+    },
+    {
+      "id": 38,
+      "object_id": "27",
+      "object_repr": "senior senior java developer",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:16:33.478077"
+    },
+    {
+      "id": 39,
+      "object_id": "19",
+      "object_repr": "Data Analyst",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.490858"
+    },
+    {
+      "id": 40,
+      "object_id": "18",
+      "object_repr": "Specialist Software Engineer - JAVA FSD",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.506090"
+    },
+    {
+      "id": 41,
+      "object_id": "17",
+      "object_repr": "Senior web developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.507806"
+    },
+    {
+      "id": 42,
+      "object_id": "16",
+      "object_repr": "app developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.509552"
+    },
+    {
+      "id": 43,
+      "object_id": "15",
+      "object_repr": "senior node js developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.511419"
+    },
+    {
+      "id": 44,
+      "object_id": "14",
+      "object_repr": "junior react developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.513149"
+    },
+    {
+      "id": 45,
+      "object_id": "13",
+      "object_repr": "game app developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.514772"
+    },
+    {
+      "id": 46,
+      "object_id": "12",
+      "object_repr": "junior mern stack developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:50:32.516867"
+    },
+    {
+      "id": 47,
+      "object_id": "19",
+      "object_repr": "Data Analyst",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:53:26.003805"
+    },
+    {
+      "id": 48,
+      "object_id": "18",
+      "object_repr": "Specialist Software Engineer - JAVA FSD",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:54:05.553417"
+    },
+    {
+      "id": 49,
+      "object_id": "17",
+      "object_repr": "Senior web developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Job type\", \"Min salary\", \"Max salary\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:54:46.160870"
+    },
+    {
+      "id": 50,
+      "object_id": "16",
+      "object_repr": "app developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Company type\", \"Category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:55:27.003043"
+    },
+    {
+      "id": 51,
+      "object_id": "15",
+      "object_repr": "senior node js developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Company type\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:56:38.651663"
+    },
+    {
+      "id": 52,
+      "object_id": "14",
+      "object_repr": "junior react developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Work mode\", \"Job type\", \"Min salary\", \"Max salary\", \"Company type\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:57:45.026789"
+    },
+    {
+      "id": 53,
+      "object_id": "13",
+      "object_repr": "game app developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Company type\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:58:28.077903"
+    },
+    {
+      "id": 54,
+      "object_id": "12",
+      "object_repr": "junior mern stack developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Company type\", \"Industry\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 05:59:23.393785"
+    },
+    {
+      "id": 55,
+      "object_id": "11",
+      "object_repr": "junior node developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Category\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:00:11.810862"
+    },
+    {
+      "id": 56,
+      "object_id": "11",
+      "object_repr": "junior node developer",
+      "action_flag": 2,
+      "change_message": "[]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:00:27.554596"
+    },
+    {
+      "id": 57,
+      "object_id": "11",
+      "object_repr": "junior node developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:00:43.073785"
+    },
+    {
+      "id": 58,
+      "object_id": "10",
+      "object_repr": "Mobile app developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:00:43.077418"
+    },
+    {
+      "id": 59,
+      "object_id": "9",
+      "object_repr": "React developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:00:43.078716"
+    },
+    {
+      "id": 60,
+      "object_id": "10",
+      "object_repr": "Mobile app developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Work mode\", \"Job type\", \"Min salary\", \"Max salary\", \"Industry\", \"Category\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:01:58.434464"
+    },
+    {
+      "id": 61,
+      "object_id": "8",
+      "object_repr": "react developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.050546"
+    },
+    {
+      "id": 62,
+      "object_id": "7",
+      "object_repr": "java developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.052364"
+    },
+    {
+      "id": 63,
+      "object_id": "6",
+      "object_repr": "Python developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.055417"
+    },
+    {
+      "id": 64,
+      "object_id": "5",
+      "object_repr": "Data analyst developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.056798"
+    },
+    {
+      "id": 65,
+      "object_id": "4",
+      "object_repr": "php developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.058010"
+    },
+    {
+      "id": 66,
+      "object_id": "3",
+      "object_repr": "java developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.059323"
+    },
+    {
+      "id": 67,
+      "object_id": "2",
+      "object_repr": "react developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.060741"
+    },
+    {
+      "id": 68,
+      "object_id": "1",
+      "object_repr": "python developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Salary disclosed\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:02:23.062133"
+    },
+    {
+      "id": 69,
+      "object_id": "1",
+      "object_repr": "python developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:03:19.231797"
+    },
+    {
+      "id": 70,
+      "object_id": "2",
+      "object_repr": "react developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Job type\", \"Min salary\", \"Max salary\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:04:35.256779"
+    },
+    {
+      "id": 71,
+      "object_id": "3",
+      "object_repr": "java developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Work mode\", \"Job type\", \"Min salary\", \"Max salary\", \"Category\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:05:23.219882"
+    },
+    {
+      "id": 72,
+      "object_id": "4",
+      "object_repr": "php developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Job type\", \"Min salary\", \"Max salary\", \"Company type\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:06:13.770595"
+    },
+    {
+      "id": 73,
+      "object_id": "5",
+      "object_repr": "Data analyst developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Work mode\", \"Job type\", \"Min salary\", \"Max salary\", \"Category\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:09:01.145514"
+    },
+    {
+      "id": 74,
+      "object_id": "6",
+      "object_repr": "Python developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Work mode\", \"Job type\", \"Min salary\", \"Max salary\", \"Company type\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:09:40.321177"
+    },
+    {
+      "id": 75,
+      "object_id": "9",
+      "object_repr": "React developer",
+      "action_flag": 3,
+      "change_message": "",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:10:16.278741"
+    },
+    {
+      "id": 76,
+      "object_id": "7",
+      "object_repr": "java developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Job type\", \"Min salary\", \"Max salary\", \"Category\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:11:02.948930"
+    },
+    {
+      "id": 77,
+      "object_id": "8",
+      "object_repr": "react developer",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Experience\", \"Work mode\", \"Job type\", \"Min salary\", \"Max salary\", \"Category\", \"Role category\", \"Education\"]}}]",
+      "content_type_id": 7,
+      "user_id": 1,
+      "action_time": "2026-05-23 06:11:54.229189"
+    }
+  ],
+  "django_content_type": [
+    {
+      "id": 1,
+      "app_label": "admin",
+      "model": "logentry"
+    },
+    {
+      "id": 2,
+      "app_label": "auth",
+      "model": "permission"
+    },
+    {
+      "id": 3,
+      "app_label": "auth",
+      "model": "group"
+    },
+    {
+      "id": 4,
+      "app_label": "auth",
+      "model": "user"
+    },
+    {
+      "id": 5,
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    },
+    {
+      "id": 6,
+      "app_label": "sessions",
+      "model": "session"
+    },
+    {
+      "id": 7,
+      "app_label": "core",
+      "model": "job"
+    },
+    {
+      "id": 8,
+      "app_label": "core",
+      "model": "userprofile"
+    },
+    {
+      "id": 9,
+      "app_label": "core",
+      "model": "companyrating"
+    },
+    {
+      "id": 10,
+      "app_label": "core",
+      "model": "savedjob"
+    },
+    {
+      "id": 11,
+      "app_label": "core",
+      "model": "applyjob"
+    },
+    {
+      "id": 12,
+      "app_label": "core",
+      "model": "emailverification"
+    },
+    {
+      "id": 13,
+      "app_label": "core",
+      "model": "application"
+    },
+    {
+      "id": 14,
+      "app_label": "core",
+      "model": "jobapplication"
+    },
+    {
+      "id": 15,
+      "app_label": "core",
+      "model": "interview"
+    },
+    {
+      "id": 16,
+      "app_label": "core",
+      "model": "message"
+    },
+    {
+      "id": 17,
+      "app_label": "core",
+      "model": "companyprofile"
+    },
+    {
+      "id": 18,
+      "app_label": "core",
+      "model": "subscription"
+    },
+    {
+      "id": 19,
+      "app_label": "core",
+      "model": "employersettings"
+    },
+    {
+      "id": 20,
+      "app_label": "core",
+      "model": "interviewquestion"
+    }
+  ],
+  "django_migrations": [
+    {
+      "id": 1,
+      "app": "contenttypes",
+      "name": "0001_initial",
+      "applied": "2026-04-01 04:02:43.426004"
+    },
+    {
+      "id": 2,
+      "app": "auth",
+      "name": "0001_initial",
+      "applied": "2026-04-01 04:02:43.765790"
+    },
+    {
+      "id": 3,
+      "app": "admin",
+      "name": "0001_initial",
+      "applied": "2026-04-01 04:02:44.000756"
+    },
+    {
+      "id": 4,
+      "app": "admin",
+      "name": "0002_logentry_remove_auto_add",
+      "applied": "2026-04-01 04:02:44.238267"
+    },
+    {
+      "id": 5,
+      "app": "admin",
+      "name": "0003_logentry_add_action_flag_choices",
+      "applied": "2026-04-01 04:02:44.383524"
+    },
+    {
+      "id": 6,
+      "app": "contenttypes",
+      "name": "0002_remove_content_type_name",
+      "applied": "2026-04-01 04:02:44.549855"
+    },
+    {
+      "id": 7,
+      "app": "auth",
+      "name": "0002_alter_permission_name_max_length",
+      "applied": "2026-04-01 04:02:44.746569"
+    },
+    {
+      "id": 8,
+      "app": "auth",
+      "name": "0003_alter_user_email_max_length",
+      "applied": "2026-04-01 04:02:44.972912"
+    },
+    {
+      "id": 9,
+      "app": "auth",
+      "name": "0004_alter_user_username_opts",
+      "applied": "2026-04-01 04:02:45.137946"
+    },
+    {
+      "id": 10,
+      "app": "auth",
+      "name": "0005_alter_user_last_login_null",
+      "applied": "2026-04-01 04:02:45.257950"
+    },
+    {
+      "id": 11,
+      "app": "auth",
+      "name": "0006_require_contenttypes_0002",
+      "applied": "2026-04-01 04:02:45.375220"
+    },
+    {
+      "id": 12,
+      "app": "auth",
+      "name": "0007_alter_validators_add_error_messages",
+      "applied": "2026-04-01 04:02:45.495907"
+    },
+    {
+      "id": 13,
+      "app": "auth",
+      "name": "0008_alter_user_username_max_length",
+      "applied": "2026-04-01 04:02:45.596985"
+    },
+    {
+      "id": 14,
+      "app": "auth",
+      "name": "0009_alter_user_last_name_max_length",
+      "applied": "2026-04-01 04:02:45.793183"
+    },
+    {
+      "id": 15,
+      "app": "auth",
+      "name": "0010_alter_group_name_max_length",
+      "applied": "2026-04-01 04:02:46.063519"
+    },
+    {
+      "id": 16,
+      "app": "auth",
+      "name": "0011_update_proxy_permissions",
+      "applied": "2026-04-01 04:02:46.221232"
+    },
+    {
+      "id": 17,
+      "app": "auth",
+      "name": "0012_alter_user_first_name_max_length",
+      "applied": "2026-04-01 04:02:46.351204"
+    },
+    {
+      "id": 18,
+      "app": "core",
+      "name": "0001_initial",
+      "applied": "2026-04-01 04:02:46.494626"
+    },
+    {
+      "id": 19,
+      "app": "sessions",
+      "name": "0001_initial",
+      "applied": "2026-04-01 04:02:46.765028"
+    },
+    {
+      "id": 20,
+      "app": "core",
+      "name": "0002_job_job_type_alter_job_experience_alter_job_skills",
+      "applied": "2026-04-02 12:11:51.035630"
+    },
+    {
+      "id": 21,
+      "app": "core",
+      "name": "0003_userprofile",
+      "applied": "2026-04-06 06:32:42.065356"
+    },
+    {
+      "id": 22,
+      "app": "core",
+      "name": "0004_userprofile_created_at_alter_job_job_type_and_more",
+      "applied": "2026-04-06 11:49:48.577678"
+    },
+    {
+      "id": 23,
+      "app": "core",
+      "name": "0005_remove_job_job_type_job_conditions_job_logo_and_more",
+      "applied": "2026-04-08 04:38:02.414394"
+    },
+    {
+      "id": 24,
+      "app": "core",
+      "name": "0006_job_category",
+      "applied": "2026-04-08 11:06:06.242757"
+    },
+    {
+      "id": 25,
+      "app": "core",
+      "name": "0007_job_company_type",
+      "applied": "2026-04-09 03:23:58.377183"
+    },
+    {
+      "id": 26,
+      "app": "core",
+      "name": "0008_job_s_sponsored",
+      "applied": "2026-04-11 05:08:29.476991"
+    },
+    {
+      "id": 27,
+      "app": "core",
+      "name": "0009_rename_s_sponsored_job_is_sponsored",
+      "applied": "2026-04-11 05:16:36.964747"
+    },
+    {
+      "id": 28,
+      "app": "core",
+      "name": "0010_job_is_featured",
+      "applied": "2026-04-11 05:28:30.291267"
+    },
+    {
+      "id": 29,
+      "app": "core",
+      "name": "0011_job_created_at",
+      "applied": "2026-04-20 03:40:36.064242"
+    },
+    {
+      "id": 30,
+      "app": "core",
+      "name": "0012_remove_job_posted",
+      "applied": "2026-04-20 04:07:01.232703"
+    },
+    {
+      "id": 31,
+      "app": "core",
+      "name": "0013_alter_job_work_mode",
+      "applied": "2026-04-20 06:35:48.159493"
+    },
+    {
+      "id": 32,
+      "app": "core",
+      "name": "0014_alter_job_category_alter_job_logo",
+      "applied": "2026-04-20 12:03:26.731828"
+    },
+    {
+      "id": 33,
+      "app": "core",
+      "name": "0015_alter_job_company_type",
+      "applied": "2026-04-21 03:53:19.627704"
+    },
+    {
+      "id": 34,
+      "app": "core",
+      "name": "0016_companyrating",
+      "applied": "2026-04-21 04:27:59.052199"
+    },
+    {
+      "id": 35,
+      "app": "core",
+      "name": "0017_alter_companyrating_unique_together",
+      "applied": "2026-04-21 05:26:23.263339"
+    },
+    {
+      "id": 36,
+      "app": "core",
+      "name": "0018_delete_companyrating",
+      "applied": "2026-04-21 06:22:56.536778"
+    },
+    {
+      "id": 37,
+      "app": "core",
+      "name": "0019_job_role_category",
+      "applied": "2026-04-23 11:37:41.450800"
+    },
+    {
+      "id": 38,
+      "app": "core",
+      "name": "0020_job_duration",
+      "applied": "2026-04-24 08:28:48.359433"
+    },
+    {
+      "id": 39,
+      "app": "core",
+      "name": "0021_job_education",
+      "applied": "2026-04-24 08:54:34.597908"
+    },
+    {
+      "id": 40,
+      "app": "core",
+      "name": "0022_alter_job_education",
+      "applied": "2026-04-24 09:00:02.347096"
+    },
+    {
+      "id": 41,
+      "app": "core",
+      "name": "0023_job_posted_by",
+      "applied": "2026-04-24 09:14:30.048843"
+    },
+    {
+      "id": 42,
+      "app": "core",
+      "name": "0024_alter_job_posted_by",
+      "applied": "2026-04-24 09:29:42.667000"
+    },
+    {
+      "id": 43,
+      "app": "core",
+      "name": "0025_job_industry",
+      "applied": "2026-04-24 10:19:23.884584"
+    },
+    {
+      "id": 44,
+      "app": "core",
+      "name": "0026_job_posted_date",
+      "applied": "2026-04-24 11:08:05.113700"
+    },
+    {
+      "id": 45,
+      "app": "core",
+      "name": "0027_remove_job_posted_date",
+      "applied": "2026-04-24 11:13:07.229633"
+    },
+    {
+      "id": 46,
+      "app": "core",
+      "name": "0028_remove_job_salary_job_max_salary_job_min_salary",
+      "applied": "2026-05-05 05:07:47.923286"
+    },
+    {
+      "id": 47,
+      "app": "core",
+      "name": "0029_savedjob",
+      "applied": "2026-05-05 06:01:26.936517"
+    },
+    {
+      "id": 48,
+      "app": "core",
+      "name": "0030_job_rating_job_review_count",
+      "applied": "2026-05-06 05:53:15.501580"
+    },
+    {
+      "id": 49,
+      "app": "core",
+      "name": "0031_applyjob",
+      "applied": "2026-05-06 12:22:00.592423"
+    },
+    {
+      "id": 50,
+      "app": "core",
+      "name": "0032_alter_applyjob_status",
+      "applied": "2026-05-06 13:27:49.508559"
+    },
+    {
+      "id": 51,
+      "app": "core",
+      "name": "0033_userprofile_company_name_userprofile_role_and_more",
+      "applied": "2026-05-07 03:16:36.359668"
+    },
+    {
+      "id": 52,
+      "app": "core",
+      "name": "0034_userprofile_email_verified_emailverification",
+      "applied": "2026-05-07 09:26:31.250310"
+    },
+    {
+      "id": 53,
+      "app": "core",
+      "name": "0035_job_employer_job_views_application",
+      "applied": "2026-05-08 04:21:33.392973"
+    },
+    {
+      "id": 54,
+      "app": "core",
+      "name": "0036_remove_job_views",
+      "applied": "2026-05-08 06:05:31.496899"
+    },
+    {
+      "id": 55,
+      "app": "core",
+      "name": "0037_job_views",
+      "applied": "2026-05-08 06:06:26.051299"
+    },
+    {
+      "id": 56,
+      "app": "core",
+      "name": "0038_jobapplication",
+      "applied": "2026-05-08 12:11:29.619650"
+    },
+    {
+      "id": 57,
+      "app": "core",
+      "name": "0039_interview",
+      "applied": "2026-05-08 13:06:51.828236"
+    },
+    {
+      "id": 58,
+      "app": "core",
+      "name": "0040_message",
+      "applied": "2026-05-08 13:26:31.711341"
+    },
+    {
+      "id": 59,
+      "app": "core",
+      "name": "0041_companyprofile",
+      "applied": "2026-05-08 15:13:54.325641"
+    },
+    {
+      "id": 60,
+      "app": "core",
+      "name": "0042_alter_companyprofile_founded_year",
+      "applied": "2026-05-08 16:36:12.574539"
+    },
+    {
+      "id": 61,
+      "app": "core",
+      "name": "0043_subscription",
+      "applied": "2026-05-08 16:47:30.415215"
+    },
+    {
+      "id": 62,
+      "app": "core",
+      "name": "0044_employersettings",
+      "applied": "2026-05-08 17:07:04.158184"
+    },
+    {
+      "id": 63,
+      "app": "core",
+      "name": "0045_application_resume",
+      "applied": "2026-05-09 04:07:19.944153"
+    },
+    {
+      "id": 64,
+      "app": "core",
+      "name": "0046_alter_application_status",
+      "applied": "2026-05-09 05:28:37.857168"
+    },
+    {
+      "id": 65,
+      "app": "core",
+      "name": "0047_job_description",
+      "applied": "2026-05-12 06:08:59.986169"
+    },
+    {
+      "id": 66,
+      "app": "core",
+      "name": "0048_remove_application_applied_at",
+      "applied": "2026-05-12 11:37:33.369937"
+    },
+    {
+      "id": 67,
+      "app": "core",
+      "name": "0049_application_applied_at",
+      "applied": "2026-05-12 12:04:17.625733"
+    },
+    {
+      "id": 68,
+      "app": "core",
+      "name": "0050_application_experience",
+      "applied": "2026-05-13 03:25:20.133937"
+    },
+    {
+      "id": 69,
+      "app": "core",
+      "name": "0051_application_location",
+      "applied": "2026-05-13 03:47:20.983982"
+    },
+    {
+      "id": 70,
+      "app": "core",
+      "name": "0052_application_skills",
+      "applied": "2026-05-13 04:06:02.587258"
+    },
+    {
+      "id": 71,
+      "app": "core",
+      "name": "0053_application_interview_date_and_more",
+      "applied": "2026-05-13 05:53:35.297979"
+    },
+    {
+      "id": 72,
+      "app": "core",
+      "name": "0054_alter_application_status",
+      "applied": "2026-05-13 06:12:20.067962"
+    },
+    {
+      "id": 73,
+      "app": "core",
+      "name": "0055_alter_application_status",
+      "applied": "2026-05-13 06:25:51.196007"
+    },
+    {
+      "id": 74,
+      "app": "core",
+      "name": "0056_job_is_active",
+      "applied": "2026-05-14 02:28:46.764095"
+    },
+    {
+      "id": 75,
+      "app": "core",
+      "name": "0057_job_status",
+      "applied": "2026-05-14 03:17:55.499812"
+    },
+    {
+      "id": 76,
+      "app": "core",
+      "name": "0058_job_job_type",
+      "applied": "2026-05-14 03:57:13.857047"
+    },
+    {
+      "id": 77,
+      "app": "core",
+      "name": "0059_application_phone_number_job_company_name",
+      "applied": "2026-05-14 04:31:35.008012"
+    },
+    {
+      "id": 78,
+      "app": "core",
+      "name": "0060_alter_application_status_delete_jobapplication",
+      "applied": "2026-05-14 06:44:58.866762"
+    },
+    {
+      "id": 79,
+      "app": "core",
+      "name": "0061_application_degree",
+      "applied": "2026-05-15 05:28:55.804275"
+    },
+    {
+      "id": 80,
+      "app": "core",
+      "name": "0062_delete_applyjob",
+      "applied": "2026-05-15 06:06:53.140660"
+    },
+    {
+      "id": 81,
+      "app": "core",
+      "name": "0063_remove_application_degree_applyjob",
+      "applied": "2026-05-15 06:15:04.589390"
+    },
+    {
+      "id": 82,
+      "app": "core",
+      "name": "0064_userprofile_location_userprofile_skills",
+      "applied": "2026-05-15 11:47:40.801578"
+    },
+    {
+      "id": 83,
+      "app": "core",
+      "name": "0065_companyprofile_benefits_companyprofile_city_and_more",
+      "applied": "2026-05-17 11:55:28.060895"
+    },
+    {
+      "id": 84,
+      "app": "core",
+      "name": "0066_delete_subscription",
+      "applied": "2026-05-17 12:21:57.312053"
+    },
+    {
+      "id": 85,
+      "app": "core",
+      "name": "0067_alter_job_category",
+      "applied": "2026-05-18 05:15:06.022336"
+    },
+    {
+      "id": 86,
+      "app": "core",
+      "name": "0068_alter_job_category",
+      "applied": "2026-05-18 05:29:23.454652"
+    },
+    {
+      "id": 87,
+      "app": "core",
+      "name": "0069_job_department_job_nature_of_business",
+      "applied": "2026-05-20 10:12:07.556480"
+    },
+    {
+      "id": 88,
+      "app": "core",
+      "name": "0070_interviewquestion",
+      "applied": "2026-05-20 11:08:20.037115"
+    },
+    {
+      "id": 89,
+      "app": "core",
+      "name": "0071_delete_interviewquestion",
+      "applied": "2026-05-20 11:13:37.216941"
+    },
+    {
+      "id": 90,
+      "app": "core",
+      "name": "0072_job_salary_disclosed_alter_job_max_salary_and_more",
+      "applied": "2026-05-23 04:09:49.987533"
+    },
+    {
+      "id": 91,
+      "app": "core",
+      "name": "0073_remove_job_department_remove_job_job_type_and_more",
+      "applied": "2026-05-23 04:54:20.238823"
+    },
+    {
+      "id": 92,
+      "app": "core",
+      "name": "0074_job_department_job_job_type_job_nature_of_business_and_more",
+      "applied": "2026-05-23 04:56:18.573953"
+    },
+    {
+      "id": 93,
+      "app": "core",
+      "name": "0001_initial_squashed_0074_job_department_job_job_type_job_nature_of_business_and_more",
+      "applied": "2026-05-29 05:56:14.236722"
+    },
+    {
+      "id": 94,
+      "app": "core",
+      "name": "0075_alter_application_applied_at_alter_job_created_at_and_more",
+      "applied": "2026-05-29 05:57:10.205632"
+    },
+    {
+      "id": 95,
+      "app": "core",
+      "name": "0076_rename_company_name_userprofile_company_and_more",
+      "applied": "2026-05-29 11:17:03.443335"
+    },
+    {
+      "id": 96,
+      "app": "core",
+      "name": "0077_alter_application_unique_together",
+      "applied": "2026-05-29 11:25:37.106023"
+    },
+    {
+      "id": 97,
+      "app": "core",
+      "name": "0078_alter_job_location",
+      "applied": "2026-05-29 11:52:29.382882"
+    }
+  ],
+  "django_session": [
+    {
+      "session_key": "1l45yg4y213i1bkuojoggmfcv7egml4t",
+      "session_data": ".eJxVjEEOwiAQAP-yZ0Ogpey2R---gSwsSNXQpLQn499Nkx70OjOZN3jet-L3llY_C0xg4PLLAsdnqoeQB9f7ouJSt3UO6kjUaZu6LZJe17P9GxRuBSYgsVayFisBKeTOscGeXIhsCCkIO0aNXRoZpc8jssEYUx50InLaDvD5AvrdOEQ:1wAgAD:9HRKkMBFIfrikZxHivPvgZOzNqIQWhNkc7f4cBq5MlE",
+      "expire_date": "2026-04-23 03:34:41.437699"
+    },
+    {
+      "session_key": "29i2j573jxif7y9ljv6y383gebjhh45v",
+      "session_data": ".eJxVjMEOwiAQRP-FsyFLReh69N5vILsLSNXQpLQn478bkh40mdO8N_NWgfathL2lNcxRXZUZ1Om3ZJJnqp3EB9X7omWp2zqz7oo-aNPTEtPrdrh_B4Va6WtviUdGhAhesqToEIGAnQBnK04yWge-xxHa5OWMFyPizABpzOrzBR5DOEM:1wOCRK:kTKzRq_RduP1oIwE_GKwS7mGonuQ-2zDTLnjRlHlayY",
+      "expire_date": "2026-05-30 10:40:14.946811"
+    },
+    {
+      "session_key": "36y5vwxbgvsu071ptyvsa2svzm9deq4i",
+      "session_data": ".eJxVjLsKwzAMAP9FczHxQ0mUsXu_IViWqNMWG-JkKv33EsjQrnfHvWGO-5bnvek6LwITWAeXX8gxPbUcRh6x3KtJtWzrwuZIzGmbuVXR1_Vs_wY5tgwTcOwJOyfkx2GwyhhHtYqBnCObVAIfWJCYEgp2JEiavPWdH0LvET5f-Ws3WQ:1wOCRQ:eHEqDO6sBHr8-5H5GMjHGrn9geCRy_ezDnB6HErwU-Q",
+      "expire_date": "2026-05-30 10:40:20.007435"
+    },
+    {
+      "session_key": "wcum5xry6cp4knigtw1d0xak7apem5b5",
+      "session_data": ".eJxVjEEOwiAQAP-yZ0MKdCn06N03EGAXqRpISnsy_t006UGvM5N5gw_7VvzeefULwQxSweUXxpCeXA9Dj1DvTaRWt3WJ4kjEabu4NeLX9Wz_BiX0AjPwxHpQEwdEZhmQszVZOkfJRFRZkY5ZktXO2CFqZ1NUdpRaImqTM43w-QIX3TgY:1wOCRR:TvmQHJ1fBIg2AQB8XCiO1IHgAseZo2CDKNZybVXW8zc",
+      "expire_date": "2026-05-30 10:40:21.488558"
+    },
+    {
+      "session_key": "6l85pewgrhvzpn1xzjrmnltau5zbbj0w",
+      "session_data": ".eJxVjEEOwiAQAP-yZ0OkLSzt0XvfQJaFlaqBpLQn499Nkx70OjOZN3jat-z3lla_RJhAd3D5hYH4mcph4oPKvSquZVuXoI5Enbapucb0up3t3yBTyzABuoiWRxQXDIqWQbO2wsgYGSOZQFZ6Fho0WyPS9Tb0V-NkZA7JsoPPFyiMOUE:1wOCRS:pvPlnvJmXYbIM9JZ8eN6dUIZmYUInINh9UKuqCKl1wY",
+      "expire_date": "2026-05-30 10:40:22.151704"
+    },
+    {
+      "session_key": "h8zfn7oggr4b2cov6wgl9oxpcxf6wu5u",
+      "session_data": ".eJxVjEsOwiAUAO_C2pDHRz4u3fcM5AEPqRpISrsy3t3UdKHbmcm8WMBtrWEbtIQ5swsTkp1-YcT0oLabfMd26zz1ti5z5HvCDzv41DM9r0f7N6g46vdLYIsy3mqUWiAJYbyOCrzNDopz2VmDorjk_FlGUTwSUPagIEpUwN4f4Ck3RA:1wOCRS:u-OH5p-vCULQZfVaDlMZfcuNK2v7xiWjtPsTMJGkuhQ",
+      "expire_date": "2026-05-30 10:40:22.466904"
+    },
+    {
+      "session_key": "4scx57c2kuqa8a67unuqzgvgdvnfm4b8",
+      "session_data": ".eJxVjDEOwjAMAP_iGUUNcZO6IztviJzYkAJKpaadEH9HlTrAene6N0Te1hK3pkucBEawBKdfmDg_te5GHlzvs8lzXZcpmT0xh23mOou-Lkf7NyjcCoyATojYe9XOoTI76wPqWXsRR2y7PigPKpQ4e58ZU5CbFQ1IA0nGAJ8vHQ043g:1wTEq0:itPDpt8MHQvbh-PTkkX8Wf0ynpnTA9iTXfjyvVAgC-g",
+      "expire_date": "2026-06-13 08:14:32.678598"
+    }
+  ],
+  "sqlite_sequence": [
+    {
+      "name": "django_migrations",
+      "seq": 97
+    },
+    {
+      "name": "django_admin_log",
+      "seq": 77
+    },
+    {
+      "name": "django_content_type",
+      "seq": 20
+    },
+    {
+      "name": "auth_permission",
+      "seq": 80
+    },
+    {
+      "name": "auth_group",
+      "seq": 0
+    },
+    {
+      "name": "auth_user",
+      "seq": 24
+    },
+    {
+      "name": "core_savedjob",
+      "seq": 54
+    },
+    {
+      "name": "core_employersettings",
+      "seq": 1
+    },
+    {
+      "name": "core_interview",
+      "seq": 5
+    },
+    {
+      "name": "core_message",
+      "seq": 7
+    },
+    {
+      "name": "core_companyprofile",
+      "seq": 1
+    },
+    {
+      "name": "core_application",
+      "seq": 15
+    },
+    {
+      "name": "core_userprofile",
+      "seq": 24
+    },
+    {
+      "name": "core_job",
+      "seq": 30
+    }
+  ]
+}

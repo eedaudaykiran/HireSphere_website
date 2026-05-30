@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'website_clone.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'jobportal_db',
+        'USER': 'postgres',
+        'PASSWORD': 'Uday@123eeda',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
