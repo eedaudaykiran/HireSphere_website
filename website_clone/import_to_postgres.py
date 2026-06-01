@@ -1,3 +1,4 @@
+
 import json
 import psycopg2
 from psycopg2.extras import execute_values
@@ -5,31 +6,32 @@ from psycopg2.extras import execute_values
 # ── CHANGE THESE to match your PostgreSQL settings ──
 DB_NAME     = 'jobportal_db'
 DB_USER     = 'postgres'
-DB_PASSWORD = 'Uday@123eeda'
+DB_PASSWORD = 'Uday123'
 DB_HOST     = 'localhost'
 DB_PORT     = '5432'
 # ────────────────────────────────────────────────────
  
-# SQLite stores booleans as 0/1 integers.
-# These are all the boolean columns in your models.
+# FIX 1: Corrected boolean columns to match your actual models exactly.
+# Removed wrong columns: sms_notifications, application_alerts, profile_views
+# Added missing: is_featured (core_job), dark_mode, two_factor_auth (core_employersettings)
 BOOLEAN_COLUMNS = {
-    'auth_user':            ['is_superuser', 'is_staff', 'is_active'],
-    'core_userprofile':     ['email_verified'],
-    'core_job':             ['is_active', 'is_sponsored', 'salary_disclosed'],
-    'core_application':     [],
-    'core_message':         ['is_read'],
-    'core_employersettings':['email_notifications', 'sms_notifications',
-                             'application_alerts', 'profile_views'],
-    'core_interview':       [],
-    'core_savedjob':        [],
-    'core_companyprofile':  [],
+    'auth_user':             ['is_superuser', 'is_staff', 'is_active'],
+    'core_userprofile':      ['email_verified'],
+    'core_job':              ['is_active', 'is_sponsored', 'is_featured', 'salary_disclosed'],
+    'core_application':      [],
+    'core_message':          ['is_read'],
+    'core_employersettings': ['email_notifications', 'dark_mode', 'two_factor_auth'],
+    'core_interview':        [],
+    'core_savedjob':         [],
+    'core_companyprofile':   [],
+    'core_applyjob':         [],
 }
  
 # Tables in correct FK order (parents before children)
 TABLE_ORDER = [
     'django_content_type',
     'auth_permission',
-    'auth_user',            # must come before everything that FK's to user
+    'auth_user',
     'auth_group',
     'auth_group_permissions',
     'auth_user_groups',
@@ -37,7 +39,7 @@ TABLE_ORDER = [
     'core_userprofile',
     'core_companyprofile',
     'core_employersettings',
-    'core_job',             # must come before application, savedjob
+    'core_job',
     'core_application',
     'core_applyjob',
     'core_savedjob',
@@ -47,6 +49,28 @@ TABLE_ORDER = [
     'django_admin_log',
     'django_session',
 ]
+ 
+# FIX 2: Tables that need sequence reset after import.
+# Added django_admin_log (was missing — caused original duplicate key error)
+# Added auth_group (was missing)
+# Removed django_session (has no integer id column — uses session_key text)
+SEQUENCE_TABLES = [
+    'auth_user',
+    'auth_group',
+    'auth_permission',
+    'django_content_type',
+    'django_admin_log',
+    'core_job',
+    'core_userprofile',
+    'core_application',
+    'core_applyjob',
+    'core_interview',
+    'core_message',
+    'core_savedjob',
+    'core_companyprofile',
+    'core_employersettings',
+]
+ 
  
 def fix_booleans(table, rows):
     """Convert 0/1 integers to True/False for boolean columns."""
@@ -62,8 +86,9 @@ def fix_booleans(table, rows):
         fixed.append(row)
     return fixed
  
+ 
 def fix_content_type_ids(rows, ct_id_map):
-    """Remap content_type_id values to match what's actually in PostgreSQL."""
+    """Remap content_type_id values to match what's in PostgreSQL."""
     fixed = []
     for row in rows:
         row = dict(row)
@@ -71,6 +96,7 @@ def fix_content_type_ids(rows, ct_id_map):
             row['content_type_id'] = ct_id_map[row['content_type_id']]
         fixed.append(row)
     return fixed
+ 
  
 print("=" * 50)
 print("Loading sqlite_backup.json...")
@@ -87,10 +113,9 @@ conn.autocommit = False
 cursor = conn.cursor()
 print("✅ Connected\n")
  
-# Step 1: Clear all existing data in reverse FK order to avoid conflicts
+# ── Step 1: Clear all existing data in reverse FK order ──────────────
 print("Clearing existing PostgreSQL data...")
-clear_order = list(reversed(TABLE_ORDER))
-for table in clear_order:
+for table in reversed(TABLE_ORDER):
     try:
         cursor.execute(f"TRUNCATE TABLE {table} RESTART IDENTITY CASCADE")
         conn.commit()
@@ -98,12 +123,14 @@ for table in clear_order:
         conn.rollback()
 print("✅ Cleared\n")
  
-# Step 2: Build a content_type ID map
-# PostgreSQL may have different IDs for content types than SQLite
-sqlite_cts  = {(r['app_label'], r['model']): r['id'] for r in all_data.get('django_content_type', [])}
-ct_id_map   = {}  # sqlite_id -> postgres_id (filled after inserting content types)
+# ── Step 2: Build content_type ID map ────────────────────────────────
+sqlite_cts = {
+    (r['app_label'], r['model']): r['id']
+    for r in all_data.get('django_content_type', [])
+}
+ct_id_map = {}  # sqlite_id → postgres_id
  
-# Step 3: Import each table
+# ── Step 3: Import each table ────────────────────────────────────────
 print("Importing data...\n")
 for table in TABLE_ORDER:
     rows = all_data.get(table, [])
@@ -111,10 +138,8 @@ for table in TABLE_ORDER:
         print(f"  SKIP  {table} — 0 records")
         continue
  
-    # Fix booleans
     rows = fix_booleans(table, rows)
  
-    # Fix content_type_id references (for auth_permission, django_admin_log)
     if table in ('auth_permission', 'django_admin_log'):
         rows = fix_content_type_ids(rows, ct_id_map)
  
@@ -133,8 +158,7 @@ for table in TABLE_ORDER:
         # After inserting content types, build the ID map
         if table == 'django_content_type':
             cursor.execute("SELECT id, app_label, model FROM django_content_type")
-            pg_cts = cursor.fetchall()
-            for pg_id, app_label, model in pg_cts:
+            for pg_id, app_label, model in cursor.fetchall():
                 sqlite_id = sqlite_cts.get((app_label, model))
                 if sqlite_id:
                     ct_id_map[sqlite_id] = pg_id
@@ -143,15 +167,9 @@ for table in TABLE_ORDER:
         conn.rollback()
         print(f"  ❌  {table}: FAILED — {e}")
  
-# Step 4: Fix all sequences so new records don't conflict
+# ── Step 4: Fix all sequences ─────────────────────────────────────────
 print("\nFixing sequences...")
-sequence_tables = [
-    'auth_user', 'auth_permission', 'django_content_type',
-    'core_job', 'core_userprofile', 'core_application',
-    'core_interview', 'core_message', 'core_savedjob',
-    'core_companyprofile', 'core_employersettings',
-]
-for table in sequence_tables:
+for table in SEQUENCE_TABLES:
     try:
         cursor.execute(f"""
             SELECT setval(
@@ -163,16 +181,16 @@ for table in sequence_tables:
         print(f"  ✅  {table} sequence fixed")
     except Exception as e:
         conn.rollback()
-        print(f"  ⚠️   {table} sequence skip — {e}")
+        print(f"  ⚠️   {table} sequence skipped — {e}")
  
 cursor.close()
 conn.close()
  
 print("\n" + "=" * 50)
-print("🎉 Import complete! Now verify in Django shell:")
+print("🎉 Import complete! Verify in Django shell:")
 print("   python manage.py shell")
-print("   >>> from core.models import Job, Application")
 print("   >>> from django.contrib.auth.models import User")
-print("   >>> print(User.objects.count())        # should be 24")
-print("   >>> print(Job.objects.count())         # should be 27")
-print("   >>> print(Application.objects.count()) # should be 13")
+print("   >>> from core.models import Job, Application")
+print("   >>> print(User.objects.count())")
+print("   >>> print(Job.objects.count())")
+print("   >>> print(Application.objects.count())")

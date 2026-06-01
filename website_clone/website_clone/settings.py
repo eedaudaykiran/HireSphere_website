@@ -17,6 +17,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -76,12 +77,15 @@ WSGI_APPLICATION = 'website_clone.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jobportal_db',
         'USER': 'postgres',
-        'PASSWORD': 'Uday@123eeda',
+        'PASSWORD': 'Uday123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
