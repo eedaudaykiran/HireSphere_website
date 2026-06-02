@@ -212,7 +212,10 @@
          RESULT BAR
     ═══════════════════════════════════════ -->
     <div class="rj-result-bar">
-        <span class="rj-result-count">1 – 20 of <strong>15,651 Remote Jobs</strong></span>
+        <span class="rj-result-count">
+            {{ page_obj.start_index }} – {{ page_obj.end_index }} of
+            <strong>{{ page_obj.paginator.count }} Jobs</strong>
+        </span>
         <button class="rj-sort-btn">Sort by: Relevance <i class="fa fa-chevron-down"></i></button>
     </div>
 
@@ -877,7 +880,42 @@
             </div>
 
             <!-- PAGINATION — lives inside column 2 only -->
-            <div class="rj-pagination" id="rjPagination"></div>
+            {% if page_obj.has_other_pages %}
+<div class="rj-pagination" id="rjPagination">
+
+    {% if page_obj.has_previous %}
+        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}"
+           class="rj-page-btn rj-page-prev">
+            <i class="fa fa-chevron-left"></i> Previous
+        </a>
+    {% else %}
+        <button class="rj-page-btn rj-page-prev" disabled>
+            <i class="fa fa-chevron-left"></i> Previous
+        </button>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <button class="rj-page-btn rj-page-num active">{{ num }}</button>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}"
+               class="rj-page-btn rj-page-num">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}"
+           class="rj-page-btn rj-page-next">
+            Next <i class="fa fa-chevron-right"></i>
+        </a>
+    {% else %}
+        <button class="rj-page-btn rj-page-next" disabled>
+            Next <i class="fa fa-chevron-right"></i>
+        </button>
+    {% endif %}
+
+</div>
+{% endif %}
 
         </main>
 
@@ -1041,74 +1079,7 @@
         });
     }
 
-    /* ── PAGINATION ── */
-    const ITEMS_PER_PAGE = 7;
-    let currentPage = 1;
-
-    function getAllCards()    { return Array.from(document.querySelectorAll('.rj-job-card')); }
-    function getVisibleCards(){ return getAllCards().filter(c => !c.classList.contains('rj-filter-hidden')); }
-
-    function renderPage() {
-        const cards      = getVisibleCards();
-        const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        const end   = start + ITEMS_PER_PAGE;
-
-        cards.forEach((card, i) => { card.style.display = (i >= start && i < end) ? '' : 'none'; });
-        getAllCards().filter(c => c.classList.contains('rj-filter-hidden')).forEach(c => c.style.display = 'none');
-
-        const countEl = document.querySelector('.rj-result-count');
-        if (countEl) {
-            const total = cards.length;
-            countEl.innerHTML = total === 0
-                ? `0 of <strong>0 Remote Jobs</strong>`
-                : `${start+1} – ${Math.min(end, total)} of <strong>${total} Remote Jobs</strong>`;
-        }
-
-        const noResults = document.getElementById('rjNoResults');
-        if (noResults) noResults.style.display = cards.length === 0 ? 'block' : 'none';
-
-        buildPageButtons(totalPages);
-    }
-
-    function buildPageButtons(totalPages) {
-        const pg = document.getElementById('rjPagination');
-        if (!pg) return;
-        pg.innerHTML = '';
-
-        const prev = document.createElement('button');
-        prev.className = 'rj-page-btn rj-page-prev';
-        prev.disabled  = currentPage === 1;
-        prev.innerHTML = '<i class="fa fa-chevron-left"></i> Previous';
-        prev.onclick   = () => goPage('prev');
-        pg.appendChild(prev);
-
-        for (let i = 1; i <= totalPages; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'rj-page-btn rj-page-num' + (i === currentPage ? ' active' : '');
-            btn.textContent = i;
-            btn.onclick = () => { currentPage = i; renderPage(); };
-            pg.appendChild(btn);
-        }
-
-        const next = document.createElement('button');
-        next.className = 'rj-page-btn rj-page-next';
-        next.disabled  = currentPage === totalPages;
-        next.innerHTML = 'Next <i class="fa fa-chevron-right"></i>';
-        next.onclick   = () => goPage('next');
-        pg.appendChild(next);
-    }
-
-    function goPage(dir) {
-        const cards      = getVisibleCards();
-        const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
-        if (dir === 'prev' && currentPage > 1) currentPage--;
-        else if (dir === 'next' && currentPage < totalPages) currentPage++;
-        renderPage();
-    }
-
+    
     /* ── CATEGORY CAROUSEL ── */
     (function () {
         const track = document.getElementById('catTrack');

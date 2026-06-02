@@ -288,7 +288,8 @@ def job_list_view(request, base_qs, template_name):
         **counts,
     }
     return render(request, template_name, context)
- 
+
+
  
 # ===================== BASIC VIEWS =====================
 def index(request):

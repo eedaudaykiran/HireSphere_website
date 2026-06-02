@@ -166,10 +166,8 @@ class Job(models.Model):
         elif self.max_salary:
             return f"Up to ₹{self.max_salary:,} per year"
         return "Not Disclosed"
-
-    # ── Helper methods ────────────────────────────────────────────
-    def __str__(self):
-        return self.title
+    
+    
 
     def skills_list(self):
         return [skill.strip() for skill in self.skills.split(',')] if self.skills else []

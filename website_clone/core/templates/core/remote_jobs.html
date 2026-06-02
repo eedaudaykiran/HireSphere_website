@@ -1,10 +1,10 @@
 {% load static %}
 {% load humanize %}
 {% load custom_filters %}
-
+ 
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,10 +14,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-
+ 
 <body>
 {% csrf_token %}
-
+ 
     <!-- ═══════════════════════════════════════
          NAVBAR
     ═══════════════════════════════════════ -->
@@ -32,7 +32,7 @@
             </div>
             <span class="rj-nav-logo-text">naukri</span>
         </a>
-
+ 
         <nav class="rj-nav-links">
             <!-- Jobs dropdown -->
             <div class="rj-nav-dropdown">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- Companies dropdown -->
             <div class="rj-nav-dropdown">
                 <a href="#" class="rj-nav-link rj-has-drop">Companies <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- Services dropdown -->
             <div class="rj-nav-dropdown">
                 <a href="#" class="rj-nav-link rj-has-drop">Services <i class="fa fa-chevron-down rj-drop-arrow"></i></a>
@@ -138,12 +138,12 @@
                 </div>
             </div>
         </nav>
-
+ 
         <div class="rj-nav-search">
             <input type="text" class="rj-nav-search-input" placeholder="Search jobs, skills, companies...">
             <button class="rj-nav-search-btn"><i class="fa fa-search"></i></button>
         </div>
-
+ 
         <div class="rj-nav-right">
             <a href="{% url 'login' %}" class="rj-nav-login">Login</a>
             <a href="{% url 'register' %}" class="rj-nav-register">Register</a>
@@ -161,28 +161,22 @@
                 </div>
             </div>
         </div>
-
+ 
         <!-- Hamburger for mobile -->
         <button class="rj-hamburger" id="rjHamburger" aria-label="Toggle menu">
             <i class="fa fa-bars"></i>
         </button>
     </header>
+ 
     <!-- SUCCESS MESSAGE -->
-{% if messages %}
-
-    {% for message in messages %}
-
-        <div class="alert-box {{ message.tags }}">
-            {{ message }}
-        </div>
-
-    {% endfor %}
-
-{% endif %}
-
-    <!-- Mobile Nav Drawer -->
-    
-
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-box {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+ 
     <!-- ═══════════════════════════════════════
          CATEGORY CAROUSEL STRIP
     ═══════════════════════════════════════ -->
@@ -207,33 +201,37 @@
         <button class="rj-cat-arrow rj-cat-next" id="catNext"><i class="fa fa-chevron-right"></i></button>
         <button class="rj-cat-arrow rj-cat-prev" id="catPrev" style="display:none;"><i class="fa fa-chevron-left"></i></button>
     </div>
-
+ 
     <!-- ═══════════════════════════════════════
          RESULT BAR
     ═══════════════════════════════════════ -->
     <div class="rj-result-bar">
-        <span class="rj-result-count">1 – 20 of <strong>15,651 Remote Jobs</strong></span>
+        <!-- ✅ Django-powered result count -->
+        <span class="rj-result-count">
+            {% with start=page_obj.start_index end=page_obj.end_index total=page_obj.paginator.count %}
+                {{ start }} – {{ end }} of <strong>{{ total }} Remote Jobs</strong>
+            {% endwith %}
+        </span>
         <button class="rj-sort-btn">Sort by: Relevance <i class="fa fa-chevron-down"></i></button>
     </div>
-
+ 
     <!-- ═══════════════════════════════════════
          THREE-COLUMN LAYOUT
     ═══════════════════════════════════════ -->
     <div class="rj-page-wrap">
-
+ 
         <!-- ══════════════════════
              COLUMN 1 — FILTER PANEL
         ══════════════════════ -->
         <aside class="rj-col rj-col--filter">
-
-           
+ 
             <form method="GET" id="filterForm" class="rj-filter-form">
-
+ 
                 <div class="rj-filter-head">
                     <span class="rj-filter-title">All Filters</span>
                     <span class="rj-filter-applied" id="rjAppliedCount">Applied (0)</span>
                 </div>
-
+ 
                 <!-- Work Mode -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('workmode')">
@@ -255,7 +253,7 @@
                         </label>
                     </div>
                 </div>
-
+ 
                 <!-- Experience -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('exp')">
@@ -275,7 +273,7 @@
                         </div>
                     </div>
                 </div>
-
+ 
                 <!-- Department -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('dept')">
@@ -318,7 +316,7 @@
                         <span class="rj-view-more" id="toggle-dept" onclick="toggleMore('dept')">View more</span>
                     </div>
                 </div>
-
+ 
                 <!-- Location -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('loc')">
@@ -361,7 +359,7 @@
                         <span class="rj-view-more" id="toggle-loc" onclick="toggleMore('loc')">View more</span>
                     </div>
                 </div>
-
+ 
                 <!-- Salary -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('sal')">
@@ -414,7 +412,7 @@
                         <span class="rj-view-more" id="toggle-sal" onclick="toggleMore('sal')">View more</span>
                     </div>
                 </div>
-
+ 
                 <!-- Company Type -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('ctype')">
@@ -457,7 +455,7 @@
                         <span class="rj-view-more" id="toggle-ctype" onclick="toggleMore('ctype')">View more</span>
                     </div>
                 </div>
-
+ 
                 <!-- Role Category -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('role')">
@@ -505,7 +503,7 @@
                         <span class="rj-view-more" id="toggle-role" onclick="toggleMore('role')">View more</span>
                     </div>
                 </div>
-
+ 
                 <!-- Stipend -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('stip')">
@@ -548,7 +546,7 @@
                         <span class="rj-view-more" onclick="toggleMore('stip')">View More</span>
                     </div>
                 </div>
-
+ 
                 <!-- Duration -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('dur')">
@@ -591,7 +589,7 @@
                         <span class="rj-view-more" onclick="toggleMore('dur')">View More</span>
                     </div>
                 </div>
-
+ 
                 <!-- Education -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('edu')">
@@ -634,7 +632,7 @@
                         <span class="rj-view-more" onclick="toggleMore('edu')">View More</span>
                     </div>
                 </div>
-
+ 
                 <!-- Posted By -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('posted')">
@@ -654,7 +652,7 @@
                         </label>
                     </div>
                 </div>
-
+ 
                 <!-- Industry -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('ind')">
@@ -702,7 +700,7 @@
                         <span class="rj-view-more" onclick="toggleMore('ind')">View More</span>
                     </div>
                 </div>
-
+ 
                 <!-- Top Companies -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('topc')">
@@ -750,7 +748,7 @@
                         <span class="rj-view-more" onclick="toggleMore('topc')">View More</span>
                     </div>
                 </div>
-
+ 
                 <!-- Freshness -->
                 <div class="rj-filter-section">
                     <div class="rj-sec-header" onclick="toggleSection('fresh')">
@@ -780,22 +778,21 @@
                         </label>
                     </div>
                 </div>
-
+ 
             </form>
         </aside>
-        
-
+ 
         <!-- ══════════════════════
              COLUMN 2 — JOB CARDS + PAGINATION
         ══════════════════════ -->
         <main class="rj-col rj-col--jobs">
-
+ 
             {% for job in jobs %}
             <div class="rj-job-card"
                 data-workmode="{{ job.work_mode|default:'' }}"
                 data-category="{{ job.category|default:'' }}"
                 data-salary="{{ job.salary|default:'' }}">
-
+ 
                 <!-- Logo -->
                 <div class="rj-card-logo">
                     {% if job.logo %}
@@ -804,7 +801,7 @@
                     <div class="rj-logo-placeholder">{{ job.company|default:"NA"|slice:":2"|upper }}</div>
                     {% endif %}
                 </div>
-
+ 
                 <!-- Body -->
                 <div class="rj-card-body">
                     <a href="#" class="rj-job-title-link">
@@ -825,16 +822,12 @@
                             <a href="#" class="rj-meta-link">{{ job.experience|default:"Not specified" }}</a>
                         </span>
                         <span>
-    <i class="fa-solid fa-indian-rupee-sign"></i>
-
-    <a href="#" class="rj-meta-link">
-        {{ job.salary_display }}
-    </a>
-</span>
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            <a href="#" class="rj-meta-link">{{ job.salary_display }}</a>
+                        </span>
                         <span><i class="fa-solid fa-location-dot"></i>
                             <a href="#" class="rj-meta-link">{{ job.work_mode }} - {{ job.location }}</a>
                         </span>
-                        
                     </div>
                     {% if job.conditions %}
                     <div class="rj-condition-row">
@@ -853,38 +846,67 @@
                         {% endif %}
                     </div>
                 </div>
-
+ 
                 <!-- Footer -->
                 <div class="rj-card-footer">
                     <span class="rj-posted">posted {{ job.created_at|naturaltime }}</span>
-                    <!-- REPLACED BUTTON WITH ANCHOR -->
-                     <div class="rj-card-actions">
-                    <a href="{% url 'apply_job' job.id %}" class="apply-btn">Apply Now</a>
-                    <button class="rj-save-btn" 
-                        data-job-id="{{ job.id }}"
-                        data-saved="false"
-                        onclick="toggleSave(this)">
-                        <i class="fa-regular fa-bookmark"></i>
-                    <span class="rj-save-text">Save</span>
-                    </button>
-                  </div>  
+                    <div class="rj-card-actions">
+                        <a href="{% url 'apply_job' job.id %}" class="apply-btn">Apply Now</a>
+                        <button class="rj-save-btn"
+                            data-job-id="{{ job.id }}"
+                            data-saved="false"
+                            onclick="toggleSave(this)">
+                            <i class="fa-regular fa-bookmark"></i>
+                            <span class="rj-save-text">Save</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             {% empty %}
             <p class="rj-empty-msg">No remote jobs available at the moment.</p>
             {% endfor %}
-
-            <!-- No Results -->
-            <div class="rj-no-results" id="rjNoResults">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                No jobs match your selected filters. Try removing some filters.
+ 
+            <!-- ✅ DJANGO BACKEND PAGINATION — replaces JS pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="rj-pagination" id="rjPagination">
+ 
+                {% if page_obj.has_previous %}
+                    <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}"
+                       class="rj-page-btn rj-page-prev">
+                        <i class="fa fa-chevron-left"></i> Previous
+                    </a>
+                {% else %}
+                    <button class="rj-page-btn rj-page-prev" disabled>
+                        <i class="fa fa-chevron-left"></i> Previous
+                    </button>
+                {% endif %}
+ 
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <button class="rj-page-btn rj-page-num active">{{ num }}</button>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}"
+                           class="rj-page-btn rj-page-num">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+ 
+                {% if page_obj.has_next %}
+                    <a href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}"
+                       class="rj-page-btn rj-page-next">
+                        Next <i class="fa fa-chevron-right"></i>
+                    </a>
+                {% else %}
+                    <button class="rj-page-btn rj-page-next" disabled>
+                        Next <i class="fa fa-chevron-right"></i>
+                    </button>
+                {% endif %}
+ 
             </div>
-
-            <!-- PAGINATION — lives inside column 2 only -->
-            <div class="rj-pagination" id="rjPagination"></div>
-
+            {% endif %}
+            <!-- END PAGINATION -->
+ 
         </main>
-
+ 
         <!-- ══════════════════════
              COLUMN 3 — PROMO BOX
         ══════════════════════ -->
@@ -904,17 +926,15 @@
                 </div>
             </div>
         </aside>
-
+ 
     </div><!-- end rj-page-wrap -->
-
-    
-
+ 
     <!-- TOAST -->
     <div class="rj-toast" id="rjToast">
         <i class="fa-solid fa-bookmark" id="rjToastIcon"></i>
         <span id="rjToastMsg">Saved successfully!</span>
     </div>
-
+ 
     <!-- ═══════════════════════════════════════
          FOOTER
     ═══════════════════════════════════════ -->
@@ -978,11 +998,11 @@
             <span>Made with ❤️ in India</span>
         </div>
     </footer>
-
+ 
     <script>
     /* Get CSRF token from the hidden input generated by {% csrf_token %} */
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
-
+ 
     /* ── TOAST ── */
     function showToast(message, type) {
         const toast = document.getElementById('rjToast');
@@ -1001,11 +1021,11 @@
         clearTimeout(window._toastTimer);
         window._toastTimer = setTimeout(() => toast.classList.remove('rj-toast--show'), 2500);
     }
-
+ 
     /* ── SAVE / UNSAVE (Backend API version) ── */
     function toggleSave(btn) {
         const jobId = btn.dataset.jobId;
-
+ 
         fetch(`/save-job/${jobId}/`, {
             method: 'POST',
             headers: {
@@ -1014,7 +1034,6 @@
             },
         })
         .then(response => {
-            // If user is not logged in, Django redirects to login page
             if (response.redirected) {
                 window.location.href = response.url;
                 return;
@@ -1023,10 +1042,8 @@
         })
         .then(data => {
             if (!data) return;
-
             const icon = btn.querySelector('i');
             const text = btn.querySelector('.rj-save-text');
-
             if (data.status === 'saved') {
                 btn.classList.add('rj-saved');
                 icon.className = 'fa-solid fa-bookmark';
@@ -1044,75 +1061,7 @@
             showToast('Something went wrong!', 'removed');
         });
     }
-
-    /* ── PAGINATION ── */
-    const ITEMS_PER_PAGE = 7;
-    let currentPage = 1;
-
-    function getAllCards()    { return Array.from(document.querySelectorAll('.rj-job-card')); }
-    function getVisibleCards(){ return getAllCards().filter(c => !c.classList.contains('rj-filter-hidden')); }
-
-    function renderPage() {
-        const cards      = getVisibleCards();
-        const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        const end   = start + ITEMS_PER_PAGE;
-
-        cards.forEach((card, i) => { card.style.display = (i >= start && i < end) ? '' : 'none'; });
-        getAllCards().filter(c => c.classList.contains('rj-filter-hidden')).forEach(c => c.style.display = 'none');
-
-        const countEl = document.querySelector('.rj-result-count');
-        if (countEl) {
-            const total = cards.length;
-            countEl.innerHTML = total === 0
-                ? `0 of <strong>0 Remote Jobs</strong>`
-                : `${start+1} – ${Math.min(end, total)} of <strong>${total} Remote Jobs</strong>`;
-        }
-
-        const noResults = document.getElementById('rjNoResults');
-        if (noResults) noResults.style.display = cards.length === 0 ? 'block' : 'none';
-
-        buildPageButtons(totalPages);
-    }
-
-    function buildPageButtons(totalPages) {
-        const pg = document.getElementById('rjPagination');
-        if (!pg) return;
-        pg.innerHTML = '';
-
-        const prev = document.createElement('button');
-        prev.className = 'rj-page-btn rj-page-prev';
-        prev.disabled  = currentPage === 1;
-        prev.innerHTML = '<i class="fa fa-chevron-left"></i> Previous';
-        prev.onclick   = () => goPage('prev');
-        pg.appendChild(prev);
-
-        for (let i = 1; i <= totalPages; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'rj-page-btn rj-page-num' + (i === currentPage ? ' active' : '');
-            btn.textContent = i;
-            btn.onclick = () => { currentPage = i; renderPage(); };
-            pg.appendChild(btn);
-        }
-
-        const next = document.createElement('button');
-        next.className = 'rj-page-btn rj-page-next';
-        next.disabled  = currentPage === totalPages;
-        next.innerHTML = 'Next <i class="fa fa-chevron-right"></i>';
-        next.onclick   = () => goPage('next');
-        pg.appendChild(next);
-    }
-
-    function goPage(dir) {
-        const cards      = getVisibleCards();
-        const totalPages = Math.max(1, Math.ceil(cards.length / ITEMS_PER_PAGE));
-        if (dir === 'prev' && currentPage > 1) currentPage--;
-        else if (dir === 'next' && currentPage < totalPages) currentPage++;
-        renderPage();
-    }
-
+ 
     /* ── CATEGORY CAROUSEL ── */
     (function () {
         const track = document.getElementById('catTrack');
@@ -1126,7 +1075,7 @@
             next.style.display = (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) ? 'none' : 'flex';
         });
     })();
-
+ 
     /* ── COLLAPSE FILTER SECTIONS ── */
     function toggleSection(id) {
         const body = document.getElementById('body-' + id);
@@ -1136,7 +1085,7 @@
         body.style.display = isOpen ? 'none' : 'block';
         icon.className = isOpen ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
     }
-
+ 
     /* ── VIEW MORE / LESS ── */
     function toggleMore(section) {
         const moreDiv    = document.getElementById('more-' + section);
@@ -1146,7 +1095,7 @@
         moreDiv.style.display = showing ? 'none' : 'block';
         if (toggleText) toggleText.textContent = showing ? 'View more' : 'View less';
     }
-
+ 
     /* ── EXPERIENCE SLIDER ── */
     function updateSlider(val) {
         const bubble = document.getElementById('sliderBubble');
@@ -1156,80 +1105,69 @@
         const off = 20 - (pct * 0.4);
         bubble.style.left = `calc(${pct}% + ${off}px)`;
     }
-
+ 
     /* ── MOBILE FILTER TOGGLE ── */
     document.addEventListener('DOMContentLoaded', function () {
         const filterToggle = document.getElementById('rjFilterToggle');
         const filterForm   = document.querySelector('.rj-filter-form');
         const filterIcon   = document.getElementById('rjFilterToggleIcon');
-
+ 
         if (filterToggle && filterForm) {
             filterToggle.addEventListener('click', function () {
                 const isOpen = filterForm.classList.toggle('rj-filter-open');
                 filterIcon.className = isOpen ? 'fa fa-chevron-up' : 'fa fa-chevron-down';
-                
-                
             });
         }
-
+ 
         /* Mobile hamburger nav */
         const hamburger = document.getElementById('rjHamburger');
         const mobileNav = document.getElementById('rjMobileNav');
         const overlay   = document.getElementById('rjMobileOverlay');
         const closeBtn  = document.getElementById('rjMobileClose');
-
+ 
         function openMobileNav() {
-            mobileNav.classList.add('rj-mobile-nav--open');
-            overlay.classList.add('rj-mobile-overlay--show');
+            if (mobileNav) mobileNav.classList.add('rj-mobile-nav--open');
+            if (overlay)   overlay.classList.add('rj-mobile-overlay--show');
             document.body.style.overflow = 'hidden';
         }
         function closeMobileNav() {
-            mobileNav.classList.remove('rj-mobile-nav--open');
-            overlay.classList.remove('rj-mobile-overlay--show');
+            if (mobileNav) mobileNav.classList.remove('rj-mobile-nav--open');
+            if (overlay)   overlay.classList.remove('rj-mobile-overlay--show');
             document.body.style.overflow = '';
         }
         if (hamburger) hamburger.addEventListener('click', openMobileNav);
         if (closeBtn)  closeBtn.addEventListener('click',  closeMobileNav);
         if (overlay)   overlay.addEventListener('click',   closeMobileNav);
-
+ 
         /* Experience slider */
         const slider = document.getElementById('expSlider');
         if (slider) {
             slider.addEventListener('input', e => updateSlider(e.target.value));
             updateSlider(slider.value);
         }
-
-        renderPage();
+ 
         updateAppliedCount();
+        // ✅ renderPage() removed — Django handles pagination now
     });
+ 
     /* ── FILTER APPLIED COUNT ── */
-function updateAppliedCount() {
-    // Count all checked checkboxes in the filter form
-    const form = document.getElementById('filterForm');
-    if (!form) return;
-
-    // Count checked checkboxes
-    const checkedBoxes = form.querySelectorAll('input[type="checkbox"]:checked').length;
-    
-    // Count selected radio buttons (freshness)
-    const checkedRadios = form.querySelectorAll('input[type="radio"]:checked').length;
-
-    // Check if experience slider is not at default (30 = Any)
-    const slider = document.getElementById('expSlider');
-    const sliderActive = slider && parseInt(slider.value) < 30 ? 1 : 0;
-
-    const total = checkedBoxes + checkedRadios + sliderActive;
-
-    const countEl = document.getElementById('rjAppliedCount');
-    if (!countEl) return;
-
-    if (total === 0) {
-        countEl.style.display = 'none';  // hide when nothing selected
-    } else {
-        countEl.style.display = 'inline'; // show when something selected
-        countEl.textContent = `Applied (${total})`;
+    function updateAppliedCount() {
+        const form = document.getElementById('filterForm');
+        if (!form) return;
+        const checkedBoxes  = form.querySelectorAll('input[type="checkbox"]:checked').length;
+        const checkedRadios = form.querySelectorAll('input[type="radio"]:checked').length;
+        const slider        = document.getElementById('expSlider');
+        const sliderActive  = slider && parseInt(slider.value) < 30 ? 1 : 0;
+        const total         = checkedBoxes + checkedRadios + sliderActive;
+        const countEl       = document.getElementById('rjAppliedCount');
+        if (!countEl) return;
+        if (total === 0) {
+            countEl.style.display = 'none';
+        } else {
+            countEl.style.display = 'inline';
+            countEl.textContent   = `Applied (${total})`;
+        }
     }
-}
     </script>
 </body>
 </html>
