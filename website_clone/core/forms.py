@@ -121,7 +121,7 @@ class JobForm(forms.ModelForm):
         fields = [
             'title',
             'company',
-            'experience',
+            'min_experience', 'max_experience',
             'min_salary',
             'max_salary',
             'salary_disclosed',
@@ -137,6 +137,7 @@ class JobForm(forms.ModelForm):
             'is_featured',
             'is_sponsored',
         ]
+        
 
         widgets = {
             'min_salary':  forms.NumberInput(attrs={'placeholder': 'Min Salary'}),
