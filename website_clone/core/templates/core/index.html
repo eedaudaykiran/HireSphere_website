@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Naukri Clone</title>
 
-    <link rel="stylesheet" href="{% static 'core/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/main.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
@@ -32,30 +32,30 @@
                 <div class="dropdown-menu jobs-dropdown">
                     <div class="dropdown-column">
                         <h4>Popular categories</h4>
-                        <a href="{% url 'it_jobs' %}">IT jobs</a>
-                        <a href="{% url 'sales_jobs' %}">Sales jobs</a>
-                        <a href="{% url 'marketing_jobs' %}">Marketing jobs</a>
-                        <a href="{% url 'data_science_jobs' %}">Data Science jobs</a>
-                        <a href="{% url 'hr_jobs_page' %}">HR jobs</a>
-                        <a href="{% url 'engineering_jobs' %}">Engineering jobs</a>
+                        <a href="{% url 'it_jobs' %}" target="_blank">IT jobs</a>
+                        <a href="{% url 'sales_jobs' %}" target="_blank">Sales jobs</a>
+                        <a href="{% url 'marketing_jobs' %}" target="_blank">Marketing jobs</a>
+                        <a href="{% url 'data_science_jobs' %}" target="_blank">Data Science jobs</a>
+                        <a href="{% url 'hr_jobs_page' %}" target="_blank">HR jobs</a>
+                        <a href="{% url 'engineering_jobs' %}" target="_blank">Engineering jobs</a>
                     </div>
                     <div class="dropdown-column">
                         <h4>Jobs in demand</h4>
-                        <a href="{% url 'fresher_jobs' %}">Fresher jobs</a>
-                        <a href="{% url 'mnc_jobs' %}">MNC jobs</a>
-                        <a href="{% url 'remote_jobs_page' %}">Remote jobs</a>
-                        <a href="{% url 'work_from_home_jobs' %}">Work from home jobs</a>
-                        <a href="{% url 'walk_in_jobs' %}">Walk-in jobs</a>
-                        <a href="{% url 'part_time_jobs' %}">Part-time jobs</a>
+                        <a href="{% url 'fresher_jobs' %}" target="_blank">Fresher jobs</a>
+                        <a href="{% url 'mnc_jobs' %}" target="_blank">MNC jobs</a>
+                        <a href="{% url 'remote_jobs_page' %}" target="_blank">Remote jobs</a>
+                        <a href="{% url 'work_from_home_jobs' %}" target="_blank">Work from home jobs</a>
+                        <a href="{% url 'walk_in_jobs' %}" target="_blank">Walk-in jobs</a>
+                        <a href="{% url 'part_time_jobs' %}" target="_blank">Part-time jobs</a>
                     </div>
                     <div class="dropdown-column">
                         <h4>Jobs by location</h4>
-                        <a href="{% url 'delhi_jobs' %}">Jobs in Delhi</a>
-                        <a href="{% url 'mumbai_jobs' %}">Jobs in Mumbai</a>
-                        <a href="{% url 'bangalore_jobs' %}">Jobs in Bangalore</a>
-                        <a href="{% url 'hyderabad_jobs' %}">Jobs in Hyderabad</a>
-                        <a href="{% url 'chennai_jobs' %}">Jobs in Chennai</a>
-                        <a href="{% url 'pune_jobs' %}">Jobs in Pune</a>
+                        <a href="{% url 'delhi_jobs' %}" target="_blank">Jobs in Delhi</a>
+                        <a href="{% url 'mumbai_jobs' %}" target="_blank">Jobs in Mumbai</a>
+                        <a href="{% url 'bangalore_jobs' %}" target="_blank">Jobs in Bangalore</a>
+                        <a href="{% url 'hyderabad_jobs' %}" target="_blank">Jobs in Hyderabad</a>
+                        <a href="{% url 'chennai_jobs' %}" target="_blank">Jobs in Chennai</a>
+                        <a href="{% url 'pune_jobs' %}" target="_blank">Jobs in Pune</a>
                     </div>
                 </div>
             </div>
@@ -66,19 +66,19 @@
                 <div class="dropdown-menu companies-dropdown">
                     <div class="dropdown-column">
                         <h4>Explore categories</h4>
-                        <a href="{% url 'company_unicorn' %}">Unicorn</a>
-                        <a href="{% url 'company_mnc' %}">MNC</a>
-                        <a href="{% url 'company_startups' %}">Startup</a>
-                        <a href="{% url 'company_product_based' %}">Product based</a>
-                        <a href="{% url 'company_internet' %}">Internet</a>
+                        <a href="{% url 'company_unicorn' %}" target="_blank">Unicorn</a>
+                        <a href="{% url 'company_mnc' %}" target="_blank">MNC</a>
+                        <a href="{% url 'company_startups' %}" target="_blank">Startup</a>
+                        <a href="{% url 'company_product_based' %}" target="_blank">Product based</a>
+                        <a href="{% url 'company_internet' %}" target="_blank">Internet</a>
                     </div>
                     <div class="dropdown-column">
                         <h4>Explore collections</h4>
-                        <a href="{% url 'top_companies_jobs' %}">Top companies</a>
-                        <a href="{% url 'company_it_companies_jobs' %}">IT companies</a>
-                        <a href="{% url 'company_fintech_companies_jobs' %}">Fintech companies</a>
-                        <a href="{% url 'company_sponsored_companies_jobs' %}">Sponsored companies</a>
-                        <a href="{% url 'company_featured_companies_jobs' %}">Featured companies</a>
+                        <a href="{% url 'top_companies_jobs' %}" target="_blank">Top companies</a>
+                        <a href="{% url 'company_it_companies_jobs' %}" target="_blank">IT companies</a>
+                        <a href="{% url 'company_fintech_companies_jobs' %}" target="_blank">Fintech companies</a>
+                        <a href="{% url 'company_sponsored_companies_jobs' %}" target="_blank">Sponsored companies</a>
+                        <a href="{% url 'company_featured_companies_jobs' %}" target="_blank">Featured companies</a>
                     </div>
                     <div class="dropdown-column">
                         <h4>Research companies</h4>
