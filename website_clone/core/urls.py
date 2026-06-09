@@ -24,9 +24,9 @@ urlpatterns = [
     path('fortune-jobs/', views.fortune_jobs_page, name='fortune_jobs'),
     path('human-resources-jobs/', views.human_resources_jobs_page, name='human_resources_jobs'),
     path('project-management-jobs/', views.project_management_jobs_page, name='project_management_jobs'),
-    path('it-jobs/', views.it_jobs_page, name='it_jobs'),
+    path('it-jobs/', views.software_it_jobs_page, name='it_jobs'),
     path('sales-jobs/', views.sales_jobs_page, name='sales_jobs'),
-    path('data-science-jobs/', views.data_science_jobs_page, name='data_science_jobs'),
+    path('data-science-jobs/', views.datascience_jobs_page, name='data_science_jobs'),
     path('fresher-jobs/', views.fresher_jobs_page, name='fresher_jobs'),
     path('walk-in-jobs/', views.walk_in_jobs_page, name='walk_in_jobs'),
     path('part-time-jobs/', views.part_time_jobs_page, name='part_time_jobs'),
@@ -167,11 +167,7 @@ urlpatterns = [
     views.supply_chain_jobs_page,
     name='supply_chain_jobs'
     ),
-    path(
-    'foreign-mnc-jobs/',
-    views.foreign_mnc_jobs_page,
-    name='foreign_mnc_jobs'
-    ),
+    path('foreign-mnc-jobs/', views.mnc_jobs_page, name='foreign_mnc_jobs'),
     path(
     'work-from-home-jobs/',
     views.work_from_home_jobs_page,
@@ -191,36 +187,12 @@ urlpatterns = [
         views.startup_jobs_page,
         name='startup_jobs'
     ),
-    path(
-    'salesjobs-page/',
-    views.salesjobs_page,
-    name='salesjobs_page'
-    ),
-    path(
-    'marketingjobs-page/',
-    views.marketingjobs_page,
-    name='marketingjobs_page'
-    ),
-    path(
-    'banking-financejobs-page/',
-    views.banking_financejobs_page,
-    name='banking_financejobs_page'
-    ),
-    path(
-    'engineeringjobs-page/',
-    views.engineeringjobs_page,
-    name='engineeringjobs_page'
-    ),
-    path(
-    'hr-jobs-page/',
-    views.hr_jobs_page,
-    name='hr_jobs_page'
-    ),
-    path(
-    'fresherjobs-page/',
-    views.fresherjobs_page,
-    name='fresherjobs_page'
-    ),
+    path('sales-jobs/', views.sales_jobs_page, name='salesjobs'),
+    path('marketing-jobs/', views.marketing_jobs_page, name='marketingjobs'),
+    path('banking-finance/', views.banking_finance_jobs_page, name='banking_financejobs'),
+    path('engineering-jobs/', views.engineering_jobs_page, name='engineeringjobs'),
+    path('hr-jobs/', views.human_resources_jobs_page, name='hr_jobs_page'),
+    path('fresher-jobs/', views.fresher_jobs_page, name='fresherjobs'),
     path('about/', views.about, name='about'),
     path('careers/', views.careers, name='careers'),
     path('employer-home/', views.employer_home, name='employer_home'),

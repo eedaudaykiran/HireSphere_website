@@ -25,7 +25,7 @@ class UserProfile(models.Model):
     email_verified = models.BooleanField(default=False)
     created_at    = models.DateTimeField(auto_now_add=True)
     skills        = models.CharField(max_length=300, blank=True, null=True)
-    location      = models.CharField(max_length=100, blank=True, null=True)
+    location      = models.CharField(max_length=100, blank=True, null=True, db_index=True)
  
     def __str__(self):
         return self.full_name
@@ -225,6 +225,11 @@ class Job(models.Model):
             return [c.strip() for c in self.conditions.split('•') if c.strip()]
         return [c.strip() for c in self.conditions.split(',') if c.strip()]
  
+    class Meta:
+        indexes = [
+            models.Index(fields=['location', 'job_type']),  # compound index
+        ]
+
     def __str__(self):
         return f"{self.title} at {self.company}"
  

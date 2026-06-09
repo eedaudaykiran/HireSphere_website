@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+
+  # ── PostgreSQL Database Container ─────────────────────────
+  db:
+    image: postgres:15          # use official PostgreSQL 15
+    container_name: hirehub_db
+    restart: always
+    environment:
+      POSTGRES_DB: jobportal_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Uday123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data   # persist data
+    ports:
+      - "5432:5432"             # host:container
+
+  # ── Django App Container ───────────────────────────────────
+  web:
+    build: .                    # build from Dockerfile in current folder
+    container_name: hirehub_web
+    restart: always
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app                  # mount project files
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"             # host:container
+    env_file:
+      - .env                    # load from your .env file
+    depends_on:
+      - db                      # wait for db to start first
+
+# ── Named Volumes ──────────────────────────────────────────
+volumes:
+  postgres_data:    # stores PostgreSQL data permanently
+  static_volume:    # stores static files
+  media_volume:     # stores uploaded files
