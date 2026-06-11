@@ -7,7 +7,7 @@
 import json
 import datetime
 from django.utils import timezone
-from django.db.models import Count
+from django.db.models import Count, Sum, Q
 
 
 # ===================== REPORT SERVICE =====================
@@ -71,17 +71,21 @@ class ReportService:
         ).order_by('-applications_count')[:8]
 
         top_jobs = []
-        for job in top_jobs_qs:
-            sc = Application.objects.filter(job=job, status='Shortlisted').count()
-            top_jobs.append({
-                'title':              job.title,
-                'applications_count': job.applications_count,
-                'shortlisted_count':  sc,
-                'views':              job.views,
-                'hire_rate':          round((sc / job.applications_count) * 100)
-                                      if job.applications_count else 0,
-            })
+        # Fixed — add sc annotation to top_jobs_qs#
+        top_jobs_qs = jobs.annotate(
+            applications_count=Count('applications'),
+            sc=Count('applications', filter=Q(applications__status='Shortlisted'))
+        ).order_by('-applications_count')[:8]
 
+        for job in top_jobs_qs:
+            top_jobs.append({
+            'title':              job.title,
+            'applications_count': job.applications_count,
+            'shortlisted_count':  job.sc,          # ← no extra query
+            'views':              job.views,
+            'hire_rate':          round((job.sc / job.applications_count) * 100)
+                                  if job.applications_count else 0,
+        })
         # ── Monthly trend (last 6 months) ─────────────────
         monthly_applications, monthly_hires, month_labels = [], [], []
         for i in range(5, -1, -1):
@@ -115,7 +119,7 @@ class ReportService:
             'rejected_count':       applications_qs.filter(status='Rejected').count(),
             'pending_count':        applications_qs.filter(status='Applied').count(),
             'interview_count':      Interview.objects.filter(job__employer=user).count(),
-            'total_views':          sum(job.views for job in jobs),
+            'total_views': Job.objects.filter(employer=user).aggregate(total=Sum('views'))['total'] or 0,
             'screened_percent':     pct(applications_qs.filter(status='Screening').count()),
             'shortlisted_percent':  pct(applications_qs.filter(status='Shortlisted').count()),
             'interview_percent':    pct(interviewed_count),
@@ -153,15 +157,16 @@ class ReportService:
         """
         from .models import Application, Job
         result = []
-        for job in Job.objects.filter(employer=user):
-            app_count = Application.objects.filter(job=job).count()
-            sc        = Application.objects.filter(job=job, status='Shortlisted').count()
+        for job in Job.objects.filter(employer=user).annotate(
+            app_count=Count('applications'),
+            sc=Count('applications', filter=Q(applications__status='Shortlisted'))
+        ):
             result.append({
                 'title':     job.title,
-                'app_count': app_count,
-                'sc':        sc,
+                'app_count': job.app_count,
+                'sc':        job.sc,
                 'views':     job.views,
-                'hire_rate': round((sc / app_count) * 100) if app_count else 0,
+                'hire_rate': round((job.sc / job.app_count) * 100) if job.app_count else 0,
             })
         return result
 

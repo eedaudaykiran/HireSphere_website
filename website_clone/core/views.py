@@ -33,10 +33,10 @@ from .forms import (
     JobForm, CompanyProfileForm, EmployerSettingsForm,
 )
 from .models import (
-    UserProfile, Job, SavedJob, ApplyJob,
+    UserProfile, Job, SavedJob, 
     Application, Interview, Message, CompanyProfile, EmployerSettings,
 )
-from .services import ReportService, SettingsService
+
 
 
 # ===================== ROLE DECORATORS =====================
@@ -742,19 +742,25 @@ def apply_job(request, job_id):
         return redirect('applied_jobs')
 
     if request.method == 'POST':
-        phone_number = request.POST.get('phone_number', '')
-        resume       = request.FILES.get('resume')
-        skills       = request.POST.get('skills', '')
-        location     = request.POST.get('location', '')
-        experience   = request.POST.get('experience', '')
+        phone_number  = request.POST.get('phone_number', '')
+        resume        = request.FILES.get('resume')
+        skills        = request.POST.get('skills', '')
+        location      = request.POST.get('location', '')
+        experience_raw = request.POST.get('experience', '')
 
-        if not skills or not location or not experience:
-            try:
-                profile    = request.user.userprofile
-                experience = experience or profile.work_status or ''
-            except Exception:
-                pass
+    if experience_raw.lower() in ['fresher', 'freshers', '']:
+        experience = 0
+    else:
+        try:
+            experience = int(experience_raw)
+        except (ValueError, TypeError):
+            experience = 0
 
+    if not skills or not location:
+        try:
+            profile = request.user.userprofile
+        except Exception:
+            pass
         Application.objects.create(
             applicant=request.user, job=job,
             phone_number=phone_number, resume=resume,
@@ -764,7 +770,10 @@ def apply_job(request, job_id):
         messages.success(request, "✅ Application submitted successfully!")
         return redirect('applied_jobs')
 
-    return render(request, 'core/apply_job.html', {'job': job})
+    return render(request, 'core/apply_job.html', {
+        'job': job,
+        'experience_range': range(0, 31),
+    })
 
 
 @candidate_required
@@ -873,7 +882,7 @@ def employer_dashboard(request):
     default_experience = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '10', '12', '15']
     db_experience = list(
         Application.objects.filter(job__employer=request.user)
-        .exclude(experience__isnull=True).exclude(experience='')
+        .exclude(experience__isnull=True)
         .values_list('experience', flat=True).distinct()
     )
 
@@ -885,11 +894,12 @@ def employer_dashboard(request):
     )
 
     default_skills = ['AWS', 'CSS', 'Data Science', 'Django', 'Docker', 'Flutter', 'HTML', 'Java', 'JavaScript', 'Machine Learning', 'MongoDB', 'Node.js', 'Python', 'React', 'SQL']
-    db_skills = list(
-        Application.objects.filter(job__employer=request.user)
-        .exclude(skills__isnull=True).exclude(skills='')
-        .values_list('skills', flat=True).distinct()
-    )
+    db_skills = []
+    for skills in Application.objects.filter(job__employer=request.user).exclude(skills__isnull=True).values_list('skills', flat=True):
+        if isinstance(skills, list):
+            db_skills.extend(skills)
+        elif isinstance(skills, str) and skills:
+            db_skills.append(skills)
 
     context = {
         'jobs':                 jobs,
@@ -904,9 +914,9 @@ def employer_dashboard(request):
         'recent_applicants':    applications.order_by('-applied_at')[:5],
         'pipeline':             pipeline,
         'unread_messages':      Message.objects.filter(receiver=request.user, is_read=False).count(),
-        'experience_options':   sorted(set(default_experience + db_experience)),
+        'experience_options': sorted(set(int(e) for e in default_experience if str(e).isdigit()) | set(db_experience)),
         'location_options':     sorted(set(default_locations + db_locations)),
-        'skill_options':        sorted(set(default_skills + db_skills)),
+        'skill_options': sorted(set(default_skills) | set(db_skills)),
         'status_choices':       ['Applied', 'Screening', 'Shortlisted', 'Interview', 'Technical', 'HR', 'Offer', 'Rejected'],
         'selected_experience':  experience,
         'selected_location':    location,
@@ -1488,23 +1498,23 @@ def all_jobs(request):
     return render(request, 'core/all_jobs.html', {'jobs': Job.objects.all()})
 
 
-def about(request):             return render(request, 'about.html')
-def careers(request):           return render(request, 'careers.html')
-def employer_home(request):     return render(request, 'employer_home.html')
-def sitemap(request):           return render(request, 'sitemap.html')
-def credits(request):           return render(request, 'credits.html')
-def help_center(request):       return render(request, 'help_center.html')
-def summons_notices(request):   return render(request, 'summons_notices.html')
-def grievances(request):        return render(request, 'grievances.html')
-def report_issue(request):      return render(request, 'report_issue.html')
-def privacy_policy(request):    return render(request, 'privacy_policy.html')
-def terms_conditions(request):  return render(request, 'terms_conditions.html')
-def fraud_alert(request):       return render(request, 'fraud_alert.html')
-def trust_safety(request):      return render(request, 'trust_safety.html')
-def search_jobs(request):       return render(request, 'search_jobs.html')
-def browser_companies(request): return render(request, 'browser_companies.html')
-def resume_builder(request):    return render(request, 'resume_builder.html')
-def career_advice(request):     return render(request, 'career_advice.html')
-def salary_calculator(request): return render(request, 'salary_calculator.html')
-def hiring_solutions(request):  return render(request, 'hiring_solutions.html')
-def view_plans(request):        return render(request, 'view_plans.html')
+def about(request):             return render(request, 'core/about.html')
+def careers(request):           return render(request, 'core/careers.html')
+def employer_home(request):     return render(request, 'core/employer_home.html')
+def sitemap(request):           return render(request, 'core/sitemap.html')
+def credits(request):           return render(request, 'core/credits.html')
+def help_center(request):       return render(request, 'core/help_center.html')
+def summons_notices(request):   return render(request, 'core/summons_notices.html')
+def grievances(request):        return render(request, 'core/grievances.html')
+def report_issue(request):      return render(request, 'core/report_issue.html')
+def privacy_policy(request):    return render(request, 'core/privacy_policy.html')
+def terms_conditions(request):  return render(request, 'core/terms_conditions.html')
+def fraud_alert(request):       return render(request, 'core/fraud_alert.html')
+def trust_safety(request):      return render(request, 'core/trust_safety.html')
+def search_jobs(request):       return render(request, 'core/search_jobs.html')
+def browser_companies(request): return render(request, 'core/browser_companies.html')
+def resume_builder(request):    return render(request, 'core/resume_builder.html')
+def career_advice(request):     return render(request, 'core/career_advice.html')
+def salary_calculator(request): return render(request, 'core/salary_calculator.html')
+def hiring_solutions(request):  return render(request, 'core/hiring_solutions.html')
+def view_plans(request):        return render(request, 'core/view_plans.html')

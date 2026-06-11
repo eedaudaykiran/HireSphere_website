@@ -163,11 +163,15 @@
         </div>
 
         <!-- Experience Field (prefilled from user profile work_status) -->
-        <div class="form-group">
-            <label class="form-label">💼 Years of Experience</label>
-            <input type="text" name="experience" placeholder="e.g. 2 Years, Fresher"
-                value="{{ request.user.userprofile.work_status|default:'' }}" class="form-input">
-        </div>
+        <select name="experience" class="form-input">
+            <option value="0">Fresher (0 years)</option>
+            {% for i in "123456789" %}
+            <option value="{{ i }}">{{ i }} Year{{ i|pluralize }}</option>
+            {% endfor %}
+            {% for i in "10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30" %}
+            <option value="{{ i }}">{{ i }} Years</option>
+            {% endfor %}
+        </select>
 
         <!-- Resume Upload -->
         <div class="form-group">

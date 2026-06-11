@@ -24,7 +24,7 @@ class UserProfile(models.Model):
     company       = models.CharField(max_length=200, blank=True, null=True)
     email_verified = models.BooleanField(default=False)
     created_at    = models.DateTimeField(auto_now_add=True)
-    skills        = models.CharField(max_length=300, blank=True, null=True)
+    skills = models.JSONField(default=list, blank=True)
     location      = models.CharField(max_length=100, blank=True, null=True, db_index=True)
  
     def __str__(self):
@@ -234,24 +234,6 @@ class Job(models.Model):
         return f"{self.title} at {self.company}"
  
  
-class ApplyJob(models.Model):
- 
-    STATUS_CHOICES = (
-        ('Applied',     'Applied'),
-        ('Pending',     'Pending'),
-        ('Shortlisted', 'Shortlisted'),
-        ('Rejected',    'Rejected'),
-        ('Selected',    'Selected'),
-    )
- 
-    user       = models.ForeignKey(User, on_delete=models.CASCADE)
-    job        = models.ForeignKey(Job, on_delete=models.CASCADE)
-    applied_at = models.DateTimeField(auto_now_add=True)
-    status     = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Applied')
- 
-    def __str__(self):
-        return f"{self.user.username} applied for {self.job.title}"
- 
  
 class SavedJob(models.Model):
  
@@ -309,9 +291,9 @@ class Application(models.Model):
  
     applied_at = models.DateTimeField(auto_now_add=True)
  
-    experience   = models.CharField(max_length=50,  blank=True, null=True)
+    experience = models.PositiveIntegerField(default=0)
     location     = models.CharField(max_length=100, blank=True, null=True)
-    skills       = models.CharField(max_length=300, blank=True, null=True)
+    skills       = models.JSONField(default=list, blank=True)
     phone_number = models.CharField(max_length=15,  blank=True, null=True)
  
     interview_date  = models.DateField(null=True, blank=True)
@@ -387,7 +369,7 @@ class CompanyProfile(models.Model):
     technologies   = models.CharField(max_length=500, blank=True)
  
     def __str__(self):
-        return self.employer.username
+        return self.company
  
  
 class EmployerSettings(models.Model):
