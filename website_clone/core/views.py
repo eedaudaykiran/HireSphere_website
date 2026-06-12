@@ -742,25 +742,20 @@ def apply_job(request, job_id):
         return redirect('applied_jobs')
 
     if request.method == 'POST':
-        phone_number  = request.POST.get('phone_number', '')
-        resume        = request.FILES.get('resume')
-        skills        = request.POST.get('skills', '')
-        location      = request.POST.get('location', '')
+        phone_number   = request.POST.get('phone_number', '')
+        resume         = request.FILES.get('resume')
+        skills         = request.POST.get('skills', '')
+        location       = request.POST.get('location', '')
         experience_raw = request.POST.get('experience', '')
 
-    if experience_raw.lower() in ['fresher', 'freshers', '']:
-        experience = 0
-    else:
-        try:
-            experience = int(experience_raw)
-        except (ValueError, TypeError):
+        if str(experience_raw).strip().lower() in ['fresher', 'freshers', '']:
             experience = 0
+        else:
+            try:
+                experience = int(experience_raw)
+            except (ValueError, TypeError):
+                experience = 0
 
-    if not skills or not location:
-        try:
-            profile = request.user.userprofile
-        except Exception:
-            pass
         Application.objects.create(
             applicant=request.user, job=job,
             phone_number=phone_number, resume=resume,
@@ -768,12 +763,10 @@ def apply_job(request, job_id):
             location=location, experience=experience,
         )
         messages.success(request, "✅ Application submitted successfully!")
-        return redirect('applied_jobs')
-
     return render(request, 'core/apply_job.html', {
-        'job': job,
-        'experience_range': range(0, 31),
-    })
+            'job': job,
+            'experience_range': range(0, 31),
+        })
 
 
 @candidate_required
