@@ -232,6 +232,25 @@ class Job(models.Model):
 
     def __str__(self):
         return f"{self.title} at {self.company}"
+
+class ApplyJob(models.Model):
+ 
+    STATUS_CHOICES = (
+        ('Applied',     'Applied'),
+        ('Pending',     'Pending'),
+        ('Shortlisted', 'Shortlisted'),
+        ('Rejected',    'Rejected'),
+        ('Selected',    'Selected'),
+    )
+ 
+    user       = models.ForeignKey(User, on_delete=models.CASCADE)
+    job        = models.ForeignKey(Job, on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)
+    status     = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Applied')
+ 
+    def __str__(self):
+        return f"{self.user.username} applied for {self.job.title}"
+
  
  
  

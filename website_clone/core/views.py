@@ -33,7 +33,7 @@ from .forms import (
     JobForm, CompanyProfileForm, EmployerSettingsForm,
 )
 from .models import (
-    UserProfile, Job, SavedJob, 
+    UserProfile, Job, SavedJob, ApplyJob,
     Application, Interview, Message, CompanyProfile, EmployerSettings,
 )
 
@@ -1116,8 +1116,15 @@ def shortlisted_candidates(request):
     shortlisted = Application.objects.filter(
         job__employer=request.user, status='Shortlisted'
     ).select_related('applicant', 'job').order_by('-applied_at')
+    
     for app in shortlisted:
-        app.skills_list = app.skills.split(',') if app.skills else []
+        if not app.skills:
+            app.skills_list = []
+        elif isinstance(app.skills, list):
+            app.skills_list = app.skills
+        else:
+            app.skills_list = app.skills.split(',')
+    
     return render(request, 'core/shortlisted.html', {'shortlisted': shortlisted})
 
 
